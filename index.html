@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--
+    FP&A Portfolio — Production-ready static site
+    Notes:
+    - Minimalist, executive-friendly, Apple/consulting-inspired layout
+    - Card-based modules, strong typography, whitespace
+    - Lightweight JS: smooth scroll + subtle reveal animations
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="FP&A Portfolio — Building Finance Systems That Drive Decisions. Forecasting, Commercial Finance, Unit Economics, Spend Analytics." />
+  <meta name="theme-color" content="#0B1220" />
+
+  <title>FP&A Portfolio — Finance Systems That Drive Decisions</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <!-- Preconnect for performance (optional, no external fonts used by default) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <!-- Skip link for accessibility -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Top Navigation -->
+  <header class="site-header" id="top">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="Go to top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">FP&A Portfolio</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="#system">System View</a>
+        <a href="#tools">Tools</a>
+        <a href="#contact">Links</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a class="btn btn-ghost" href="#projects">View Projects</a>
+        <a class="btn btn-solid" href="https://github.com/your-username" target="_blank" rel="noreferrer">View GitHub</a>
+      </div>
+
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" data-mobile-menu>
+      <div class="container mobile-menu-inner">
+        <a href="#projects" class="mobile-link">Projects</a>
+        <a href="#system" class="mobile-link">System View</a>
+        <a href="#tools" class="mobile-link">Tools</a>
+        <a href="#contact" class="mobile-link">Links</a>
+
+        <div class="mobile-cta">
+          <a class="btn btn-ghost" href="#projects">View Projects</a>
+          <a class="btn btn-solid" href="https://github.com/your-username" target="_blank" rel="noreferrer">View GitHub</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 1) Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">FP&A-first • Decision Systems • Executive-ready</div>
+          <h1 class="hero-title">
+            FP&amp;A Portfolio — <span class="accent">Building Finance Systems That Drive Decisions</span>
+          </h1>
+          <p class="hero-subtitle">
+            Forecasting • Commercial Finance • Unit Economics • Spend Analytics
+          </p>
+          <p class="hero-one-liner">
+            FP&amp;A specialist with end-to-end understanding of the finance engine.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="#projects">View Projects</a>
+            <a class="btn btn-ghost" href="https://github.com/your-username" target="_blank" rel="noreferrer">View GitHub</a>
+          </div>
+
+          <div class="hero-metrics">
+            <div class="metric-card">
+              <div class="metric-label">Focus</div>
+              <div class="metric-value">Decision-useful FP&amp;A</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Output</div>
+              <div class="metric-value">Models • Narratives • Controls</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Style</div>
+              <div class="metric-value">Clean • Executive • Practical</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minimal “portal” panel (visually rich, not chart-heavy) -->
+        <aside class="hero-panel reveal" aria-label="Finance system preview panel">
+          <div class="panel">
+            <div class="panel-top">
+              <div class="panel-title">Finance Operating System</div>
+              <div class="panel-chip">System view</div>
+            </div>
+
+            <div class="panel-body">
+              <div class="panel-row">
+                <div class="panel-kpi">
+                  <div class="kpi-label">Forecast cadence</div>
+                  <div class="kpi-value">Weekly / Monthly</div>
+                </div>
+                <div class="panel-kpi">
+                  <div class="kpi-label">Decision loop</div>
+                  <div class="kpi-value">Drivers → Actions</div>
+                </div>
+              </div>
+
+              <div class="panel-map" role="img" aria-label="A simple flow showing how FP&A modules connect">
+                <div class="node">Forecasting</div>
+                <div class="link" aria-hidden="true"></div>
+                <div class="node">Commercial</div>
+                <div class="link" aria-hidden="true"></div>
+                <div class="node">Unit Economics</div>
+                <div class="link" aria-hidden="true"></div>
+                <div class="node">Cost Control</div>
+                <div class="link" aria-hidden="true"></div>
+                <div class="node">Cash Awareness</div>
+              </div>
+
+              <div class="panel-note">
+                Built like an internal CFO portal: modular, consistent, and decision-oriented.
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 2) Philosophy / Approach -->
+    <section class="section" id="philosophy">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Philosophy</h2>
+          <p class="section-subhead">
+            FP&amp;A that helps leaders decide faster—with fewer surprises.
+          </p>
+        </div>
+
+        <div class="grid-4">
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">↗</div>
+            <h3>Drivers over outputs</h3>
+            <p>Start with what moves results—price, volume, headcount, utilization—not just variance tables.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">◎</div>
+            <h3>Decision-useful finance</h3>
+            <p>Every model ends in a decision: keep, change, stop, or double down.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">▦</div>
+            <h3>Systems over one-offs</h3>
+            <p>Reusable frameworks beat “hero spreadsheets.” Modular inputs, clear logic, consistent outputs.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">⚙</div>
+            <h3>Finance as an engine</h3>
+            <p>Forecasting, commercial support, cost control, and cash awareness work best as one system.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) Core Portfolio Projects -->
+    <section class="section section-muted" id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Core Portfolio Projects</h2>
+          <p class="section-subhead">
+            Product-grade FP&amp;A artifacts—built to be used, not just presented.
+          </p>
+        </div>
+
+        <div class="project-grid">
+          <!-- Project 1 -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <div>
+                <div class="project-label">Core FP&amp;A foundation</div>
+                <h3 class="project-title">Unified FP&amp;A Core Model</h3>
+              </div>
+              <span class="pill">Flagship</span>
+            </div>
+
+            <p class="project-pitch">The backbone of corporate FP&amp;A decision-making.</p>
+
+            <div class="project-meta">
+              <div class="meta-block">
+                <div class="meta-title">Business problem</div>
+                <div class="meta-text">Unify planning + reporting into one driver-led model leaders can trust.</div>
+              </div>
+              <div class="meta-block">
+                <div class="meta-title">Role coverage</div>
+                <div class="meta-text">Corporate FP&amp;A • Finance Business Partnering • Management Reporting</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">3-statement model (lite)</div>
+              <div class="bullet">OpEx &amp; headcount drivers</div>
+              <div class="bullet">Budget vs Actual vs Forecast</div>
+              <div class="bullet">Executive commentary output</div>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-solid" href="#" aria-disabled="true">View Model</a>
+              <a class="btn btn-ghost" href="#" aria-disabled="true">View Details</a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <div>
+                <div class="project-label">Commercial decision support</div>
+                <h3 class="project-title">Commercial / Sales Finance Model</h3>
+              </div>
+              <span class="pill">Revenue</span>
+            </div>
+
+            <p class="project-pitch">Evaluating revenue decisions beyond top-line growth.</p>
+
+            <div class="project-meta">
+              <div class="meta-block">
+                <div class="meta-title">Business problem</div>
+                <div class="meta-text">Measure profitability of promos, channels, and pricing moves—before and after.</div>
+              </div>
+              <div class="meta-block">
+                <div class="meta-title">Role coverage</div>
+                <div class="meta-text">Sales Finance • Commercial Finance • Revenue Analytics</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">Promotion ROI (pre/post)</div>
+              <div class="bullet">Channel-level P&amp;L</div>
+              <div class="bullet">Price / Volume / Mix</div>
+              <div class="bullet">Discount &amp; accrual logic</div>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-solid" href="#" aria-disabled="true">View Model</a>
+              <a class="btn btn-ghost" href="#" aria-disabled="true">View Details</a>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <div>
+                <div class="project-label">Growth &amp; scalability</div>
+                <h3 class="project-title">SaaS / Fintech Unit Economics</h3>
+              </div>
+              <span class="pill">Unit economics</span>
+            </div>
+
+            <p class="project-pitch">Understanding growth, profitability, and scalability.</p>
+
+            <div class="project-meta">
+              <div class="meta-block">
+                <div class="meta-title">Business problem</div>
+                <div class="meta-text">Translate growth into margin and cash reality—so scale doesn’t hide risk.</div>
+              </div>
+              <div class="meta-block">
+                <div class="meta-title">Role coverage</div>
+                <div class="meta-text">SaaS FP&amp;A • Fintech Finance • Growth Analytics</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">CAC / LTV</div>
+              <div class="bullet">Contribution margin</div>
+              <div class="bullet">Run-rate forecasting</div>
+              <div class="bullet">Scenario toggles</div>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-solid" href="#" aria-disabled="true">View Model</a>
+              <a class="btn btn-ghost" href="#" aria-disabled="true">View Details</a>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <div>
+                <div class="project-label">Cost visibility</div>
+                <h3 class="project-title">Indirect Cost &amp; Headcount CoE</h3>
+              </div>
+              <span class="pill">Cost control</span>
+            </div>
+
+            <p class="project-pitch">Making overhead costs transparent and controllable.</p>
+
+            <div class="project-meta">
+              <div class="meta-block">
+                <div class="meta-title">Business problem</div>
+                <div class="meta-text">Turn overhead into something you can explain, forecast, and actively manage.</div>
+              </div>
+              <div class="meta-block">
+                <div class="meta-title">Role coverage</div>
+                <div class="meta-text">Cost Management • Headcount Planning • Finance CoE</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">Headcount by cost center</div>
+              <div class="bullet">Shared services allocation</div>
+              <div class="bullet">Accruals &amp; deferrals logic</div>
+              <div class="bullet">Variance narratives</div>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-solid" href="#" aria-disabled="true">View Model</a>
+              <a class="btn btn-ghost" href="#" aria-disabled="true">View Details</a>
+            </div>
+          </article>
+
+          <!-- Project 5 -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <div>
+                <div class="project-label">Operational spend</div>
+                <h3 class="project-title">Operations Finance &amp; Spend Analytics</h3>
+              </div>
+              <span class="pill">Ops</span>
+            </div>
+
+            <p class="project-pitch">Controlling spend in complex, operational environments.</p>
+
+            <div class="project-meta">
+              <div class="meta-block">
+                <div class="meta-title">Business problem</div>
+                <div class="meta-text">Spot leakage early, enforce rate discipline, and reduce forecast surprises.</div>
+              </div>
+              <div class="meta-block">
+                <div class="meta-title">Role coverage</div>
+                <div class="meta-text">Operations Finance • Finance Operations • Spend Analytics</div>
+              </div>
+            </div>
+
+            <div class="bullets">
+              <div class="bullet">Vendor rate cards</div>
+              <div class="bullet">Accrual tracking</div>
+              <div class="bullet">Forecast vs actual spend</div>
+              <div class="bullet">Risk &amp; anomaly flags</div>
+            </div>
+
+            <div class="project-actions">
+              <a class="btn btn-solid" href="#" aria-disabled="true">View Model</a>
+              <a class="btn btn-ghost" href="#" aria-disabled="true">View Details</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="note reveal">
+          <span class="note-dot" aria-hidden="true"></span>
+          Replace the placeholder CTAs with your GitHub Pages links (e.g., /projects/core-model/, /projects/unit-econ/).
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) System View -->
+    <section class="section" id="system">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>System View</h2>
+          <p class="section-subhead">
+            These aren’t isolated spreadsheets. They form a single Finance Operating System.
+          </p>
+        </div>
+
+        <div class="system-wrap reveal">
+          <div class="system-visual" role="img" aria-label="A system diagram connecting FP&A modules">
+            <div class="sys-col">
+              <div class="sys-card">
+                <div class="sys-title">Forecasting</div>
+                <div class="sys-text">Driver models + planning cadence</div>
+              </div>
+              <div class="sys-arrow" aria-hidden="true">→</div>
+              <div class="sys-card">
+                <div class="sys-title">Commercial</div>
+                <div class="sys-text">Pricing, promos, channels</div>
+              </div>
+            </div>
+
+            <div class="sys-col">
+              <div class="sys-card">
+                <div class="sys-title">Unit Economics</div>
+                <div class="sys-text">Growth, margin, payback</div>
+              </div>
+              <div class="sys-arrow" aria-hidden="true">→</div>
+              <div class="sys-card">
+                <div class="sys-title">Cost Control</div>
+                <div class="sys-text">Headcount + overhead clarity</div>
+              </div>
+            </div>
+
+            <div class="sys-col">
+              <div class="sys-card">
+                <div class="sys-title">Cash Awareness</div>
+                <div class="sys-text">Run-rate + timing risk</div>
+              </div>
+              <div class="sys-arrow" aria-hidden="true">→</div>
+              <div class="sys-card sys-card-strong">
+                <div class="sys-title">Decision Engine</div>
+                <div class="sys-text">Narratives leaders act on</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="system-copy">
+            <div class="system-statement">
+              I specialize in FP&amp;A, but understand the full finance engine.
+            </div>
+            <p class="system-plain">
+              In real life: a leader asks “should we hire, cut, raise prices, push a promo, or slow down?”
+              This system turns that question into numbers you can trust—and a clear recommendation.
+            </p>
+
+            <div class="system-actions">
+              <a class="btn btn-solid" href="#projects">Explore the modules</a>
+              <a class="btn btn-ghost" href="#contact">Open links</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) Footer / Credibility -->
+    <section class="section section-muted" id="tools">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Credibility</h2>
+          <p class="section-subhead">Tools are just tools. The advantage is the system design.</p>
+        </div>
+
+        <div class="cred-grid">
+          <div class="card reveal">
+            <h3>Tooling</h3>
+            <div class="tag-row" aria-label="Tools used">
+              <span class="tag">Excel</span>
+              <span class="tag">Power BI</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Python</span>
+            </div>
+            <p class="muted">
+              Light mention on purpose—this portfolio is about decision systems, not software flexing.
+            </p>
+          </div>
+
+          <div class="card reveal" id="contact">
+            <h3>Links</h3>
+            <div class="link-list">
+              <a class="link-item" href="https://github.com/your-username" target="_blank" rel="noreferrer">
+                <span>GitHub</span><span class="link-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="link-item" href="https://www.linkedin.com/in/your-profile" target="_blank" rel="noreferrer">
+                <span>LinkedIn</span><span class="link-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="link-item" href="mailto:you@email.com">
+                <span>Email</span><span class="link-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="muted">
+              Keep it simple: one click to proof.
+            </p>
+          </div>
+
+          <div class="card reveal">
+            <h3>Closing</h3>
+            <p class="closing">
+              Built for recruiters, hiring managers, and finance leaders who value clarity, rigor, and decision velocity.
+            </p>
+            <div class="smallprint">
+              © <span data-year></span> • FP&amp;A Portfolio
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Back to top -->
+  <a class="to-top" href="#top" aria-label="Back to top">↑</a>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
