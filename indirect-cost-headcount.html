@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Indirect Cost & Headcount CoE — Making overhead costs transparent and controllable" />
+  <meta name="theme-color" content="#0B1220" />
+  <title>Indirect Cost & Headcount CoE — Cost Control Module</title>
+  
+  <style>
+    /* =========================================
+       Indirect Cost & Headcount CoE Module
+       Apple/consulting-inspired design
+       ========================================= */
+
+    :root {
+      --bg: #ffffff;
+      --bg-muted: #f6f8fb;
+      --text: #0b1220;
+      --muted: #5d6b7a;
+      --border: rgba(12, 23, 45, 0.10);
+      --shadow: 0 10px 30px rgba(11, 18, 32, 0.08);
+      --shadow-soft: 0 8px 18px rgba(11, 18, 32, 0.06);
+      --accent: #0f766e;
+      --accent-2: #1b4d7a;
+      --accent-soft: rgba(15, 118, 110, 0.10);
+      --success: #059669;
+      --success-soft: rgba(5, 150, 105, 0.10);
+      --warning: #d97706;
+      --warning-soft: rgba(217, 119, 6, 0.10);
+      --radius: 18px;
+      --radius-sm: 14px;
+      --max: 1240px;
+      --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg-muted);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    p { margin: 0; }
+    h1, h2, h3, h4 { margin: 0; letter-spacing: -0.02em; }
+
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px var(--accent-soft);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
+      user-select: none;
+      cursor: pointer;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-solid {
+      background: var(--text);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-solid:hover { box-shadow: var(--shadow); }
+
+    .btn-ghost {
+      background: white;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: rgba(12, 23, 45, 0.18); box-shadow: 0 6px 18px rgba(11,18,32,0.06); }
+
+    .btn-accent {
+      background: var(--accent);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-accent:hover { box-shadow: var(--shadow); }
+
+    /* Module header */
+    .module-header {
+      padding: 48px 0 32px 0;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .module-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .module-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .module-title {
+      font-size: 38px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .module-subtitle {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    .module-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .info-card {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-muted);
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .info-value {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Main content */
+    .main-content {
+      padding: 32px 0 64px 0;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Data upload */
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 48px 24px;
+      text-align: center;
+      background: rgba(246,248,251,0.4);
+      transition: border-color 200ms ease, background 200ms ease;
+      cursor: pointer;
+    }
+
+    .upload-area:hover {
+      border-color: var(--accent);
+      background: rgba(15, 118, 110, 0.02);
+    }
+
+    .upload-area.dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(15,118,110,0.18);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+    }
+
+    .upload-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .upload-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    /* Data tables */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: var(--bg-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 650;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(246,248,251,0.5);
+    }
+
+    .cell-number {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 500;
+    }
+
+    .cell-positive {
+      color: var(--success);
+    }
+
+    .cell-negative {
+      color: var(--warning);
+    }
+
+    /* Charts & visualizations */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .chart-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .chart-badge {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(15,118,110,0.18);
+    }
+
+    .bar-chart {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 80px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .bar-label {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .bar-track {
+      height: 32px;
+      background: var(--bg-muted);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 8px;
+      transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .bar-value {
+      font-size: 13px;
+      font-weight: 650;
+      text-align: right;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    /* Metrics grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .metric-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .metric-trend {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .trend-up {
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .trend-down {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .metric-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Alert */
+    .alert {
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.10);
+      border-color: rgba(59, 130, 246, 0.20);
+    }
+
+    .alert-info .alert-icon {
+      background: rgba(59, 130, 246, 0.20);
+      color: #1d4ed8;
+    }
+
+    .alert-content h4 {
+      font-size: 14px;
+      font-weight: 650;
+      margin-bottom: 4px;
+    }
+
+    .alert-content p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab {
+      padding: 10px 16px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 10px 10px 0 0;
+      transition: background 140ms ease, color 140ms ease;
+      position: relative;
+    }
+
+    .tab:hover {
+      background: rgba(11,18,32,0.04);
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--text);
+      background: white;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .module-top {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .module-title {
+        font-size: 28px;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: fadeInUp 500ms ease forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="FP&A Portfolio">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">FP&A Portfolio</span>
+      </a>
+      <div style="display: flex; gap: 10px;">
+        <a class="btn btn-ghost" href="index-2.html">← Back to Portfolio</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Module Header -->
+  <section class="module-header">
+    <div class="container">
+      <div class="module-top">
+        <div>
+          <div class="module-badge">
+            <span>Cost control</span>
+          </div>
+          <h1 class="module-title">Indirect Cost & Headcount CoE</h1>
+          <p class="module-subtitle">Making overhead costs transparent and controllable.</p>
+        </div>
+        <div class="module-actions">
+          <button class="btn btn-accent" onclick="downloadTemplate()">
+            <span>📥</span>
+            <span>Download Template</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Business problem</div>
+          <div class="info-value">Turn overhead into something you can explain, forecast, and actively manage.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Role coverage</div>
+          <div class="info-value">Cost Management • Headcount Planning • Finance CoE</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Key outputs</div>
+          <div class="info-value">Headcount by cost center • Shared services allocation</div>
+        </div>
+        <div class="info-card">
+          <div class="info-label">Decision support</div>
+          <div class="info-value">Accruals & deferrals logic • Variance narratives</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Alert -->
+      <div class="alert alert-info">
+        <div class="alert-icon">ℹ</div>
+        <div class="alert-content">
+          <h4>Sample Data Loaded</h4>
+          <p>Currently showing sample data for a mid-sized tech company. Upload your own data using the template below to see personalized insights.</p>
+        </div>
+      </div>
+
+      <!-- Upload Section -->
+      <section class="section">
+        <div class="card">
+          <h2 class="section-title">
+            <span>📊</span>
+            <span>Data Management</span>
+          </h2>
+          
+          <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-icon">📁</div>
+            <div class="upload-title">Upload Your Data</div>
+            <div class="upload-subtitle">Drag and drop your Excel file here, or click to browse</div>
+            <div class="module-actions">
+              <button class="btn btn-ghost" onclick="event.stopPropagation(); loadSampleData()">
+                Use Sample Data
+              </button>
+            </div>
+          </div>
+          
+          <input 
+            type="file" 
+            id="fileInput" 
+            class="file-input" 
+            accept=".xlsx,.xls,.csv"
+            onchange="handleFileUpload(event)"
+          />
+        </div>
+      </section>
+
+      <!-- Key Metrics -->
+      <section class="section">
+        <h2 class="section-title">
+          <span>📈</span>
+          <span>Key Metrics</span>
+        </h2>
+        
+        <div class="metrics-grid">
+          <div class="metric-card animate-in">
+            <div class="metric-header">
+              <div class="metric-label">Total Headcount</div>
+              <div class="metric-trend trend-up">+12%</div>
+            </div>
+            <div class="metric-value" id="totalHeadcount">247</div>
+            <div class="metric-subtitle">vs. 221 prior year</div>
+          </div>
+
+          <div class="metric-card animate-in" style="animation-delay: 100ms">
+            <div class="metric-header">
+              <div class="metric-label">Total Indirect Cost</div>
+              <div class="metric-trend trend-up">+8%</div>
+            </div>
+            <div class="metric-value" id="totalCost">$18.2M</div>
+            <div class="metric-subtitle">vs. $16.8M prior year</div>
+          </div>
+
+          <div class="metric-card animate-in" style="animation-delay: 200ms">
+            <div class="metric-header">
+              <div class="metric-label">Cost per Head</div>
+              <div class="metric-trend trend-down">-4%</div>
+            </div>
+            <div class="metric-value" id="costPerHead">$73.7K</div>
+            <div class="metric-subtitle">vs. $76.0K prior year</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('headcount')">Headcount by Cost Center</button>
+        <button class="tab" onclick="switchTab('allocation')">Shared Services Allocation</button>
+        <button class="tab" onclick="switchTab('variance')">Variance Analysis</button>
+      </div>
+
+      <!-- Tab Content: Headcount -->
+      <div id="headcount-tab" class="tab-content active">
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Headcount by Department</h3>
+              <span class="chart-badge">Current FY</span>
+            </div>
+            <div class="bar-chart" id="headcountChart"></div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">YoY Headcount Growth</h3>
+              <span class="chart-badge">Change %</span>
+            </div>
+            <div class="bar-chart" id="growthChart"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <h3 class="section-title">Detailed Headcount Table</h3>
+          <div class="table-wrapper">
+            <table id="headcountTable">
+              <thead>
+                <tr>
+                  <th>Cost Center</th>
+                  <th>Department</th>
+                  <th>Current HC</th>
+                  <th>Prior Year HC</th>
+                  <th>Change</th>
+                  <th>Change %</th>
+                  <th>Avg Cost per Head</th>
+                </tr>
+              </thead>
+              <tbody id="headcountTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Allocation -->
+      <div id="allocation-tab" class="tab-content">
+        <div class="card">
+          <h3 class="section-title">Shared Services Cost Allocation</h3>
+          <div class="table-wrapper">
+            <table id="allocationTable">
+              <thead>
+                <tr>
+                  <th>Service Center</th>
+                  <th>Total Cost</th>
+                  <th>Allocation Method</th>
+                  <th>Finance</th>
+                  <th>Engineering</th>
+                  <th>Sales</th>
+                  <th>Marketing</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody id="allocationTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="chart-grid" style="margin-top: 24px;">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">IT Services Allocation</h3>
+              <span class="chart-badge">$2.4M</span>
+            </div>
+            <div class="bar-chart" id="itAllocationChart"></div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Facilities Allocation</h3>
+              <span class="chart-badge">$1.8M</span>
+            </div>
+            <div class="bar-chart" id="facilitiesAllocationChart"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Variance -->
+      <div id="variance-tab" class="tab-content">
+        <div class="card">
+          <h3 class="section-title">Budget vs Actual Variance Analysis</h3>
+          <div class="table-wrapper">
+            <table id="varianceTable">
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>Budget</th>
+                  <th>Actual</th>
+                  <th>Variance ($)</th>
+                  <th>Variance (%)</th>
+                  <th>Driver</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="varianceTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+          <h3 class="section-title">Variance Narratives</h3>
+          <div id="narratives" style="display: grid; gap: 16px;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Sample Data
+    const sampleData = {
+      headcount: [
+        { costCenter: 'CC-100', department: 'Finance', current: 28, prior: 25, avgCost: 85000 },
+        { costCenter: 'CC-200', department: 'Engineering', current: 85, prior: 72, avgCost: 95000 },
+        { costCenter: 'CC-300', department: 'Sales', current: 52, prior: 48, avgCost: 75000 },
+        { costCenter: 'CC-400', department: 'Marketing', current: 35, prior: 32, avgCost: 68000 },
+        { costCenter: 'CC-500', department: 'Operations', current: 32, prior: 30, avgCost: 62000 },
+        { costCenter: 'CC-600', department: 'HR', current: 15, prior: 14, avgCost: 72000 }
+      ],
+      allocation: [
+        { service: 'IT Services', total: 2400000, method: 'Headcount', finance: 272727, engineering: 777273, sales: 476364, marketing: 320455, operations: 292727 },
+        { service: 'Facilities', total: 1800000, method: 'Square Footage', finance: 216216, engineering: 540541, sales: 405405, marketing: 324324, operations: 313514 },
+        { service: 'HR Services', total: 950000, method: 'Headcount', finance: 107692, engineering: 295769, sales: 181538, marketing: 121923, operations: 115385 },
+        { service: 'Legal & Compliance', total: 720000, method: 'Revenue Split', finance: 86400, engineering: 144000, sales: 288000, marketing: 115200, operations: 86400 }
+      ],
+      variance: [
+        { department: 'Finance', budget: 2380000, actual: 2450000, driver: 'Headcount +3', action: 'Approved hire for compliance' },
+        { department: 'Engineering', budget: 8075000, actual: 8320000, driver: 'Compensation adjustment', action: 'Market rate correction Q2' },
+        { department: 'Sales', budget: 3900000, actual: 3820000, driver: 'Lower commission rate', action: 'Favorable variance' },
+        { department: 'Marketing', budget: 2380000, actual: 2590000, driver: 'Campaign overspend', action: 'Review and reforecast' },
+        { department: 'Operations', budget: 1984000, actual: 1920000, driver: 'Delayed hires', action: 'On track to close gap Q3' },
+        { department: 'HR', budget: 1080000, actual: 1100000, driver: 'Recruiting fees', action: 'Within acceptable range' }
+      ]
+    };
+
+    let currentData = sampleData;
+
+    // Initialize
+    function init() {
+      loadSampleData();
+    }
+
+    // Load sample data
+    function loadSampleData() {
+      currentData = sampleData;
+      renderAllData();
+    }
+
+    // Render all visualizations
+    function renderAllData() {
+      renderMetrics();
+      renderHeadcountChart();
+      renderGrowthChart();
+      renderHeadcountTable();
+      renderAllocationTable();
+      renderAllocationCharts();
+      renderVarianceTable();
+      renderNarratives();
+    }
+
+    // Render key metrics
+    function renderMetrics() {
+      const totalHeadcount = currentData.headcount.reduce((sum, item) => sum + item.current, 0);
+      const priorHeadcount = currentData.headcount.reduce((sum, item) => sum + item.prior, 0);
+      const totalCost = currentData.headcount.reduce((sum, item) => sum + (item.current * item.avgCost), 0);
+      const priorCost = currentData.headcount.reduce((sum, item) => sum + (item.prior * item.avgCost), 0);
+      const costPerHead = totalCost / totalHeadcount;
+      const priorCostPerHead = priorCost / priorHeadcount;
+
+      document.getElementById('totalHeadcount').textContent = totalHeadcount;
+      document.getElementById('totalCost').textContent = formatCurrency(totalCost / 1000000, 1) + 'M';
+      document.getElementById('costPerHead').textContent = formatCurrency(costPerHead / 1000, 1) + 'K';
+    }
+
+    // Render headcount chart
+    function renderHeadcountChart() {
+      const container = document.getElementById('headcountChart');
+      const maxValue = Math.max(...currentData.headcount.map(d => d.current));
+      
+      container.innerHTML = currentData.headcount.map(item => `
+        <div class="bar-row">
+          <div class="bar-label">${item.department}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(item.current / maxValue * 100)}%"></div>
+          </div>
+          <div class="bar-value">${item.current}</div>
+        </div>
+      `).join('');
+    }
+
+    // Render growth chart
+    function renderGrowthChart() {
+      const container = document.getElementById('growthChart');
+      const data = currentData.headcount.map(item => ({
+        ...item,
+        growth: ((item.current - item.prior) / item.prior * 100)
+      }));
+      const maxValue = Math.max(...data.map(d => Math.abs(d.growth)));
+      
+      container.innerHTML = data.map(item => `
+        <div class="bar-row">
+          <div class="bar-label">${item.department}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(Math.abs(item.growth) / maxValue * 100)}%"></div>
+          </div>
+          <div class="bar-value ${item.growth >= 0 ? 'cell-positive' : 'cell-negative'}">
+            ${item.growth >= 0 ? '+' : ''}${item.growth.toFixed(1)}%
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render headcount table
+    function renderHeadcountTable() {
+      const tbody = document.getElementById('headcountTableBody');
+      
+      tbody.innerHTML = currentData.headcount.map(item => {
+        const change = item.current - item.prior;
+        const changePct = (change / item.prior * 100);
+        
+        return `
+          <tr>
+            <td>${item.costCenter}</td>
+            <td><strong>${item.department}</strong></td>
+            <td class="cell-number">${item.current}</td>
+            <td class="cell-number">${item.prior}</td>
+            <td class="cell-number ${change >= 0 ? 'cell-positive' : 'cell-negative'}">
+              ${change >= 0 ? '+' : ''}${change}
+            </td>
+            <td class="cell-number ${changePct >= 0 ? 'cell-positive' : 'cell-negative'}">
+              ${changePct >= 0 ? '+' : ''}${changePct.toFixed(1)}%
+            </td>
+            <td class="cell-number">${formatCurrency(item.avgCost, 0)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Render allocation table
+    function renderAllocationTable() {
+      const tbody = document.getElementById('allocationTableBody');
+      
+      tbody.innerHTML = currentData.allocation.map(item => `
+        <tr>
+          <td><strong>${item.service}</strong></td>
+          <td class="cell-number">${formatCurrency(item.total, 0)}</td>
+          <td>${item.method}</td>
+          <td class="cell-number">${formatCurrency(item.finance, 0)}</td>
+          <td class="cell-number">${formatCurrency(item.engineering, 0)}</td>
+          <td class="cell-number">${formatCurrency(item.sales, 0)}</td>
+          <td class="cell-number">${formatCurrency(item.marketing, 0)}</td>
+          <td class="cell-number">${formatCurrency(item.operations, 0)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Render allocation charts
+    function renderAllocationCharts() {
+      // IT Services
+      const itData = currentData.allocation[0];
+      const itTotal = itData.finance + itData.engineering + itData.sales + itData.marketing + itData.operations;
+      const itContainer = document.getElementById('itAllocationChart');
+      
+      itContainer.innerHTML = `
+        <div class="bar-row">
+          <div class="bar-label">Finance</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(itData.finance / itTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(itData.finance / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Engineering</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(itData.engineering / itTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(itData.engineering / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Sales</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(itData.sales / itTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(itData.sales / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Marketing</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(itData.marketing / itTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(itData.marketing / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Operations</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(itData.operations / itTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(itData.operations / 1000, 0)}K</div>
+        </div>
+      `;
+
+      // Facilities
+      const facData = currentData.allocation[1];
+      const facTotal = facData.finance + facData.engineering + facData.sales + facData.marketing + facData.operations;
+      const facContainer = document.getElementById('facilitiesAllocationChart');
+      
+      facContainer.innerHTML = `
+        <div class="bar-row">
+          <div class="bar-label">Finance</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(facData.finance / facTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(facData.finance / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Engineering</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(facData.engineering / facTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(facData.engineering / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Sales</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(facData.sales / facTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(facData.sales / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Marketing</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(facData.marketing / facTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(facData.marketing / 1000, 0)}K</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Operations</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${(facData.operations / facTotal * 100)}%"></div>
+          </div>
+          <div class="bar-value">${formatCurrency(facData.operations / 1000, 0)}K</div>
+        </div>
+      `;
+    }
+
+    // Render variance table
+    function renderVarianceTable() {
+      const tbody = document.getElementById('varianceTableBody');
+      
+      tbody.innerHTML = currentData.variance.map(item => {
+        const variance = item.actual - item.budget;
+        const variancePct = (variance / item.budget * 100);
+        
+        return `
+          <tr>
+            <td><strong>${item.department}</strong></td>
+            <td class="cell-number">${formatCurrency(item.budget, 0)}</td>
+            <td class="cell-number">${formatCurrency(item.actual, 0)}</td>
+            <td class="cell-number ${variance >= 0 ? 'cell-positive' : 'cell-negative'}">
+              ${variance >= 0 ? '+' : ''}${formatCurrency(variance, 0)}
+            </td>
+            <td class="cell-number ${variancePct >= 0 ? 'cell-positive' : 'cell-negative'}">
+              ${variancePct >= 0 ? '+' : ''}${variancePct.toFixed(1)}%
+            </td>
+            <td>${item.driver}</td>
+            <td>${item.action}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Render narratives
+    function renderNarratives() {
+      const container = document.getElementById('narratives');
+      
+      const narratives = [
+        {
+          title: 'Engineering Cost Overrun',
+          variance: '+$245K',
+          status: 'Attention Required',
+          content: 'Engineering costs exceeded budget by $245K (3.0%) driven primarily by market rate compensation adjustments implemented in Q2. The adjustment was necessary to remain competitive and reduce attrition risk. Finance recommends incorporating these new rates into the Q3 reforecast.'
+        },
+        {
+          title: 'Marketing Campaign Investment',
+          variance: '+$210K',
+          status: 'Under Review',
+          content: 'Marketing overspent by $210K (8.8%) on brand campaigns. While above budget, the campaign generated measurable pipeline growth of 15% MoM. Leadership is evaluating ROI metrics before deciding whether to continue elevated spend or revert to original budget in Q3.'
+        },
+        {
+          title: 'Sales Efficiency Gain',
+          variance: '-$80K',
+          status: 'Favorable',
+          content: 'Sales came in $80K (2.1%) under budget due to lower commission rates on enterprise deals. The shift toward longer sales cycles with larger deal sizes has temporarily reduced commission expense. This trend is expected to normalize as the pipeline converts.'
+        }
+      ];
+
+      container.innerHTML = narratives.map(item => `
+        <div class="card" style="padding: 16px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px;">
+            <h4 style="font-size: 15px; font-weight: 650;">${item.title}</h4>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="metric-trend ${item.variance.startsWith('+') ? 'trend-up' : 'trend-down'}">${item.variance}</span>
+              <span style="font-size: 11px; color: var(--muted);">${item.status}</span>
+            </div>
+          </div>
+          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">${item.content}</p>
+        </div>
+      `).join('');
+    }
+
+    // Tab switching
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName + '-tab').classList.add('active');
+    }
+
+    // File upload handling
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      alert('File upload functionality would parse your Excel file here. For now, loading sample data.');
+      loadSampleData();
+    }
+
+    // Drag and drop
+    const uploadArea = document.getElementById('uploadArea');
+    
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        handleFileUpload({ target: { files } });
+      }
+    });
+
+    // Download template
+    function downloadTemplate() {
+      // Create CSV template
+      const template = `Cost Center,Department,Current Headcount,Prior Year Headcount,Avg Cost per Head
+CC-100,Finance,28,25,85000
+CC-200,Engineering,85,72,95000
+CC-300,Sales,52,48,75000
+CC-400,Marketing,35,32,68000
+CC-500,Operations,32,30,62000
+CC-600,HR,15,14,72000
+
+Service Center,Total Cost,Allocation Method,Finance,Engineering,Sales,Marketing,Operations
+IT Services,2400000,Headcount,272727,777273,476364,320455,292727
+Facilities,1800000,Square Footage,216216,540541,405405,324324,313514
+HR Services,950000,Headcount,107692,295769,181538,121923,115385
+Legal & Compliance,720000,Revenue Split,86400,144000,288000,115200,86400
+
+Department,Budget,Actual,Driver,Action
+Finance,2380000,2450000,Headcount +3,Approved hire for compliance
+Engineering,8075000,8320000,Compensation adjustment,Market rate correction Q2
+Sales,3900000,3820000,Lower commission rate,Favorable variance
+Marketing,2380000,2590000,Campaign overspend,Review and reforecast
+Operations,1984000,1920000,Delayed hires,On track to close gap Q3
+HR,1080000,1100000,Recruiting fees,Within acceptable range`;
+
+      const blob = new Blob([template], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'indirect-cost-headcount-template.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+
+    // Utility: Format currency
+    function formatCurrency(value, decimals = 2) {
+      return '$' + value.toLocaleString('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
