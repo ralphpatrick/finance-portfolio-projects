@@ -594,6 +594,28 @@
       }
     }
 
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideOut {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+    }
+
     .animate-in {
       animation: fadeInUp 500ms ease forwards;
     }
@@ -609,7 +631,7 @@
         <span class="brand-text">FP&A Portfolio</span>
       </a>
       <div style="display: flex; gap: 10px;">
-        <a class="btn btn-ghost" href="../index.html">← Back to Portfolio</a>
+        <a class="btn btn-ghost" href="index-2.html">← Back to Portfolio</a>
       </div>
     </div>
   </header>
@@ -853,33 +875,98 @@
   </main>
 
   <script>
-    // Sample Data
-    const sampleData = {
-      headcount: [
-        { costCenter: 'CC-100', department: 'Finance', current: 28, prior: 25, avgCost: 85000 },
-        { costCenter: 'CC-200', department: 'Engineering', current: 85, prior: 72, avgCost: 95000 },
-        { costCenter: 'CC-300', department: 'Sales', current: 52, prior: 48, avgCost: 75000 },
-        { costCenter: 'CC-400', department: 'Marketing', current: 35, prior: 32, avgCost: 68000 },
-        { costCenter: 'CC-500', department: 'Operations', current: 32, prior: 30, avgCost: 62000 },
-        { costCenter: 'CC-600', department: 'HR', current: 15, prior: 14, avgCost: 72000 }
-      ],
-      allocation: [
-        { service: 'IT Services', total: 2400000, method: 'Headcount', finance: 272727, engineering: 777273, sales: 476364, marketing: 320455, operations: 292727 },
-        { service: 'Facilities', total: 1800000, method: 'Square Footage', finance: 216216, engineering: 540541, sales: 405405, marketing: 324324, operations: 313514 },
-        { service: 'HR Services', total: 950000, method: 'Headcount', finance: 107692, engineering: 295769, sales: 181538, marketing: 121923, operations: 115385 },
-        { service: 'Legal & Compliance', total: 720000, method: 'Revenue Split', finance: 86400, engineering: 144000, sales: 288000, marketing: 115200, operations: 86400 }
-      ],
-      variance: [
-        { department: 'Finance', budget: 2380000, actual: 2450000, driver: 'Headcount +3', action: 'Approved hire for compliance' },
-        { department: 'Engineering', budget: 8075000, actual: 8320000, driver: 'Compensation adjustment', action: 'Market rate correction Q2' },
-        { department: 'Sales', budget: 3900000, actual: 3820000, driver: 'Lower commission rate', action: 'Favorable variance' },
-        { department: 'Marketing', budget: 2380000, actual: 2590000, driver: 'Campaign overspend', action: 'Review and reforecast' },
-        { department: 'Operations', budget: 1984000, actual: 1920000, driver: 'Delayed hires', action: 'On track to close gap Q3' },
-        { department: 'HR', budget: 1080000, actual: 1100000, driver: 'Recruiting fees', action: 'Within acceptable range' }
-      ]
-    };
+    // Generate randomized sample data
+    function generateRandomData() {
+      const departments = [
+        { code: 'CC-100', name: 'Finance', baseCount: 32, baseCost: 85000 },
+        { code: 'CC-200', name: 'Engineering', baseCount: 45, baseCost: 95000 },
+        { code: 'CC-300', name: 'Sales', baseCount: 38, baseCost: 75000 },
+        { code: 'CC-400', name: 'Marketing', baseCount: 28, baseCost: 68000 },
+        { code: 'CC-500', name: 'Operations', baseCount: 35, baseCost: 62000 },
+        { code: 'CC-600', name: 'HR', baseCount: 18, baseCost: 72000 }
+      ];
 
-    let currentData = sampleData;
+      const drivers = [
+        'Headcount changes', 'Compensation adjustment', 'Delayed hires', 
+        'Market correction', 'Attrition', 'New initiative', 
+        'Restructuring', 'Seasonal hiring', 'Budget reallocation'
+      ];
+
+      const actions = [
+        'Approved by leadership', 'Under review', 'Favorable variance',
+        'Reforecast required', 'Within acceptable range', 'Action plan in progress',
+        'No action needed', 'Escalated to CFO', 'Monitoring closely'
+      ];
+
+      // Randomize headcount
+      const headcount = departments.map(dept => {
+        const variance = 0.7 + Math.random() * 0.6; // 70% to 130%
+        const current = Math.round(dept.baseCount * variance);
+        const prior = Math.round(current / (0.95 + Math.random() * 0.15)); // -5% to +10% growth
+        const costVariance = 0.9 + Math.random() * 0.25; // 90% to 115%
+        const avgCost = Math.round(dept.baseCost * costVariance / 1000) * 1000;
+        
+        return {
+          costCenter: dept.code,
+          department: dept.name,
+          current,
+          prior,
+          avgCost
+        };
+      });
+
+      // Calculate total headcount for allocation
+      const totalHeadcount = headcount.reduce((sum, d) => sum + d.current, 0);
+
+      // Randomize allocation
+      const services = [
+        { name: 'IT Services', baseTotal: 2400000, method: 'Headcount' },
+        { name: 'Facilities', baseTotal: 1800000, method: 'Square Footage' },
+        { name: 'HR Services', baseTotal: 950000, method: 'Headcount' },
+        { name: 'Legal & Compliance', baseTotal: 720000, method: 'Revenue Split' }
+      ];
+
+      const allocation = services.map(svc => {
+        const variance = 0.8 + Math.random() * 0.5; // 80% to 130%
+        const total = Math.round(svc.baseTotal * variance);
+        
+        // Generate random allocation percentages that sum to 100%
+        let percentages = departments.map(() => Math.random());
+        const sum = percentages.reduce((a, b) => a + b, 0);
+        percentages = percentages.map(p => p / sum);
+        
+        return {
+          service: svc.name,
+          total,
+          method: svc.method,
+          finance: Math.round(total * percentages[0]),
+          engineering: Math.round(total * percentages[1]),
+          sales: Math.round(total * percentages[2]),
+          marketing: Math.round(total * percentages[3]),
+          operations: Math.round(total * percentages[4])
+        };
+      });
+
+      // Randomize variance data
+      const variance = departments.map(dept => {
+        const hc = headcount.find(h => h.department === dept.name);
+        const budget = Math.round(hc.current * hc.avgCost);
+        const variancePercent = -0.15 + Math.random() * 0.30; // -15% to +15%
+        const actual = Math.round(budget * (1 + variancePercent));
+        
+        return {
+          department: dept.name,
+          budget,
+          actual,
+          driver: drivers[Math.floor(Math.random() * drivers.length)],
+          action: actions[Math.floor(Math.random() * actions.length)]
+        };
+      });
+
+      return { headcount, allocation, variance };
+    }
+
+    let currentData = generateRandomData();
 
     // Initialize
     function init() {
@@ -888,8 +975,11 @@
 
     // Load sample data
     function loadSampleData() {
-      currentData = sampleData;
+      currentData = generateRandomData();
       renderAllData();
+      
+      // Show success message
+      showNotification('Sample data randomized successfully!', 'success');
     }
 
     // Render all visualizations
@@ -1119,26 +1209,42 @@
     function renderNarratives() {
       const container = document.getElementById('narratives');
       
-      const narratives = [
-        {
-          title: 'Engineering Cost Overrun',
-          variance: '+$245K',
-          status: 'Attention Required',
-          content: 'Engineering costs exceeded budget by $245K (3.0%) driven primarily by market rate compensation adjustments implemented in Q2. The adjustment was necessary to remain competitive and reduce attrition risk. Finance recommends incorporating these new rates into the Q3 reforecast.'
-        },
-        {
-          title: 'Marketing Campaign Investment',
-          variance: '+$210K',
-          status: 'Under Review',
-          content: 'Marketing overspent by $210K (8.8%) on brand campaigns. While above budget, the campaign generated measurable pipeline growth of 15% MoM. Leadership is evaluating ROI metrics before deciding whether to continue elevated spend or revert to original budget in Q3.'
-        },
-        {
-          title: 'Sales Efficiency Gain',
-          variance: '-$80K',
-          status: 'Favorable',
-          content: 'Sales came in $80K (2.1%) under budget due to lower commission rates on enterprise deals. The shift toward longer sales cycles with larger deal sizes has temporarily reduced commission expense. This trend is expected to normalize as the pipeline converts.'
-        }
-      ];
+      // Generate narratives from variance data
+      const narratives = currentData.variance
+        .filter(item => {
+          const variance = item.actual - item.budget;
+          const variancePct = Math.abs((variance / item.budget * 100));
+          return variancePct > 5; // Only show significant variances
+        })
+        .slice(0, 3) // Top 3
+        .map(item => {
+          const variance = item.actual - item.budget;
+          const variancePct = (variance / item.budget * 100);
+          const isOverBudget = variance > 0;
+          
+          let content = `${item.department} ${isOverBudget ? 'exceeded' : 'came in under'} budget by ${formatCurrency(Math.abs(variance), 0)} (${Math.abs(variancePct).toFixed(1)}%) `;
+          content += `driven by ${item.driver.toLowerCase()}. ${item.action}.`;
+          
+          const status = Math.abs(variancePct) > 10 ? 'Attention Required' : 
+                        Math.abs(variancePct) > 5 ? 'Under Review' : 
+                        'Within Range';
+
+          return {
+            title: `${item.department} ${isOverBudget ? 'Cost Overrun' : 'Cost Savings'}`,
+            variance: (variance >= 0 ? '+' : '') + formatCurrency(variance / 1000, 0) + 'K',
+            status: isOverBudget ? status : 'Favorable',
+            content
+          };
+        });
+
+      if (narratives.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="padding: 16px;">
+            <p style="font-size: 13px; color: var(--muted);">All departments are within 5% of budget. No significant variances to report.</p>
+          </div>
+        `;
+        return;
+      }
 
       container.innerHTML = narratives.map(item => `
         <div class="card" style="padding: 16px;">
@@ -1170,8 +1276,238 @@
       const file = event.target.files[0];
       if (!file) return;
 
-      alert('File upload functionality would parse your Excel file here. For now, loading sample data.');
-      loadSampleData();
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const parsedData = parseCSV(text);
+          
+          if (parsedData) {
+            currentData = parsedData;
+            renderAllData();
+            showNotification('File uploaded successfully!', 'success');
+          } else {
+            showNotification('Invalid file format. Please use the template.', 'error');
+          }
+        } catch (error) {
+          console.error('Parse error:', error);
+          showNotification('Error parsing file: ' + error.message, 'error');
+        }
+        
+        // Reset file input so the same file can be uploaded again
+        event.target.value = '';
+      };
+
+      reader.onerror = function() {
+        showNotification('Error reading file. Please try again.', 'error');
+        event.target.value = '';
+      };
+
+      reader.readAsText(file);
+    }
+
+    // Parse CSV file
+    function parseCSV(text) {
+      try {
+        const lines = text.trim().split('\n').map(line => line.trim()).filter(line => line && !line.toLowerCase().startsWith('notes'));
+        
+        if (lines.length < 2) {
+          throw new Error('File appears to be empty or invalid.');
+        }
+
+        // Parse header
+        const header = lines[0].split(',').map(h => h.trim().toLowerCase());
+        
+        // Validate required columns
+        const requiredColumns = ['cost center', 'department', 'current headcount', 'prior year headcount', 'avg cost per head', 'budget', 'actual'];
+        const missingColumns = requiredColumns.filter(col => !header.includes(col));
+        
+        if (missingColumns.length > 0) {
+          throw new Error(`Missing required columns: ${missingColumns.join(', ')}`);
+        }
+
+        // Get column indices
+        const getIndex = (name) => header.findIndex(h => h.includes(name));
+        
+        const indices = {
+          costCenter: getIndex('cost center'),
+          department: getIndex('department'),
+          currentHC: getIndex('current headcount'),
+          priorHC: getIndex('prior year headcount'),
+          avgCost: getIndex('avg cost per head'),
+          budget: getIndex('budget'),
+          actual: getIndex('actual'),
+          driver: getIndex('driver'),
+          action: getIndex('action'),
+          itAlloc: getIndex('it services'),
+          facAlloc: getIndex('facilities'),
+          hrAlloc: getIndex('hr services'),
+          legalAlloc: getIndex('legal')
+        };
+
+        // Parse data rows
+        const headcount = [];
+        const variance = [];
+        let totalIT = 0, totalFac = 0, totalHR = 0, totalLegal = 0;
+
+        for (let i = 1; i < lines.length; i++) {
+          const cols = lines[i].split(',').map(c => c.trim());
+          if (cols.length < requiredColumns.length) continue;
+
+          const dept = cols[indices.department];
+          
+          // Headcount data
+          headcount.push({
+            costCenter: cols[indices.costCenter],
+            department: dept,
+            current: parseInt(cols[indices.currentHC]) || 0,
+            prior: parseInt(cols[indices.priorHC]) || 0,
+            avgCost: parseInt(cols[indices.avgCost]) || 0
+          });
+
+          // Variance data
+          variance.push({
+            department: dept,
+            budget: parseInt(cols[indices.budget]) || 0,
+            actual: parseInt(cols[indices.actual]) || 0,
+            driver: cols[indices.driver] || 'N/A',
+            action: cols[indices.action] || 'N/A'
+          });
+
+          // Accumulate allocation totals
+          if (indices.itAlloc >= 0) totalIT += parseInt(cols[indices.itAlloc]) || 0;
+          if (indices.facAlloc >= 0) totalFac += parseInt(cols[indices.facAlloc]) || 0;
+          if (indices.hrAlloc >= 0) totalHR += parseInt(cols[indices.hrAlloc]) || 0;
+          if (indices.legalAlloc >= 0) totalLegal += parseInt(cols[indices.legalAlloc]) || 0;
+        }
+
+        // Build allocation data from individual department allocations
+        const allocation = [];
+        
+        if (totalIT > 0) {
+          allocation.push({
+            service: 'IT Services',
+            total: totalIT,
+            method: 'Headcount',
+            finance: parseInt(lines[1].split(',')[indices.itAlloc]) || 0,
+            engineering: parseInt(lines[2].split(',')[indices.itAlloc]) || 0,
+            sales: parseInt(lines[3].split(',')[indices.itAlloc]) || 0,
+            marketing: parseInt(lines[4].split(',')[indices.itAlloc]) || 0,
+            operations: parseInt(lines[5].split(',')[indices.itAlloc]) || 0
+          });
+        }
+
+        if (totalFac > 0) {
+          allocation.push({
+            service: 'Facilities',
+            total: totalFac,
+            method: 'Square Footage',
+            finance: parseInt(lines[1].split(',')[indices.facAlloc]) || 0,
+            engineering: parseInt(lines[2].split(',')[indices.facAlloc]) || 0,
+            sales: parseInt(lines[3].split(',')[indices.facAlloc]) || 0,
+            marketing: parseInt(lines[4].split(',')[indices.facAlloc]) || 0,
+            operations: parseInt(lines[5].split(',')[indices.facAlloc]) || 0
+          });
+        }
+
+        if (totalHR > 0) {
+          allocation.push({
+            service: 'HR Services',
+            total: totalHR,
+            method: 'Headcount',
+            finance: parseInt(lines[1].split(',')[indices.hrAlloc]) || 0,
+            engineering: parseInt(lines[2].split(',')[indices.hrAlloc]) || 0,
+            sales: parseInt(lines[3].split(',')[indices.hrAlloc]) || 0,
+            marketing: parseInt(lines[4].split(',')[indices.hrAlloc]) || 0,
+            operations: parseInt(lines[5].split(',')[indices.hrAlloc]) || 0
+          });
+        }
+
+        if (totalLegal > 0) {
+          allocation.push({
+            service: 'Legal & Compliance',
+            total: totalLegal,
+            method: 'Revenue Split',
+            finance: parseInt(lines[1].split(',')[indices.legalAlloc]) || 0,
+            engineering: parseInt(lines[2].split(',')[indices.legalAlloc]) || 0,
+            sales: parseInt(lines[3].split(',')[indices.legalAlloc]) || 0,
+            marketing: parseInt(lines[4].split(',')[indices.legalAlloc]) || 0,
+            operations: parseInt(lines[5].split(',')[indices.legalAlloc]) || 0
+          });
+        }
+
+        if (headcount.length === 0) {
+          throw new Error('No valid data rows found in file.');
+        }
+
+        // If no allocation data, generate default
+        if (allocation.length === 0) {
+          const totalHeadcount = headcount.reduce((sum, d) => sum + d.current, 0);
+          allocation.push({
+            service: 'Shared Services',
+            total: 1000000,
+            method: 'Headcount',
+            finance: Math.round(1000000 * headcount[0].current / totalHeadcount),
+            engineering: Math.round(1000000 * headcount[1].current / totalHeadcount),
+            sales: Math.round(1000000 * headcount[2].current / totalHeadcount),
+            marketing: Math.round(1000000 * headcount[3].current / totalHeadcount),
+            operations: Math.round(1000000 * headcount[4].current / totalHeadcount)
+          });
+        }
+
+        return { headcount, allocation, variance };
+      } catch (error) {
+        throw new Error('CSV parsing failed: ' + error.message);
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Remove existing notification
+      const existing = document.querySelector('.notification');
+      if (existing) existing.remove();
+
+      // Create notification
+      const notification = document.createElement('div');
+      notification.className = 'notification notification-' + type;
+      notification.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 20px;">${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
+          <span>${message}</span>
+        </div>
+      `;
+
+      // Add styles
+      notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 24px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 20px;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        animation: slideIn 300ms ease;
+        max-width: 400px;
+      `;
+
+      if (type === 'success') {
+        notification.style.borderColor = 'rgba(5, 150, 105, 0.3)';
+        notification.style.background = 'rgba(5, 150, 105, 0.05)';
+      } else if (type === 'error') {
+        notification.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        notification.style.background = 'rgba(239, 68, 68, 0.05)';
+      }
+
+      document.body.appendChild(notification);
+
+      // Auto remove after 4 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 300ms ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 4000);
     }
 
     // Drag and drop
@@ -1198,28 +1534,23 @@
 
     // Download template
     function downloadTemplate() {
-      // Create CSV template
-      const template = `Cost Center,Department,Current Headcount,Prior Year Headcount,Avg Cost per Head
-CC-100,Finance,28,25,85000
-CC-200,Engineering,85,72,95000
-CC-300,Sales,52,48,75000
-CC-400,Marketing,35,32,68000
-CC-500,Operations,32,30,62000
-CC-600,HR,15,14,72000
+      // Create CSV template with single unified structure
+      const template = `Cost Center,Department,Current Headcount,Prior Year Headcount,Avg Cost per Head,Budget,Actual,Variance Driver,Variance Action,IT Services Allocation,Facilities Allocation,HR Services Allocation,Legal Allocation
+CC-100,Finance,32,30,85000,2720000,2800000,Headcount +2,Approved hire for compliance,320000,240000,120000,96000
+CC-200,Engineering,45,42,95000,4275000,4420000,Compensation adjustment,Market rate correction Q2,450000,337500,168750,135000
+CC-300,Sales,38,35,75000,2850000,2775000,Lower commission rate,Favorable variance,380000,285000,142500,114000
+CC-400,Marketing,28,26,68000,1904000,2070000,Campaign overspend,Review and reforecast,280000,210000,105000,84000
+CC-500,Operations,35,33,62000,2170000,2100000,Delayed hires,On track to close gap Q3,350000,262500,131250,105000
+CC-600,HR,18,16,72000,1296000,1350000,Recruiting fees,Within acceptable range,180000,135000,67500,54000
 
-Service Center,Total Cost,Allocation Method,Finance,Engineering,Sales,Marketing,Operations
-IT Services,2400000,Headcount,272727,777273,476364,320455,292727
-Facilities,1800000,Square Footage,216216,540541,405405,324324,313514
-HR Services,950000,Headcount,107692,295769,181538,121923,115385
-Legal & Compliance,720000,Revenue Split,86400,144000,288000,115200,86400
-
-Department,Budget,Actual,Driver,Action
-Finance,2380000,2450000,Headcount +3,Approved hire for compliance
-Engineering,8075000,8320000,Compensation adjustment,Market rate correction Q2
-Sales,3900000,3820000,Lower commission rate,Favorable variance
-Marketing,2380000,2590000,Campaign overspend,Review and reforecast
-Operations,1984000,1920000,Delayed hires,On track to close gap Q3
-HR,1080000,1100000,Recruiting fees,Within acceptable range`;
+Notes:
+- Keep the header row (row 1) unchanged
+- Edit the data rows (rows 2-7) with your actual data
+- All allocation columns should sum to the total cost for each service
+- IT Services total: 1960000
+- Facilities total: 1470000
+- HR Services total: 735000
+- Legal & Compliance total: 588000`;
 
       const blob = new Blob([template], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
@@ -1230,6 +1561,8 @@ HR,1080000,1100000,Recruiting fees,Within acceptable range`;
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      
+      showNotification('Template downloaded! Fill it out and upload to see your data.', 'success');
     }
 
     // Utility: Format currency
