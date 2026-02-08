@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commercial / Sales Finance Model · FP&A Portfolio</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <style>
+    /* Module-specific styles */
+    .module-hero {
+      padding: 48px 0 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .module-title {
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    .module-subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .module-problem {
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 520;
+      max-width: 68ch;
+      margin-bottom: 12px;
+    }
+    .module-role {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .feature-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .chip {
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+    }
+    .module-section {
+      padding: 48px 0;
+    }
+    .module-section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .module-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-small {
+      padding: 7px 12px;
+      font-size: 13px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 140ms ease;
+    }
+    .btn-small:hover {
+      border-color: rgba(12, 23, 45, 0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .btn-small:active {
+      transform: translateY(1px);
+    }
+    .btn-primary {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 18px rgba(11,18,32,0.12);
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .kpi-box {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(246,248,251,0.6);
+    }
+    .kpi-box-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .kpi-box-value {
+      font-size: 20px;
+      font-weight: 650;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 16px 0;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 650;
+      color: var(--text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover {
+      background: rgba(246,248,251,0.5);
+    }
+    .chart-container {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+    }
+    .chart-title {
+      font-size: 14px;
+      font-weight: 650;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .upload-zone {
+      padding: 20px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(246,248,251,0.4);
+      text-align: center;
+      margin: 16px 0;
+    }
+    .upload-instructions {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      border-bottom: 1px dotted var(--muted);
+    }
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      background: var(--text);
+      color: white;
+      font-size: 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 100;
+      margin-bottom: 6px;
+    }
+    .filter-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-row select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      background: white;
+      font-family: var(--font-sans);
+    }
+    .demo-section {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .demo-card {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+    }
+    .demo-card-title {
+      font-size: 14px;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+    .demo-card-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a href="../index.html" class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          FP&A Portfolio
+        </a>
+        <div class="nav-cta">
+          <a href="../index.html" class="btn btn-ghost">← Back to Portfolio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    
+    <!-- Hero -->
+    <section class="module-hero">
+      <div class="container">
+        <h1 class="module-title">Commercial / Sales Finance Model</h1>
+        <p class="module-subtitle">Evaluating revenue decisions beyond top-line growth.</p>
+        <p class="module-problem">Measure profitability of promos, channels, and pricing moves—before and after.</p>
+        <p class="module-role">Sales Finance • Commercial Finance • Revenue Analytics</p>
+        <div class="feature-chips">
+          <span class="chip">Promotion ROI (pre/post)</span>
+          <span class="chip">Channel-level P&L</span>
+          <span class="chip">Price / Volume / Mix</span>
+          <span class="chip">Discount & accrual logic</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Randomizer -->
+    <section class="module-section section-muted">
+      <div class="container">
+        <div style="text-align: center;">
+          <button id="randomizeAll" class="btn btn-solid" style="font-size: 15px; padding: 12px 20px;">
+            🎲 Generate Random Scenario
+          </button>
+          <p style="margin-top: 10px; font-size: 13px; color: var(--muted);">
+            Instantly populate all models with new realistic data
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Promotion ROI -->
+    <section class="module-section">
+      <div class="container">
+        <h2 class="module-section-title">1. Promotion ROI Analysis</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Promotion Performance</h3>
+            <div class="card-actions">
+              <button onclick="downloadPromoCSV()" class="btn-small">Export CSV</button>
+              <button onclick="downloadPromoTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="promoUpload" accept=".csv" onchange="handlePromoUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="promoKPIs">
+            <!-- KPIs populated by JS -->
+          </div>
+
+          <table class="data-table" id="promoTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Channel P&L -->
+    <section class="module-section section-muted">
+      <div class="container">
+        <h2 class="module-section-title">2. Channel P&L Analysis</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Channel Performance</h3>
+            <div class="card-actions">
+              <button onclick="downloadChannelCSV()" class="btn-small">Export View</button>
+              <button onclick="downloadChannelTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="channelUpload" accept=".csv" onchange="handleChannelUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <select id="monthFilter" onchange="renderChannelData()">
+              <option value="all">All Months</option>
+            </select>
+            <select id="channelFilter" onchange="renderChannelData()">
+              <option value="all">All Channels</option>
+            </select>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-title">Revenue by Channel</div>
+            <canvas id="channelChart" width="800" height="300"></canvas>
+          </div>
+
+          <table class="data-table" id="channelTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Price Volume Mix -->
+    <section class="module-section">
+      <div class="container">
+        <h2 class="module-section-title">3. Price Volume Mix (PVM) Bridge</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Revenue Variance Analysis</h3>
+            <div class="card-actions">
+              <button onclick="downloadPVMCSV()" class="btn-small">Export Results</button>
+              <button onclick="downloadPVMTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="pvmUpload" accept=".csv" onchange="handlePVMUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="pvmKPIs">
+            <!-- KPIs populated by JS -->
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-title">Revenue Bridge: Prior → Current</div>
+            <canvas id="pvmChart" width="800" height="300"></canvas>
+          </div>
+
+          <table class="data-table" id="pvmTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Discount & Accrual -->
+    <section class="module-section section-muted">
+      <div class="container">
+        <h2 class="module-section-title">4. Discount & Accrual Schedule</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Straight-Line Accrual</h3>
+            <div class="card-actions">
+              <button onclick="downloadAccrualCSV()" class="btn-small">Export Schedule</button>
+              <button onclick="downloadAccrualTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="accrualUpload" accept=".csv" onchange="handleAccrualUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="accrualKPIs">
+            <!-- KPIs populated by JS -->
+          </div>
+
+          <table class="data-table" id="accrualTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- What This Demonstrates -->
+    <section class="demo-section">
+      <div class="container">
+        <h2 class="module-section-title">What This Demonstrates</h2>
+        <div class="demo-grid">
+          <div class="demo-card">
+            <div class="demo-card-title">Commercial Decision Support</div>
+            <div class="demo-card-text">
+              Pre/post ROI analysis for promotions, channel profitability tracking, and pricing impact quantification.
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-title">Revenue Quality vs Growth</div>
+            <div class="demo-card-text">
+              Looking beyond top-line metrics to understand margin impact, channel economics, and true profitability.
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-title">Finance-Grade Modeling Logic</div>
+            <div class="demo-card-text">
+              Variance decomposition, accrual mechanics, and multi-dimensional analysis built for real finance teams.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <a href="#" class="to-top" aria-label="Back to top">↑</a>
+
+  <script>
+    /* =========================================
+       Commercial Finance Model - JavaScript
+       Sample data + CSV handling + charts
+       ========================================= */
+
+    // ========== SAMPLE DATA ==========
+
+    let promoData = [
+      { name: 'Spring Sale', baseline_rev: 500000, promo_rev: 680000, baseline_gp: 200000, promo_gp: 245000, promo_cost: 35000 },
+      { name: 'Summer Boost', baseline_rev: 420000, promo_rev: 550000, baseline_gp: 168000, promo_gp: 198000, promo_cost: 28000 },
+      { name: 'Fall Clearance', baseline_rev: 380000, promo_rev: 520000, baseline_gp: 152000, promo_gp: 182000, promo_cost: 32000 }
+    ];
+
+    let channelData = [
+      { month: 'Jan', channel: 'Direct', revenue: 850000, cogs: 340000, opex: 180000 },
+      { month: 'Jan', channel: 'Retail', revenue: 620000, cogs: 310000, opex: 140000 },
+      { month: 'Jan', channel: 'Online', revenue: 480000, cogs: 192000, opex: 95000 },
+      { month: 'Feb', channel: 'Direct', revenue: 880000, cogs: 352000, opex: 185000 },
+      { month: 'Feb', channel: 'Retail', revenue: 640000, cogs: 320000, opex: 145000 },
+      { month: 'Feb', channel: 'Online', revenue: 510000, cogs: 204000, opex: 100000 },
+      { month: 'Mar', channel: 'Direct', revenue: 920000, cogs: 368000, opex: 190000 },
+      { month: 'Mar', channel: 'Retail', revenue: 680000, cogs: 340000, opex: 152000 },
+      { month: 'Mar', channel: 'Online', revenue: 540000, cogs: 216000, opex: 105000 }
+    ];
+
+    let pvmData = [
+      { product: 'Product A', prior_volume: 10000, prior_price: 50, current_volume: 11000, current_price: 52 },
+      { product: 'Product B', prior_volume: 8000, prior_price: 75, current_volume: 7500, current_price: 80 },
+      { product: 'Product C', prior_volume: 5000, prior_price: 120, current_volume: 5800, current_price: 118 }
+    ];
+
+    let accrualData = {
+      total_amount: 240000,
+      start_month: 'Jan',
+      duration_months: 12
+    };
+
+    // ========== PROMO ROI FUNCTIONS ==========
+
+    function calculatePromoMetrics() {
+      return promoData.map(p => {
+        const incRev = p.promo_rev - p.baseline_rev;
+        const incGP = p.promo_gp - p.baseline_gp;
+        const netProfit = incGP - p.promo_cost;
+        const roi = p.promo_cost > 0 ? (netProfit / p.promo_cost * 100) : 0;
+        const cm = p.promo_rev > 0 ? (p.promo_gp / p.promo_rev * 100) : 0;
+        return { ...p, incRev, incGP, netProfit, roi, cm };
+      });
+    }
+
+    function renderPromoData() {
+      const metrics = calculatePromoMetrics();
+      
+      // KPIs
+      const totalIncRev = metrics.reduce((sum, m) => sum + m.incRev, 0);
+      const totalIncGP = metrics.reduce((sum, m) => sum + m.incGP, 0);
+      const totalPromoCost = metrics.reduce((sum, m) => sum + m.promo_cost, 0);
+      const totalNetProfit = totalIncGP - totalPromoCost;
+      const avgROI = totalPromoCost > 0 ? (totalNetProfit / totalPromoCost * 100) : 0;
+
+      document.getElementById('promoKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label">Incremental Revenue</div>
+          <div class="kpi-box-value">$${(totalIncRev/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Incremental GP</div>
+          <div class="kpi-box-value">$${(totalIncGP/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Net Promo Profit</div>
+          <div class="kpi-box-value">$${(totalNetProfit/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Avg ROI</div>
+          <div class="kpi-box-value">${avgROI.toFixed(1)}%</div>
+        </div>
+      `;
+
+      // Table
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Promotion</th>
+            <th>Baseline Rev</th>
+            <th>Promo Rev</th>
+            <th>Inc. Rev</th>
+            <th>Inc. GP</th>
+            <th>Promo Cost</th>
+            <th>Net Profit</th>
+            <th>ROI</th>
+            <th>CM%</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      metrics.forEach(m => {
+        tableHTML += `
+          <tr>
+            <td>${m.name}</td>
+            <td>$${(m.baseline_rev/1000).toFixed(0)}K</td>
+            <td>$${(m.promo_rev/1000).toFixed(0)}K</td>
+            <td>$${(m.incRev/1000).toFixed(0)}K</td>
+            <td>$${(m.incGP/1000).toFixed(0)}K</td>
+            <td>$${(m.promo_cost/1000).toFixed(0)}K</td>
+            <td>$${(m.netProfit/1000).toFixed(0)}K</td>
+            <td>${m.roi.toFixed(1)}%</td>
+            <td>${m.cm.toFixed(1)}%</td>
+          </tr>
+        `;
+      });
+      tableHTML += '</tbody>';
+      document.getElementById('promoTable').innerHTML = tableHTML;
+    }
+
+    function randomizePromoData() {
+      promoData = [
+        { name: 'Spring Sale', baseline_rev: randInt(400, 600) * 1000, promo_rev: 0, baseline_gp: 0, promo_gp: 0, promo_cost: randInt(25, 45) * 1000 },
+        { name: 'Summer Boost', baseline_rev: randInt(350, 500) * 1000, promo_rev: 0, baseline_gp: 0, promo_gp: 0, promo_cost: randInt(20, 35) * 1000 },
+        { name: 'Fall Clearance', baseline_rev: randInt(300, 450) * 1000, promo_rev: 0, baseline_gp: 0, promo_gp: 0, promo_cost: randInt(25, 40) * 1000 }
+      ];
+      promoData.forEach(p => {
+        p.promo_rev = p.baseline_rev * randFloat(1.2, 1.5);
+        p.baseline_gp = p.baseline_rev * randFloat(0.35, 0.45);
+        p.promo_gp = p.promo_rev * randFloat(0.32, 0.42);
+      });
+      renderPromoData();
+    }
+
+    // ========== CHANNEL P&L FUNCTIONS ==========
+
+    function renderChannelData() {
+      const monthFilter = document.getElementById('monthFilter').value;
+      const channelFilter = document.getElementById('channelFilter').value;
+
+      let filtered = channelData.filter(d => {
+        if (monthFilter !== 'all' && d.month !== monthFilter) return false;
+        if (channelFilter !== 'all' && d.channel !== channelFilter) return false;
+        return true;
+      });
+
+      // Table
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Channel</th>
+            <th>Revenue</th>
+            <th>COGS</th>
+            <th>OpEx</th>
+            <th>Gross Profit</th>
+            <th>EBITDA</th>
+            <th>Margin %</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      filtered.forEach(d => {
+        const gp = d.revenue - d.cogs;
+        const ebitda = gp - d.opex;
+        const margin = d.revenue > 0 ? (ebitda / d.revenue * 100) : 0;
+        tableHTML += `
+          <tr>
+            <td>${d.month}</td>
+            <td>${d.channel}</td>
+            <td>$${(d.revenue/1000).toFixed(0)}K</td>
+            <td>$${(d.cogs/1000).toFixed(0)}K</td>
+            <td>$${(d.opex/1000).toFixed(0)}K</td>
+            <td>$${(gp/1000).toFixed(0)}K</td>
+            <td>$${(ebitda/1000).toFixed(0)}K</td>
+            <td>${margin.toFixed(1)}%</td>
+          </tr>
+        `;
+      });
+      tableHTML += '</tbody>';
+      document.getElementById('channelTable').innerHTML = tableHTML;
+
+      renderChannelChart();
+    }
+
+    function renderChannelChart() {
+      const canvas = document.getElementById('channelChart');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Aggregate by channel
+      const byChannel = {};
+      channelData.forEach(d => {
+        if (!byChannel[d.channel]) byChannel[d.channel] = 0;
+        byChannel[d.channel] += d.revenue;
+      });
+
+      const channels = Object.keys(byChannel);
+      const values = channels.map(c => byChannel[c]);
+      const maxVal = Math.max(...values);
+
+      const barWidth = 80;
+      const gap = 40;
+      const startX = 80;
+      const chartH = h - 60;
+
+      // Draw bars
+      channels.forEach((ch, i) => {
+        const barH = (values[i] / maxVal) * chartH;
+        const x = startX + i * (barWidth + gap);
+        const y = h - 40 - barH;
+
+        ctx.fillStyle = i === 0 ? '#0f766e' : i === 1 ? '#1b4d7a' : '#5d6b7a';
+        ctx.fillRect(x, y, barWidth, barH);
+
+        // Label
+        ctx.fillStyle = '#0b1220';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(ch, x + barWidth / 2, h - 20);
+
+        // Value
+        ctx.fillText('$' + (values[i]/1000).toFixed(0) + 'K', x + barWidth / 2, y - 10);
+      });
+    }
+
+    function populateChannelFilters() {
+      const months = [...new Set(channelData.map(d => d.month))];
+      const channels = [...new Set(channelData.map(d => d.channel))];
+
+      document.getElementById('monthFilter').innerHTML = '<option value="all">All Months</option>' +
+        months.map(m => `<option value="${m}">${m}</option>`).join('');
+
+      document.getElementById('channelFilter').innerHTML = '<option value="all">All Channels</option>' +
+        channels.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    function randomizeChannelData() {
+      const months = ['Jan', 'Feb', 'Mar'];
+      const channels = ['Direct', 'Retail', 'Online'];
+      channelData = [];
+      months.forEach(month => {
+        channels.forEach(channel => {
+          const revenue = randInt(400, 1000) * 1000;
+          channelData.push({
+            month,
+            channel,
+            revenue,
+            cogs: revenue * randFloat(0.35, 0.45),
+            opex: revenue * randFloat(0.18, 0.25)
+          });
+        });
+      });
+      populateChannelFilters();
+      renderChannelData();
+    }
+
+    // ========== PVM FUNCTIONS ==========
+
+    function calculatePVM() {
+      const priorTotal = pvmData.reduce((sum, p) => sum + (p.prior_volume * p.prior_price), 0);
+      const currentTotal = pvmData.reduce((sum, p) => sum + (p.current_volume * p.current_price), 0);
+      const totalChange = currentTotal - priorTotal;
+
+      // Price effect: sum of (current_volume * (current_price - prior_price))
+      const priceEffect = pvmData.reduce((sum, p) => sum + (p.current_volume * (p.current_price - p.prior_price)), 0);
+
+      // Volume effect: sum of ((current_volume - prior_volume) * prior_price)
+      const volumeEffect = pvmData.reduce((sum, p) => sum + ((p.current_volume - p.prior_volume) * p.prior_price), 0);
+
+      // Mix effect: residual
+      const mixEffect = totalChange - priceEffect - volumeEffect;
+
+      return { priorTotal, currentTotal, totalChange, priceEffect, volumeEffect, mixEffect };
+    }
+
+    function renderPVMData() {
+      const pvm = calculatePVM();
+
+      // KPIs
+      document.getElementById('pvmKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label">Prior Period Revenue</div>
+          <div class="kpi-box-value">$${(pvm.priorTotal/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Current Period Revenue</div>
+          <div class="kpi-box-value">$${(pvm.currentTotal/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Total Change</div>
+          <div class="kpi-box-value">$${(pvm.totalChange/1000).toFixed(0)}K</div>
+        </div>
+      `;
+
+      // Table
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Impact ($)</th>
+            <th>Explanation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tooltip" data-tooltip="Revenue change from price differences at current volume">Price Effect</span></td>
+            <td>$${(pvm.priceEffect/1000).toFixed(0)}K</td>
+            <td>Impact of pricing changes on revenue</td>
+          </tr>
+          <tr>
+            <td><span class="tooltip" data-tooltip="Revenue change from volume differences at prior prices">Volume Effect</span></td>
+            <td>$${(pvm.volumeEffect/1000).toFixed(0)}K</td>
+            <td>Impact of volume changes on revenue</td>
+          </tr>
+          <tr>
+            <td><span class="tooltip" data-tooltip="Revenue change from shifts in product mix">Mix Effect</span></td>
+            <td>$${(pvm.mixEffect/1000).toFixed(0)}K</td>
+            <td>Impact of product mix shifts on revenue</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--border); font-weight: 650;">
+            <td>Total Change</td>
+            <td>$${(pvm.totalChange/1000).toFixed(0)}K</td>
+            <td></td>
+          </tr>
+        </tbody>
+      `;
+      document.getElementById('pvmTable').innerHTML = tableHTML;
+
+      renderPVMChart(pvm);
+    }
+
+    function renderPVMChart(pvm) {
+      const canvas = document.getElementById('pvmChart');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const components = [
+        { label: 'Prior', value: pvm.priorTotal },
+        { label: 'Price', value: pvm.priceEffect },
+        { label: 'Volume', value: pvm.volumeEffect },
+        { label: 'Mix', value: pvm.mixEffect },
+        { label: 'Current', value: pvm.currentTotal }
+      ];
+
+      const barWidth = 90;
+      const gap = 30;
+      const startX = 60;
+      const baseline = h - 50;
+      const scale = 0.0003;
+
+      let cumulative = pvm.priorTotal;
+
+      components.forEach((comp, i) => {
+        const x = startX + i * (barWidth + gap);
+        let barH = comp.value * scale;
+        let y = baseline - barH;
+
+        if (i === 0 || i === 4) {
+          // Prior and Current: draw from baseline
+          ctx.fillStyle = '#1b4d7a';
+          ctx.fillRect(x, y, barWidth, barH);
+        } else {
+          // Variance components: stack
+          if (comp.value >= 0) {
+            ctx.fillStyle = '#0f766e';
+            y = baseline - (cumulative * scale) - barH;
+            ctx.fillRect(x, y, barWidth, barH);
+          } else {
+            ctx.fillStyle = '#dc2626';
+            y = baseline - (cumulative * scale);
+            ctx.fillRect(x, y, barWidth, Math.abs(barH));
+          }
+          cumulative += comp.value;
+        }
+
+        // Label
+        ctx.fillStyle = '#0b1220';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(comp.label, x + barWidth / 2, h - 25);
+
+        // Value
+        const displayVal = i === 0 || i === 4 ? comp.value : comp.value;
+        ctx.fillText((displayVal >= 0 ? '+' : '') + (displayVal/1000).toFixed(0) + 'K', x + barWidth / 2, y - 8);
+      });
+    }
+
+    function randomizePVMData() {
+      pvmData = [
+        { product: 'Product A', prior_volume: randInt(8, 12) * 1000, prior_price: randInt(45, 55), current_volume: 0, current_price: 0 },
+        { product: 'Product B', prior_volume: randInt(6, 10) * 1000, prior_price: randInt(70, 80), current_volume: 0, current_price: 0 },
+        { product: 'Product C', prior_volume: randInt(4, 6) * 1000, prior_price: randInt(110, 130), current_volume: 0, current_price: 0 }
+      ];
+      pvmData.forEach(p => {
+        p.current_volume = p.prior_volume * randFloat(0.9, 1.15);
+        p.current_price = p.prior_price * randFloat(0.95, 1.08);
+      });
+      renderPVMData();
+    }
+
+    // ========== ACCRUAL FUNCTIONS ==========
+
+    function renderAccrualData() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthlyAmount = accrualData.total_amount / accrualData.duration_months;
+      const startIdx = months.indexOf(accrualData.start_month);
+
+      let schedule = [];
+      let cumulative = 0;
+
+      for (let i = 0; i < accrualData.duration_months; i++) {
+        cumulative += monthlyAmount;
+        schedule.push({
+          month: months[(startIdx + i) % 12],
+          monthly: monthlyAmount,
+          cumulative
+        });
+      }
+
+      const totalAccrued = cumulative;
+      const remaining = accrualData.total_amount - totalAccrued;
+
+      // KPIs
+      document.getElementById('accrualKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label">Total Amount</div>
+          <div class="kpi-box-value">$${(accrualData.total_amount/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Monthly Accrual</div>
+          <div class="kpi-box-value">$${(monthlyAmount/1000).toFixed(1)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Total Accrued</div>
+          <div class="kpi-box-value">$${(totalAccrued/1000).toFixed(0)}K</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Remaining</div>
+          <div class="kpi-box-value">$${(remaining/1000).toFixed(0)}K</div>
+        </div>
+      `;
+
+      // Table
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Monthly Accrual</th>
+            <th>Cumulative</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      schedule.forEach(s => {
+        tableHTML += `
+          <tr>
+            <td>${s.month}</td>
+            <td>$${(s.monthly/1000).toFixed(1)}K</td>
+            <td>$${(s.cumulative/1000).toFixed(0)}K</td>
+          </tr>
+        `;
+      });
+      tableHTML += '</tbody>';
+      document.getElementById('accrualTable').innerHTML = tableHTML;
+    }
+
+    function randomizeAccrualData() {
+      accrualData = {
+        total_amount: randInt(180, 300) * 1000,
+        start_month: ['Jan', 'Feb', 'Mar', 'Apr'][randInt(0, 3)],
+        duration_months: randInt(6, 12)
+      };
+      renderAccrualData();
+    }
+
+    // ========== CSV FUNCTIONS ==========
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',');
+        const row = {};
+        headers.forEach((h, idx) => {
+          row[h] = values[idx] ? values[idx].trim() : '';
+        });
+        data.push(row);
+      }
+      return { headers, data };
+    }
+
+    function downloadCSV(filename, headers, rows) {
+      let csv = headers.join(',') + '\n';
+      rows.forEach(row => {
+        csv += headers.map(h => row[h] || '').join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+    }
+
+    // Promo CSV
+    function downloadPromoCSV() {
+      const metrics = calculatePromoMetrics();
+      const headers = ['name', 'baseline_rev', 'promo_rev', 'baseline_gp', 'promo_gp', 'promo_cost', 'inc_rev', 'inc_gp', 'net_profit', 'roi'];
+      const rows = metrics.map(m => ({
+        name: m.name,
+        baseline_rev: m.baseline_rev,
+        promo_rev: m.promo_rev,
+        baseline_gp: m.baseline_gp,
+        promo_gp: m.promo_gp,
+        promo_cost: m.promo_cost,
+        inc_rev: m.incRev,
+        inc_gp: m.incGP,
+        net_profit: m.netProfit,
+        roi: m.roi.toFixed(2)
+      }));
+      downloadCSV('promo_analysis.csv', headers, rows);
+    }
+
+    function downloadPromoTemplate() {
+      const headers = ['name', 'baseline_rev', 'promo_rev', 'baseline_gp', 'promo_gp', 'promo_cost'];
+      const rows = [
+        { name: 'Example Promo', baseline_rev: 500000, promo_rev: 650000, baseline_gp: 200000, promo_gp: 240000, promo_cost: 30000 }
+      ];
+      downloadCSV('promotions_template.csv', headers, rows);
+    }
+
+    function handlePromoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['name', 'baseline_rev', 'promo_rev', 'baseline_gp', 'promo_gp', 'promo_cost'];
+          if (!required.every(h => headers.includes(h))) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          promoData = data.map(d => ({
+            name: d.name,
+            baseline_rev: parseFloat(d.baseline_rev) || 0,
+            promo_rev: parseFloat(d.promo_rev) || 0,
+            baseline_gp: parseFloat(d.baseline_gp) || 0,
+            promo_gp: parseFloat(d.promo_gp) || 0,
+            promo_cost: parseFloat(d.promo_cost) || 0
+          }));
+          renderPromoData();
+          alert('Promo data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Channel CSV
+    function downloadChannelCSV() {
+      const headers = ['month', 'channel', 'revenue', 'cogs', 'opex'];
+      downloadCSV('channel_pnl.csv', headers, channelData);
+    }
+
+    function downloadChannelTemplate() {
+      const headers = ['month', 'channel', 'revenue', 'cogs', 'opex'];
+      const rows = [
+        { month: 'Jan', channel: 'Direct', revenue: 850000, cogs: 340000, opex: 180000 },
+        { month: 'Jan', channel: 'Retail', revenue: 620000, cogs: 310000, opex: 140000 }
+      ];
+      downloadCSV('channel_pnl_template.csv', headers, rows);
+    }
+
+    function handleChannelUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['month', 'channel', 'revenue', 'cogs', 'opex'];
+          if (!required.every(h => headers.includes(h))) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          channelData = data.map(d => ({
+            month: d.month,
+            channel: d.channel,
+            revenue: parseFloat(d.revenue) || 0,
+            cogs: parseFloat(d.cogs) || 0,
+            opex: parseFloat(d.opex) || 0
+          }));
+          populateChannelFilters();
+          renderChannelData();
+          alert('Channel data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // PVM CSV
+    function downloadPVMCSV() {
+      const pvm = calculatePVM();
+      const headers = ['component', 'value'];
+      const rows = [
+        { component: 'Price Effect', value: pvm.priceEffect },
+        { component: 'Volume Effect', value: pvm.volumeEffect },
+        { component: 'Mix Effect', value: pvm.mixEffect },
+        { component: 'Total Change', value: pvm.totalChange }
+      ];
+      downloadCSV('pvm_analysis.csv', headers, rows);
+    }
+
+    function downloadPVMTemplate() {
+      const headers = ['product', 'prior_volume', 'prior_price', 'current_volume', 'current_price'];
+      const rows = [
+        { product: 'Product A', prior_volume: 10000, prior_price: 50, current_volume: 11000, current_price: 52 },
+        { product: 'Product B', prior_volume: 8000, prior_price: 75, current_volume: 7500, current_price: 80 }
+      ];
+      downloadCSV('pvm_template.csv', headers, rows);
+    }
+
+    function handlePVMUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['product', 'prior_volume', 'prior_price', 'current_volume', 'current_price'];
+          if (!required.every(h => headers.includes(h))) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          pvmData = data.map(d => ({
+            product: d.product,
+            prior_volume: parseFloat(d.prior_volume) || 0,
+            prior_price: parseFloat(d.prior_price) || 0,
+            current_volume: parseFloat(d.current_volume) || 0,
+            current_price: parseFloat(d.current_price) || 0
+          }));
+          renderPVMData();
+          alert('PVM data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Accrual CSV
+    function downloadAccrualCSV() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthlyAmount = accrualData.total_amount / accrualData.duration_months;
+      const startIdx = months.indexOf(accrualData.start_month);
+      let schedule = [];
+      let cumulative = 0;
+      for (let i = 0; i < accrualData.duration_months; i++) {
+        cumulative += monthlyAmount;
+        schedule.push({
+          month: months[(startIdx + i) % 12],
+          monthly_accrual: monthlyAmount.toFixed(2),
+          cumulative: cumulative.toFixed(2)
+        });
+      }
+      const headers = ['month', 'monthly_accrual', 'cumulative'];
+      downloadCSV('accrual_schedule.csv', headers, schedule);
+    }
+
+    function downloadAccrualTemplate() {
+      const headers = ['total_amount', 'start_month', 'duration_months'];
+      const rows = [{ total_amount: 240000, start_month: 'Jan', duration_months: 12 }];
+      downloadCSV('accrual_template.csv', headers, rows);
+    }
+
+    function handleAccrualUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['total_amount', 'start_month', 'duration_months'];
+          if (!required.every(h => headers.includes(h))) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          const row = data[0];
+          accrualData = {
+            total_amount: parseFloat(row.total_amount) || 0,
+            start_month: row.start_month,
+            duration_months: parseInt(row.duration_months) || 12
+          };
+          renderAccrualData();
+          alert('Accrual data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ========== UTILITY FUNCTIONS ==========
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randFloat(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // ========== RANDOMIZE ALL ==========
+
+    document.getElementById('randomizeAll').addEventListener('click', () => {
+      randomizePromoData();
+      randomizeChannelData();
+      randomizePVMData();
+      randomizeAccrualData();
+    });
+
+    // ========== INIT ==========
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderPromoData();
+      populateChannelFilters();
+      renderChannelData();
+      renderPVMData();
+      renderAccrualData();
+    });
+
+    // ========== BACK TO TOP ==========
+
+    const toTop = document.querySelector('.to-top');
+    const onScroll = () => {
+      if (!toTop) return;
+      const show = window.scrollY > 650;
+      toTop.classList.toggle('is-visible', show);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+
+</body>
+</html>
