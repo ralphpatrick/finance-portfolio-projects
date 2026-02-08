@@ -441,9 +441,93 @@
       color: var(--text);
       box-shadow: 0 2px 4px rgba(11,18,32,0.08);
     }
+
+    /* ==========================================
+       FLOATING CONTROL PANEL
+       ========================================== */
+    .floating-controls {
+      position: fixed;
+      right: 32px;
+      top: 120px;
+      width: 280px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      z-index: 100;
+      transition: all 300ms ease;
+    }
+
+    .floating-controls-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .floating-controls-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .floating-controls .btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 13px;
+      padding: 10px 14px;
+    }
+
+    .floating-controls .data-badge {
+      margin-bottom: 12px;
+      text-align: center;
+      display: block;
+    }
+
+    .floating-divider {
+      margin: 16px 0;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Hide original action bar */
+    .action-bar {
+      display: none !important;
+    }
+
+    /* Responsive: hide floating controls on mobile, show original bar */
+    @media (max-width: 1280px) {
+      .floating-controls {
+        display: none;
+      }
+      .action-bar {
+        display: block !important;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Floating Controls Panel -->
+  <div class="floating-controls">
+    <div class="floating-controls-title">Data Controls</div>
+    <span class="data-badge" id="dataBadgeFloating">Sample Data</span>
+    <div class="floating-controls-buttons">
+      <button class="btn btn-ghost btn-sm" onclick="useSample()">Use Sample</button>
+      <button class="btn btn-solid btn-sm" onclick="generateRandom()">🎲 Generate Random</button>
+      <button class="btn btn-ghost btn-sm" onclick="downloadTemplates()">Download All Templates</button>
+    </div>
+    <hr class="floating-divider">
+    <div class="floating-controls-buttons">
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadRateCards').click()">Upload Rate Cards</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadTransactions').click()">Upload Transactions</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadAccruals').click()">Upload Accruals</button>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadForecast').click()">Upload Forecast</button>
+    </div>
+  </div>
+
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
@@ -694,6 +778,27 @@
   </main>
 
   <a href="#" class="to-top" aria-label="Back to top">↑</a>
+
+    // Sync floating and main data badges
+    function updateDataBadges(text) {
+      const mainBadge = document.getElementById("dataModeBadge");
+      const floatingBadge = document.getElementById("dataBadgeFloating");
+      if (mainBadge) mainBadge.textContent = text;
+      if (floatingBadge) floatingBadge.textContent = text;
+    }
+
+    // Override original functions to update both badges
+    const originalUseSample = window.useSample;
+    window.useSample = function() {
+      if (originalUseSample) originalUseSample();
+      updateDataBadges("Sample Data");
+    };
+
+    const originalGenerateRandom = window.generateRandom;
+    window.generateRandom = function() {
+      if (originalGenerateRandom) originalGenerateRandom();
+      updateDataBadges("Random Data");
+    };
 
   <script src="main.js"></script>
   <script>
