@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaaS / Fintech Unit Economics · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    /* Module-specific styles */
+    .module-hero {
+      padding: 48px 0 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .module-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .module-title {
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    .module-pill {
+      display: inline-flex;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .module-subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .module-problem {
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 520;
+      max-width: 68ch;
+      margin-bottom: 12px;
+    }
+    .module-role {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .feature-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .chip {
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+    }
+    
+    /* Action bar */
+    .action-bar {
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin: 32px 0;
+      box-shadow: var(--shadow-soft);
+    }
+    .action-bar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .data-badge {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .action-bar-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    /* Scenario tabs */
+    .scenario-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .scenario-tab {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 140ms ease;
+    }
+    .scenario-tab:hover {
+      border-color: rgba(12, 23, 45, 0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .scenario-tab.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    
+    /* Module sections */
+    .module-section {
+      padding: 48px 0;
+    }
+    .module-section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .module-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    /* Buttons */
+    .btn-small {
+      padding: 7px 12px;
+      font-size: 13px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 140ms ease;
+    }
+    .btn-small:hover {
+      border-color: rgba(12, 23, 45, 0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .btn-small:active {
+      transform: translateY(1px);
+    }
+    .btn-primary {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 18px rgba(11,18,32,0.12);
+    }
+    
+    /* KPI grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .kpi-box {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(246,248,251,0.6);
+    }
+    .kpi-box-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .kpi-box-value {
+      font-size: 20px;
+      font-weight: 650;
+    }
+    
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 16px 0;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 650;
+      color: var(--text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover {
+      background: rgba(246,248,251,0.5);
+    }
+    
+    /* Charts */
+    .chart-container {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+      position: relative;
+    }
+    .chart-title {
+      font-size: 14px;
+      font-weight: 650;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .chart-wrapper {
+      position: relative;
+    }
+    .chart-tooltip {
+      position: absolute;
+      background: rgba(11, 18, 32, 0.95);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 150ms ease;
+      z-index: 100;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .chart-tooltip.visible {
+      opacity: 1;
+    }
+    
+    /* Input grid */
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .input-field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .input-field input {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      background: white;
+    }
+    .input-field input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    /* Tooltips */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      border-bottom: 1px dotted var(--muted);
+    }
+    .tooltip:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      background: var(--text);
+      color: white;
+      font-size: 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 100;
+      margin-bottom: 6px;
+    }
+    
+    /* File upload */
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    /* Demo section */
+    .demo-section {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .demo-card {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
+    }
+    .demo-card-title {
+      font-size: 14px;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+    .demo-card-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    
+    /* Risk flags */
+    .risk-flags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .risk-flag {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(220, 38, 38, 0.10);
+      border: 1px solid rgba(220, 38, 38, 0.20);
+      color: #dc2626;
+      font-weight: 600;
+    }
+    .risk-flag.ok {
+      background: rgba(15, 118, 110, 0.10);
+      border: 1px solid rgba(15, 118, 110, 0.20);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html" class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          FP&A Portfolio
+        </a>
+        <div class="nav-cta">
+          <a href="index.html" class="btn btn-ghost">← Back to Portfolio</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    
+    <!-- Hero -->
+    <section class="module-hero">
+      <div class="container">
+        <div class="module-label">Growth & scalability</div>
+        <h1 class="module-title">SaaS / Fintech Unit Economics</h1>
+        <div class="module-pill">Unit economics</div>
+        <p class="module-subtitle">Understanding growth, profitability, and scalability.</p>
+        <p class="module-problem">Translate growth into margin and cash reality—so scale doesn't hide risk.</p>
+        <p class="module-role">SaaS FP&A • Fintech Finance • Growth Analytics</p>
+        <div class="feature-chips">
+          <span class="chip">CAC / LTV</span>
+          <span class="chip">Contribution margin</span>
+          <span class="chip">Run-rate forecasting</span>
+          <span class="chip">Scenario toggles</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Bar -->
+    <section class="module-section">
+      <div class="container">
+        <div class="action-bar">
+          <div class="action-bar-top">
+            <div class="data-badge" id="dataModeBadge">Sample Data</div>
+            <div class="action-bar-buttons">
+              <button onclick="useSampleData()" class="btn-small">Use Sample</button>
+              <button onclick="randomizeAll()" class="btn-small btn-primary">🎲 Generate Random Scenario</button>
+              <button onclick="downloadAllTemplates()" class="btn-small">Download Templates</button>
+            </div>
+          </div>
+          
+          <!-- Scenario Tabs -->
+          <div class="scenario-tabs">
+            <button class="scenario-tab active" onclick="setScenario('base')" data-scenario="base">Base</button>
+            <button class="scenario-tab" onclick="setScenario('upside')" data-scenario="upside">Upside</button>
+            <button class="scenario-tab" onclick="setScenario('downside')" data-scenario="downside">Downside</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAC / LTV Engine -->
+    <section class="module-section">
+      <div class="container">
+        <h2 class="module-section-title">1. CAC / LTV Engine</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Customer Acquisition Economics</h3>
+            <div class="card-actions">
+              <button onclick="downloadCACLTVCSV()" class="btn-small">Export Results</button>
+              <button onclick="downloadCACLTVTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="cacLtvUpload" accept=".csv" onchange="handleCACLTVUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="input-grid">
+            <div class="input-field">
+              <label>New Customers Acquired</label>
+              <input type="number" id="newCustomers" value="120" onchange="computeCACLTV()">
+            </div>
+            <div class="input-field">
+              <label>Marketing Spend ($)</label>
+              <input type="number" id="marketingSpend" value="48000" onchange="computeCACLTV()">
+            </div>
+            <div class="input-field">
+              <label>Sales Spend ($)</label>
+              <input type="number" id="salesSpend" value="72000" onchange="computeCACLTV()">
+            </div>
+            <div class="input-field">
+              <label>ARPA ($/customer/month)</label>
+              <input type="number" id="arpa" value="120" onchange="computeCACLTV()">
+            </div>
+            <div class="input-field">
+              <label>Gross Margin (%)</label>
+              <input type="number" step="0.1" id="grossMargin" value="72" onchange="computeCACLTV()">
+            </div>
+            <div class="input-field">
+              <label>Monthly Churn (%)</label>
+              <input type="number" step="0.1" id="churnRate" value="3.5" onchange="computeCACLTV()">
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="cacLtvKPIs">
+            <!-- KPIs populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contribution Margin -->
+    <section class="module-section section-muted">
+      <div class="container">
+        <h2 class="module-section-title">2. Contribution Margin Analysis</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Monthly Contribution</h3>
+            <div class="card-actions">
+              <button onclick="downloadContributionCSV()" class="btn-small">Export Data</button>
+              <button onclick="downloadContributionTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="contributionUpload" accept=".csv" onchange="handleContributionUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-title">Contribution Margin Trend</div>
+            <div class="chart-wrapper">
+              <canvas id="contributionChart" width="800" height="300"></canvas>
+              <div class="chart-tooltip" id="contributionTooltip"></div>
+            </div>
+          </div>
+
+          <table class="data-table" id="contributionTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Run-rate Forecasting -->
+    <section class="module-section">
+      <div class="container">
+        <h2 class="module-section-title">3. Run-rate Forecasting</h2>
+        
+        <div class="module-card">
+          <div class="card-header">
+            <h3 class="card-title">Forward Projection</h3>
+            <div class="card-actions">
+              <button onclick="downloadRunrateCSV()" class="btn-small">Export Forecast</button>
+              <button onclick="downloadRunrateTemplate()" class="btn-small">Download Template</button>
+              <div class="file-input-wrapper">
+                <button class="btn-small btn-primary">Upload CSV</button>
+                <input type="file" id="runrateUpload" accept=".csv" onchange="handleRunrateUpload(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid" id="runrateKPIs">
+            <!-- KPIs populated by JS -->
+          </div>
+
+          <div class="risk-flags" id="riskFlags">
+            <!-- Risk flags populated by JS -->
+          </div>
+
+          <div class="chart-container">
+            <div class="chart-title">MRR & Customer Projection</div>
+            <div class="chart-wrapper">
+              <canvas id="runrateChart" width="800" height="300"></canvas>
+              <div class="chart-tooltip" id="runrateTooltip"></div>
+            </div>
+          </div>
+
+          <table class="data-table" id="runrateTable">
+            <!-- Table populated by JS -->
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- What This Demonstrates -->
+    <section class="demo-section">
+      <div class="container">
+        <h2 class="module-section-title">What This Demonstrates</h2>
+        <div class="demo-grid">
+          <div class="demo-card">
+            <div class="demo-card-title">Growth Analytics That Doesn't Lie</div>
+            <div class="demo-card-text">
+              Moving beyond vanity metrics to understand true unit profitability, payback dynamics, and sustainable scaling models.
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-title">Finance-Grade Unit Economics</div>
+            <div class="demo-card-text">
+              CAC/LTV with churn sensitivity, contribution margin decomposition, and run-rate forecasting built for decision-making.
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-title">Scenario-Driven Risk Visibility</div>
+            <div class="demo-card-text">
+              Instant upside/downside modeling with risk flagging for churn spikes, negative CM, and extended payback periods.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <a href="#" class="to-top" aria-label="Back to top">↑</a>
+
+  <script>
+    /* =========================================
+       Unit Economics - JavaScript
+       Interactive charts with hover tooltips
+       ========================================= */
+
+    // ========== GLOBAL STATE ==========
+    
+    let currentScenario = 'base';
+    let dataMode = 'sample';
+    
+    // CAC/LTV inputs
+    let cacLtvInputs = {
+      base: { newCustomers: 120, marketingSpend: 48000, salesSpend: 72000, arpa: 120, grossMargin: 72, churnRate: 3.5 },
+      upside: { newCustomers: 180, marketingSpend: 48000, salesSpend: 72000, arpa: 135, grossMargin: 75, churnRate: 2.8 },
+      downside: { newCustomers: 80, marketingSpend: 48000, salesSpend: 72000, arpa: 105, grossMargin: 68, churnRate: 5.2 }
+    };
+    
+    // Contribution margin data (12 months)
+    let contributionData = {
+      base: [],
+      upside: [],
+      downside: []
+    };
+    
+    // Run-rate data (24 months)
+    let runrateData = {
+      base: [],
+      upside: [],
+      downside: []
+    };
+    
+    // Chart interaction state
+    let contributionChartPoints = [];
+    let runrateChartPoints = [];
+    
+    // ========== UTILITY FUNCTIONS ==========
+    
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    function randFloat(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    
+    function clamp(val, min, max) {
+      return Math.max(min, Math.min(max, val));
+    }
+    
+    function formatCurrency(val) {
+      return '$' + Math.round(val).toLocaleString();
+    }
+    
+    function formatPercent(val) {
+      return val.toFixed(1) + '%';
+    }
+    
+    // ========== CSV PARSING ==========
+    
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+        const row = {};
+        headers.forEach((h, idx) => {
+          row[h] = values[idx] || '';
+        });
+        data.push(row);
+      }
+      return { headers, data };
+    }
+    
+    function validateHeaders(actual, required) {
+      return required.every(h => actual.includes(h));
+    }
+    
+    function downloadCSV(filename, headers, rows) {
+      let csv = headers.join(',') + '\n';
+      rows.forEach(row => {
+        csv += headers.map(h => row[h] !== undefined ? row[h] : '').join(',') + '\n';
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+    }
+    
+    // ========== SCENARIO MANAGEMENT ==========
+    
+    function setScenario(scenario) {
+      currentScenario = scenario;
+      document.querySelectorAll('.scenario-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.scenario === scenario);
+      });
+      loadScenarioInputs();
+      renderAll();
+    }
+    
+    function loadScenarioInputs() {
+      const inputs = cacLtvInputs[currentScenario];
+      document.getElementById('newCustomers').value = inputs.newCustomers;
+      document.getElementById('marketingSpend').value = inputs.marketingSpend;
+      document.getElementById('salesSpend').value = inputs.salesSpend;
+      document.getElementById('arpa').value = inputs.arpa;
+      document.getElementById('grossMargin').value = inputs.grossMargin;
+      document.getElementById('churnRate').value = inputs.churnRate;
+    }
+    
+    function saveScenarioInputs() {
+      cacLtvInputs[currentScenario] = {
+        newCustomers: parseFloat(document.getElementById('newCustomers').value) || 0,
+        marketingSpend: parseFloat(document.getElementById('marketingSpend').value) || 0,
+        salesSpend: parseFloat(document.getElementById('salesSpend').value) || 0,
+        arpa: parseFloat(document.getElementById('arpa').value) || 0,
+        grossMargin: parseFloat(document.getElementById('grossMargin').value) || 0,
+        churnRate: parseFloat(document.getElementById('churnRate').value) || 0
+      };
+    }
+    
+    // ========== DATA INITIALIZATION ==========
+    
+    function initializeSampleData() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        contributionData[scenario] = months.map((month, i) => {
+          const baseMult = scenario === 'upside' ? 1.15 : scenario === 'downside' ? 0.85 : 1.0;
+          const revenue = (80000 + i * 5000) * baseMult;
+          const cogs = revenue * (scenario === 'upside' ? 0.22 : scenario === 'downside' ? 0.35 : 0.28);
+          const paymentFees = revenue * 0.025;
+          const supportCost = (500 + i * 50) * baseMult;
+          const infraCost = (300 + i * 30) * baseMult;
+          return { month, revenue, cogs, paymentFees, supportCost, infraCost };
+        });
+      });
+      
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const baseCustomers = scenario === 'upside' ? 450 : scenario === 'downside' ? 280 : 350;
+        const baseMRR = scenario === 'upside' ? 52000 : scenario === 'downside' ? 32000 : 42000;
+        const baseChurn = scenario === 'upside' ? 2.5 : scenario === 'downside' ? 5.5 : 3.8;
+        const baseExpansion = scenario === 'upside' ? 2.2 : scenario === 'downside' ? 0.8 : 1.5;
+        const baseGM = scenario === 'upside' ? 76 : scenario === 'downside' ? 65 : 71;
+        const baseOpEx = scenario === 'upside' ? 180000 : scenario === 'downside' ? 220000 : 200000;
+        
+        runrateData[scenario] = [];
+        for (let i = 0; i < 24; i++) {
+          const customers = baseCustomers + i * (scenario === 'upside' ? 22 : scenario === 'downside' ? 8 : 15);
+          const mrr = baseMRR + i * (scenario === 'upside' ? 6500 : scenario === 'downside' ? 2200 : 4500);
+          const expansion = baseExpansion + (i * 0.03);
+          const churn = baseChurn - (i * 0.015);
+          const gm = baseGM + (i * 0.1);
+          const opex = baseOpEx + (i * 2000);
+          runrateData[scenario].push({
+            month: i + 1,
+            customers: Math.round(customers),
+            mrr: Math.round(mrr),
+            expansion,
+            churn: Math.max(1.0, churn),
+            gm: Math.min(88, gm),
+            opex: Math.round(opex)
+          });
+        }
+      });
+    }
+    
+    function useSampleData() {
+      dataMode = 'sample';
+      document.getElementById('dataModeBadge').textContent = 'Sample Data';
+      initializeSampleData();
+      renderAll();
+    }
+    
+    function randomizeAll() {
+      dataMode = 'sample';
+      document.getElementById('dataModeBadge').textContent = 'Randomized Data';
+      
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const mult = scenario === 'upside' ? 1.15 : scenario === 'downside' ? 0.85 : 1.0;
+        cacLtvInputs[scenario] = {
+          newCustomers: Math.round(randInt(80, 200) * mult),
+          marketingSpend: Math.round(randInt(30000, 80000) * mult),
+          salesSpend: Math.round(randInt(40000, 100000) * mult),
+          arpa: Math.round(randFloat(80, 180) * mult),
+          grossMargin: clamp(randFloat(62, 78) * (scenario === 'upside' ? 1.05 : scenario === 'downside' ? 0.93 : 1.0), 55, 88),
+          churnRate: clamp(randFloat(2.5, 6.5) * (scenario === 'upside' ? 0.75 : scenario === 'downside' ? 1.3 : 1.0), 1.5, 9)
+        };
+      });
+      
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const mult = scenario === 'upside' ? 1.2 : scenario === 'downside' ? 0.8 : 1.0;
+        let prevRev = randInt(60000, 100000) * mult;
+        contributionData[scenario] = months.map((month, i) => {
+          const revenue = prevRev * randFloat(1.02, 1.08);
+          prevRev = revenue;
+          const cogs = revenue * randFloat(0.20, 0.35);
+          const paymentFees = revenue * randFloat(0.015, 0.030);
+          const supportCost = randInt(400, 1200) * mult;
+          const infraCost = randInt(250, 900) * mult;
+          return { month, revenue, cogs, paymentFees, supportCost, infraCost };
+        });
+      });
+      
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const mult = scenario === 'upside' ? 1.25 : scenario === 'downside' ? 0.75 : 1.0;
+        let customers = randInt(250, 450) * mult;
+        let mrr = randInt(30000, 60000) * mult;
+        let churn = randFloat(2.5, 6.5) * (scenario === 'upside' ? 0.7 : scenario === 'downside' ? 1.4 : 1.0);
+        let gm = randFloat(65, 78) * (scenario === 'upside' ? 1.05 : scenario === 'downside' ? 0.92 : 1.0);
+        
+        runrateData[scenario] = [];
+        for (let i = 0; i < 24; i++) {
+          customers = customers * randFloat(1.02, 1.06);
+          mrr = mrr * randFloat(1.03, 1.07);
+          churn = clamp(churn + randFloat(-0.15, 0.15), 1.5, 9);
+          gm = clamp(gm + randFloat(-0.3, 0.3), 55, 88);
+          const expansion = randFloat(0.5, 3.0);
+          const opex = randInt(150000, 300000) * mult;
+          
+          runrateData[scenario].push({
+            month: i + 1,
+            customers: Math.round(customers),
+            mrr: Math.round(mrr),
+            expansion,
+            churn,
+            gm,
+            opex
+          });
+        }
+      });
+      
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const inputs = cacLtvInputs[scenario];
+        const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+        const ltv = (inputs.arpa * (inputs.grossMargin / 100)) / (inputs.churnRate / 100);
+        const ratio = ltv / cac;
+        
+        if (ratio > 10) {
+          inputs.churnRate = Math.min(9, inputs.churnRate * 1.3);
+        }
+        
+        const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+        if (payback < 1) {
+          inputs.marketingSpend = inputs.marketingSpend * 1.5;
+          inputs.salesSpend = inputs.salesSpend * 1.5;
+        }
+      });
+      
+      loadScenarioInputs();
+      renderAll();
+    }
+    
+    // ========== CAC/LTV FUNCTIONS ==========
+    
+    function computeCACLTV() {
+      saveScenarioInputs();
+      const inputs = cacLtvInputs[currentScenario];
+      
+      const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+      const ltv = (inputs.arpa * (inputs.grossMargin / 100)) / (inputs.churnRate / 100);
+      const ratio = ltv / cac;
+      const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+      
+      document.getElementById('cacLtvKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label"><span class="tooltip" data-tooltip="(Marketing + Sales) / New Customers">CAC</span></div>
+          <div class="kpi-box-value">${formatCurrency(cac)}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label"><span class="tooltip" data-tooltip="(ARPA × GM%) / Churn%">LTV</span></div>
+          <div class="kpi-box-value">${formatCurrency(ltv)}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label"><span class="tooltip" data-tooltip="LTV / CAC">LTV:CAC Ratio</span></div>
+          <div class="kpi-box-value">${ratio.toFixed(1)}x</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label"><span class="tooltip" data-tooltip="CAC / (ARPA × GM%)">Payback Period</span></div>
+          <div class="kpi-box-value">${payback.toFixed(1)} mo</div>
+        </div>
+      `;
+    }
+    
+    // ========== CONTRIBUTION FUNCTIONS ==========
+    
+    function renderContribution() {
+      const data = contributionData[currentScenario];
+      
+      // Table
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Revenue</th>
+            <th>COGS</th>
+            <th>Payment Fees</th>
+            <th>Support</th>
+            <th>Infra</th>
+            <th>Contrib. Margin $</th>
+            <th>CM %</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      data.forEach(d => {
+        const totalVarCost = d.cogs + d.paymentFees + d.supportCost + d.infraCost;
+        const cm = d.revenue - totalVarCost;
+        const cmPct = (cm / d.revenue) * 100;
+        tableHTML += `
+          <tr>
+            <td>${d.month}</td>
+            <td>${formatCurrency(d.revenue)}</td>
+            <td>${formatCurrency(d.cogs)}</td>
+            <td>${formatCurrency(d.paymentFees)}</td>
+            <td>${formatCurrency(d.supportCost)}</td>
+            <td>${formatCurrency(d.infraCost)}</td>
+            <td>${formatCurrency(cm)}</td>
+            <td>${formatPercent(cmPct)}</td>
+          </tr>
+        `;
+      });
+      tableHTML += '</tbody>';
+      document.getElementById('contributionTable').innerHTML = tableHTML;
+      
+      renderContributionChart();
+    }
+    
+    function renderContributionChart() {
+      const data = contributionData[currentScenario];
+      const canvas = document.getElementById('contributionChart');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      
+      const cmValues = data.map(d => {
+        const totalVarCost = d.cogs + d.paymentFees + d.supportCost + d.infraCost;
+        return (d.revenue - totalVarCost) / d.revenue * 100;
+      });
+      
+      const maxVal = Math.max(...cmValues);
+      const minVal = Math.min(...cmValues);
+      const range = maxVal - minVal;
+      
+      const padding = 60;
+      const chartW = w - padding * 2;
+      const chartH = h - 80;
+      const pointGap = chartW / (data.length - 1);
+      
+      // Store points for interaction
+      contributionChartPoints = [];
+      
+      // Draw grid lines
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = 40 + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(w - 40, y);
+        ctx.stroke();
+      }
+      
+      // Draw line
+      ctx.beginPath();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      data.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      
+      // Draw points and store positions
+      data.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        
+        contributionChartPoints.push({
+          x, y,
+          month: d.month,
+          value: cmValues[i],
+          revenue: d.revenue
+        });
+        
+        ctx.fillStyle = '#0f766e';
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Outer ring for hover effect
+        ctx.strokeStyle = 'rgba(15, 118, 110, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Month labels
+        ctx.fillStyle = '#5d6b7a';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.month, x, h - 20);
+        
+        // Value labels on points
+        ctx.fillStyle = '#0b1220';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(cmValues[i].toFixed(1) + '%', x, y - 15);
+      });
+      
+      // Y-axis labels
+      ctx.fillStyle = '#5d6b7a';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 4; i++) {
+        const val = minVal + (range * (1 - i / 4));
+        const y = 40 + (i / 4) * chartH;
+        ctx.fillText(val.toFixed(1) + '%', padding - 10, y + 4);
+      }
+      
+      // Chart title on canvas
+      ctx.fillStyle = '#0b1220';
+      ctx.font = 'bold 12px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('CM %', padding, 25);
+    }
+    
+    // ========== RUN-RATE FUNCTIONS ==========
+    
+    function renderRunrate() {
+      const data = runrateData[currentScenario];
+      const lastMonth = data[data.length - 1];
+      const runrateARR = lastMonth.mrr * 12;
+      
+      // Forecast next 6 months
+      const forecast = [];
+      let customers = lastMonth.customers;
+      let mrr = lastMonth.mrr;
+      for (let i = 0; i < 6; i++) {
+        const netGrowth = (lastMonth.expansion - lastMonth.churn) / 100;
+        customers = customers * (1 + netGrowth);
+        mrr = mrr * (1 + netGrowth);
+        forecast.push({ month: lastMonth.month + i + 1, customers: Math.round(customers), mrr: Math.round(mrr) });
+      }
+      
+      const forecastARR = forecast[5].mrr * 12;
+      const avgOpEx = data.reduce((sum, d) => sum + d.opex, 0) / data.length;
+      const avgRev = data.reduce((sum, d) => sum + d.mrr, 0) / data.length;
+      const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
+      const monthlyBurn = avgOpEx - (avgRev * (avgGM / 100));
+      
+      // KPIs
+      document.getElementById('runrateKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label">Run-rate ARR (Current)</div>
+          <div class="kpi-box-value">${formatCurrency(runrateARR)}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Forecast ARR (6mo)</div>
+          <div class="kpi-box-value">${formatCurrency(forecastARR)}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Avg Monthly Burn</div>
+          <div class="kpi-box-value">${formatCurrency(Math.abs(monthlyBurn))}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Current Customers</div>
+          <div class="kpi-box-value">${lastMonth.customers.toLocaleString()}</div>
+        </div>
+      `;
+      
+      // Risk flags
+      const avgChurn = data.slice(-6).reduce((sum, d) => sum + d.churn, 0) / 6;
+      const inputs = cacLtvInputs[currentScenario];
+      const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+      const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+      const avgCM = (avgRev * (avgGM / 100) - avgRev * 0.25) / avgRev * 100;
+      
+      let flagsHTML = '';
+      if (avgChurn > 5) {
+        flagsHTML += '<div class="risk-flag">⚠️ High Churn (' + avgChurn.toFixed(1) + '%)</div>';
+      } else {
+        flagsHTML += '<div class="risk-flag ok">✓ Churn Healthy</div>';
+      }
+      if (payback > 12) {
+        flagsHTML += '<div class="risk-flag">⚠️ Long Payback (' + payback.toFixed(1) + ' mo)</div>';
+      } else {
+        flagsHTML += '<div class="risk-flag ok">✓ Payback Acceptable</div>';
+      }
+      if (avgCM < 40) {
+        flagsHTML += '<div class="risk-flag">⚠️ Low Contribution Margin</div>';
+      } else {
+        flagsHTML += '<div class="risk-flag ok">✓ CM Healthy</div>';
+      }
+      document.getElementById('riskFlags').innerHTML = flagsHTML;
+      
+      // Table (show last 12 months + forecast)
+      const displayData = data.slice(-12).concat(forecast);
+      let tableHTML = `
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Customers</th>
+            <th>MRR</th>
+            <th>Expansion %</th>
+            <th>Churn %</th>
+            <th>GM %</th>
+            <th>OpEx</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      displayData.forEach((d, i) => {
+        const isForecast = i >= 12;
+        tableHTML += `
+          <tr${isForecast ? ' style="background: rgba(15,118,110,0.05);"' : ''}>
+            <td>${d.month}</td>
+            <td>${d.customers.toLocaleString()}</td>
+            <td>${formatCurrency(d.mrr)}</td>
+            <td>${d.expansion !== undefined ? formatPercent(d.expansion) : '-'}</td>
+            <td>${d.churn !== undefined ? formatPercent(d.churn) : '-'}</td>
+            <td>${d.gm !== undefined ? formatPercent(d.gm) : '-'}</td>
+            <td>${d.opex !== undefined ? formatCurrency(d.opex) : '-'}</td>
+            <td>${isForecast ? 'Forecast' : 'Actual'}</td>
+          </tr>
+        `;
+      });
+      tableHTML += '</tbody>';
+      document.getElementById('runrateTable').innerHTML = tableHTML;
+      
+      renderRunrateChart(displayData);
+    }
+    
+    function renderRunrateChart(displayData) {
+      const canvas = document.getElementById('runrateChart');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.clearRect(0, 0, w, h);
+      
+      const mrrValues = displayData.map(d => d.mrr);
+      const customerValues = displayData.map(d => d.customers);
+      
+      const maxMRR = Math.max(...mrrValues);
+      const maxCustomers = Math.max(...customerValues);
+      
+      const padding = 60;
+      const chartW = w - padding * 2;
+      const chartH = h - 80;
+      const pointGap = chartW / (displayData.length - 1);
+      
+      // Store points for interaction
+      runrateChartPoints = [];
+      
+      // Draw grid lines
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = 40 + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding, y);
+        ctx.lineTo(w - 160, y);
+        ctx.stroke();
+      }
+      
+      // Draw MRR line
+      ctx.beginPath();
+      ctx.strokeStyle = '#1b4d7a';
+      ctx.lineWidth = 3;
+      displayData.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - (d.mrr / maxMRR) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      
+      // Draw MRR points
+      displayData.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - (d.mrr / maxMRR) * chartH;
+        
+        runrateChartPoints.push({
+          x, y,
+          month: d.month,
+          mrr: d.mrr,
+          customers: d.customers,
+          type: 'mrr'
+        });
+        
+        ctx.fillStyle = '#1b4d7a';
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      
+      // Draw customer line (dashed)
+      ctx.beginPath();
+      ctx.strokeStyle = '#0f766e';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([6, 6]);
+      displayData.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - (d.customers / maxCustomers) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Draw customer points
+      displayData.forEach((d, i) => {
+        const x = padding + i * pointGap;
+        const y = 40 + chartH - (d.customers / maxCustomers) * chartH;
+        
+        runrateChartPoints.push({
+          x, y,
+          month: d.month,
+          mrr: d.mrr,
+          customers: d.customers,
+          type: 'customers'
+        });
+        
+        ctx.fillStyle = '#0f766e';
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      
+      // Month labels (every 3rd month)
+      ctx.fillStyle = '#5d6b7a';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      displayData.forEach((d, i) => {
+        if (i % 3 === 0) {
+          const x = padding + i * pointGap;
+          ctx.fillText('M' + d.month, x, h - 20);
+        }
+      });
+      
+      // Y-axis labels (MRR)
+      ctx.fillStyle = '#1b4d7a';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxMRR * (1 - i / 4);
+        const y = 40 + (i / 4) * chartH;
+        ctx.fillText('$' + (val / 1000).toFixed(0) + 'K', padding - 10, y + 4);
+      }
+      
+      // Y-axis labels (Customers) - right side
+      ctx.fillStyle = '#0f766e';
+      ctx.textAlign = 'left';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxCustomers * (1 - i / 4);
+        const y = 40 + (i / 4) * chartH;
+        ctx.fillText(Math.round(val).toLocaleString(), w - 150, y + 4);
+      }
+      
+      // Legend
+      ctx.fillStyle = '#1b4d7a';
+      ctx.fillRect(w - 150, 20, 20, 3);
+      ctx.fillStyle = '#0b1220';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('MRR', w - 125, 25);
+      
+      ctx.fillStyle = '#0f766e';
+      ctx.fillRect(w - 150, 40, 20, 3);
+      ctx.fillText('Customers', w - 125, 45);
+    }
+    
+    // ========== CHART INTERACTION ==========
+    
+    function setupChartInteractions() {
+      const contributionCanvas = document.getElementById('contributionChart');
+      const contributionTooltip = document.getElementById('contributionTooltip');
+      
+      contributionCanvas.addEventListener('mousemove', (e) => {
+        const rect = contributionCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Find closest point
+        let closest = null;
+        let minDist = 20; // threshold
+        
+        contributionChartPoints.forEach(point => {
+          const dist = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = point;
+          }
+        });
+        
+        if (closest) {
+          contributionTooltip.innerHTML = `
+            <strong>${closest.month}</strong><br>
+            CM: ${closest.value.toFixed(1)}%<br>
+            Revenue: ${formatCurrency(closest.revenue)}
+          `;
+          contributionTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          contributionTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          contributionTooltip.classList.add('visible');
+        } else {
+          contributionTooltip.classList.remove('visible');
+        }
+      });
+      
+      contributionCanvas.addEventListener('mouseleave', () => {
+        contributionTooltip.classList.remove('visible');
+      });
+      
+      // Runrate chart
+      const runrateCanvas = document.getElementById('runrateChart');
+      const runrateTooltip = document.getElementById('runrateTooltip');
+      
+      runrateCanvas.addEventListener('mousemove', (e) => {
+        const rect = runrateCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        let closest = null;
+        let minDist = 20;
+        
+        runrateChartPoints.forEach(point => {
+          const dist = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = point;
+          }
+        });
+        
+        if (closest) {
+          runrateTooltip.innerHTML = `
+            <strong>Month ${closest.month}</strong><br>
+            MRR: ${formatCurrency(closest.mrr)}<br>
+            Customers: ${closest.customers.toLocaleString()}
+          `;
+          runrateTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          runrateTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          runrateTooltip.classList.add('visible');
+        } else {
+          runrateTooltip.classList.remove('visible');
+        }
+      });
+      
+      runrateCanvas.addEventListener('mouseleave', () => {
+        runrateTooltip.classList.remove('visible');
+      });
+    }
+    
+    // ========== CSV UPLOAD HANDLERS ==========
+    
+    function handleCACLTVUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['newCustomers', 'marketingSpend', 'salesSpend', 'arpa', 'grossMargin', 'churnRate'];
+          if (!validateHeaders(headers, required)) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          const row = data[0];
+          cacLtvInputs[currentScenario] = {
+            newCustomers: parseFloat(row.newCustomers) || 0,
+            marketingSpend: parseFloat(row.marketingSpend) || 0,
+            salesSpend: parseFloat(row.salesSpend) || 0,
+            arpa: parseFloat(row.arpa) || 0,
+            grossMargin: parseFloat(row.grossMargin) || 0,
+            churnRate: parseFloat(row.churnRate) || 0
+          };
+          dataMode = 'uploaded';
+          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          loadScenarioInputs();
+          computeCACLTV();
+          alert('CAC/LTV data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+    
+    function handleContributionUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['month', 'revenue', 'cogs', 'paymentFees', 'supportCost', 'infraCost'];
+          if (!validateHeaders(headers, required)) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          contributionData[currentScenario] = data.map(d => ({
+            month: d.month,
+            revenue: parseFloat(d.revenue) || 0,
+            cogs: parseFloat(d.cogs) || 0,
+            paymentFees: parseFloat(d.paymentFees) || 0,
+            supportCost: parseFloat(d.supportCost) || 0,
+            infraCost: parseFloat(d.infraCost) || 0
+          }));
+          dataMode = 'uploaded';
+          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          renderContribution();
+          alert('Contribution data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+    
+    function handleRunrateUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          const required = ['month', 'customers', 'mrr', 'expansion', 'churn', 'gm', 'opex'];
+          if (!validateHeaders(headers, required)) {
+            alert('Invalid CSV. Required headers: ' + required.join(', '));
+            return;
+          }
+          runrateData[currentScenario] = data.map(d => ({
+            month: parseInt(d.month) || 0,
+            customers: parseInt(d.customers) || 0,
+            mrr: parseFloat(d.mrr) || 0,
+            expansion: parseFloat(d.expansion) || 0,
+            churn: parseFloat(d.churn) || 0,
+            gm: parseFloat(d.gm) || 0,
+            opex: parseFloat(d.opex) || 0
+          }));
+          dataMode = 'uploaded';
+          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          renderRunrate();
+          alert('Run-rate data uploaded successfully!');
+        } catch (err) {
+          alert('Error parsing CSV: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+    
+    // ========== CSV DOWNLOADS ==========
+    
+    function downloadCACLTVCSV() {
+      const inputs = cacLtvInputs[currentScenario];
+      const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+      const ltv = (inputs.arpa * (inputs.grossMargin / 100)) / (inputs.churnRate / 100);
+      const ratio = ltv / cac;
+      const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+      
+      const headers = ['metric', 'value'];
+      const rows = [
+        { metric: 'CAC', value: cac.toFixed(2) },
+        { metric: 'LTV', value: ltv.toFixed(2) },
+        { metric: 'LTV:CAC', value: ratio.toFixed(2) },
+        { metric: 'Payback_Months', value: payback.toFixed(2) }
+      ];
+      downloadCSV('cac_ltv_results.csv', headers, rows);
+    }
+    
+    function downloadCACLTVTemplate() {
+      const headers = ['newCustomers', 'marketingSpend', 'salesSpend', 'arpa', 'grossMargin', 'churnRate'];
+      const rows = [{ newCustomers: 120, marketingSpend: 48000, salesSpend: 72000, arpa: 120, grossMargin: 72, churnRate: 3.5 }];
+      downloadCSV('cac_ltv_template.csv', headers, rows);
+    }
+    
+    function downloadContributionCSV() {
+      const data = contributionData[currentScenario];
+      const headers = ['month', 'revenue', 'cogs', 'paymentFees', 'supportCost', 'infraCost', 'contributionMargin', 'cmPercent'];
+      const rows = data.map(d => {
+        const totalVarCost = d.cogs + d.paymentFees + d.supportCost + d.infraCost;
+        const cm = d.revenue - totalVarCost;
+        const cmPct = (cm / d.revenue) * 100;
+        return {
+          month: d.month,
+          revenue: d.revenue.toFixed(2),
+          cogs: d.cogs.toFixed(2),
+          paymentFees: d.paymentFees.toFixed(2),
+          supportCost: d.supportCost.toFixed(2),
+          infraCost: d.infraCost.toFixed(2),
+          contributionMargin: cm.toFixed(2),
+          cmPercent: cmPct.toFixed(2)
+        };
+      });
+      downloadCSV('contribution_margin.csv', headers, rows);
+    }
+    
+    function downloadContributionTemplate() {
+      const headers = ['month', 'revenue', 'cogs', 'paymentFees', 'supportCost', 'infraCost'];
+      const rows = [
+        { month: 'Jan', revenue: 80000, cogs: 22400, paymentFees: 2000, supportCost: 500, infraCost: 300 },
+        { month: 'Feb', revenue: 85000, cogs: 23800, paymentFees: 2125, supportCost: 550, infraCost: 330 }
+      ];
+      downloadCSV('contribution_template.csv', headers, rows);
+    }
+    
+    function downloadRunrateCSV() {
+      const data = runrateData[currentScenario];
+      const headers = ['month', 'customers', 'mrr', 'expansion', 'churn', 'gm', 'opex'];
+      const rows = data.map(d => ({
+        month: d.month,
+        customers: d.customers,
+        mrr: d.mrr.toFixed(2),
+        expansion: d.expansion.toFixed(2),
+        churn: d.churn.toFixed(2),
+        gm: d.gm.toFixed(2),
+        opex: d.opex.toFixed(2)
+      }));
+      downloadCSV('runrate_forecast.csv', headers, rows);
+    }
+    
+    function downloadRunrateTemplate() {
+      const headers = ['month', 'customers', 'mrr', 'expansion', 'churn', 'gm', 'opex'];
+      const rows = [
+        { month: 1, customers: 350, mrr: 42000, expansion: 1.5, churn: 3.8, gm: 71, opex: 200000 },
+        { month: 2, customers: 365, mrr: 46500, expansion: 1.53, churn: 3.785, gm: 71.1, opex: 202000 }
+      ];
+      downloadCSV('runrate_template.csv', headers, rows);
+    }
+    
+    function downloadAllTemplates() {
+      downloadCACLTVTemplate();
+      setTimeout(() => downloadContributionTemplate(), 300);
+      setTimeout(() => downloadRunrateTemplate(), 600);
+    }
+    
+    // ========== RENDER ALL ==========
+    
+    function renderAll() {
+      computeCACLTV();
+      renderContribution();
+      renderRunrate();
+    }
+    
+    // ========== INIT ==========
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      initializeSampleData();
+      loadScenarioInputs();
+      renderAll();
+      setupChartInteractions();
+    });
+    
+    // ========== BACK TO TOP ==========
+    
+    const toTop = document.querySelector('.to-top');
+    const onScroll = () => {
+      if (!toTop) return;
+      const show = window.scrollY > 650;
+      toTop.classList.toggle('is-visible', show);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+
+</body>
+</html>
