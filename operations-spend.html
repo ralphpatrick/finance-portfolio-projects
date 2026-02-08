@@ -443,65 +443,66 @@
     }
 
     /* ==========================================
-       FLOATING CONTROL PANEL
+       SIDEBAR LAYOUT (like unit-economics.html)
        ========================================== */
-    .floating-controls {
-      position: fixed;
-      right: 32px;
-      top: 120px;
-      width: 280px;
+    /* Main layout with sidebar */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    
+    /* Sticky sidebar */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 20px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      z-index: 100;
-      transition: all 300ms ease;
+      box-shadow: var(--shadow-soft);
     }
-
-    .floating-controls-title {
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+    .sidebar-title {
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      color: var(--muted);
-      margin-bottom: 16px;
     }
-
-    .floating-controls-buttons {
+    .sidebar-buttons {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-
-    .floating-controls .btn {
+    .sidebar-buttons .btn {
       width: 100%;
       justify-content: center;
-      font-size: 13px;
-      padding: 10px 14px;
     }
-
-    .floating-controls .data-badge {
-      margin-bottom: 12px;
-      text-align: center;
-      display: block;
-    }
-
-    .floating-divider {
-      margin: 16px 0;
-      border: none;
-      border-top: 1px solid var(--border);
-    }
-
+    
     /* Hide original action bar */
     .action-bar {
       display: none !important;
     }
-
-    /* Responsive: hide floating controls on mobile, show original bar */
-    @media (max-width: 1280px) {
-      .floating-controls {
-        display: none;
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
       }
       .action-bar {
         display: block !important;
@@ -510,30 +511,44 @@
   </style>
 </head>
 <body>
-  <!-- Floating Controls Panel -->
-  <div class="floating-controls">
-    <div class="floating-controls-title">Data Controls</div>
-    <span class="data-badge" id="dataBadgeFloating">Sample Data</span>
-    <div class="floating-controls-buttons">
-      <button class="btn btn-ghost btn-sm" onclick="useSample()">Use Sample</button>
-      <button class="btn btn-solid btn-sm" onclick="generateRandom()">🎲 Generate Random</button>
-      <button class="btn btn-ghost btn-sm" onclick="downloadTemplates()">Download All Templates</button>
-    </div>
-    <hr class="floating-divider">
-    <div class="floating-controls-buttons">
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadRateCards').click()">Upload Rate Cards</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadTransactions').click()">Upload Transactions</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadAccruals').click()">Upload Accruals</button>
-      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('uploadForecast').click()">Upload Forecast</button>
-    </div>
-  </div>
-
 
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <!-- Header -->
   <header class="site-header">
     <div class="container">
+    
+    <div class="module-layout">
+      
+      <!-- Sticky Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Data Mode</div>
+          <div class="data-badge" id="dataModeBadge">Sample Data</div>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Actions</div>
+          <div class="sidebar-buttons">
+            <button onclick="useSample()" class="btn btn-ghost btn-sm">Use Sample</button>
+            <button onclick="generateRandom()" class="btn btn-solid btn-sm">🎲 Generate Random</button>
+            <button onclick="downloadTemplates()" class="btn btn-ghost btn-sm">Download Templates</button>
+          </div>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Upload Data</div>
+          <div class="sidebar-buttons">
+            <button onclick="document.getElementById('uploadRateCards').click()" class="btn btn-ghost btn-sm">Upload Rate Cards</button>
+            <button onclick="document.getElementById('uploadTransactions').click()" class="btn btn-ghost btn-sm">Upload Transactions</button>
+            <button onclick="document.getElementById('uploadAccruals').click()" class="btn btn-ghost btn-sm">Upload Accruals</button>
+            <button onclick="document.getElementById('uploadForecast').click()" class="btn btn-ghost btn-sm">Upload Forecast</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
       <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="brand">
           <span class="brand-mark" aria-hidden="true"></span>
@@ -569,9 +584,6 @@
     <!-- Action Bar -->
     <section class="module-section">
       <div class="container">
-        <div class="action-bar">
-          <div class="action-bar-top">
-            <div class="data-badge" id="dataModeBadge">Sample Data</div>
             <div class="action-bar-buttons">
               <button onclick="useSampleData()" class="btn-small">Use Sample</button>
               <button onclick="randomizeSampleData()" class="btn-small btn-primary">🎲 Generate Random Sample</button>
@@ -778,27 +790,6 @@
   </main>
 
   <a href="#" class="to-top" aria-label="Back to top">↑</a>
-
-    // Sync floating and main data badges
-    function updateDataBadges(text) {
-      const mainBadge = document.getElementById("dataModeBadge");
-      const floatingBadge = document.getElementById("dataBadgeFloating");
-      if (mainBadge) mainBadge.textContent = text;
-      if (floatingBadge) floatingBadge.textContent = text;
-    }
-
-    // Override original functions to update both badges
-    const originalUseSample = window.useSample;
-    window.useSample = function() {
-      if (originalUseSample) originalUseSample();
-      updateDataBadges("Sample Data");
-    };
-
-    const originalGenerateRandom = window.generateRandom;
-    window.generateRandom = function() {
-      if (originalGenerateRandom) originalGenerateRandom();
-      updateDataBadges("Random Data");
-    };
 
   <script src="main.js"></script>
   <script>
@@ -2062,5 +2053,10 @@
     });
   </script>
 
+</body>
+</html>
+      </div><!-- /main-content -->
+    </div><!-- /module-layout -->
+    </div><!-- /container -->
 </body>
 </html>
