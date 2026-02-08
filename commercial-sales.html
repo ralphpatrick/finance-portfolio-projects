@@ -251,80 +251,6 @@
       color: var(--muted);
       line-height: 1.5;
     }
-
-    /* ==========================================
-       SIDEBAR LAYOUT (like unit-economics.html)
-       ========================================== */
-    /* Main layout with sidebar */
-    .module-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      align-items: start;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
-    
-    /* Sticky sidebar */
-    .sidebar {
-      position: sticky;
-      top: 80px;
-      padding: 20px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-    }
-    .sidebar-section {
-      margin-bottom: 24px;
-    }
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-    }
-    .sidebar-title {
-      font-size: 13px;
-      font-weight: 650;
-      color: var(--text);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-    .sidebar-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-buttons .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .sidebar-note {
-      font-size: 12px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.4;
-      margin-top: 8px;
-    }
-    
-    /* Hide original center action */
-    .center-action {
-      display: none !important;
-    }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .module-layout {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-      .center-action {
-        display: flex !important;
-      }
-    }
   </style>
 </head>
 <body>
@@ -334,38 +260,6 @@
   <!-- Header -->
   <header class="site-header">
     <div class="container">
-    
-    <div class="module-layout">
-      
-      <!-- Sticky Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-title">Data Mode</div>
-          <div class="data-badge" id="dataModeBadge">Sample Scenario</div>
-        </div>
-        
-        <div class="sidebar-section">
-          <div class="sidebar-title">Actions</div>
-          <div class="sidebar-buttons">
-            <button onclick="generateRandomScenario()" class="btn btn-solid btn-sm">🎲 Generate Random</button>
-          </div>
-          <div class="sidebar-note">
-            Instantly populate all models with new realistic data
-          </div>
-        </div>
-        
-        <div class="sidebar-section">
-          <div class="sidebar-title">Export / Upload</div>
-          <div class="sidebar-buttons">
-            <button onclick="exportCSV('promo')" class="btn btn-ghost btn-sm">Export Promo CSV</button>
-            <button onclick="downloadTemplate('promo')" class="btn btn-ghost btn-sm">Download Template</button>
-            <button onclick="document.getElementById('uploadPromo').click()" class="btn btn-ghost btn-sm">Upload CSV</button>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content -->
-      <div class="main-content">
       <nav class="nav" aria-label="Main navigation">
         <a href="../index.html" class="brand">
           <span class="brand-mark" aria-hidden="true"></span>
@@ -1323,13 +1217,6 @@
     onScroll();
   </script>
 
-</body>
-
-</html>
-
-      </div><!-- /main-content -->
-    </div><!-- /module-layout -->
-    </div><!-- /container -->
 </body>
 
 </html>

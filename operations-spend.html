@@ -441,73 +441,6 @@
       color: var(--text);
       box-shadow: 0 2px 4px rgba(11,18,32,0.08);
     }
-
-    /* ==========================================
-       SIDEBAR LAYOUT (like unit-economics.html)
-       ========================================== */
-    /* Main layout with sidebar */
-    .module-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      align-items: start;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
-    
-    /* Sticky sidebar */
-    .sidebar {
-      position: sticky;
-      top: 80px;
-      padding: 20px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-    }
-    .sidebar-section {
-      margin-bottom: 24px;
-    }
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-    }
-    .sidebar-title {
-      font-size: 13px;
-      font-weight: 650;
-      color: var(--text);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-    .sidebar-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-buttons .btn {
-      width: 100%;
-      justify-content: center;
-    }
-    
-    /* Hide original action bar */
-    .action-bar {
-      display: none !important;
-    }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .module-layout {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-      .action-bar {
-        display: block !important;
-      }
-    }
   </style>
 </head>
 <body>
@@ -517,38 +450,6 @@
   <!-- Header -->
   <header class="site-header">
     <div class="container">
-    
-    <div class="module-layout">
-      
-      <!-- Sticky Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-title">Data Mode</div>
-          <div class="data-badge" id="dataModeBadge">Sample Data</div>
-        </div>
-        
-        <div class="sidebar-section">
-          <div class="sidebar-title">Actions</div>
-          <div class="sidebar-buttons">
-            <button onclick="useSample()" class="btn btn-ghost btn-sm">Use Sample</button>
-            <button onclick="generateRandom()" class="btn btn-solid btn-sm">🎲 Generate Random</button>
-            <button onclick="downloadTemplates()" class="btn btn-ghost btn-sm">Download Templates</button>
-          </div>
-        </div>
-        
-        <div class="sidebar-section">
-          <div class="sidebar-title">Upload Data</div>
-          <div class="sidebar-buttons">
-            <button onclick="document.getElementById('uploadRateCards').click()" class="btn btn-ghost btn-sm">Upload Rate Cards</button>
-            <button onclick="document.getElementById('uploadTransactions').click()" class="btn btn-ghost btn-sm">Upload Transactions</button>
-            <button onclick="document.getElementById('uploadAccruals').click()" class="btn btn-ghost btn-sm">Upload Accruals</button>
-            <button onclick="document.getElementById('uploadForecast').click()" class="btn btn-ghost btn-sm">Upload Forecast</button>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content -->
-      <div class="main-content">
       <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="brand">
           <span class="brand-mark" aria-hidden="true"></span>
@@ -584,6 +485,9 @@
     <!-- Action Bar -->
     <section class="module-section">
       <div class="container">
+        <div class="action-bar">
+          <div class="action-bar-top">
+            <div class="data-badge" id="dataModeBadge">Sample Data</div>
             <div class="action-bar-buttons">
               <button onclick="useSampleData()" class="btn-small">Use Sample</button>
               <button onclick="randomizeSampleData()" class="btn-small btn-primary">🎲 Generate Random Sample</button>
@@ -2053,10 +1957,5 @@
     });
   </script>
 
-</body>
-</html>
-      </div><!-- /main-content -->
-    </div><!-- /module-layout -->
-    </div><!-- /container -->
 </body>
 </html>
