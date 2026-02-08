@@ -70,22 +70,40 @@
       color: var(--text);
     }
     
-    /* Action bar */
-    .action-bar {
+    /* Main layout with sidebar */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    
+    /* Sticky sidebar */
+    .sidebar {
+      position: sticky;
+      top: 80px;
       padding: 20px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      margin: 32px 0;
       box-shadow: var(--shadow-soft);
     }
-    .action-bar-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
     .data-badge {
       font-size: 12px;
@@ -95,30 +113,31 @@
       border: 1px solid rgba(15,118,110,0.20);
       color: var(--accent);
       font-weight: 600;
+      display: inline-block;
+      margin-bottom: 12px;
     }
-    .action-bar-buttons {
+    .sidebar-buttons {
       display: flex;
+      flex-direction: column;
       gap: 8px;
-      flex-wrap: wrap;
     }
     
-    /* Scenario tabs */
+    /* Scenario tabs in sidebar */
     .scenario-tabs {
       display: flex;
+      flex-direction: column;
       gap: 8px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 24px;
     }
     .scenario-tab {
-      padding: 8px 16px;
-      border-radius: 999px;
+      padding: 10px 14px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: white;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
       transition: all 140ms ease;
+      text-align: left;
     }
     .scenario-tab:hover {
       border-color: rgba(12, 23, 45, 0.18);
@@ -130,9 +149,14 @@
       border-color: var(--text);
     }
     
+    /* Main content area */
+    .main-content {
+      min-width: 0;
+    }
+    
     /* Module sections */
     .module-section {
-      padding: 48px 0;
+      padding: 0 0 48px 0;
     }
     .module-section-title {
       font-size: 24px;
@@ -167,7 +191,7 @@
     
     /* Buttons */
     .btn-small {
-      padding: 7px 12px;
+      padding: 8px 14px;
       font-size: 13px;
       border-radius: 999px;
       font-weight: 600;
@@ -175,6 +199,7 @@
       background: white;
       cursor: pointer;
       transition: all 140ms ease;
+      white-space: nowrap;
     }
     .btn-small:hover {
       border-color: rgba(12, 23, 45, 0.18);
@@ -190,6 +215,11 @@
     }
     .btn-primary:hover {
       box-shadow: 0 6px 18px rgba(11,18,32,0.12);
+    }
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      display: flex;
     }
     
     /* KPI grid */
@@ -243,10 +273,10 @@
       background: rgba(246,248,251,0.5);
     }
     
-    /* Charts */
+    /* Charts - optimized for space */
     .chart-container {
       margin: 20px 0;
-      padding: 16px;
+      padding: 20px;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       background: white;
@@ -255,17 +285,23 @@
     .chart-title {
       font-size: 14px;
       font-weight: 650;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       color: var(--text);
     }
     .chart-wrapper {
       position: relative;
+      width: 100%;
+    }
+    .chart-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
     }
     .chart-tooltip {
       position: absolute;
       background: rgba(11, 18, 32, 0.95);
       color: white;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
       font-size: 12px;
       pointer-events: none;
@@ -277,6 +313,11 @@
     }
     .chart-tooltip.visible {
       opacity: 1;
+    }
+    .chart-tooltip strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
     }
     
     /* Input grid */
@@ -393,6 +434,24 @@
       border: 1px solid rgba(15, 118, 110, 0.20);
       color: var(--accent);
     }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+      .scenario-tabs {
+        flex-direction: row;
+      }
+      .sidebar-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
   </style>
 </head>
 <body>
@@ -434,190 +493,195 @@
       </div>
     </section>
 
-    <!-- Action Bar -->
-    <section class="module-section">
-      <div class="container">
-        <div class="action-bar">
-          <div class="action-bar-top">
-            <div class="data-badge" id="dataModeBadge">Sample Data</div>
-            <div class="action-bar-buttons">
-              <button onclick="useSampleData()" class="btn-small">Use Sample</button>
-              <button onclick="randomizeAll()" class="btn-small btn-primary">🎲 Generate Random Scenario</button>
-              <button onclick="downloadAllTemplates()" class="btn-small">Download Templates</button>
-            </div>
+    <!-- Main Layout with Sidebar -->
+    <div class="module-layout">
+      
+      <!-- Sticky Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Data Mode</div>
+          <div class="data-badge" id="dataModeBadge">Sample Data</div>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Actions</div>
+          <div class="sidebar-buttons">
+            <button onclick="useSampleData()" class="btn-small btn-full">Use Sample</button>
+            <button onclick="randomizeAll()" class="btn-small btn-primary btn-full">🎲 Randomize All</button>
+            <button onclick="downloadAllTemplates()" class="btn-small btn-full">Download Templates</button>
           </div>
-          
-          <!-- Scenario Tabs -->
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Scenario</div>
           <div class="scenario-tabs">
-            <button class="scenario-tab active" onclick="setScenario('base')" data-scenario="base">Base</button>
+            <button class="scenario-tab active" onclick="setScenario('base')" data-scenario="base">Base Case</button>
             <button class="scenario-tab" onclick="setScenario('upside')" data-scenario="upside">Upside</button>
             <button class="scenario-tab" onclick="setScenario('downside')" data-scenario="downside">Downside</button>
           </div>
         </div>
-      </div>
-    </section>
+      </aside>
 
-    <!-- CAC / LTV Engine -->
-    <section class="module-section">
-      <div class="container">
-        <h2 class="module-section-title">1. CAC / LTV Engine</h2>
-        
-        <div class="module-card">
-          <div class="card-header">
-            <h3 class="card-title">Customer Acquisition Economics</h3>
-            <div class="card-actions">
-              <button onclick="downloadCACLTVCSV()" class="btn-small">Export Results</button>
-              <button onclick="downloadCACLTVTemplate()" class="btn-small">Download Template</button>
-              <div class="file-input-wrapper">
-                <button class="btn-small btn-primary">Upload CSV</button>
-                <input type="file" id="cacLtvUpload" accept=".csv" onchange="handleCACLTVUpload(event)">
+      <!-- Main Content -->
+      <div class="main-content">
+
+        <!-- CAC / LTV Engine -->
+        <section class="module-section">
+          <h2 class="module-section-title">1. CAC / LTV Engine</h2>
+          
+          <div class="module-card">
+            <div class="card-header">
+              <h3 class="card-title">Customer Acquisition Economics</h3>
+              <div class="card-actions">
+                <button onclick="downloadCACLTVCSV()" class="btn-small">Export Results</button>
+                <button onclick="downloadCACLTVTemplate()" class="btn-small">Download Template</button>
+                <div class="file-input-wrapper">
+                  <button class="btn-small btn-primary">Upload CSV</button>
+                  <input type="file" id="cacLtvUpload" accept=".csv" onchange="handleCACLTVUpload(event)">
+                </div>
+              </div>
+            </div>
+
+            <div class="input-grid">
+              <div class="input-field">
+                <label>New Customers Acquired</label>
+                <input type="number" id="newCustomers" value="120" onchange="computeCACLTV()">
+              </div>
+              <div class="input-field">
+                <label>Marketing Spend ($)</label>
+                <input type="number" id="marketingSpend" value="48000" onchange="computeCACLTV()">
+              </div>
+              <div class="input-field">
+                <label>Sales Spend ($)</label>
+                <input type="number" id="salesSpend" value="72000" onchange="computeCACLTV()">
+              </div>
+              <div class="input-field">
+                <label>ARPA ($/customer/month)</label>
+                <input type="number" id="arpa" value="120" onchange="computeCACLTV()">
+              </div>
+              <div class="input-field">
+                <label>Gross Margin (%)</label>
+                <input type="number" step="0.1" id="grossMargin" value="72" onchange="computeCACLTV()">
+              </div>
+              <div class="input-field">
+                <label>Monthly Churn (%)</label>
+                <input type="number" step="0.1" id="churnRate" value="3.5" onchange="computeCACLTV()">
+              </div>
+            </div>
+
+            <div class="kpi-grid" id="cacLtvKPIs">
+              <!-- KPIs populated by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Contribution Margin -->
+        <section class="module-section">
+          <h2 class="module-section-title">2. Contribution Margin Analysis</h2>
+          
+          <div class="module-card">
+            <div class="card-header">
+              <h3 class="card-title">Monthly Contribution</h3>
+              <div class="card-actions">
+                <button onclick="downloadContributionCSV()" class="btn-small">Export Data</button>
+                <button onclick="downloadContributionTemplate()" class="btn-small">Download Template</button>
+                <div class="file-input-wrapper">
+                  <button class="btn-small btn-primary">Upload CSV</button>
+                  <input type="file" id="contributionUpload" accept=".csv" onchange="handleContributionUpload(event)">
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-container">
+              <div class="chart-title">Contribution Margin Trend</div>
+              <div class="chart-wrapper">
+                <canvas id="contributionChart" class="chart-canvas"></canvas>
+                <div class="chart-tooltip" id="contributionTooltip"></div>
+              </div>
+            </div>
+
+            <table class="data-table" id="contributionTable">
+              <!-- Table populated by JS -->
+            </table>
+          </div>
+        </section>
+
+        <!-- Run-rate Forecasting -->
+        <section class="module-section">
+          <h2 class="module-section-title">3. Run-rate Forecasting</h2>
+          
+          <div class="module-card">
+            <div class="card-header">
+              <h3 class="card-title">Forward Projection</h3>
+              <div class="card-actions">
+                <button onclick="downloadRunrateCSV()" class="btn-small">Export Forecast</button>
+                <button onclick="downloadRunrateTemplate()" class="btn-small">Download Template</button>
+                <div class="file-input-wrapper">
+                  <button class="btn-small btn-primary">Upload CSV</button>
+                  <input type="file" id="runrateUpload" accept=".csv" onchange="handleRunrateUpload(event)">
+                </div>
+              </div>
+            </div>
+
+            <div class="kpi-grid" id="runrateKPIs">
+              <!-- KPIs populated by JS -->
+            </div>
+
+            <div class="risk-flags" id="riskFlags">
+              <!-- Risk flags populated by JS -->
+            </div>
+
+            <div class="chart-container">
+              <div class="chart-title">MRR & Customer Projection</div>
+              <div class="chart-wrapper">
+                <canvas id="runrateChart" class="chart-canvas"></canvas>
+                <div class="chart-tooltip" id="runrateTooltip"></div>
+              </div>
+            </div>
+
+            <table class="data-table" id="runrateTable">
+              <!-- Table populated by JS -->
+            </table>
+          </div>
+        </section>
+
+        <!-- What This Demonstrates -->
+        <section class="demo-section">
+          <h2 class="module-section-title">What This Demonstrates</h2>
+          <div class="demo-grid">
+            <div class="demo-card">
+              <div class="demo-card-title">Growth Analytics That Doesn't Lie</div>
+              <div class="demo-card-text">
+                Moving beyond vanity metrics to understand true unit profitability, payback dynamics, and sustainable scaling models.
+              </div>
+            </div>
+            <div class="demo-card">
+              <div class="demo-card-title">Finance-Grade Unit Economics</div>
+              <div class="demo-card-text">
+                CAC/LTV with churn sensitivity, contribution margin decomposition, and run-rate forecasting built for decision-making.
+              </div>
+            </div>
+            <div class="demo-card">
+              <div class="demo-card-title">Scenario-Driven Risk Visibility</div>
+              <div class="demo-card-text">
+                Instant upside/downside modeling with risk flagging for churn spikes, negative CM, and extended payback periods.
               </div>
             </div>
           </div>
+        </section>
 
-          <div class="input-grid">
-            <div class="input-field">
-              <label>New Customers Acquired</label>
-              <input type="number" id="newCustomers" value="120" onchange="computeCACLTV()">
-            </div>
-            <div class="input-field">
-              <label>Marketing Spend ($)</label>
-              <input type="number" id="marketingSpend" value="48000" onchange="computeCACLTV()">
-            </div>
-            <div class="input-field">
-              <label>Sales Spend ($)</label>
-              <input type="number" id="salesSpend" value="72000" onchange="computeCACLTV()">
-            </div>
-            <div class="input-field">
-              <label>ARPA ($/customer/month)</label>
-              <input type="number" id="arpa" value="120" onchange="computeCACLTV()">
-            </div>
-            <div class="input-field">
-              <label>Gross Margin (%)</label>
-              <input type="number" step="0.1" id="grossMargin" value="72" onchange="computeCACLTV()">
-            </div>
-            <div class="input-field">
-              <label>Monthly Churn (%)</label>
-              <input type="number" step="0.1" id="churnRate" value="3.5" onchange="computeCACLTV()">
-            </div>
-          </div>
-
-          <div class="kpi-grid" id="cacLtvKPIs">
-            <!-- KPIs populated by JS -->
-          </div>
-        </div>
       </div>
-    </section>
-
-    <!-- Contribution Margin -->
-    <section class="module-section section-muted">
-      <div class="container">
-        <h2 class="module-section-title">2. Contribution Margin Analysis</h2>
-        
-        <div class="module-card">
-          <div class="card-header">
-            <h3 class="card-title">Monthly Contribution</h3>
-            <div class="card-actions">
-              <button onclick="downloadContributionCSV()" class="btn-small">Export Data</button>
-              <button onclick="downloadContributionTemplate()" class="btn-small">Download Template</button>
-              <div class="file-input-wrapper">
-                <button class="btn-small btn-primary">Upload CSV</button>
-                <input type="file" id="contributionUpload" accept=".csv" onchange="handleContributionUpload(event)">
-              </div>
-            </div>
-          </div>
-
-          <div class="chart-container">
-            <div class="chart-title">Contribution Margin Trend</div>
-            <div class="chart-wrapper">
-              <canvas id="contributionChart" width="800" height="300"></canvas>
-              <div class="chart-tooltip" id="contributionTooltip"></div>
-            </div>
-          </div>
-
-          <table class="data-table" id="contributionTable">
-            <!-- Table populated by JS -->
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Run-rate Forecasting -->
-    <section class="module-section">
-      <div class="container">
-        <h2 class="module-section-title">3. Run-rate Forecasting</h2>
-        
-        <div class="module-card">
-          <div class="card-header">
-            <h3 class="card-title">Forward Projection</h3>
-            <div class="card-actions">
-              <button onclick="downloadRunrateCSV()" class="btn-small">Export Forecast</button>
-              <button onclick="downloadRunrateTemplate()" class="btn-small">Download Template</button>
-              <div class="file-input-wrapper">
-                <button class="btn-small btn-primary">Upload CSV</button>
-                <input type="file" id="runrateUpload" accept=".csv" onchange="handleRunrateUpload(event)">
-              </div>
-            </div>
-          </div>
-
-          <div class="kpi-grid" id="runrateKPIs">
-            <!-- KPIs populated by JS -->
-          </div>
-
-          <div class="risk-flags" id="riskFlags">
-            <!-- Risk flags populated by JS -->
-          </div>
-
-          <div class="chart-container">
-            <div class="chart-title">MRR & Customer Projection</div>
-            <div class="chart-wrapper">
-              <canvas id="runrateChart" width="800" height="300"></canvas>
-              <div class="chart-tooltip" id="runrateTooltip"></div>
-            </div>
-          </div>
-
-          <table class="data-table" id="runrateTable">
-            <!-- Table populated by JS -->
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- What This Demonstrates -->
-    <section class="demo-section">
-      <div class="container">
-        <h2 class="module-section-title">What This Demonstrates</h2>
-        <div class="demo-grid">
-          <div class="demo-card">
-            <div class="demo-card-title">Growth Analytics That Doesn't Lie</div>
-            <div class="demo-card-text">
-              Moving beyond vanity metrics to understand true unit profitability, payback dynamics, and sustainable scaling models.
-            </div>
-          </div>
-          <div class="demo-card">
-            <div class="demo-card-title">Finance-Grade Unit Economics</div>
-            <div class="demo-card-text">
-              CAC/LTV with churn sensitivity, contribution margin decomposition, and run-rate forecasting built for decision-making.
-            </div>
-          </div>
-          <div class="demo-card">
-            <div class="demo-card-title">Scenario-Driven Risk Visibility</div>
-            <div class="demo-card-text">
-              Instant upside/downside modeling with risk flagging for churn spikes, negative CM, and extended payback periods.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </div>
 
   </main>
 
   <a href="#" class="to-top" aria-label="Back to top">↑</a>
 
+  <script src="./main.js"></script>
   <script>
     /* =========================================
        Unit Economics - JavaScript
-       Interactive charts with hover tooltips
+       Optimized charts with smart label positioning
        ========================================= */
 
     // ========== GLOBAL STATE ==========
@@ -625,28 +689,14 @@
     let currentScenario = 'base';
     let dataMode = 'sample';
     
-    // CAC/LTV inputs
     let cacLtvInputs = {
       base: { newCustomers: 120, marketingSpend: 48000, salesSpend: 72000, arpa: 120, grossMargin: 72, churnRate: 3.5 },
       upside: { newCustomers: 180, marketingSpend: 48000, salesSpend: 72000, arpa: 135, grossMargin: 75, churnRate: 2.8 },
       downside: { newCustomers: 80, marketingSpend: 48000, salesSpend: 72000, arpa: 105, grossMargin: 68, churnRate: 5.2 }
     };
     
-    // Contribution margin data (12 months)
-    let contributionData = {
-      base: [],
-      upside: [],
-      downside: []
-    };
-    
-    // Run-rate data (24 months)
-    let runrateData = {
-      base: [],
-      upside: [],
-      downside: []
-    };
-    
-    // Chart interaction state
+    let contributionData = { base: [], upside: [], downside: [] };
+    let runrateData = { base: [], upside: [], downside: [] };
     let contributionChartPoints = [];
     let runrateChartPoints = [];
     
@@ -850,23 +900,6 @@
         }
       });
       
-      ['base', 'upside', 'downside'].forEach(scenario => {
-        const inputs = cacLtvInputs[scenario];
-        const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
-        const ltv = (inputs.arpa * (inputs.grossMargin / 100)) / (inputs.churnRate / 100);
-        const ratio = ltv / cac;
-        
-        if (ratio > 10) {
-          inputs.churnRate = Math.min(9, inputs.churnRate * 1.3);
-        }
-        
-        const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
-        if (payback < 1) {
-          inputs.marketingSpend = inputs.marketingSpend * 1.5;
-          inputs.salesSpend = inputs.salesSpend * 1.5;
-        }
-      });
-      
       loadScenarioInputs();
       renderAll();
     }
@@ -907,7 +940,6 @@
     function renderContribution() {
       const data = contributionData[currentScenario];
       
-      // Table
       let tableHTML = `
         <thead>
           <tr>
@@ -949,9 +981,22 @@
     function renderContributionChart() {
       const data = contributionData[currentScenario];
       const canvas = document.getElementById('contributionChart');
+      const container = canvas.parentElement.parentElement;
+      const containerWidth = container.clientWidth - 40;
+      
+      canvas.width = containerWidth;
+      canvas.height = 350;
+      
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
       
       ctx.clearRect(0, 0, w, h);
       
@@ -962,25 +1007,38 @@
       
       const maxVal = Math.max(...cmValues);
       const minVal = Math.min(...cmValues);
-      const range = maxVal - minVal;
+      const range = maxVal - minVal || 1;
       
-      const padding = 60;
-      const chartW = w - padding * 2;
-      const chartH = h - 80;
+      const paddingLeft = 50;
+      const paddingRight = 30;
+      const paddingTop = 40;
+      const paddingBottom = 50;
+      const chartW = w - paddingLeft - paddingRight;
+      const chartH = h - paddingTop - paddingBottom;
       const pointGap = chartW / (data.length - 1);
       
-      // Store points for interaction
       contributionChartPoints = [];
       
-      // Draw grid lines
+      // Grid lines
       ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
-        const y = 40 + (i / 4) * chartH;
+        const y = paddingTop + (i / 4) * chartH;
         ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(w - 40, y);
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(w - paddingRight, y);
         ctx.stroke();
+      }
+      
+      // Y-axis labels
+      ctx.fillStyle = '#5d6b7a';
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxVal - (range * (i / 4));
+        const y = paddingTop + (i / 4) * chartH;
+        ctx.fillText(val.toFixed(1) + '%', paddingLeft - 10, y);
       }
       
       // Draw line
@@ -988,8 +1046,8 @@
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       data.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - ((cmValues[i] - minVal) / range) * chartH;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
@@ -997,8 +1055,8 @@
       
       // Draw points and store positions
       data.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - ((cmValues[i] - minVal) / range) * chartH;
         
         contributionChartPoints.push({
           x, y,
@@ -1007,45 +1065,42 @@
           revenue: d.revenue
         });
         
+        // Point
         ctx.fillStyle = '#0f766e';
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
         
-        // Outer ring for hover effect
+        // Outer ring
         ctx.strokeStyle = 'rgba(15, 118, 110, 0.3)';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.arc(x, y, 9, 0, Math.PI * 2);
         ctx.stroke();
         
         // Month labels
         ctx.fillStyle = '#5d6b7a';
         ctx.font = '11px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(d.month, x, h - 20);
+        ctx.textBaseline = 'top';
+        ctx.fillText(d.month, x, h - paddingBottom + 10);
         
-        // Value labels on points
+        // Value labels - smart positioning to avoid overlap
         ctx.fillStyle = '#0b1220';
         ctx.font = 'bold 11px sans-serif';
-        ctx.fillText(cmValues[i].toFixed(1) + '%', x, y - 15);
+        ctx.textBaseline = 'bottom';
+        
+        // Alternate above/below to reduce overlap
+        const labelY = (i % 2 === 0) ? y - 12 : y + 20;
+        ctx.fillText(cmValues[i].toFixed(1) + '%', x, labelY);
       });
       
-      // Y-axis labels
-      ctx.fillStyle = '#5d6b7a';
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'right';
-      for (let i = 0; i <= 4; i++) {
-        const val = minVal + (range * (1 - i / 4));
-        const y = 40 + (i / 4) * chartH;
-        ctx.fillText(val.toFixed(1) + '%', padding - 10, y + 4);
-      }
-      
-      // Chart title on canvas
+      // Title
       ctx.fillStyle = '#0b1220';
-      ctx.font = 'bold 12px sans-serif';
+      ctx.font = 'bold 13px sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('CM %', padding, 25);
+      ctx.textBaseline = 'top';
+      ctx.fillText('CM %', paddingLeft, 10);
     }
     
     // ========== RUN-RATE FUNCTIONS ==========
@@ -1055,7 +1110,6 @@
       const lastMonth = data[data.length - 1];
       const runrateARR = lastMonth.mrr * 12;
       
-      // Forecast next 6 months
       const forecast = [];
       let customers = lastMonth.customers;
       let mrr = lastMonth.mrr;
@@ -1072,7 +1126,6 @@
       const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
       const monthlyBurn = avgOpEx - (avgRev * (avgGM / 100));
       
-      // KPIs
       document.getElementById('runrateKPIs').innerHTML = `
         <div class="kpi-box">
           <div class="kpi-box-label">Run-rate ARR (Current)</div>
@@ -1092,7 +1145,6 @@
         </div>
       `;
       
-      // Risk flags
       const avgChurn = data.slice(-6).reduce((sum, d) => sum + d.churn, 0) / 6;
       const inputs = cacLtvInputs[currentScenario];
       const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
@@ -1117,7 +1169,6 @@
       }
       document.getElementById('riskFlags').innerHTML = flagsHTML;
       
-      // Table (show last 12 months + forecast)
       const displayData = data.slice(-12).concat(forecast);
       let tableHTML = `
         <thead>
@@ -1157,9 +1208,22 @@
     
     function renderRunrateChart(displayData) {
       const canvas = document.getElementById('runrateChart');
+      const container = canvas.parentElement.parentElement;
+      const containerWidth = container.clientWidth - 40;
+      
+      canvas.width = containerWidth;
+      canvas.height = 350;
+      
       const ctx = canvas.getContext('2d');
       const w = canvas.width;
       const h = canvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
       
       ctx.clearRect(0, 0, w, h);
       
@@ -1169,23 +1233,45 @@
       const maxMRR = Math.max(...mrrValues);
       const maxCustomers = Math.max(...customerValues);
       
-      const padding = 60;
-      const chartW = w - padding * 2;
-      const chartH = h - 80;
+      const paddingLeft = 70;
+      const paddingRight = 90;
+      const paddingTop = 50;
+      const paddingBottom = 50;
+      const chartW = w - paddingLeft - paddingRight;
+      const chartH = h - paddingTop - paddingBottom;
       const pointGap = chartW / (displayData.length - 1);
       
-      // Store points for interaction
       runrateChartPoints = [];
       
-      // Draw grid lines
+      // Grid lines
       ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
-        const y = 40 + (i / 4) * chartH;
+        const y = paddingTop + (i / 4) * chartH;
         ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(w - 160, y);
+        ctx.moveTo(paddingLeft, y);
+        ctx.lineTo(w - paddingRight, y);
         ctx.stroke();
+      }
+      
+      // Y-axis labels (MRR - left)
+      ctx.fillStyle = '#1b4d7a';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxMRR * (1 - i / 4);
+        const y = paddingTop + (i / 4) * chartH;
+        ctx.fillText('$' + (val / 1000).toFixed(0) + 'K', paddingLeft - 10, y);
+      }
+      
+      // Y-axis labels (Customers - right)
+      ctx.fillStyle = '#0f766e';
+      ctx.textAlign = 'left';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxCustomers * (1 - i / 4);
+        const y = paddingTop + (i / 4) * chartH;
+        ctx.fillText(Math.round(val).toLocaleString(), w - paddingRight + 10, y);
       }
       
       // Draw MRR line
@@ -1193,8 +1279,8 @@
       ctx.strokeStyle = '#1b4d7a';
       ctx.lineWidth = 3;
       displayData.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - (d.mrr / maxMRR) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - (d.mrr / maxMRR) * chartH;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
@@ -1202,16 +1288,10 @@
       
       // Draw MRR points
       displayData.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - (d.mrr / maxMRR) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - (d.mrr / maxMRR) * chartH;
         
-        runrateChartPoints.push({
-          x, y,
-          month: d.month,
-          mrr: d.mrr,
-          customers: d.customers,
-          type: 'mrr'
-        });
+        runrateChartPoints.push({ x, y, month: d.month, mrr: d.mrr, customers: d.customers, type: 'mrr' });
         
         ctx.fillStyle = '#1b4d7a';
         ctx.beginPath();
@@ -1225,8 +1305,8 @@
       ctx.lineWidth = 3;
       ctx.setLineDash([6, 6]);
       displayData.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - (d.customers / maxCustomers) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - (d.customers / maxCustomers) * chartH;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
@@ -1235,16 +1315,10 @@
       
       // Draw customer points
       displayData.forEach((d, i) => {
-        const x = padding + i * pointGap;
-        const y = 40 + chartH - (d.customers / maxCustomers) * chartH;
+        const x = paddingLeft + i * pointGap;
+        const y = paddingTop + chartH - (d.customers / maxCustomers) * chartH;
         
-        runrateChartPoints.push({
-          x, y,
-          month: d.month,
-          mrr: d.mrr,
-          customers: d.customers,
-          type: 'customers'
-        });
+        runrateChartPoints.push({ x, y, month: d.month, mrr: d.mrr, customers: d.customers, type: 'customers' });
         
         ctx.fillStyle = '#0f766e';
         ctx.beginPath();
@@ -1252,46 +1326,30 @@
         ctx.fill();
       });
       
-      // Month labels (every 3rd month)
+      // Month labels (every 3rd)
       ctx.fillStyle = '#5d6b7a';
       ctx.font = '11px sans-serif';
       ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
       displayData.forEach((d, i) => {
         if (i % 3 === 0) {
-          const x = padding + i * pointGap;
-          ctx.fillText('M' + d.month, x, h - 20);
+          const x = paddingLeft + i * pointGap;
+          ctx.fillText('M' + d.month, x, h - paddingBottom + 10);
         }
       });
       
-      // Y-axis labels (MRR)
-      ctx.fillStyle = '#1b4d7a';
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'right';
-      for (let i = 0; i <= 4; i++) {
-        const val = maxMRR * (1 - i / 4);
-        const y = 40 + (i / 4) * chartH;
-        ctx.fillText('$' + (val / 1000).toFixed(0) + 'K', padding - 10, y + 4);
-      }
-      
-      // Y-axis labels (Customers) - right side
-      ctx.fillStyle = '#0f766e';
-      ctx.textAlign = 'left';
-      for (let i = 0; i <= 4; i++) {
-        const val = maxCustomers * (1 - i / 4);
-        const y = 40 + (i / 4) * chartH;
-        ctx.fillText(Math.round(val).toLocaleString(), w - 150, y + 4);
-      }
-      
       // Legend
       ctx.fillStyle = '#1b4d7a';
-      ctx.fillRect(w - 150, 20, 20, 3);
+      ctx.fillRect(paddingLeft, 20, 20, 3);
       ctx.fillStyle = '#0b1220';
       ctx.font = '12px sans-serif';
-      ctx.fillText('MRR', w - 125, 25);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('MRR', paddingLeft + 25, 22);
       
       ctx.fillStyle = '#0f766e';
-      ctx.fillRect(w - 150, 40, 20, 3);
-      ctx.fillText('Customers', w - 125, 45);
+      ctx.fillRect(paddingLeft + 70, 20, 20, 3);
+      ctx.fillText('Customers', paddingLeft + 95, 22);
     }
     
     // ========== CHART INTERACTION ==========
@@ -1302,12 +1360,11 @@
       
       contributionCanvas.addEventListener('mousemove', (e) => {
         const rect = contributionCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left) * (contributionCanvas.width / rect.width) / (window.devicePixelRatio || 1);
+        const y = (e.clientY - rect.top) * (contributionCanvas.height / rect.height) / (window.devicePixelRatio || 1);
         
-        // Find closest point
         let closest = null;
-        let minDist = 20; // threshold
+        let minDist = 25;
         
         contributionChartPoints.forEach(point => {
           const dist = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
@@ -1335,17 +1392,16 @@
         contributionTooltip.classList.remove('visible');
       });
       
-      // Runrate chart
       const runrateCanvas = document.getElementById('runrateChart');
       const runrateTooltip = document.getElementById('runrateTooltip');
       
       runrateCanvas.addEventListener('mousemove', (e) => {
         const rect = runrateCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = (e.clientX - rect.left) * (runrateCanvas.width / rect.width) / (window.devicePixelRatio || 1);
+        const y = (e.clientY - rect.top) * (runrateCanvas.height / rect.height) / (window.devicePixelRatio || 1);
         
         let closest = null;
-        let minDist = 20;
+        let minDist = 25;
         
         runrateChartPoints.forEach(point => {
           const dist = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
@@ -1374,7 +1430,7 @@
       });
     }
     
-    // ========== CSV UPLOAD HANDLERS ==========
+    // ========== CSV HANDLERS ==========
     
     function handleCACLTVUpload(event) {
       const file = event.target.files[0];
@@ -1401,9 +1457,9 @@
           document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
           loadScenarioInputs();
           computeCACLTV();
-          alert('CAC/LTV data uploaded successfully!');
+          alert('CAC/LTV data uploaded!');
         } catch (err) {
-          alert('Error parsing CSV: ' + err.message);
+          alert('Error: ' + err.message);
         }
       };
       reader.readAsText(file);
@@ -1432,9 +1488,9 @@
           dataMode = 'uploaded';
           document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
           renderContribution();
-          alert('Contribution data uploaded successfully!');
+          alert('Contribution data uploaded!');
         } catch (err) {
-          alert('Error parsing CSV: ' + err.message);
+          alert('Error: ' + err.message);
         }
       };
       reader.readAsText(file);
@@ -1464,9 +1520,9 @@
           dataMode = 'uploaded';
           document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
           renderRunrate();
-          alert('Run-rate data uploaded successfully!');
+          alert('Run-rate data uploaded!');
         } catch (err) {
-          alert('Error parsing CSV: ' + err.message);
+          alert('Error: ' + err.message);
         }
       };
       reader.readAsText(file);
@@ -1574,16 +1630,10 @@
       setupChartInteractions();
     });
     
-    // ========== BACK TO TOP ==========
-    
-    const toTop = document.querySelector('.to-top');
-    const onScroll = () => {
-      if (!toTop) return;
-      const show = window.scrollY > 650;
-      toTop.classList.toggle('is-visible', show);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    window.addEventListener('resize', () => {
+      renderContribution();
+      renderRunrate();
+    });
   </script>
 
 </body>
