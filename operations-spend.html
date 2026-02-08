@@ -61,31 +61,41 @@
       gap: 8px;
       margin-top: 16px;
     }
-    .chip {
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
+    
+    /* Main layout with sidebar */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
     }
     
-    /* Action bar */
-    .action-bar {
+    /* Sticky sidebar */
+    .sidebar {
+      position: sticky;
+      top: 80px;
       padding: 20px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      margin: 32px 0;
       box-shadow: var(--shadow-soft);
     }
-    .action-bar-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
     .data-badge {
       font-size: 12px;
@@ -95,17 +105,52 @@
       border: 1px solid rgba(15,118,110,0.20);
       color: var(--accent);
       font-weight: 600;
+      display: inline-block;
+      margin-bottom: 12px;
     }
-    .action-bar-buttons {
+    .sidebar-buttons {
       display: flex;
+      flex-direction: column;
       gap: 8px;
-      flex-wrap: wrap;
+    }
+    
+    /* Main content area */
+    .main-content {
+      min-width: 0;
     }
     
     /* Module sections */
     .module-section {
-      padding: 48px 0;
+      padding: 0 0 48px 0;
     }
+    
+    /* Action bar - REMOVED, using sidebar instead */
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+      .sidebar-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+    }
+    
+
     .module-section-title {
       font-size: 24px;
       margin-bottom: 20px;
@@ -163,6 +208,11 @@
     }
     .btn-primary:hover {
       box-shadow: 0 6px 18px rgba(11,18,32,0.12);
+    }
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      display: flex;
     }
     
     /* KPI grid */
@@ -479,47 +529,55 @@
           <span class="chip">Forecast vs actual spend</span>
           <span class="chip">Risk & anomaly flags</span>
         </div>
-      </div>
     </section>
 
-    <!-- Action Bar -->
-    <section class="module-section">
-      <div class="container">
-        <div class="action-bar">
-          <div class="action-bar-top">
-            <div class="data-badge" id="dataModeBadge">Sample Data</div>
-            <div class="action-bar-buttons">
-              <button onclick="useSampleData()" class="btn-small">Use Sample</button>
-              <button onclick="randomizeSampleData()" class="btn-small btn-primary">🎲 Generate Random Sample</button>
-              <button onclick="downloadAllTemplates()" class="btn-small">Download All Templates</button>
-            </div>
+    <!-- Main Layout with Sidebar -->
+    <div class="module-layout">
+      
+      <!-- Sticky Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Data Mode</div>
+          <div class="data-badge" id="dataModeBadge">Sample Data</div>
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Actions</div>
+          <div class="sidebar-buttons">
+            <button onclick="useSampleData()" class="btn-small btn-full">Use Sample</button>
+            <button onclick="randomizeSampleData()" class="btn-small btn-primary btn-full">🎲 Generate Random</button>
+            <button onclick="downloadAllTemplates()" class="btn-small btn-full">Download Templates</button>
           </div>
-          
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Upload Data</div>
+          <div class="sidebar-buttons">
             <div class="file-input-wrapper">
-              <button class="btn-small">Upload Rate Cards</button>
+              <button class="btn-small btn-full">Rate Cards</button>
               <input type="file" id="rateCardsUpload" accept=".csv" onchange="handleRateCardsUpload(event)">
             </div>
             <div class="file-input-wrapper">
-              <button class="btn-small">Upload Transactions</button>
+              <button class="btn-small btn-full">Transactions</button>
               <input type="file" id="transactionsUpload" accept=".csv" onchange="handleTransactionsUpload(event)">
             </div>
             <div class="file-input-wrapper">
-              <button class="btn-small">Upload Accruals</button>
+              <button class="btn-small btn-full">Accruals</button>
               <input type="file" id="accrualsUpload" accept=".csv" onchange="handleAccrualsUpload(event)">
             </div>
             <div class="file-input-wrapper">
-              <button class="btn-small">Upload Forecast</button>
+              <button class="btn-small btn-full">Forecast</button>
               <input type="file" id="forecastUpload" accept=".csv" onchange="handleForecastUpload(event)">
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </aside>
 
-    <!-- Rate Leakage -->
-    <section class="module-section">
-      <div class="container">
+      <!-- Main Content -->
+      <div class="main-content">
+
+        <!-- Rate Leakage -->
+        <section class="module-section">
         <h2 class="module-section-title">1. Vendor Rate Cards (Rate Discipline)</h2>
         
         <div class="module-card">
@@ -560,7 +618,6 @@
             <!-- Table populated by JS -->
           </table>
         </div>
-      </div>
     </section>
 
     <!-- Accrual Tracking -->
@@ -591,12 +648,10 @@
             <!-- Table populated by JS -->
           </table>
         </div>
-      </div>
     </section>
 
     <!-- Forecast vs Actual -->
     <section class="module-section">
-      <div class="container">
         <h2 class="module-section-title">3. Forecast vs Actual Spend</h2>
         
         <div class="module-card">
@@ -622,7 +677,6 @@
             <!-- Table populated by JS -->
           </table>
         </div>
-      </div>
     </section>
 
     <!-- Risk & Anomaly Flags -->
@@ -661,7 +715,6 @@
             <!-- Alert cards populated by JS -->
           </div>
         </div>
-      </div>
     </section>
 
     <!-- What This Demonstrates -->
@@ -688,8 +741,10 @@
             </div>
           </div>
         </div>
-      </div>
     </section>
+
+      </div>
+    </div>
 
   </main>
 
