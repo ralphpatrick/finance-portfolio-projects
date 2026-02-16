@@ -1,206 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Indirect Cost & Headcount CoE — Making overhead costs transparent and controllable" />
-  <meta name="theme-color" content="#0B1220" />
-  <title>Indirect Cost & Headcount CoE — Cost Control Module</title>
-
-  <!-- Favicon -->
-<link rel="icon" type="image/png" href="favicon.png">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indirect Cost & Headcount CoE · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
   <style>
-    /* =========================================
-       Indirect Cost & Headcount CoE Module
-       Apple/consulting-inspired design
-       ========================================= */
-
-    :root {
-      --bg: #ffffff;
-      --bg-muted: #f6f8fb;
-      --text: #0b1220;
-      --muted: #5d6b7a;
-      --border: rgba(12, 23, 45, 0.10);
-      --shadow: 0 10px 30px rgba(11, 18, 32, 0.08);
-      --shadow-soft: 0 8px 18px rgba(11, 18, 32, 0.06);
-      --accent: #0f766e;
-      --accent-2: #1b4d7a;
-      --accent-soft: rgba(15, 118, 110, 0.10);
-      --success: #059669;
-      --success-soft: rgba(5, 150, 105, 0.10);
-      --warning: #d97706;
-      --warning-soft: rgba(217, 119, 6, 0.10);
-      --radius: 18px;
-      --radius-sm: 14px;
-      --max: 1240px;
-      --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg-muted);
-      color: var(--text);
-      font-family: var(--font-sans);
-      line-height: 1.45;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    p { margin: 0; }
-    h1, h2, h3, h4 { margin: 0; letter-spacing: -0.02em; }
-
-    .container {
-      width: min(var(--max), calc(100% - 48px));
-      margin: 0 auto;
-    }
-
-    /* Header */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(255,255,255,0.78);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      gap: 16px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 650;
-      letter-spacing: -0.02em;
-    }
-
-    .brand-mark {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 6px var(--accent-soft);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: 600;
-      border: 1px solid transparent;
-      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
-      user-select: none;
-      cursor: pointer;
-    }
-    .btn:active { transform: translateY(1px); }
-
-    .btn-solid {
-      background: var(--text);
-      color: white;
-      box-shadow: var(--shadow-soft);
-    }
-    .btn-solid:hover { box-shadow: var(--shadow); }
-
-    .btn-ghost {
-      background: white;
-      border-color: var(--border);
-      color: var(--text);
-    }
-    .btn-ghost:hover { border-color: rgba(12, 23, 45, 0.18); box-shadow: 0 6px 18px rgba(11,18,32,0.06); }
-
-    .btn-accent {
-      background: var(--accent);
-      color: white;
-      box-shadow: var(--shadow-soft);
-    }
-    .btn-accent:hover { box-shadow: var(--shadow); }
-
-    /* Module header */
-    .module-header {
+    /* Module-specific styles matching unit-economics.html */
+    .module-hero {
       padding: 48px 0 32px 0;
-      background: white;
       border-bottom: 1px solid var(--border);
     }
-
-    .module-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .module-badge {
+    .module-label {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .module-title {
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    .module-pill {
+      display: inline-flex;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .module-subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .feature-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .chip {
+      font-size: 12px;
       padding: 7px 12px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: rgba(246,248,251,0.8);
-      color: var(--muted);
-      margin-bottom: 12px;
+      color: var(--text);
     }
-
-    .module-title {
-      font-size: 38px;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-
-    .module-subtitle {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 60ch;
-    }
-
-    .module-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .info-card {
-      padding: 16px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg-muted);
-    }
-
-    .info-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .info-value {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
+    
     /* Main layout with sidebar */
     .module-layout {
       display: grid;
@@ -209,7 +65,7 @@
       align-items: start;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 24px 64px 24px;
+      padding: 32px 24px;
     }
     
     /* Sticky sidebar */
@@ -233,7 +89,6 @@
       font-weight: 650;
       color: var(--text);
       margin-bottom: 12px;
-      text-transform: uppercase;
       letter-spacing: 0.03em;
     }
     .data-badge {
@@ -247,16 +102,83 @@
       display: inline-block;
       margin-bottom: 12px;
     }
+    .data-badge.random {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      color: #92400e;
+    }
     .sidebar-buttons {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-    .btn-full {
-      width: 100%;
-      justify-content: center;
+    
+    /* Scenario tabs in sidebar */
+    .scenario-tabs {
       display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
+    .scenario-tab {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .scenario-tab:hover {
+      border-color: rgba(12, 23, 45, 0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .scenario-tab.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    
+    /* Main content area */
+    .main-content {
+      min-width: 0;
+    }
+    
+    /* Module sections */
+    .module-section {
+      padding: 0 0 48px 0;
+    }
+    .module-section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .module-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+    
+    /* Buttons */
     .btn-small {
       padding: 8px 14px;
       font-size: 13px;
@@ -283,365 +205,240 @@
     .btn-primary:hover {
       box-shadow: 0 6px 18px rgba(11,18,32,0.12);
     }
-
-    /* Main content */
-    .main-content {
-      min-width: 0;
-      padding: 32px 0 0 0;
-    }
-
-    .section {
-      margin-bottom: 32px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    /* Data upload */
-    .upload-area {
-      border: 2px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 48px 24px;
-      text-align: center;
-      background: rgba(246,248,251,0.4);
-      transition: border-color 200ms ease, background 200ms ease;
-      cursor: pointer;
-    }
-
-    .upload-area:hover {
-      border-color: var(--accent);
-      background: rgba(15, 118, 110, 0.02);
-    }
-
-    .upload-area.dragover {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
-
-    .upload-icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 16px;
-      border-radius: 16px;
-      background: var(--accent-soft);
-      border: 1px solid rgba(15,118,110,0.18);
-      display: grid;
-      place-items: center;
-      font-size: 24px;
-    }
-
-    .upload-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .upload-subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .file-input {
-      display: none;
-    }
-
-    /* Data tables */
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-    }
-
-    table {
+    .btn-full {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
+      justify-content: center;
+      display: flex;
     }
-
-    thead {
-      background: var(--bg-muted);
-      border-bottom: 1px solid var(--border);
+    
+    /* KPI grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
     }
-
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 650;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-
-    td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
+    .kpi-box {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       background: rgba(246,248,251,0.5);
     }
-
-    .cell-number {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-weight: 500;
-    }
-
-    .cell-positive {
-      color: var(--success);
-    }
-
-    .cell-negative {
-      color: var(--warning);
-    }
-
-    /* Charts & visualizations */
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .chart-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .chart-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .chart-title {
-      font-size: 15px;
-      font-weight: 650;
-    }
-
-    .chart-badge {
-      font-size: 11px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      border: 1px solid rgba(15,118,110,0.18);
-    }
-
-    .bar-chart {
-      display: grid;
-      gap: 10px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 120px 1fr 80px;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .bar-label {
-      font-size: 13px;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .bar-track {
-      height: 32px;
-      background: var(--bg-muted);
-      border-radius: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      border-radius: 8px;
-      transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .bar-value {
-      font-size: 13px;
-      font-weight: 650;
-      text-align: right;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    }
-
-    /* Metrics grid */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .metric-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .metric-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .metric-label {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .metric-trend {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
-
-    .trend-up {
-      background: var(--warning-soft);
-      color: var(--warning);
-    }
-
-    .trend-down {
-      background: var(--success-soft);
-      color: var(--success);
-    }
-
-    .metric-value {
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .metric-subtitle {
+    .kpi-box-label {
       font-size: 12px;
       color: var(--muted);
-    }
-
-    /* Alert */
-    .alert {
-      padding: 16px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      margin-bottom: 24px;
+      margin-bottom: 6px;
       display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .alert-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .alert-info {
-      background: rgba(59, 130, 246, 0.10);
-      border-color: rgba(59, 130, 246, 0.20);
-    }
-
-    .alert-info .alert-icon {
-      background: rgba(59, 130, 246, 0.20);
-      color: #1d4ed8;
-    }
-
-    .alert-content h4 {
-      font-size: 14px;
-      font-weight: 650;
-      margin-bottom: 4px;
-    }
-
-    .alert-content p {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* Tabs */
-    .tabs {
-      display: flex;
+      align-items: center;
       gap: 6px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0;
     }
-
-    .tab {
-      padding: 10px 16px;
-      border: none;
-      background: none;
+    .kpi-box-value {
+      font-size: 20px;
+      font-weight: 650;
+    }
+    .kpi-box-sub {
+      font-size: 12px;
+      margin-top: 6px;
       color: var(--muted);
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 10px 10px 0 0;
-      transition: background 140ms ease, color 140ms ease;
+    }
+    
+    /* Charts */
+    .chart-container {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: white;
       position: relative;
     }
-
-    .tab:hover {
-      background: rgba(11,18,32,0.04);
-      color: var(--text);
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
     }
-
-    .tab.active {
-      color: var(--text);
-      background: white;
-    }
-
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--accent);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
+    .chart-canvas {
       display: block;
+      width: 100%;
+      height: auto;
     }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
+    .chart-tooltip {
+      position: absolute;
+      background: rgba(11, 18, 32, 0.95);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 150ms ease;
+      z-index: 100;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .chart-tooltip.visible {
+      opacity: 1;
+    }
+    .chart-tooltip strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 16px 0;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 650;
+      color: var(--text);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover {
+      background: rgba(246,248,251,0.5);
+    }
+    
+    /* Hiring recommendation boxes */
+    .hiring-rec {
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      border: 1px solid;
+    }
+    .hiring-rec.recommend {
+      background: rgba(5, 150, 105, 0.08);
+      border-color: rgba(5, 150, 105, 0.20);
+    }
+    .hiring-rec.caution {
+      background: rgba(217, 119, 6, 0.08);
+      border-color: rgba(217, 119, 6, 0.20);
+    }
+    .hiring-rec.delay {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.20);
+    }
+    .hiring-rec-title {
+      font-size: 15px;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+    .hiring-rec-reason {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    
+    /* Tradeoff comparison */
+    .tradeoff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .tradeoff-box {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(246,248,251,0.5);
+    }
+    .tradeoff-title {
+      font-size: 16px;
+      font-weight: 650;
+      margin-bottom: 12px;
+    }
+    .tradeoff-section {
+      margin-bottom: 12px;
+    }
+    .tradeoff-section:last-child {
+      margin-bottom: 0;
+    }
+    .tradeoff-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .tradeoff-list {
+      display: grid;
+      gap: 6px;
+    }
+    .tradeoff-item {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .tradeoff-item::before {
+      content: '•';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    
+    /* Tooltip styling for help icons */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15, 118, 110, 0.10);
+      border: 1px solid rgba(15, 118, 110, 0.20);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .help-icon::before {
+      content: '?';
+      line-height: 1;
+    }
+    
+    /* Tooltip hover styling - using textContent approach */
+    .help-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      padding: 12px 16px;
+      background: rgba(11, 18, 32, 0.95);
+      color: white;
+      font-size: 12px;
+      line-height: 1.6;
+      border-radius: 10px;
+      white-space: pre-line;
+      width: 360px;
+      max-width: 90vw;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      font-weight: 400;
+      text-align: left;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 150ms ease;
+    }
+    
+    .help-icon:hover .help-tooltip {
+      opacity: 1;
+    }
+    
+    @media (max-width: 980px) {
       .module-layout {
         grid-template-columns: 1fr;
       }
@@ -649,1043 +446,1418 @@
         position: relative;
         top: 0;
       }
-      .sidebar-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-    }
-
-    @media (max-width: 980px) {
-      .info-grid {
+      .kpi-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-      
-      .chart-grid {
+      .tradeoff-grid {
         grid-template-columns: 1fr;
       }
-
-      .metrics-grid {
+    }
+    
+    @media (max-width: 560px) {
+      .kpi-grid {
         grid-template-columns: 1fr;
       }
-
-      .module-top {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .info-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .module-title {
-        font-size: 28px;
-      }
-    }
-
-    /* Animation */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes slideOut {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(100px);
-      }
-    }
-
-    .animate-in {
-      animation: fadeInUp 500ms ease forwards;
     }
   </style>
 </head>
-
 <body>
   <!-- Header -->
   <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="#top" aria-label="FP&A Portfolio">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span class="brand-text">FP&A Portfolio</span>
-      </a>
-      <div style="display: flex; gap: 10px;">
-        <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
-      </div>
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="brand">
+          <span class="brand-mark"></span>
+          <span>FP&A Portfolio</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html#projects">Modules</a>
+          <a href="index.html#about">About</a>
+        </div>
+      </nav>
     </div>
   </header>
 
-  <!-- Module Header -->
-  <section class="module-header">
+  <!-- Module Hero -->
+  <div class="module-hero" style="background: white;">
     <div class="container">
-      <div class="module-top">
-        <div>
-          <div class="module-badge">
-            <span>Cost control</span>
-          </div>
-          <h1 class="module-title">Indirect Cost & Headcount CoE</h1>
-          <p class="module-subtitle">Making overhead costs transparent and controllable.</p>
-        </div>
+      <div class="module-label">
+        <span>FP&A Module</span>
+        <span style="color: var(--border);">•</span>
+        <span>Cost Control & Workforce Planning</span>
       </div>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-label">Business problem</div>
-          <div class="info-value">Turn overhead into something you can explain, forecast, and actively manage.</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Role coverage</div>
-          <div class="info-value">Cost Management • Headcount Planning • Finance CoE</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Key outputs</div>
-          <div class="info-value">Headcount by cost center • Shared services allocation</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">Decision support</div>
-          <div class="info-value">Accruals & deferrals logic • Variance narratives</div>
-        </div>
+      <h1 class="module-title">Indirect Cost & Headcount CoE</h1>
+      <div class="module-pill">Center of Excellence</div>
+      <p class="module-subtitle">
+        Senior-level headcount planning with fully loaded costs, capacity modeling, and hiring vs. runway tradeoffs
+      </p>
+      <div class="feature-chips">
+        <span class="chip">Fully Loaded Costs</span>
+        <span class="chip">Productivity Ramp</span>
+        <span class="chip">Capacity Modeling</span>
+        <span class="chip">Hiring Triggers</span>
+        <span class="chip">Runway Impact</span>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Main Layout with Sidebar -->
-    <div class="module-layout">
-      
-      <!-- Sticky Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-title">Data Mode</div>
-          <div class="data-badge" id="dataModeBadge">Sample Data</div>
+  <!-- Main Module Layout -->
+  <div class="module-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Data Mode -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">DATA MODE</div>
+        <div id="dataModeBadge" class="data-badge">Sample Data</div>
+      </div>
+
+      <!-- Actions -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">ACTIONS</div>
+        <div class="sidebar-buttons">
+          <button class="btn-small btn-full" onclick="onUseSample()">Use Sample</button>
+          <button class="btn-small btn-full" onclick="onRandomizeAll()">Randomize All</button>
+          <button class="btn-small btn-full" onclick="downloadTemplates()">Download Templates</button>
+        </div>
+      </div>
+
+      <!-- Scenarios -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">SCENARIO</div>
+        <div class="scenario-tabs">
+          <button class="scenario-tab active" data-scenario="base" onclick="onScenarioChange('base')">
+            <span>Base Case</span>
+            <span class="help-icon">
+              <span class="help-tooltip">Standard performance assumptions with balanced growth and costs</span>
+            </span>
+          </button>
+          <button class="scenario-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
+            <span>Upside</span>
+            <span class="help-icon">
+              <span class="help-tooltip">Optimistic scenario: +15% capacity, higher utilization, lower attrition</span>
+            </span>
+          </button>
+          <button class="scenario-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
+            <span>Downside</span>
+            <span class="help-icon">
+              <span class="help-tooltip">Conservative scenario: -15% capacity, lower utilization, higher attrition</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Summary KPIs -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Summary</h2>
+          <span class="help-icon">
+            <span class="help-tooltip">High-level view of headcount, costs, and runway across all functions</span>
+          </span>
+        </div>
+        <div id="summaryKPIs" class="kpi-grid"></div>
+      </section>
+
+      <!-- Org Structure -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Org Structure by Function</h2>
+          <span class="help-icon" id="opexHelp">
+          </span>
         </div>
         
-        <div class="sidebar-section">
-          <div class="sidebar-title">Actions</div>
-          <div class="sidebar-buttons">
-            <button onclick="loadSampleData()" class="btn-small btn-full">Use Sample Data</button>
-            <button onclick="downloadTemplate()" class="btn-small btn-primary btn-full">📥 Download Template</button>
-            <div style="position: relative; width: 100%;">
-              <button class="btn-small btn-full" onclick="document.getElementById('fileInput').click()" style="background: white; border: 1px solid var(--border);">
-                📁 Upload CSV
-              </button>
-              <input 
-                type="file" 
-                id="fileInput" 
-                class="file-input" 
-                accept=".xlsx,.xls,.csv"
-                onchange="handleFileUpload(event)"
-                style="position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"
-              />
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main Content Area -->
-      <div style="min-width: 0;">
-        <div class="container" style="width: 100%; max-width: 100%;">
-          <!-- Alert -->
-          <div class="alert alert-info">
-            <div class="alert-icon">ℹ</div>
-            <div class="alert-content">
-              <h4>Sample Data Loaded</h4>
-              <p>Currently showing sample data for a mid-sized tech company. Upload your own data using the template to see personalized insights.</p>
-            </div>
-          </div>
-
-          <!-- Key Metrics -->
-          <section class="section">
-            <h2 class="section-title">
-              <span>📈</span>
-              <span>Key Metrics</span>
-            </h2>
-            
-            <div class="metrics-grid">
-              <div class="metric-card animate-in">
-                <div class="metric-header">
-                  <div class="metric-label">Total Headcount</div>
-                  <div class="metric-trend trend-up">+12%</div>
-                </div>
-                <div class="metric-value" id="totalHeadcount">247</div>
-                <div class="metric-subtitle">vs. 221 prior year</div>
-              </div>
-
-              <div class="metric-card animate-in" style="animation-delay: 100ms">
-                <div class="metric-header">
-                  <div class="metric-label">Total Indirect Cost</div>
-                  <div class="metric-trend trend-up">+8%</div>
-                </div>
-                <div class="metric-value" id="totalCost">$18.2M</div>
-                <div class="metric-subtitle">vs. $16.8M prior year</div>
-              </div>
-
-              <div class="metric-card animate-in" style="animation-delay: 200ms">
-                <div class="metric-header">
-                  <div class="metric-label">Cost per Head</div>
-                  <div class="metric-trend trend-down">-4%</div>
-                </div>
-                <div class="metric-value" id="costPerHead">$73.7K</div>
-                <div class="metric-subtitle">vs. $76.0K prior year</div>
-              </div>
-            </div>
-          </section>
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('headcount')">Headcount by Cost Center</button>
-        <button class="tab" onclick="switchTab('allocation')">Shared Services Allocation</button>
-        <button class="tab" onclick="switchTab('variance')">Variance Analysis</button>
-      </div>
-
-      <!-- Tab Content: Headcount -->
-      <div id="headcount-tab" class="tab-content active">
-        <div class="chart-grid">
-          <div class="chart-card">
-            <div class="chart-header">
-              <h3 class="chart-title">Headcount by Department</h3>
-              <span class="chart-badge">Current FY</span>
-            </div>
-            <div class="bar-chart" id="headcountChart"></div>
-          </div>
-
-          <div class="chart-card">
-            <div class="chart-header">
-              <h3 class="chart-title">YoY Headcount Growth</h3>
-              <span class="chart-badge">Change %</span>
-            </div>
-            <div class="bar-chart" id="growthChart"></div>
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Headcount by Function</div>
+          <div class="chart-wrapper">
+            <canvas id="headcountChart" class="chart-canvas"></canvas>
+            <div id="headcountTooltip" class="chart-tooltip"></div>
           </div>
         </div>
 
-        <div class="card" style="margin-top: 24px;">
-          <h3 class="section-title">Detailed Headcount Table</h3>
-          <div class="table-wrapper">
-            <table id="headcountTable">
-              <thead>
-                <tr>
-                  <th>Cost Center</th>
-                  <th>Department</th>
-                  <th>Current HC</th>
-                  <th>Prior Year HC</th>
-                  <th>Change</th>
-                  <th>Change %</th>
-                  <th>Avg Cost per Head</th>
-                </tr>
-              </thead>
-              <tbody id="headcountTableBody"></tbody>
-            </table>
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Opex by Function</div>
+          <div class="chart-wrapper">
+            <canvas id="opexChart" class="chart-canvas"></canvas>
+            <div id="opexTooltip" class="chart-tooltip"></div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Tab Content: Allocation -->
-      <div id="allocation-tab" class="tab-content">
-        <div class="card">
-          <h3 class="section-title">Shared Services Cost Allocation</h3>
-          <div class="table-wrapper">
-            <table id="allocationTable">
-              <thead>
-                <tr>
-                  <th>Service Center</th>
-                  <th>Total Cost</th>
-                  <th>Allocation Method</th>
-                  <th>Finance</th>
-                  <th>Engineering</th>
-                  <th>Sales</th>
-                  <th>Marketing</th>
-                  <th>Operations</th>
-                </tr>
-              </thead>
-              <tbody id="allocationTableBody"></tbody>
-            </table>
+      <!-- Fully Loaded Costs -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Fully Loaded Cost Structure</h2>
+          <span class="help-icon" id="fullyLoadedCostHelp">
+          </span>
+        </div>
+        <div id="fullyLoadedCosts"></div>
+      </section>
+
+      <!-- Capacity & Utilization -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Capacity & Utilization</h2>
+          <span class="help-icon" id="utilizationHelp">
+          </span>
+        </div>
+        
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Utilization by Function</div>
+          <div class="chart-wrapper">
+            <canvas id="utilizationChart" class="chart-canvas"></canvas>
+            <div id="utilizationTooltip" class="chart-tooltip"></div>
           </div>
         </div>
 
-        <div class="chart-grid" style="margin-top: 24px;">
-          <div class="chart-card">
-            <div class="chart-header">
-              <h3 class="chart-title">IT Services Allocation</h3>
-              <span class="chart-badge">$2.4M</span>
-            </div>
-            <div class="bar-chart" id="itAllocationChart"></div>
-          </div>
-
-          <div class="chart-card">
-            <div class="chart-header">
-              <h3 class="chart-title">Facilities Allocation</h3>
-              <span class="chart-badge">$1.8M</span>
-            </div>
-            <div class="bar-chart" id="facilitiesAllocationChart"></div>
-          </div>
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Current Capacity Status</div>
+          <table id="capacityTable" class="data-table"></table>
         </div>
-      </div>
+      </section>
 
-      <!-- Tab Content: Variance -->
-      <div id="variance-tab" class="tab-content">
-        <div class="card">
-          <h3 class="section-title">Budget vs Actual Variance Analysis</h3>
-          <div class="table-wrapper">
-            <table id="varianceTable">
-              <thead>
-                <tr>
-                  <th>Department</th>
-                  <th>Budget</th>
-                  <th>Actual</th>
-                  <th>Variance ($)</th>
-                  <th>Variance (%)</th>
-                  <th>Driver</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="varianceTableBody"></tbody>
-            </table>
+      <!-- Hiring Triggers -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Hiring Justification Logic</h2>
+          <span class="help-icon" id="hiringTriggersHelp">
+          </span>
+        </div>
+        <div id="hiringTriggers"></div>
+      </section>
+
+      <!-- Hiring vs Runway Tradeoff -->
+      <section class="module-section">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+          <h2 class="module-section-title" style="margin: 0;">Hiring Strategy Comparison</h2>
+          <span class="help-icon" id="runwayHelp">
+          </span>
+        </div>
+
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Runway Impact</div>
+          <div class="chart-wrapper">
+            <canvas id="runwayChart" class="chart-canvas"></canvas>
+            <div id="runwayTooltip" class="chart-tooltip"></div>
           </div>
         </div>
 
-        <div class="card" style="margin-top: 24px;">
-          <h3 class="section-title">Variance Narratives</h3>
-          <div id="narratives" style="display: grid; gap: 16px;"></div>
-        </div>
-      </div>
-    </div>
-      </div> <!-- End main content area -->
-    </div> <!-- End module-layout -->
-  </main>
+        <div id="strategyComparison"></div>
+      </section>
+    </main>
+  </div>
 
+  <script src="./main.js"></script>
   <script>
-    // Generate randomized sample data
-    function generateRandomData() {
-      const departments = [
-        { code: 'CC-100', name: 'Finance', baseCount: 32, baseCost: 85000 },
-        { code: 'CC-200', name: 'Engineering', baseCount: 45, baseCost: 95000 },
-        { code: 'CC-300', name: 'Sales', baseCount: 38, baseCost: 75000 },
-        { code: 'CC-400', name: 'Marketing', baseCount: 28, baseCost: 68000 },
-        { code: 'CC-500', name: 'Operations', baseCount: 35, baseCost: 62000 },
-        { code: 'CC-600', name: 'HR', baseCount: 18, baseCost: 72000 }
-      ];
+    // ========== PROFESSIONAL MONOCHROME PALETTE ==========
+    const COLORS = {
+      functions: ['#111827', '#374151', '#6B7280', '#9CA3AF'],
+      accent: '#0F766E',
+      warning: '#dc2626',
+      caution: '#d97706',
+      success: '#059669',
+      muted: '#5d6b7a'
+    };
 
-      const drivers = [
-        'Headcount changes', 'Compensation adjustment', 'Delayed hires', 
-        'Market correction', 'Attrition', 'New initiative', 
-        'Restructuring', 'Seasonal hiring', 'Budget reallocation'
-      ];
+    // ========== FIXED SAMPLE DATASET (12 MONTHS WITH VARIANCE) ==========
+    const SAMPLE_DATA = {
+      months: [
+        {
+          month: 'Jan',
+          functions: [
+            { name: 'Sales', headcount: 12, costs: { salary: 102000, benefits: 18360, taxes: 8160, bonus: 13260, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 52, demand: 39 } },
+            { name: 'Engineering', headcount: 28, costs: { salary: 280000, benefits: 50400, taxes: 22400, bonus: 36400, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Story Points/month', capacity: 326, demand: 261 } },
+            { name: 'G&A', headcount: 18, costs: { salary: 112500, benefits: 20250, taxes: 9000, bonus: 14625, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 18, demand: 14 } },
+            { name: 'Ops', headcount: 15, costs: { salary: 81250, benefits: 14625, taxes: 6500, bonus: 10563, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 662, demand: 477 } }
+          ]
+        },
+        {
+          month: 'Feb',
+          functions: [
+            { name: 'Sales', headcount: 12, costs: { salary: 102000, benefits: 18360, taxes: 8160, bonus: 13260, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 53, demand: 41 } },
+            { name: 'Engineering', headcount: 29, costs: { salary: 290000, benefits: 52200, taxes: 23200, bonus: 37700, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 338, demand: 270 } },
+            { name: 'G&A', headcount: 18, costs: { salary: 112500, benefits: 20250, taxes: 9000, bonus: 14625, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 18, demand: 14 } },
+            { name: 'Ops', headcount: 15, costs: { salary: 81250, benefits: 14625, taxes: 6500, bonus: 10563, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Tickets/month', capacity: 665, demand: 485 } }
+          ]
+        },
+        {
+          month: 'Mar',
+          functions: [
+            { name: 'Sales', headcount: 13, costs: { salary: 110500, benefits: 19890, taxes: 8840, bonus: 14365, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 56, demand: 44 } },
+            { name: 'Engineering', headcount: 29, costs: { salary: 290000, benefits: 52200, taxes: 23200, bonus: 37700, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Story Points/month', capacity: 342, demand: 280 } },
+            { name: 'G&A', headcount: 18, costs: { salary: 112500, benefits: 20250, taxes: 9000, bonus: 14625, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 18, demand: 14 } },
+            { name: 'Ops', headcount: 16, costs: { salary: 86667, benefits: 15600, taxes: 6933, bonus: 11267, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Tickets/month', capacity: 698, demand: 510 } }
+          ]
+        },
+        {
+          month: 'Apr',
+          functions: [
+            { name: 'Sales', headcount: 13, costs: { salary: 110500, benefits: 19890, taxes: 8840, bonus: 14365, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 57, demand: 46 } },
+            { name: 'Engineering', headcount: 30, costs: { salary: 300000, benefits: 54000, taxes: 24000, bonus: 39000, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 354, demand: 292 } },
+            { name: 'G&A', headcount: 19, costs: { salary: 118750, benefits: 21375, taxes: 9500, bonus: 15438, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'FTE Available', capacity: 19, demand: 14 } },
+            { name: 'Ops', headcount: 16, costs: { salary: 86667, benefits: 15600, taxes: 6933, bonus: 11267, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 704, demand: 525 } }
+          ]
+        },
+        {
+          month: 'May',
+          functions: [
+            { name: 'Sales', headcount: 14, costs: { salary: 119000, benefits: 21420, taxes: 9520, bonus: 15470, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 60, demand: 49 } },
+            { name: 'Engineering', headcount: 31, costs: { salary: 310000, benefits: 55800, taxes: 24800, bonus: 40300, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 366, demand: 305 } },
+            { name: 'G&A', headcount: 19, costs: { salary: 118750, benefits: 21375, taxes: 9500, bonus: 15438, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 19, demand: 14 } },
+            { name: 'Ops', headcount: 16, costs: { salary: 86667, benefits: 15600, taxes: 6933, bonus: 11267, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 710, demand: 540 } }
+          ]
+        },
+        {
+          month: 'Jun',
+          functions: [
+            { name: 'Sales', headcount: 14, costs: { salary: 119000, benefits: 21420, taxes: 9520, bonus: 15470, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 62, demand: 52 } },
+            { name: 'Engineering', headcount: 32, costs: { salary: 320000, benefits: 57600, taxes: 25600, bonus: 41600, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 378, demand: 320 } },
+            { name: 'G&A', headcount: 19, costs: { salary: 118750, benefits: 21375, taxes: 9500, bonus: 15438, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 19, demand: 14 } },
+            { name: 'Ops', headcount: 17, costs: { salary: 92083, benefits: 16575, taxes: 7367, bonus: 11971, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Tickets/month', capacity: 743, demand: 570 } }
+          ]
+        },
+        {
+          month: 'Jul',
+          functions: [
+            { name: 'Sales', headcount: 15, costs: { salary: 127500, benefits: 22950, taxes: 10200, bonus: 16575, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 65, demand: 55 } },
+            { name: 'Engineering', headcount: 33, costs: { salary: 330000, benefits: 59400, taxes: 26400, bonus: 42900, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 390, demand: 336 } },
+            { name: 'G&A', headcount: 20, costs: { salary: 125000, benefits: 22500, taxes: 10000, bonus: 16250, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'FTE Available', capacity: 20, demand: 15 } },
+            { name: 'Ops', headcount: 17, costs: { salary: 92083, benefits: 16575, taxes: 7367, bonus: 11971, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 750, demand: 590 } }
+          ]
+        },
+        {
+          month: 'Aug',
+          functions: [
+            { name: 'Sales', headcount: 15, costs: { salary: 127500, benefits: 22950, taxes: 10200, bonus: 16575, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 66, demand: 58 } },
+            { name: 'Engineering', headcount: 34, costs: { salary: 340000, benefits: 61200, taxes: 27200, bonus: 44200, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 402, demand: 352 } },
+            { name: 'G&A', headcount: 20, costs: { salary: 125000, benefits: 22500, taxes: 10000, bonus: 16250, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 20, demand: 15 } },
+            { name: 'Ops', headcount: 18, costs: { salary: 97500, benefits: 17550, taxes: 7800, bonus: 12675, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Tickets/month', capacity: 783, demand: 620 } }
+          ]
+        },
+        {
+          month: 'Sep',
+          functions: [
+            { name: 'Sales', headcount: 16, costs: { salary: 136000, benefits: 24480, taxes: 10880, bonus: 17680, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 69, demand: 61 } },
+            { name: 'Engineering', headcount: 35, costs: { salary: 350000, benefits: 63000, taxes: 28000, bonus: 45500, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 414, demand: 368 } },
+            { name: 'G&A', headcount: 20, costs: { salary: 125000, benefits: 22500, taxes: 10000, bonus: 16250, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 20, demand: 15 } },
+            { name: 'Ops', headcount: 18, costs: { salary: 97500, benefits: 17550, taxes: 7800, bonus: 12675, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 790, demand: 645 } }
+          ]
+        },
+        {
+          month: 'Oct',
+          functions: [
+            { name: 'Sales', headcount: 16, costs: { salary: 136000, benefits: 24480, taxes: 10880, bonus: 17680, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 70, demand: 64 } },
+            { name: 'Engineering', headcount: 36, costs: { salary: 360000, benefits: 64800, taxes: 28800, bonus: 46800, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 426, demand: 383 } },
+            { name: 'G&A', headcount: 21, costs: { salary: 131250, benefits: 23625, taxes: 10500, bonus: 17063, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'FTE Available', capacity: 21, demand: 15 } },
+            { name: 'Ops', headcount: 18, costs: { salary: 97500, benefits: 17550, taxes: 7800, bonus: 12675, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 796, demand: 665 } }
+          ]
+        },
+        {
+          month: 'Nov',
+          functions: [
+            { name: 'Sales', headcount: 17, costs: { salary: 144500, benefits: 26010, taxes: 11560, bonus: 18785, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Deals/month', capacity: 73, demand: 67 } },
+            { name: 'Engineering', headcount: 37, costs: { salary: 370000, benefits: 66600, taxes: 29600, bonus: 48100, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 438, demand: 398 } },
+            { name: 'G&A', headcount: 21, costs: { salary: 131250, benefits: 23625, taxes: 10500, bonus: 17063, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 21, demand: 15 } },
+            { name: 'Ops', headcount: 19, costs: { salary: 102917, benefits: 18525, taxes: 8233, bonus: 13379, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Tickets/month', capacity: 829, demand: 690 } }
+          ]
+        },
+        {
+          month: 'Dec',
+          functions: [
+            { name: 'Sales', headcount: 17, costs: { salary: 144500, benefits: 26010, taxes: 11560, bonus: 18785, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Deals/month', capacity: 74, demand: 71 } },
+            { name: 'Engineering', headcount: 38, costs: { salary: 380000, benefits: 68400, taxes: 30400, bonus: 49400, equipment: 3500, recruiting: 8000, onboarding: 4500 }, capacity: { metric: 'Story Points/month', capacity: 450, demand: 415 } },
+            { name: 'G&A', headcount: 21, costs: { salary: 131250, benefits: 23625, taxes: 10500, bonus: 17063, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'FTE Available', capacity: 21, demand: 16 } },
+            { name: 'Ops', headcount: 19, costs: { salary: 102917, benefits: 18525, taxes: 8233, bonus: 13379, equipment: 0, recruiting: 0, onboarding: 0 }, capacity: { metric: 'Tickets/month', capacity: 835, demand: 710 } }
+          ]
+        }
+      ],
+      runway: { cash: 2400000, burn: 185000 }
+    };
 
-      const actions = [
-        'Approved by leadership', 'Under review', 'Favorable variance',
-        'Reforecast required', 'Within acceptable range', 'Action plan in progress',
-        'No action needed', 'Escalated to CFO', 'Monitoring closely'
-      ];
+    // ========== STATE MANAGEMENT ==========
+    let dataMode = 'sample'; // 'sample' or 'random'
+    let scenario = 'base'; // 'base', 'upside', 'downside'
+    let baseDataset = null; // Raw dataset without scenario multipliers
+    let activeDataset = null; // Dataset with scenario multipliers applied
 
-      // Randomize headcount
-      const headcount = departments.map(dept => {
-        const variance = 0.7 + Math.random() * 0.6; // 70% to 130%
-        const current = Math.round(dept.baseCount * variance);
-        const prior = Math.round(current / (0.95 + Math.random() * 0.15)); // -5% to +10% growth
-        const costVariance = 0.9 + Math.random() * 0.25; // 90% to 115%
-        const avgCost = Math.round(dept.baseCost * costVariance / 1000) * 1000;
-        
-        return {
-          costCenter: dept.code,
-          department: dept.name,
-          current,
-          prior,
-          avgCost
-        };
-      });
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const FUNCTIONS = ['Sales', 'Engineering', 'G&A', 'Ops'];
 
-      // Calculate total headcount for allocation
-      const totalHeadcount = headcount.reduce((sum, d) => sum + d.current, 0);
+    // Chart points for tooltips
+    let headcountChartPoints = [];
+    let opexChartPoints = [];
+    let utilizationChartPoints = [];
+    let runwayChartPoints = [];
 
-      // Randomize allocation
-      const services = [
-        { name: 'IT Services', baseTotal: 2400000, method: 'Headcount' },
-        { name: 'Facilities', baseTotal: 1800000, method: 'Square Footage' },
-        { name: 'HR Services', baseTotal: 950000, method: 'Headcount' },
-        { name: 'Legal & Compliance', baseTotal: 720000, method: 'Revenue Split' }
-      ];
-
-      const allocation = services.map(svc => {
-        const variance = 0.8 + Math.random() * 0.5; // 80% to 130%
-        const total = Math.round(svc.baseTotal * variance);
-        
-        // Generate random allocation percentages that sum to 100%
-        let percentages = departments.map(() => Math.random());
-        const sum = percentages.reduce((a, b) => a + b, 0);
-        percentages = percentages.map(p => p / sum);
-        
-        return {
-          service: svc.name,
-          total,
-          method: svc.method,
-          finance: Math.round(total * percentages[0]),
-          engineering: Math.round(total * percentages[1]),
-          sales: Math.round(total * percentages[2]),
-          marketing: Math.round(total * percentages[3]),
-          operations: Math.round(total * percentages[4])
-        };
-      });
-
-      // Randomize variance data
-      const variance = departments.map(dept => {
-        const hc = headcount.find(h => h.department === dept.name);
-        const budget = Math.round(hc.current * hc.avgCost);
-        const variancePercent = -0.15 + Math.random() * 0.30; // -15% to +15%
-        const actual = Math.round(budget * (1 + variancePercent));
-        
-        return {
-          department: dept.name,
-          budget,
-          actual,
-          driver: drivers[Math.floor(Math.random() * drivers.length)],
-          action: actions[Math.floor(Math.random() * actions.length)]
-        };
-      });
-
-      return { headcount, allocation, variance };
+    // ========== DATA FUNCTIONS ==========
+    
+    function deepCopy(obj) {
+      return JSON.parse(JSON.stringify(obj));
     }
 
-    let currentData = generateRandomData();
-
-    // Initialize
-    function init() {
-      loadSampleData();
-    }
-
-    // Load sample data
     function loadSampleData() {
-      currentData = generateRandomData();
-      renderAllData();
-      
-      // Update sidebar badge
-      const badge = document.getElementById('dataModeBadge');
-      if (badge) {
-        badge.textContent = 'Sample Data';
-      }
-      
-      // Show success message
-      showNotification('Sample data randomized successfully!', 'success');
+      return deepCopy(SAMPLE_DATA);
     }
 
-    // Render all visualizations
-    function renderAllData() {
-      renderMetrics();
-      renderHeadcountChart();
-      renderGrowthChart();
-      renderHeadcountTable();
-      renderAllocationTable();
-      renderAllocationCharts();
-      renderVarianceTable();
-      renderNarratives();
-    }
+    function generateRandomData() {
+      const data = {
+        months: [],
+        runway: { 
+          cash: 1600000 + Math.random() * 1400000,
+          burn: 140000 + Math.random() * 90000
+        }
+      };
 
-    // Render key metrics
-    function renderMetrics() {
-      const totalHeadcount = currentData.headcount.reduce((sum, item) => sum + item.current, 0);
-      const priorHeadcount = currentData.headcount.reduce((sum, item) => sum + item.prior, 0);
-      const totalCost = currentData.headcount.reduce((sum, item) => sum + (item.current * item.avgCost), 0);
-      const priorCost = currentData.headcount.reduce((sum, item) => sum + (item.prior * item.avgCost), 0);
-      const costPerHead = totalCost / totalHeadcount;
-      const priorCostPerHead = priorCost / priorHeadcount;
+      MONTHS.forEach((month, mi) => {
+        const monthData = { month, functions: [] };
 
-      document.getElementById('totalHeadcount').textContent = totalHeadcount;
-      document.getElementById('totalCost').textContent = formatCurrency(totalCost / 1000000, 1) + 'M';
-      document.getElementById('costPerHead').textContent = formatCurrency(costPerHead / 1000, 1) + 'K';
-    }
+        FUNCTIONS.forEach((func, fi) => {
+          const baseHC = Math.floor(10 + Math.random() * 25);
+          const hireRate = (0.2 + Math.random() * 0.5);
+          const growth = Math.floor(mi * hireRate);
+          const headcount = baseHC + growth;
 
-    // Render headcount chart
-    function renderHeadcountChart() {
-      const container = document.getElementById('headcountChart');
-      const maxValue = Math.max(...currentData.headcount.map(d => d.current));
-      
-      container.innerHTML = currentData.headcount.map(item => `
-        <div class="bar-row">
-          <div class="bar-label">${item.department}</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(item.current / maxValue * 100)}%"></div>
-          </div>
-          <div class="bar-value">${item.current}</div>
-        </div>
-      `).join('');
-    }
-
-    // Render growth chart
-    function renderGrowthChart() {
-      const container = document.getElementById('growthChart');
-      const data = currentData.headcount.map(item => ({
-        ...item,
-        growth: ((item.current - item.prior) / item.prior * 100)
-      }));
-      const maxValue = Math.max(...data.map(d => Math.abs(d.growth)));
-      
-      container.innerHTML = data.map(item => `
-        <div class="bar-row">
-          <div class="bar-label">${item.department}</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(Math.abs(item.growth) / maxValue * 100)}%"></div>
-          </div>
-          <div class="bar-value ${item.growth >= 0 ? 'cell-positive' : 'cell-negative'}">
-            ${item.growth >= 0 ? '+' : ''}${item.growth.toFixed(1)}%
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Render headcount table
-    function renderHeadcountTable() {
-      const tbody = document.getElementById('headcountTableBody');
-      
-      tbody.innerHTML = currentData.headcount.map(item => {
-        const change = item.current - item.prior;
-        const changePct = (change / item.prior * 100);
-        
-        return `
-          <tr>
-            <td>${item.costCenter}</td>
-            <td><strong>${item.department}</strong></td>
-            <td class="cell-number">${item.current}</td>
-            <td class="cell-number">${item.prior}</td>
-            <td class="cell-number ${change >= 0 ? 'cell-positive' : 'cell-negative'}">
-              ${change >= 0 ? '+' : ''}${change}
-            </td>
-            <td class="cell-number ${changePct >= 0 ? 'cell-positive' : 'cell-negative'}">
-              ${changePct >= 0 ? '+' : ''}${changePct.toFixed(1)}%
-            </td>
-            <td class="cell-number">${formatCurrency(item.avgCost, 0)}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Render allocation table
-    function renderAllocationTable() {
-      const tbody = document.getElementById('allocationTableBody');
-      
-      tbody.innerHTML = currentData.allocation.map(item => `
-        <tr>
-          <td><strong>${item.service}</strong></td>
-          <td class="cell-number">${formatCurrency(item.total, 0)}</td>
-          <td>${item.method}</td>
-          <td class="cell-number">${formatCurrency(item.finance, 0)}</td>
-          <td class="cell-number">${formatCurrency(item.engineering, 0)}</td>
-          <td class="cell-number">${formatCurrency(item.sales, 0)}</td>
-          <td class="cell-number">${formatCurrency(item.marketing, 0)}</td>
-          <td class="cell-number">${formatCurrency(item.operations, 0)}</td>
-        </tr>
-      `).join('');
-    }
-
-    // Render allocation charts
-    function renderAllocationCharts() {
-      // IT Services
-      const itData = currentData.allocation[0];
-      const itTotal = itData.finance + itData.engineering + itData.sales + itData.marketing + itData.operations;
-      const itContainer = document.getElementById('itAllocationChart');
-      
-      itContainer.innerHTML = `
-        <div class="bar-row">
-          <div class="bar-label">Finance</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(itData.finance / itTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(itData.finance / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Engineering</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(itData.engineering / itTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(itData.engineering / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Sales</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(itData.sales / itTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(itData.sales / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Marketing</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(itData.marketing / itTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(itData.marketing / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Operations</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(itData.operations / itTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(itData.operations / 1000, 0)}K</div>
-        </div>
-      `;
-
-      // Facilities
-      const facData = currentData.allocation[1];
-      const facTotal = facData.finance + facData.engineering + facData.sales + facData.marketing + facData.operations;
-      const facContainer = document.getElementById('facilitiesAllocationChart');
-      
-      facContainer.innerHTML = `
-        <div class="bar-row">
-          <div class="bar-label">Finance</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(facData.finance / facTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(facData.finance / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Engineering</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(facData.engineering / facTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(facData.engineering / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Sales</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(facData.sales / facTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(facData.sales / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Marketing</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(facData.marketing / facTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(facData.marketing / 1000, 0)}K</div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Operations</div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width: ${(facData.operations / facTotal * 100)}%"></div>
-          </div>
-          <div class="bar-value">${formatCurrency(facData.operations / 1000, 0)}K</div>
-        </div>
-      `;
-    }
-
-    // Render variance table
-    function renderVarianceTable() {
-      const tbody = document.getElementById('varianceTableBody');
-      
-      tbody.innerHTML = currentData.variance.map(item => {
-        const variance = item.actual - item.budget;
-        const variancePct = (variance / item.budget * 100);
-        
-        return `
-          <tr>
-            <td><strong>${item.department}</strong></td>
-            <td class="cell-number">${formatCurrency(item.budget, 0)}</td>
-            <td class="cell-number">${formatCurrency(item.actual, 0)}</td>
-            <td class="cell-number ${variance >= 0 ? 'cell-positive' : 'cell-negative'}">
-              ${variance >= 0 ? '+' : ''}${formatCurrency(variance, 0)}
-            </td>
-            <td class="cell-number ${variancePct >= 0 ? 'cell-positive' : 'cell-negative'}">
-              ${variancePct >= 0 ? '+' : ''}${variancePct.toFixed(1)}%
-            </td>
-            <td>${item.driver}</td>
-            <td>${item.action}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Render narratives
-    function renderNarratives() {
-      const container = document.getElementById('narratives');
-      
-      // Generate narratives from variance data
-      const narratives = currentData.variance
-        .filter(item => {
-          const variance = item.actual - item.budget;
-          const variancePct = Math.abs((variance / item.budget * 100));
-          return variancePct > 5; // Only show significant variances
-        })
-        .slice(0, 3) // Top 3
-        .map(item => {
-          const variance = item.actual - item.budget;
-          const variancePct = (variance / item.budget * 100);
-          const isOverBudget = variance > 0;
+          const baseSalary = 55000 + Math.random() * 85000;
+          const salaryMonth = (baseSalary / 12) * headcount;
+          const benefits = salaryMonth * (0.16 + Math.random() * 0.08);
+          const taxes = salaryMonth * (0.07 + Math.random() * 0.02);
+          const bonus = salaryMonth * (0.11 + Math.random() * 0.08);
           
-          let content = `${item.department} ${isOverBudget ? 'exceeded' : 'came in under'} budget by ${formatCurrency(Math.abs(variance), 0)} (${Math.abs(variancePct).toFixed(1)}%) `;
-          content += `driven by ${item.driver.toLowerCase()}. ${item.action}.`;
+          const newHires = mi === 0 ? 0 : Math.floor(hireRate * (0.9 + Math.random() * 0.2));
+          const equipment = newHires * (2000 + Math.random() * 3500);
+          const recruiting = newHires * (5000 + Math.random() * 11000);
+          const onboarding = newHires * (3000 + Math.random() * 6000);
           
-          const status = Math.abs(variancePct) > 10 ? 'Attention Required' : 
-                        Math.abs(variancePct) > 5 ? 'Under Review' : 
-                        'Within Range';
+          let capacityMetric, capacity, demand;
+          if (func === 'Sales') {
+            capacityMetric = 'Deals/month';
+            capacity = Math.round(headcount * (3.5 + Math.random() * 2.5));
+            demand = Math.round(capacity * (0.70 + mi * 0.018 + Math.random() * 0.12));
+          } else if (func === 'Engineering') {
+            capacityMetric = 'Story Points/month';
+            capacity = Math.round(headcount * (10 + Math.random() * 5));
+            demand = Math.round(capacity * (0.75 + mi * 0.012 + Math.random() * 0.10));
+          } else if (func === 'Ops') {
+            capacityMetric = 'Tickets/month';
+            capacity = Math.round(headcount * (38 + Math.random() * 16));
+            demand = Math.round(capacity * (0.68 + mi * 0.008 + Math.random() * 0.14));
+          } else {
+            capacityMetric = 'FTE Available';
+            capacity = Math.round(headcount);
+            demand = Math.round(capacity * (0.73 + Math.random() * 0.08));
+          }
 
-          return {
-            title: `${item.department} ${isOverBudget ? 'Cost Overrun' : 'Cost Savings'}`,
-            variance: (variance >= 0 ? '+' : '') + formatCurrency(variance / 1000, 0) + 'K',
-            status: isOverBudget ? status : 'Favorable',
-            content
-          };
+          monthData.functions.push({
+            name: func,
+            headcount,
+            costs: { salary: salaryMonth, benefits, taxes, bonus, equipment, recruiting, onboarding },
+            capacity: { metric: capacityMetric, capacity, demand }
+          });
         });
 
-      if (narratives.length === 0) {
-        container.innerHTML = `
-          <div class="card" style="padding: 16px;">
-            <p style="font-size: 13px; color: var(--muted);">All departments are within 5% of budget. No significant variances to report.</p>
-          </div>
-        `;
-        return;
-      }
+        data.months.push(monthData);
+      });
 
-      container.innerHTML = narratives.map(item => `
-        <div class="card" style="padding: 16px;">
-          <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px;">
-            <h4 style="font-size: 15px; font-weight: 650;">${item.title}</h4>
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <span class="metric-trend ${item.variance.startsWith('+') ? 'trend-up' : 'trend-down'}">${item.variance}</span>
-              <span style="font-size: 11px; color: var(--muted);">${item.status}</span>
+      return data;
+    }
+
+    function applyScenario(baseData, scenarioName) {
+      const mult = scenarioName === 'upside' ? 1.15 : scenarioName === 'downside' ? 0.85 : 1.0;
+      const utilBoost = scenarioName === 'upside' ? 0.10 : scenarioName === 'downside' ? -0.10 : 0;
+      
+      const scenarioData = deepCopy(baseData);
+      
+      scenarioData.months.forEach(month => {
+        month.functions.forEach(func => {
+          // Apply multipliers to headcount (affects staffing levels)
+          func.headcount = Math.round(func.headcount * mult);
+          
+          // Apply multipliers to costs (proportional to headcount changes)
+          const costKeys = ['salary', 'benefits', 'taxes', 'bonus', 'equipment', 'recruiting', 'onboarding'];
+          costKeys.forEach(key => {
+            if (func.costs[key]) {
+              func.costs[key] = Math.round(func.costs[key] * mult);
+            }
+          });
+          
+          // Apply multipliers to capacity
+          func.capacity.capacity = Math.round(func.capacity.capacity * mult);
+          const newDemand = Math.round(func.capacity.demand * (1 + utilBoost));
+          func.capacity.demand = newDemand;
+        });
+      });
+      
+      return scenarioData;
+    }
+
+    // ========== EVENT HANDLERS ==========
+    
+    function onUseSample() {
+      baseDataset = loadSampleData();
+      dataMode = 'sample';
+      activeDataset = applyScenario(baseDataset, scenario);
+      updateDataModeBadge();
+      renderAll();
+    }
+
+    function onRandomizeAll() {
+      baseDataset = generateRandomData();
+      dataMode = 'random';
+      activeDataset = applyScenario(baseDataset, scenario);
+      updateDataModeBadge();
+      renderAll();
+    }
+
+    function onScenarioChange(newScenario) {
+      console.log('🔄 Scenario change:', scenario, '→', newScenario);
+      scenario = newScenario;
+      
+      // Update active tab
+      document.querySelectorAll('.scenario-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelector(`[data-scenario="${newScenario}"]`).classList.add('active');
+      
+      // Apply scenario to existing baseDataset (NO regeneration)
+      activeDataset = applyScenario(baseDataset, scenario);
+      console.log('✅ Dataset updated with scenario multiplier, rendering charts...');
+      renderAll();
+      console.log('✅ Render complete');
+    }
+
+    function updateDataModeBadge() {
+      const badge = document.getElementById('dataModeBadge');
+      badge.textContent = dataMode === 'sample' ? 'Sample Data' : 'Randomized Data';
+      badge.className = dataMode === 'sample' ? 'data-badge' : 'data-badge random';
+    }
+
+    // ========== TOOLTIP ENGINE (textContent approach) ==========
+    
+    function updateTooltips() {
+      if (!activeDataset) return;
+      
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      const totalHC = last.functions.reduce((s, f) => s + f.headcount, 0);
+      const totalCost = last.functions.reduce((s, f) => {
+        const c = f.costs;
+        return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
+      }, 0);
+      const avgUtil = last.functions.reduce((s, f) => {
+        const util = (f.capacity.demand / f.capacity.capacity) * 100;
+        return s + util;
+      }, 0) / FUNCTIONS.length;
+      const runway = data.runway.cash / data.runway.burn;
+      
+      // Opex tooltip
+      const opexHelp = document.querySelector('#opexHelp .help-tooltip');
+      if (opexHelp) {
+        opexHelp.textContent = `Operating Expenses (Opex)\n\nDefinition: All operating costs including fully loaded headcount costs. Current total: $${formatCurrency(totalCost, 0)}/month\n\nCalculation: Sum of all function costs (salary + benefits + taxes + bonus + one-time costs)\n\nNote: Opex % of Revenue measures efficiency—lower is better (typical SaaS: 60-80%)`;
+      }
+      
+      // Fully Loaded Cost tooltip
+      const fullyLoadedHelp = document.querySelector('#fullyLoadedCostHelp .help-tooltip');
+      if (fullyLoadedHelp) {
+        fullyLoadedHelp.textContent = `Fully Loaded Cost\n\nDefinition: Total cost of an employee including salary, benefits, taxes, bonuses, equipment, recruiting, and onboarding.\n\nCalculation: Base Salary + Benefits (15-25%) + Taxes (7-9%) + Bonus (10-20%) + One-time costs (equipment ~$3.5K, recruiting ~$8K, onboarding ~$4.5K)\n\nTypical Range: 1.3-1.5x base salary annually`;
+      }
+      
+      // Utilization tooltip
+      const utilizationHelp = document.querySelector('#utilizationHelp .help-tooltip');
+      if (utilizationHelp) {
+        utilizationHelp.textContent = `Utilization (%)\n\nDefinition: Percentage of available capacity being used. Measures how efficiently headcount is deployed.\n\nCalculation: (Actual Demand ÷ Available Capacity) × 100. Current avg: ${avgUtil.toFixed(1)}%\n\nTypical Range: 70-85% (healthy), >85% (bottleneck risk), <70% (overcapacity)`;
+      }
+      
+      // Hiring Triggers tooltip
+      const hiringTriggersHelp = document.querySelector('#hiringTriggersHelp .help-tooltip');
+      if (hiringTriggersHelp) {
+        hiringTriggersHelp.textContent = `Hiring Triggers\n\nDefinition: Data-driven rules for when to hire or delay hiring decisions.\n\nRules in this model:\n• Recommend hire if: Utilization >85% for 2+ months OR Backlog growth >15%/month\n• Recommend delay if: Runway <6 months\n• Monitor if: Utilization <70% (potential overcapacity)\n\nPurpose: Prevents both understaffing (team burnout) and overstaffing (cash burn)`;
+      }
+      
+      // Runway tooltip
+      const runwayHelp = document.querySelector('#runwayHelp .help-tooltip');
+      if (runwayHelp) {
+        runwayHelp.textContent = `Runway (Months of Cash)\n\nDefinition: Months of cash remaining at current burn rate. Critical metric for capital planning.\n\nCalculation: Cash Balance ($${formatCurrency(data.runway.cash, 0)}) ÷ Monthly Burn ($${formatCurrency(data.runway.burn, 0)}) = ${runway.toFixed(1)} months\n\nTypical Range: 6-18 months (healthy), <6 months (critical), >18 months (comfortable)`;
+      }
+    }
+
+    // ========== RENDERING FUNCTIONS ==========
+    
+    function renderSummaryKPIs() {
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      
+      const totalHC = last.functions.reduce((s, f) => s + f.headcount, 0);
+      const totalCost = last.functions.reduce((s, f) => {
+        const c = f.costs;
+        return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
+      }, 0);
+      const avgUtil = last.functions.reduce((s, f) => {
+        const util = (f.capacity.demand / f.capacity.capacity) * 100;
+        return s + util;
+      }, 0) / FUNCTIONS.length;
+      const runway = data.runway.cash / data.runway.burn;
+
+      document.getElementById('summaryKPIs').innerHTML = `
+        <div class="kpi-box">
+          <div class="kpi-box-label">Total Headcount</div>
+          <div class="kpi-box-value">${totalHC}</div>
+          <div class="kpi-box-sub">Across ${FUNCTIONS.length} functions</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Monthly Opex</div>
+          <div class="kpi-box-value">${formatCurrency(totalCost, 0)}</div>
+          <div class="kpi-box-sub">Fully loaded</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Avg Utilization</div>
+          <div class="kpi-box-value" style="color: ${avgUtil > 85 ? COLORS.warning : avgUtil > 75 ? COLORS.caution : COLORS.success};">${avgUtil.toFixed(1)}%</div>
+          <div class="kpi-box-sub">${avgUtil > 85 ? 'Consider hiring' : avgUtil < 70 ? 'Underutilized' : 'Healthy range'}</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">Runway</div>
+          <div class="kpi-box-value" style="color: ${runway < 6 ? COLORS.warning : runway < 12 ? COLORS.caution : COLORS.success};">${runway.toFixed(1)} mo</div>
+          <div class="kpi-box-sub">At current burn</div>
+        </div>
+      `;
+    }
+
+    function renderHeadcountChart() {
+      const canvas = document.getElementById('headcountChart');
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = 320 * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = '320px';
+      ctx.scale(dpr, dpr);
+      
+      const w = rect.width;
+      const h = 320;
+      const padding = { top: 40, right: 60, bottom: 50, left: 60 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+      
+      const data = activeDataset;
+      headcountChartPoints = [];
+      
+      const maxHC = Math.max(...data.months.map(m => m.functions.reduce((s, f) => s + f.headcount, 0))) * 1.1;
+      
+      // Grid
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+      }
+      
+      // Y-axis
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxHC * (1 - i / 4);
+        const y = padding.top + (i / 4) * chartH;
+        ctx.fillText(Math.round(val).toString(), padding.left - 10, y);
+      }
+      
+      // Stacked bars
+      const barWidth = chartW / data.months.length;
+      
+      data.months.forEach((month, mi) => {
+        const x = padding.left + mi * barWidth + barWidth * 0.1;
+        const barW = barWidth * 0.8;
+        let yOffset = 0;
+        
+        month.functions.forEach((func, fi) => {
+          const height = (func.headcount / maxHC) * chartH;
+          const y = padding.top + chartH - yOffset - height;
+          
+          ctx.fillStyle = COLORS.functions[fi];
+          ctx.fillRect(x, y, barW, height);
+          
+          headcountChartPoints.push({
+            x: x + barW / 2,
+            y: y + height / 2,
+            month: month.month,
+            function: func.name,
+            headcount: func.headcount
+          });
+          
+          yOffset += height;
+        });
+      });
+      
+      // Month labels
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      data.months.forEach((month, i) => {
+        if (i % 2 === 0 || data.months.length <= 6) {
+          const x = padding.left + i * barWidth + barWidth / 2;
+          ctx.fillText(month.month, x, h - padding.bottom + 10);
+        }
+      });
+      
+      // Legend
+      let legendX = padding.left;
+      FUNCTIONS.forEach((func, i) => {
+        ctx.fillStyle = COLORS.functions[i];
+        ctx.fillRect(legendX, 15, 16, 10);
+        ctx.fillStyle = '#0b1220';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(func, legendX + 20, 22);
+        legendX += ctx.measureText(func).width + 35;
+      });
+    }
+
+    function renderOpexChart() {
+      const canvas = document.getElementById('opexChart');
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = 320 * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = '320px';
+      ctx.scale(dpr, dpr);
+      
+      const w = rect.width;
+      const h = 320;
+      const padding = { top: 40, right: 60, bottom: 50, left: 70 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+      
+      const data = activeDataset;
+      opexChartPoints = [];
+      
+      const maxOpex = Math.max(...data.months.map(m => m.functions.reduce((s, f) => {
+        const c = f.costs;
+        return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
+      }, 0))) * 1.1;
+      
+      // Grid
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+      }
+      
+      // Y-axis
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxOpex * (1 - i / 4);
+        const y = padding.top + (i / 4) * chartH;
+        ctx.fillText('$' + (val / 1000).toFixed(0) + 'K', padding.left - 10, y);
+      }
+      
+      // Stacked bars
+      const barWidth = chartW / data.months.length;
+      
+      data.months.forEach((month, mi) => {
+        const x = padding.left + mi * barWidth + barWidth * 0.1;
+        const barW = barWidth * 0.8;
+        let yOffset = 0;
+        
+        month.functions.forEach((func, fi) => {
+          const c = func.costs;
+          const totalCost = c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding;
+          const height = (totalCost / maxOpex) * chartH;
+          const y = padding.top + chartH - yOffset - height;
+          
+          ctx.fillStyle = COLORS.functions[fi];
+          ctx.fillRect(x, y, barW, height);
+          
+          opexChartPoints.push({
+            x: x + barW / 2,
+            y: y + height / 2,
+            month: month.month,
+            function: func.name,
+            cost: totalCost
+          });
+          
+          yOffset += height;
+        });
+      });
+      
+      // Month labels
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      data.months.forEach((month, i) => {
+        if (i % 2 === 0 || data.months.length <= 6) {
+          const x = padding.left + i * barWidth + barWidth / 2;
+          ctx.fillText(month.month, x, h - padding.bottom + 10);
+        }
+      });
+      
+      // Legend
+      let legendX = padding.left;
+      FUNCTIONS.forEach((func, i) => {
+        ctx.fillStyle = COLORS.functions[i];
+        ctx.fillRect(legendX, 15, 16, 10);
+        ctx.fillStyle = '#0b1220';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(func, legendX + 20, 22);
+        legendX += ctx.measureText(func).width + 35;
+      });
+    }
+
+    function renderFullyLoadedCosts() {
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      
+      let html = '';
+      last.functions.forEach(func => {
+        const c = func.costs;
+        const runRate = c.salary + c.benefits + c.taxes + c.bonus;
+        const oneTime = c.equipment + c.recruiting + c.onboarding;
+        const perHead = runRate / func.headcount;
+        const annualPerHead = perHead * 12;
+        
+        html += `
+          <div class="module-card">
+            <div class="card-header">
+              <div class="card-title">${func.name}</div>
+              <div style="font-size: 13px; color: var(--muted);">${func.headcount} employees</div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-box">
+                <div class="kpi-box-label">Monthly/Head</div>
+                <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(perHead, 0)}</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-box-label">Annual/Head</div>
+                <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(annualPerHead, 0)}</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-box-label">Monthly Run Rate</div>
+                <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(runRate, 0)}</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-box-label">One-Time Costs</div>
+                <div class="kpi-box-value" style="font-size: 18px; color: ${oneTime > 0 ? COLORS.caution : COLORS.success};">${formatCurrency(oneTime, 0)}</div>
+              </div>
+            </div>
+            <div style="margin-top: 16px; padding: 14px; background: rgba(246,248,251,0.5); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 12px;">
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <div><span style="color: var(--muted);">Base Salary:</span> <strong>${formatCurrency(c.salary / func.headcount, 0)}/mo</strong></div>
+                <div><span style="color: var(--muted);">Benefits:</span> <strong>${formatCurrency(c.benefits / func.headcount, 0)}/mo</strong></div>
+                <div><span style="color: var(--muted);">Taxes:</span> <strong>${formatCurrency(c.taxes / func.headcount, 0)}/mo</strong></div>
+                <div><span style="color: var(--muted);">Bonus:</span> <strong>${formatCurrency(c.bonus / func.headcount, 0)}/mo</strong></div>
+                <div><span style="color: var(--muted);">Equipment:</span> <strong>${formatCurrency(c.equipment, 0)} total</strong></div>
+                <div><span style="color: var(--muted);">Recruiting:</span> <strong>${formatCurrency(c.recruiting, 0)} total</strong></div>
+              </div>
             </div>
           </div>
-          <p style="font-size: 13px; color: var(--muted); line-height: 1.5;">${item.content}</p>
-        </div>
-      `).join('');
-    }
-
-    // Tab switching
-    function switchTab(tabName) {
-      // Update tab buttons
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      event.target.classList.add('active');
-
-      // Update tab content
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      document.getElementById(tabName + '-tab').classList.add('active');
-    }
-
-    // File upload handling
-    function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
+        `;
+      });
       
-      reader.onload = function(e) {
-        try {
-          const text = e.target.result;
-          const parsedData = parseCSV(text);
+      document.getElementById('fullyLoadedCosts').innerHTML = html;
+    }
+
+    function renderUtilizationChart() {
+      const canvas = document.getElementById('utilizationChart');
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = 280 * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = '280px';
+      ctx.scale(dpr, dpr);
+      
+      const w = rect.width;
+      const h = 280;
+      const padding = { top: 40, right: 40, bottom: 50, left: 60 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+      
+      const data = activeDataset;
+      utilizationChartPoints = [];
+      
+      // Function lines
+      FUNCTIONS.forEach((func, fi) => {
+        const utilData = data.months.map(m => {
+          const f = m.functions.find(fn => fn.name === func);
+          if (!f) return 0;
+          return (f.capacity.demand / f.capacity.capacity) * 100;
+        });
+        
+        const barWidth = chartW / data.months.length;
+        
+        ctx.beginPath();
+        ctx.strokeStyle = COLORS.functions[fi];
+        ctx.lineWidth = 2.5;
+        
+        data.months.forEach((month, mi) => {
+          const x = padding.left + mi * barWidth + barWidth / 2;
+          const util = utilData[mi];
+          const y = padding.top + chartH - (util / 100) * chartH;
           
-          if (parsedData) {
-            currentData = parsedData;
-            renderAllData();
+          if (mi === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          
+          utilizationChartPoints.push({
+            x, y,
+            month: month.month,
+            function: func,
+            utilization: util
+          });
+        });
+        
+        ctx.stroke();
+        
+        // Points
+        data.months.forEach((month, mi) => {
+          const x = padding.left + mi * barWidth + barWidth / 2;
+          const util = utilData[mi];
+          const y = padding.top + chartH - (util / 100) * chartH;
+          
+          ctx.fillStyle = COLORS.functions[fi];
+          ctx.beginPath();
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      });
+      
+      // Grid
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+        
+        const val = 100 * (1 - i / 4);
+        ctx.fillStyle = COLORS.muted;
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(val.toFixed(0) + '%', padding.left - 10, y);
+      }
+      
+      // Month labels
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      data.months.forEach((month, i) => {
+        if (i % 2 === 0 || data.months.length <= 6) {
+          const barWidth = chartW / data.months.length;
+          const x = padding.left + i * barWidth + barWidth / 2;
+          ctx.fillText(month.month, x, h - padding.bottom + 10);
+        }
+      });
+      
+      // Legend
+      let legendX = padding.left;
+      FUNCTIONS.forEach((func, i) => {
+        ctx.fillStyle = COLORS.functions[i];
+        ctx.fillRect(legendX, 15, 16, 2.5);
+        ctx.fillStyle = '#0b1220';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(func, legendX + 20, 19);
+        legendX += ctx.measureText(func).width + 35;
+      });
+    }
+
+    function renderCapacityTable() {
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      
+      let html = '<thead><tr><th>Function</th><th>Capacity</th><th>Demand</th><th>Utilization</th><th>Backlog</th><th>Backlog %</th></tr></thead><tbody>';
+      
+      last.functions.forEach(func => {
+        const util = (func.capacity.demand / func.capacity.capacity) * 100;
+        const backlog = Math.max(0, func.capacity.demand - func.capacity.capacity);
+        const backlogPct = (backlog / func.capacity.capacity) * 100;
+        
+        const utilColor = util > 85 ? COLORS.warning : util > 75 ? COLORS.caution : COLORS.success;
+        const backlogColor = backlogPct > 20 ? COLORS.warning : backlogPct > 0 ? COLORS.caution : COLORS.success;
+        
+        html += `
+          <tr>
+            <td style="font-weight: 600;">${func.name}</td>
+            <td>${func.capacity.capacity} ${func.capacity.metric}</td>
+            <td>${func.capacity.demand}</td>
+            <td style="color: ${utilColor}; font-weight: 600;">${util.toFixed(1)}%</td>
+            <td style="color: ${backlogColor}; font-weight: 600;">${backlog}</td>
+            <td style="color: ${backlogColor}; font-weight: 600;">${backlogPct.toFixed(1)}%</td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody>';
+      document.getElementById('capacityTable').innerHTML = html;
+    }
+
+    function renderHiringTriggers() {
+      const data = activeDataset;
+      const runway = data.runway.cash / data.runway.burn;
+      
+      let html = '';
+      
+      FUNCTIONS.forEach((fname, fi) => {
+        const recent = data.months.slice(-3).map(m => m.functions[fi]);
+        const avgUtil = recent.reduce((s, f) => {
+          return s + ((f.capacity.demand / f.capacity.capacity) * 100);
+        }, 0) / recent.length;
+        
+        const backlogs = recent.map(f => Math.max(0, f.capacity.demand - f.capacity.capacity));
+        const backlogGrowth = backlogs.length > 1 ? ((backlogs[backlogs.length - 1] - backlogs[0]) / Math.max(1, backlogs[0])) * 100 : 0;
+        
+        let recType, message, reasons = [];
+        
+        if (runway < 6) {
+          recType = 'delay';
+          message = `Delay hiring in ${fname}`;
+          reasons.push(`Runway is ${runway.toFixed(1)} months (< 6 month threshold)`);
+          reasons.push('Preserve cash until revenue materializes or funding secured');
+        } else if (avgUtil > 85 || backlogGrowth > 15) {
+          recType = 'recommend';
+          message = `Recommend hiring in ${fname}`;
+          if (avgUtil > 85) reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (> 85% threshold for 2+ months)`);
+          if (backlogGrowth > 15) reasons.push(`Backlog growth ${backlogGrowth.toFixed(1)}% (> 15% threshold)`);
+          reasons.push('Team at capacity risk—hire to maintain delivery velocity');
+        } else if (avgUtil < 70) {
+          recType = 'caution';
+          message = `Monitor capacity in ${fname}`;
+          reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (< 70%)—potential overcapacity`);
+          reasons.push('Consider workload distribution or delay next hire');
+        } else {
+          recType = 'caution';
+          message = `No action needed for ${fname}`;
+          reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (healthy 70-85% range)`);
+          reasons.push('Team appropriately sized for current demand');
+        }
+        
+        html += `
+          <div class="hiring-rec ${recType}">
+            <div class="hiring-rec-title">${message}</div>
+            <div class="hiring-rec-reason">
+              ${reasons.map(r => `<div style="margin-bottom: 4px;">• ${r}</div>`).join('')}
+            </div>
+          </div>
+        `;
+      });
+      
+      document.getElementById('hiringTriggers').innerHTML = html;
+    }
+
+    function renderRunwayChart() {
+      const canvas = document.getElementById('runwayChart');
+      const ctx = canvas.getContext('2d');
+      const dpr = window.devicePixelRatio || 1;
+      
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = 260 * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = '260px';
+      ctx.scale(dpr, dpr);
+      
+      const w = rect.width;
+      const h = 260;
+      const padding = { top: 40, right: 60, bottom: 50, left: 60 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+      
+      const data = activeDataset;
+      runwayChartPoints = [];
+      
+      // Trajectories
+      const conservative = [];
+      const aggressive = [];
+      
+      let conCash = data.runway.cash;
+      let aggCash = data.runway.cash;
+      
+      data.months.forEach((month, mi) => {
+        const burn = month.functions.reduce((s, f) => {
+          const c = f.costs;
+          return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
+        }, 0);
+        
+        const conBurn = burn * (mi === 0 ? 1 : 0.92);
+        conCash -= conBurn;
+        conservative.push(Math.max(0, conCash / conBurn));
+        
+        const aggBurn = burn * (mi === 0 ? 1 : 1.13);
+        aggCash -= aggBurn;
+        aggressive.push(Math.max(0, aggCash / aggBurn));
+      });
+      
+      const maxRunway = Math.max(...conservative, ...aggressive) * 1.1;
+      
+      // Grid
+      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (i / 4) * chartH;
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(w - padding.right, y);
+        ctx.stroke();
+      }
+      
+      // Y-axis
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const val = maxRunway * (1 - i / 4);
+        const y = padding.top + (i / 4) * chartH;
+        ctx.fillText(val.toFixed(1) + ' mo', padding.left - 10, y);
+      }
+      
+      const barWidth = chartW / data.months.length;
+      
+      // Conservative line
+      ctx.beginPath();
+      ctx.strokeStyle = COLORS.accent;
+      ctx.lineWidth = 2.5;
+      conservative.forEach((runway, i) => {
+        const x = padding.left + i * barWidth + barWidth / 2;
+        const y = padding.top + chartH - (runway / maxRunway) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      
+      // Aggressive line
+      ctx.beginPath();
+      ctx.strokeStyle = COLORS.warning;
+      ctx.lineWidth = 2.5;
+      aggressive.forEach((runway, i) => {
+        const x = padding.left + i * barWidth + barWidth / 2;
+        const y = padding.top + chartH - (runway / maxRunway) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      
+      // Points
+      conservative.forEach((runway, i) => {
+        const x = padding.left + i * barWidth + barWidth / 2;
+        const y = padding.top + chartH - (runway / maxRunway) * chartH;
+        
+        ctx.fillStyle = COLORS.accent;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        runwayChartPoints.push({ x, y, month: data.months[i].month, runway, strategy: 'conservative' });
+      });
+      
+      aggressive.forEach((runway, i) => {
+        const x = padding.left + i * barWidth + barWidth / 2;
+        const y = padding.top + chartH - (runway / maxRunway) * chartH;
+        
+        ctx.fillStyle = COLORS.warning;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        runwayChartPoints.push({ x, y, month: data.months[i].month, runway, strategy: 'aggressive' });
+      });
+      
+      // Month labels
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      data.months.forEach((month, i) => {
+        if (i % 2 === 0 || data.months.length <= 6) {
+          const x = padding.left + i * barWidth + barWidth / 2;
+          ctx.fillText(month.month, x, h - padding.bottom + 10);
+        }
+      });
+      
+      // Legend
+      ctx.fillStyle = COLORS.accent;
+      ctx.fillRect(padding.left, 15, 20, 2.5);
+      ctx.fillStyle = '#0b1220';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('Conservative Hiring', padding.left + 25, 19);
+      
+      ctx.fillStyle = COLORS.warning;
+      ctx.fillRect(padding.left + 160, 15, 20, 2.5);
+      ctx.fillText('Aggressive Hiring', padding.left + 185, 19);
+    }
+
+    function renderStrategyComparison() {
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      
+      const currentHC = last.functions.reduce((s, f) => s + f.headcount, 0);
+      const currentCost = last.functions.reduce((s, f) => {
+        const c = f.costs;
+        return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
+      }, 0);
+      const currentUtil = last.functions.reduce((s, f) => {
+        return s + ((f.capacity.demand / f.capacity.capacity) * 100);
+      }, 0) / FUNCTIONS.length;
+      
+      const conHC = Math.round(currentHC * 1.06);
+      const conCost = currentCost * 1.06;
+      const conUtil = Math.min(currentUtil * 1.09, 96);
+      const conRunway = data.runway.cash / (currentCost * 1.06);
+      
+      const aggHC = Math.round(currentHC * 1.17);
+      const aggCost = currentCost * 1.17;
+      const aggUtil = Math.max(currentUtil * 0.91, 62);
+      const aggRunway = data.runway.cash / (currentCost * 1.17);
+      
+      const html = `
+        <div class="module-card">
+          <div class="card-title" style="margin-bottom: 16px;">Strategy Comparison (6-month projection)</div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Conservative</th>
+                <th>Aggressive</th>
+                <th>Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 600;">Headcount</td>
+                <td>${conHC}</td>
+                <td>${aggHC}</td>
+                <td style="color: ${COLORS.accent};">+${aggHC - conHC}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600;">Monthly Opex</td>
+                <td>${formatCurrency(conCost, 0)}</td>
+                <td>${formatCurrency(aggCost, 0)}</td>
+                <td style="color: ${COLORS.warning};">+${formatCurrency(aggCost - conCost, 0)}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600;">Avg Utilization</td>
+                <td style="color: ${conUtil > 85 ? COLORS.warning : COLORS.caution};">${conUtil.toFixed(1)}%</td>
+                <td style="color: ${aggUtil < 70 ? COLORS.caution : COLORS.success};">${aggUtil.toFixed(1)}%</td>
+                <td>${(aggUtil - conUtil).toFixed(1)}%</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600;">Runway</td>
+                <td style="color: ${conRunway < 6 ? COLORS.warning : COLORS.success};">${conRunway.toFixed(1)} mo</td>
+                <td style="color: ${aggRunway < 6 ? COLORS.warning : COLORS.caution};">${aggRunway.toFixed(1)} mo</td>
+                <td style="color: ${conRunway > aggRunway ? COLORS.success : COLORS.warning};">${(conRunway - aggRunway > 0 ? '+' : '')}${(conRunway - aggRunway).toFixed(1)} mo</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div class="tradeoff-grid">
+            <div class="tradeoff-box">
+              <div class="tradeoff-title">Conservative Hiring</div>
+              <div class="tradeoff-section">
+                <div class="tradeoff-label">What you gain:</div>
+                <div class="tradeoff-list">
+                  <div class="tradeoff-item">Extended runway (+${(conRunway - aggRunway).toFixed(1)} months vs aggressive)</div>
+                  <div class="tradeoff-item">Lower cash burn risk</div>
+                  <div class="tradeoff-item">More time to prove unit economics</div>
+                </div>
+              </div>
+              <div class="tradeoff-section">
+                <div class="tradeoff-label">What you risk:</div>
+                <div class="tradeoff-list">
+                  <div class="tradeoff-item">Team burnout (${conUtil.toFixed(1)}% utilization)</div>
+                  <div class="tradeoff-item">Delivery bottlenecks and missed deadlines</div>
+                  <div class="tradeoff-item">Lost revenue opportunities</div>
+                </div>
+              </div>
+            </div>
             
-            // Update sidebar badge
-            const badge = document.getElementById('dataModeBadge');
-            if (badge) {
-              badge.textContent = 'Your Data';
-              badge.style.background = 'rgba(5, 150, 105, 0.10)';
-              badge.style.borderColor = 'rgba(5, 150, 105, 0.20)';
-              badge.style.color = 'var(--success)';
+            <div class="tradeoff-box">
+              <div class="tradeoff-title">Aggressive Hiring</div>
+              <div class="tradeoff-section">
+                <div class="tradeoff-label">What you gain:</div>
+                <div class="tradeoff-list">
+                  <div class="tradeoff-item">Healthy utilization (${aggUtil.toFixed(1)}%)</div>
+                  <div class="tradeoff-item">Faster execution and product velocity</div>
+                  <div class="tradeoff-item">Capacity for revenue growth</div>
+                </div>
+              </div>
+              <div class="tradeoff-section">
+                <div class="tradeoff-label">What you risk:</div>
+                <div class="tradeoff-list">
+                  <div class="tradeoff-item">Shortened runway (${aggRunway.toFixed(1)} months)</div>
+                  <div class="tradeoff-item">Higher burn rate (+${formatCurrency(aggCost - conCost, 0)}/mo)</div>
+                  <div class="tradeoff-item">Pressure to raise capital sooner</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 20px; padding: 16px; background: rgba(246,248,251,0.5); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6;">
+            <strong>Strategic Recommendation:</strong> ${
+              conRunway < 9 
+                ? 'With <9 months runway, prioritize conservative hiring. Focus on high-ROI roles. Defer nice-to-have hires until funding secured or revenue inflects.'
+                : aggUtil > 82
+                ? 'Current utilization suggests aggressive hiring is justified. Team is near capacity—invest in growth before bottlenecks limit revenue.'
+                : 'Balanced approach: hire strategically in bottlenecked functions (>85% util), delay in underutilized areas (<70% util).'
             }
-            
-            showNotification('File uploaded successfully!', 'success');
-          } else {
-            showNotification('Invalid file format. Please use the template.', 'error');
-          }
-        } catch (error) {
-          console.error('Parse error:', error);
-          showNotification('Error parsing file: ' + error.message, 'error');
-        }
-        
-        // Reset file input so the same file can be uploaded again
-        event.target.value = '';
-      };
-
-      reader.onerror = function() {
-        showNotification('Error reading file. Please try again.', 'error');
-        event.target.value = '';
-      };
-
-      reader.readAsText(file);
-    }
-
-    // Parse CSV file
-    function parseCSV(text) {
-      try {
-        const lines = text.trim().split('\n').map(line => line.trim()).filter(line => line && !line.toLowerCase().startsWith('notes'));
-        
-        if (lines.length < 2) {
-          throw new Error('File appears to be empty or invalid.');
-        }
-
-        // Parse header
-        const header = lines[0].split(',').map(h => h.trim().toLowerCase());
-        
-        // Validate required columns
-        const requiredColumns = ['cost center', 'department', 'current headcount', 'prior year headcount', 'avg cost per head', 'budget', 'actual'];
-        const missingColumns = requiredColumns.filter(col => !header.includes(col));
-        
-        if (missingColumns.length > 0) {
-          throw new Error(`Missing required columns: ${missingColumns.join(', ')}`);
-        }
-
-        // Get column indices
-        const getIndex = (name) => header.findIndex(h => h.includes(name));
-        
-        const indices = {
-          costCenter: getIndex('cost center'),
-          department: getIndex('department'),
-          currentHC: getIndex('current headcount'),
-          priorHC: getIndex('prior year headcount'),
-          avgCost: getIndex('avg cost per head'),
-          budget: getIndex('budget'),
-          actual: getIndex('actual'),
-          driver: getIndex('driver'),
-          action: getIndex('action'),
-          itAlloc: getIndex('it services'),
-          facAlloc: getIndex('facilities'),
-          hrAlloc: getIndex('hr services'),
-          legalAlloc: getIndex('legal')
-        };
-
-        // Parse data rows
-        const headcount = [];
-        const variance = [];
-        let totalIT = 0, totalFac = 0, totalHR = 0, totalLegal = 0;
-
-        for (let i = 1; i < lines.length; i++) {
-          const cols = lines[i].split(',').map(c => c.trim());
-          if (cols.length < requiredColumns.length) continue;
-
-          const dept = cols[indices.department];
-          
-          // Headcount data
-          headcount.push({
-            costCenter: cols[indices.costCenter],
-            department: dept,
-            current: parseInt(cols[indices.currentHC]) || 0,
-            prior: parseInt(cols[indices.priorHC]) || 0,
-            avgCost: parseInt(cols[indices.avgCost]) || 0
-          });
-
-          // Variance data
-          variance.push({
-            department: dept,
-            budget: parseInt(cols[indices.budget]) || 0,
-            actual: parseInt(cols[indices.actual]) || 0,
-            driver: cols[indices.driver] || 'N/A',
-            action: cols[indices.action] || 'N/A'
-          });
-
-          // Accumulate allocation totals
-          if (indices.itAlloc >= 0) totalIT += parseInt(cols[indices.itAlloc]) || 0;
-          if (indices.facAlloc >= 0) totalFac += parseInt(cols[indices.facAlloc]) || 0;
-          if (indices.hrAlloc >= 0) totalHR += parseInt(cols[indices.hrAlloc]) || 0;
-          if (indices.legalAlloc >= 0) totalLegal += parseInt(cols[indices.legalAlloc]) || 0;
-        }
-
-        // Build allocation data from individual department allocations
-        const allocation = [];
-        
-        if (totalIT > 0) {
-          allocation.push({
-            service: 'IT Services',
-            total: totalIT,
-            method: 'Headcount',
-            finance: parseInt(lines[1].split(',')[indices.itAlloc]) || 0,
-            engineering: parseInt(lines[2].split(',')[indices.itAlloc]) || 0,
-            sales: parseInt(lines[3].split(',')[indices.itAlloc]) || 0,
-            marketing: parseInt(lines[4].split(',')[indices.itAlloc]) || 0,
-            operations: parseInt(lines[5].split(',')[indices.itAlloc]) || 0
-          });
-        }
-
-        if (totalFac > 0) {
-          allocation.push({
-            service: 'Facilities',
-            total: totalFac,
-            method: 'Square Footage',
-            finance: parseInt(lines[1].split(',')[indices.facAlloc]) || 0,
-            engineering: parseInt(lines[2].split(',')[indices.facAlloc]) || 0,
-            sales: parseInt(lines[3].split(',')[indices.facAlloc]) || 0,
-            marketing: parseInt(lines[4].split(',')[indices.facAlloc]) || 0,
-            operations: parseInt(lines[5].split(',')[indices.facAlloc]) || 0
-          });
-        }
-
-        if (totalHR > 0) {
-          allocation.push({
-            service: 'HR Services',
-            total: totalHR,
-            method: 'Headcount',
-            finance: parseInt(lines[1].split(',')[indices.hrAlloc]) || 0,
-            engineering: parseInt(lines[2].split(',')[indices.hrAlloc]) || 0,
-            sales: parseInt(lines[3].split(',')[indices.hrAlloc]) || 0,
-            marketing: parseInt(lines[4].split(',')[indices.hrAlloc]) || 0,
-            operations: parseInt(lines[5].split(',')[indices.hrAlloc]) || 0
-          });
-        }
-
-        if (totalLegal > 0) {
-          allocation.push({
-            service: 'Legal & Compliance',
-            total: totalLegal,
-            method: 'Revenue Split',
-            finance: parseInt(lines[1].split(',')[indices.legalAlloc]) || 0,
-            engineering: parseInt(lines[2].split(',')[indices.legalAlloc]) || 0,
-            sales: parseInt(lines[3].split(',')[indices.legalAlloc]) || 0,
-            marketing: parseInt(lines[4].split(',')[indices.legalAlloc]) || 0,
-            operations: parseInt(lines[5].split(',')[indices.legalAlloc]) || 0
-          });
-        }
-
-        if (headcount.length === 0) {
-          throw new Error('No valid data rows found in file.');
-        }
-
-        // If no allocation data, generate default
-        if (allocation.length === 0) {
-          const totalHeadcount = headcount.reduce((sum, d) => sum + d.current, 0);
-          allocation.push({
-            service: 'Shared Services',
-            total: 1000000,
-            method: 'Headcount',
-            finance: Math.round(1000000 * headcount[0].current / totalHeadcount),
-            engineering: Math.round(1000000 * headcount[1].current / totalHeadcount),
-            sales: Math.round(1000000 * headcount[2].current / totalHeadcount),
-            marketing: Math.round(1000000 * headcount[3].current / totalHeadcount),
-            operations: Math.round(1000000 * headcount[4].current / totalHeadcount)
-          });
-        }
-
-        return { headcount, allocation, variance };
-      } catch (error) {
-        throw new Error('CSV parsing failed: ' + error.message);
-      }
-    }
-
-    // Show notification
-    function showNotification(message, type = 'info') {
-      // Remove existing notification
-      const existing = document.querySelector('.notification');
-      if (existing) existing.remove();
-
-      // Create notification
-      const notification = document.createElement('div');
-      notification.className = 'notification notification-' + type;
-      notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span style="font-size: 20px;">${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span>
-          <span>${message}</span>
+          </div>
         </div>
       `;
-
-      // Add styles
-      notification.style.cssText = `
-        position: fixed;
-        top: 80px;
-        right: 24px;
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 16px 20px;
-        box-shadow: var(--shadow);
-        z-index: 1000;
-        animation: slideIn 300ms ease;
-        max-width: 400px;
-      `;
-
-      if (type === 'success') {
-        notification.style.borderColor = 'rgba(5, 150, 105, 0.3)';
-        notification.style.background = 'rgba(5, 150, 105, 0.05)';
-      } else if (type === 'error') {
-        notification.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-        notification.style.background = 'rgba(239, 68, 68, 0.05)';
-      }
-
-      document.body.appendChild(notification);
-
-      // Auto remove after 4 seconds
-      setTimeout(() => {
-        notification.style.animation = 'slideOut 300ms ease';
-        setTimeout(() => notification.remove(), 300);
-      }, 4000);
+      
+      document.getElementById('strategyComparison').innerHTML = html;
     }
 
-    // Drag and drop (if uploadArea exists for backwards compatibility)
-    const uploadArea = document.getElementById('uploadArea');
+    // ========== CHART INTERACTIONS ==========
     
-    if (uploadArea) {
-      uploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadArea.classList.add('dragover');
-      });
-
-      uploadArea.addEventListener('dragleave', () => {
-        uploadArea.classList.remove('dragover');
-      });
-
-      uploadArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
+    function setupChartInteractions() {
+      const hcCanvas = document.getElementById('headcountChart');
+      const hcTooltip = document.getElementById('headcountTooltip');
+      
+      hcCanvas.addEventListener('mousemove', (e) => {
+        const rect = hcCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
         
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-          handleFileUpload({ target: { files } });
+        let closest = null;
+        let minDist = 40;
+        
+        headcountChartPoints.forEach(p => {
+          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = p;
+          }
+        });
+        
+        if (closest) {
+          hcTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${closest.headcount} employees`;
+          hcTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          hcTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          hcTooltip.classList.add('visible');
+        } else {
+          hcTooltip.classList.remove('visible');
         }
       });
-    }
-
-    // Download template
-    function downloadTemplate() {
-      // Create CSV template with single unified structure
-      const template = `Cost Center,Department,Current Headcount,Prior Year Headcount,Avg Cost per Head,Budget,Actual,Variance Driver,Variance Action,IT Services Allocation,Facilities Allocation,HR Services Allocation,Legal Allocation
-CC-100,Finance,32,30,85000,2720000,2800000,Headcount +2,Approved hire for compliance,320000,240000,120000,96000
-CC-200,Engineering,45,42,95000,4275000,4420000,Compensation adjustment,Market rate correction Q2,450000,337500,168750,135000
-CC-300,Sales,38,35,75000,2850000,2775000,Lower commission rate,Favorable variance,380000,285000,142500,114000
-CC-400,Marketing,28,26,68000,1904000,2070000,Campaign overspend,Review and reforecast,280000,210000,105000,84000
-CC-500,Operations,35,33,62000,2170000,2100000,Delayed hires,On track to close gap Q3,350000,262500,131250,105000
-CC-600,HR,18,16,72000,1296000,1350000,Recruiting fees,Within acceptable range,180000,135000,67500,54000
-
-Notes:
-- Keep the header row (row 1) unchanged
-- Edit the data rows (rows 2-7) with your actual data
-- All allocation columns should sum to the total cost for each service
-- IT Services total: 1960000
-- Facilities total: 1470000
-- HR Services total: 735000
-- Legal & Compliance total: 588000`;
-
-      const blob = new Blob([template], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'indirect-cost-headcount-template.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
       
-      showNotification('Template downloaded! Fill it out and upload to see your data.', 'success');
+      hcCanvas.addEventListener('mouseleave', () => hcTooltip.classList.remove('visible'));
+      
+      const opexCanvas = document.getElementById('opexChart');
+      const opexTooltip = document.getElementById('opexTooltip');
+      
+      opexCanvas.addEventListener('mousemove', (e) => {
+        const rect = opexCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        let closest = null;
+        let minDist = 40;
+        
+        opexChartPoints.forEach(p => {
+          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = p;
+          }
+        });
+        
+        if (closest) {
+          opexTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${formatCurrency(closest.cost, 0)}`;
+          opexTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          opexTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          opexTooltip.classList.add('visible');
+        } else {
+          opexTooltip.classList.remove('visible');
+        }
+      });
+      
+      opexCanvas.addEventListener('mouseleave', () => opexTooltip.classList.remove('visible'));
+      
+      const utilCanvas = document.getElementById('utilizationChart');
+      const utilTooltip = document.getElementById('utilizationTooltip');
+      
+      utilCanvas.addEventListener('mousemove', (e) => {
+        const rect = utilCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        let closest = null;
+        let minDist = 25;
+        
+        utilizationChartPoints.forEach(p => {
+          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = p;
+          }
+        });
+        
+        if (closest) {
+          utilTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${closest.utilization.toFixed(1)}%`;
+          utilTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          utilTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          utilTooltip.classList.add('visible');
+        } else {
+          utilTooltip.classList.remove('visible');
+        }
+      });
+      
+      utilCanvas.addEventListener('mouseleave', () => utilTooltip.classList.remove('visible'));
+      
+      const runwayCanvas = document.getElementById('runwayChart');
+      const runwayTooltip = document.getElementById('runwayTooltip');
+      
+      runwayCanvas.addEventListener('mousemove', (e) => {
+        const rect = runwayCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        let closest = null;
+        let minDist = 25;
+        
+        runwayChartPoints.forEach(p => {
+          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = p;
+          }
+        });
+        
+        if (closest) {
+          runwayTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.strategy}: ${closest.runway.toFixed(1)} months`;
+          runwayTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+          runwayTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+          runwayTooltip.classList.add('visible');
+        } else {
+          runwayTooltip.classList.remove('visible');
+        }
+      });
+      
+      runwayCanvas.addEventListener('mouseleave', () => runwayTooltip.classList.remove('visible'));
     }
 
-    // Utility: Format currency
+    // ========== HELPERS ==========
+    
     function formatCurrency(value, decimals = 2) {
       return '$' + value.toLocaleString('en-US', {
         minimumFractionDigits: decimals,
@@ -1693,8 +1865,56 @@ Notes:
       });
     }
 
-    // Initialize on load
-    window.addEventListener('DOMContentLoaded', init);
+    function downloadTemplates() {
+      const csv = `Function,Month,Headcount,Base_Salary,Benefits_Pct,Taxes_Pct,Bonus_Pct,Capacity_Metric,Demand_Value
+Sales,Jan,12,85000,0.20,0.08,0.15,Deals/month,45
+Engineering,Jan,28,120000,0.20,0.08,0.15,Story Points/month,280
+G&A,Jan,18,75000,0.20,0.08,0.15,FTE Available,14
+Ops,Jan,15,65000,0.20,0.08,0.15,Tickets/month,580
+
+Notes:
+- Capacity_Metric: What the function produces
+- Demand_Value: Current workload
+- One-time costs calculated automatically
+- Ramp curves applied automatically for new hires`;
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'headcount-template.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderAll() {
+      renderSummaryKPIs();
+      renderHeadcountChart();
+      renderOpexChart();
+      renderFullyLoadedCosts();
+      renderUtilizationChart();
+      renderCapacityTable();
+      renderHiringTriggers();
+      renderRunwayChart();
+      renderStrategyComparison();
+      setupChartInteractions();
+      updateTooltips();
+    }
+
+    // ========== INIT ==========
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      onUseSample(); // Load sample data on init
+    });
+    
+    window.addEventListener('resize', () => {
+      renderHeadcountChart();
+      renderOpexChart();
+      renderUtilizationChart();
+      renderRunwayChart();
+    });
   </script>
 </body>
 </html>
