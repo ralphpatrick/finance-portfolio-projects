@@ -373,6 +373,102 @@
       margin-bottom: 6px;
     }
     
+    /* Section header with tooltip */
+    .section-header-with-help {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(15, 118, 110, 0.10);
+      border: 1px solid rgba(15, 118, 110, 0.20);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+      flex-shrink: 0;
+      margin-top: 2px; /* Fine-tune vertical alignment */
+    }
+    
+    .help-icon::before {
+      content: '?';
+    }
+    
+    .help-icon:hover::after {
+      content: attr(data-help);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 8px;
+      padding: 12px 16px;
+      background: var(--text);
+      color: white;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 10px;
+      white-space: normal;
+      width: 320px;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      font-weight: 400;
+      text-align: left;
+    }
+    
+    /* Inline term helper */
+    .term-helper {
+      position: relative;
+      cursor: help;
+      border-bottom: 1px dotted rgba(15, 118, 110, 0.4);
+      color: var(--accent);
+    }
+    
+    .term-helper:hover::after {
+      content: attr(data-definition);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 6px;
+      padding: 10px 14px;
+      background: var(--text);
+      color: white;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 8px;
+      white-space: normal;
+      width: 260px;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+      font-weight: 400;
+    }
+    
+    /* Chart explanation */
+    .chart-explanation {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(15, 118, 110, 0.05);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    
+    .chart-explanation strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    
     /* File upload */
     .file-input-wrapper {
       position: relative;
@@ -433,6 +529,183 @@
       background: rgba(15, 118, 110, 0.10);
       border: 1px solid rgba(15, 118, 110, 0.20);
       color: var(--accent);
+    }
+    
+    /* Sensitivity Table */
+    .sensitivity-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+    .sensitivity-table th {
+      text-align: left;
+      padding: 10px 12px;
+      background: rgba(246,248,251,0.8);
+      border: 1px solid var(--border);
+      font-weight: 650;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .sensitivity-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: white;
+    }
+    .sensitivity-deterioration {
+      color: #dc2626;
+      font-weight: 600;
+    }
+    .sensitivity-improvement {
+      color: #059669;
+      font-weight: 600;
+    }
+    
+    /* Cash & Runway Widget */
+    .cash-widget {
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.05) 0%, rgba(27, 77, 122, 0.05) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 20px;
+    }
+    .cash-widget-title {
+      font-size: 16px;
+      font-weight: 650;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .runway-bar {
+      height: 12px;
+      background: rgba(220, 38, 38, 0.10);
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 12px 0;
+      position: relative;
+    }
+    .runway-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #059669 0%, #0f766e 50%, #dc2626 100%);
+      transition: width 300ms ease;
+    }
+    .runway-months {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 8px 0;
+    }
+    .funding-warning {
+      padding: 12px 16px;
+      background: rgba(220, 38, 38, 0.10);
+      border-left: 3px solid #dc2626;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #dc2626;
+      font-weight: 600;
+    }
+    .cash-generating {
+      padding: 12px 16px;
+      background: rgba(5, 150, 105, 0.10);
+      border-left: 3px solid #059669;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #059669;
+      font-weight: 600;
+    }
+    
+    /* Capital Efficiency Score */
+    .efficiency-score-card {
+      padding: 24px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      margin-top: 20px;
+    }
+    .efficiency-score {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      margin: 12px 0;
+    }
+    .efficiency-score.strong {
+      color: #059669;
+    }
+    .efficiency-score.moderate {
+      color: #d97706;
+    }
+    .efficiency-score.fragile {
+      color: #dc2626;
+    }
+    .efficiency-rating {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .efficiency-interpretation {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* Integration Diagram */
+    .integration-diagram {
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 20px;
+    }
+    .flow-step {
+      padding: 16px;
+      background: rgba(246,248,251,0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .flow-step:last-child {
+      margin-bottom: 0;
+    }
+    .flow-arrow {
+      text-align: center;
+      color: var(--accent);
+      font-size: 20px;
+      margin: 8px 0;
+    }
+    .flow-label {
+      font-weight: 650;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .flow-description {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    
+    /* Strategic callout */
+    .strategic-callout {
+      padding: 20px;
+      background: rgba(27, 77, 122, 0.05);
+      border-left: 4px solid var(--accent-2);
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .strategic-callout strong {
+      color: var(--accent-2);
     }
     
     /* Responsive */
@@ -527,7 +800,10 @@
 
         <!-- CAC / LTV Engine -->
         <section class="module-section">
-          <h2 class="module-section-title">1. CAC / LTV Engine</h2>
+          <div class="section-header-with-help">
+            <h2 class="module-section-title">1. CAC / LTV Engine</h2>
+            <span class="help-icon" data-help="CAC/LTV measures how much it costs to acquire a customer versus how much revenue they generate over their lifetime. It's crucial for understanding if your growth is profitable and sustainable. A healthy ratio is 3:1 or higher (LTV is 3x greater than CAC)."></span>
+          </div>
           
           <div class="module-card">
             <div class="card-header">
@@ -572,12 +848,32 @@
             <div class="kpi-grid" id="cacLtvKPIs">
               <!-- KPIs populated by JS -->
             </div>
+            
+            <!-- Capital Efficiency Score -->
+            <div class="efficiency-score-card" id="efficiencyScore">
+              <!-- Populated by JS -->
+            </div>
+            
+            <!-- Payback Sensitivity Analysis -->
+            <div style="margin-top: 24px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <h3 style="font-size: 16px; font-weight: 650; margin: 0;">
+                  <span class="term-helper" data-definition="Sensitivity analysis tests how much an outcome changes when one assumption moves slightly. It reveals which assumptions are most critical and where your model is most fragile.">Payback Sensitivity</span> — Stress Testing Assumptions
+                </h3>
+              </div>
+              <table class="sensitivity-table" id="sensitivityTable">
+                <!-- Populated by JS -->
+              </table>
+            </div>
           </div>
         </section>
 
         <!-- Contribution Margin -->
         <section class="module-section">
-          <h2 class="module-section-title">2. Contribution Margin Analysis</h2>
+          <div class="section-header-with-help">
+            <h2 class="module-section-title">2. Contribution Margin Analysis</h2>
+            <span class="help-icon" data-help="Contribution Margin shows how much profit each sale generates after covering variable costs (like hosting, support, transaction fees). It's the money available to cover fixed costs and generate profit. Higher contribution margin means better unit economics and faster path to profitability."></span>
+          </div>
           
           <div class="module-card">
             <div class="card-header">
@@ -598,6 +894,9 @@
                 <canvas id="contributionChart" class="chart-canvas"></canvas>
                 <div class="chart-tooltip" id="contributionTooltip"></div>
               </div>
+              <div class="chart-explanation" id="cmChartExplanation">
+                <!-- Dynamic explanation populated by JavaScript -->
+              </div>
             </div>
 
             <table class="data-table" id="contributionTable">
@@ -608,7 +907,10 @@
 
         <!-- Run-rate Forecasting -->
         <section class="module-section">
-          <h2 class="module-section-title">3. Run-rate Forecasting</h2>
+          <div class="section-header-with-help">
+            <h2 class="module-section-title">3. Run-rate Forecasting</h2>
+            <span class="help-icon" data-help="Run-rate Forecasting projects your monthly recurring revenue (MRR) and customer growth based on current trends. It answers 'Where will we be in 12 months if we keep growing at this pace?' Essential for planning resources, fundraising, and setting realistic targets."></span>
+          </div>
           
           <div class="module-card">
             <div class="card-header">
@@ -642,6 +944,110 @@
             <table class="data-table" id="runrateTable">
               <!-- Table populated by JS -->
             </table>
+          </div>
+        </section>
+
+        <!-- Cash & Runway Impact -->
+        <section class="module-section">
+          <div class="section-header-with-help">
+            <h2 class="module-section-title">4. Cash & Runway Impact</h2>
+            <span class="help-icon" data-help="Runway analysis connects your growth metrics to enterprise survival. It shows how many months you can operate before running out of cash, helping you plan fundraising timing and make capital allocation decisions."></span>
+          </div>
+          
+          <div class="module-card">
+            <div class="card-header">
+              <h3 class="card-title">Liquidity & Survival Analysis</h3>
+            </div>
+
+            <div class="input-grid">
+              <div class="input-field">
+                <label>Starting <span class="term-helper" data-definition="Cash Balance: Total cash you have available right now to fund operations. This is your financial cushion and determines how long you can survive at your current burn rate.">Cash Balance</span> ($)</label>
+                <input type="number" id="cashBalance" value="2400000" onchange="computeCashRunway()">
+              </div>
+            </div>
+
+            <div class="cash-widget" id="cashWidget">
+              <!-- Populated by JS -->
+            </div>
+            
+            <div class="strategic-callout">
+              <strong>Strategic Implication:</strong> Understanding runway is critical for capital allocation decisions. If runway < 12 months, growth initiatives compete with survival. If runway > 24 months, you can invest aggressively in scaling.
+            </div>
+          </div>
+        </section>
+
+        <!-- Enterprise Integration -->
+        <section class="module-section">
+          <div class="section-header-with-help">
+            <h2 class="module-section-title">5. Integration Into Enterprise Financial Model</h2>
+            <span class="help-icon" data-help="This shows how unit economics flows into your company's overall financial model. Every metric here has downstream impacts on revenue forecasts, operating budgets, and cash planning."></span>
+          </div>
+          
+          <div class="module-card">
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">
+              Unit economics doesn't live in isolation. Each metric feeds into enterprise-level planning and decision-making.
+            </p>
+            
+            <div class="integration-diagram">
+              <div class="flow-step">
+                <div class="flow-label">
+                  <span class="term-helper" data-definition="CAC (Customer Acquisition Cost) flows directly into your operating expense budget as Sales & Marketing spend. This impacts your OpEx forecast and EBITDA.">CAC</span> → Operating Expense
+                </div>
+                <div class="flow-description">
+                  Customer acquisition costs flow into Sales & Marketing budgets. Rising CAC increases <span class="term-helper" data-definition="OpEx: Operating Expenses - all the costs of running your business excluding cost of goods sold.">OpEx</span> and pressures <span class="term-helper" data-definition="EBITDA: Earnings Before Interest, Taxes, Depreciation, and Amortization - a measure of operating profitability.">EBITDA</span> margins.
+                </div>
+              </div>
+              
+              <div class="flow-arrow">↓</div>
+              
+              <div class="flow-step">
+                <div class="flow-label">
+                  <span class="term-helper" data-definition="Churn: The percentage of customers who cancel each month. High churn erodes revenue growth and makes growth expensive.">Churn</span> → Revenue Forecast
+                </div>
+                <div class="flow-description">
+                  Monthly churn directly reduces <span class="term-helper" data-definition="ARR: Annual Recurring Revenue - the predictable revenue you can expect over the next 12 months from current subscriptions.">ARR</span> growth. A 5% churn rate means you lose 5% of your revenue base every month, requiring constant new customer acquisition just to maintain revenue.
+                </div>
+              </div>
+              
+              <div class="flow-arrow">↓</div>
+              
+              <div class="flow-step">
+                <div class="flow-label">
+                  <span class="term-helper" data-definition="Payback Period: How long it takes to recover customer acquisition costs through gross profit. Critical for cash planning.">Payback</span> → Cash Flow Timing
+                </div>
+                <div class="flow-description">
+                  Longer payback periods create working capital needs. If payback is 18 months but you're growing 10% monthly, you need external capital to fund the <span class="term-helper" data-definition="Working Capital: The cash tied up in your business operations between spending money (CAC) and getting it back (subscription revenue).">working capital</span> gap.
+                </div>
+              </div>
+              
+              <div class="flow-arrow">↓</div>
+              
+              <div class="flow-step">
+                <div class="flow-label">
+                  <span class="term-helper" data-definition="Burn: How much cash you're consuming each month. Negative burn (profit) means you're generating cash. Positive burn means you're spending more than you earn.">Burn</span> → Balance Sheet & Capital Needs
+                </div>
+                <div class="flow-description">
+                  Monthly burn determines how much cash you need on the balance sheet. High burn with long payback means frequent fundraising. Low burn with short payback enables organic growth without dilution.
+                </div>
+              </div>
+            </div>
+            
+            <div class="strategic-callout" style="margin-top: 20px;">
+              <strong>CFO Takeaway:</strong> Unit economics is the engine that drives the entire financial model. Improving LTV:CAC by 20% doesn't just make sales more efficient—it reduces OpEx, extends runway, delays the next fundraise, and improves company valuation by demonstrating capital efficiency.
+            </div>
+            
+            <div class="strategic-callout" style="margin-top: 24px;">
+              <strong>Scope Note:</strong> This module focuses on SaaS unit economics and cash runway. It does not fully model <span class="term-helper" data-definition="Working Capital: The cash tied up between spending money (like paying vendors or acquiring customers) and collecting it (like customer payments). Includes AR, AP, deferred revenue, and inventory timing.">working capital</span> schedules such as:
+              <ul style="margin: 8px 0 0 20px; line-height: 1.8;">
+                <li><span class="term-helper" data-definition="AR: Accounts Receivable - money customers owe you but haven't paid yet. Common in B2B SaaS with annual contracts invoiced upfront.">AR (Accounts Receivable)</span> timing and collection</li>
+                <li><span class="term-helper" data-definition="Deferred Revenue: Cash received from customers that you haven't yet earned (future service delivery). Common in SaaS with annual prepayments. This is a liability on the balance sheet.">Deferred Revenue</span> unwinding</li>
+                <li><span class="term-helper" data-definition="AP: Accounts Payable - money you owe vendors but haven't paid yet. Managing AP timing (paying later while collecting AR faster) helps optimize cash flow.">AP (Accounts Payable)</span> payment timing</li>
+                <li><span class="term-helper" data-definition="Inventory: Physical goods held for sale. Not applicable to pure SaaS, but critical for hardware/physical product companies.">Inventory</span> (not applicable to SaaS)</li>
+              </ul>
+              <div style="margin-top: 12px; font-size: 13px; color: var(--muted);">
+                <strong style="color: var(--text);">Future Enhancement:</strong> Full working capital modeling would connect billing cycles, payment terms, and cash conversion cycles to provide a more complete liquidity picture.
+              </div>
+            </div>
           </div>
         </section>
 
@@ -917,22 +1323,110 @@
       
       document.getElementById('cacLtvKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label"><span class="tooltip" data-tooltip="(Marketing + Sales) / New Customers">CAC</span></div>
+          <div class="kpi-box-label"><span class="term-helper" data-definition="Customer Acquisition Cost: The total cost (marketing + sales expenses) divided by number of new customers. Think of it as: 'How much did we spend to get one new customer?'">CAC</span></div>
           <div class="kpi-box-value">${formatCurrency(cac)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label"><span class="tooltip" data-tooltip="(ARPA × GM%) / Churn%">LTV</span></div>
+          <div class="kpi-box-label"><span class="term-helper" data-definition="Lifetime Value: The total profit a customer generates over their entire relationship with you. Calculated as: monthly revenue per customer × gross margin ÷ churn rate. Basically: 'How much money will this customer make us?'">LTV</span></div>
           <div class="kpi-box-value">${formatCurrency(ltv)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label"><span class="tooltip" data-tooltip="LTV / CAC">LTV:CAC Ratio</span></div>
+          <div class="kpi-box-label"><span class="term-helper" data-definition="LTV:CAC Ratio: How many times more value a customer generates compared to what it cost to acquire them. A 3:1 ratio means customers are worth 3x what you spent to get them. Higher is better! Under 3x is risky.">LTV:CAC Ratio</span></div>
           <div class="kpi-box-value">${ratio.toFixed(1)}x</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label"><span class="tooltip" data-tooltip="CAC / (ARPA × GM%)">Payback Period</span></div>
+          <div class="kpi-box-label"><span class="term-helper" data-definition="Payback Period: How many months it takes to recover the cost of acquiring a customer through their monthly profit contribution. Example: If CAC is $1,200 and monthly profit is $100, payback is 12 months. Shorter is better!">Payback Period</span></div>
           <div class="kpi-box-value">${payback.toFixed(1)} mo</div>
         </div>
       `;
+      
+      // === CAPITAL EFFICIENCY SCORE ===
+      let score = 0;
+      let rating = '';
+      let interpretation = '';
+      
+      // Factor 1: LTV:CAC Ratio (0-40 points)
+      if (ratio >= 4) score += 40;
+      else if (ratio >= 3) score += 30;
+      else if (ratio >= 2) score += 20;
+      else if (ratio >= 1) score += 10;
+      
+      // Factor 2: Payback Period (0-30 points)
+      if (payback <= 6) score += 30;
+      else if (payback <= 12) score += 20;
+      else if (payback <= 18) score += 10;
+      else if (payback <= 24) score += 5;
+      
+      // Factor 3: Gross Margin (0-30 points)
+      if (inputs.grossMargin >= 75) score += 30;
+      else if (inputs.grossMargin >= 65) score += 20;
+      else if (inputs.grossMargin >= 55) score += 10;
+      
+      // Determine rating and interpretation
+      if (score >= 75) {
+        rating = 'Strong';
+        interpretation = 'Your growth creates significantly more value than it consumes. You can scale efficiently without requiring constant external capital. Investors see this as a compounding machine.';
+      } else if (score >= 50) {
+        rating = 'Moderate';
+        interpretation = 'Your unit economics support sustainable growth, but you\'ll need periodic capital injections to fund expansion. Focus on improving either LTV (reduce churn, increase ARPA) or CAC (improve conversion rates).';
+      } else {
+        rating = 'Fragile';
+        interpretation = 'Growth requires significant external capital to sustain. Each new customer consumes more cash than it generates in the short term. You must either improve unit economics or secure substantial funding before scaling aggressively.';
+      }
+      
+      const scoreClass = rating.toLowerCase();
+      document.getElementById('efficiencyScore').innerHTML = `
+        <div class="efficiency-rating" style="color: var(--muted);">
+          <span class="term-helper" data-definition="This score combines three key signals: LTV:CAC ratio (40 points max), payback period (30 points max), and gross margin (30 points max). Total 100 points possible. Higher score means growth creates value faster than it consumes cash. 75+ is strong, 50-74 is moderate, under 50 needs improvement.">Capital Efficiency</span> Score
+        </div>
+        <div class="efficiency-score ${scoreClass}">${score}/100</div>
+        <div class="efficiency-rating ${scoreClass}">${rating}</div>
+        <div class="efficiency-interpretation">${interpretation}</div>
+      `;
+      
+      // === PAYBACK SENSITIVITY TABLE ===
+      const scenarios = [
+        { label: 'Baseline', churnAdj: 0, gmAdj: 0, arpaAdj: 0 },
+        { label: 'Churn +1%', churnAdj: 1, gmAdj: 0, arpaAdj: 0 },
+        { label: 'Gross Margin -5%', churnAdj: 0, gmAdj: -5, arpaAdj: 0 },
+        { label: 'ARPA -10%', churnAdj: 0, gmAdj: 0, arpaAdj: -0.10 }
+      ];
+      
+      let sensitivityHTML = `
+        <thead>
+          <tr>
+            <th><span class="term-helper" data-definition="Different stress scenarios to test how fragile your payback period is to small changes in key assumptions.">Scenario</span></th>
+            <th>Payback (months)</th>
+            <th>Change</th>
+            <th>% Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      
+      scenarios.forEach(s => {
+        const stressedChurn = inputs.churnRate + s.churnAdj;
+        const stressedGM = inputs.grossMargin + s.gmAdj;
+        const stressedARPA = inputs.arpa * (1 + s.arpaAdj);
+        const stressedPayback = cac / (stressedARPA * (stressedGM / 100));
+        const change = stressedPayback - payback;
+        const pctChange = (change / payback) * 100;
+        
+        const changeClass = change > 0.5 ? 'sensitivity-deterioration' : change < -0.5 ? 'sensitivity-improvement' : '';
+        const changeSymbol = change > 0 ? '+' : '';
+        
+        sensitivityHTML += `
+          <tr>
+            <td><strong>${s.label}</strong></td>
+            <td>${stressedPayback.toFixed(1)}</td>
+            <td class="${changeClass}">${changeSymbol}${change.toFixed(1)} mo</td>
+            <td class="${changeClass}">${changeSymbol}${pctChange.toFixed(1)}%</td>
+          </tr>
+        `;
+      });
+      
+      sensitivityHTML += '</tbody>';
+      document.getElementById('sensitivityTable').innerHTML = sensitivityHTML;
     }
     
     // ========== CONTRIBUTION FUNCTIONS ==========
@@ -1005,28 +1499,48 @@
         return (d.revenue - totalVarCost) / d.revenue * 100;
       });
       
-      const maxVal = Math.max(...cmValues);
-      const minVal = Math.min(...cmValues);
+      const avgCM = cmValues.reduce((sum, val) => sum + val, 0) / cmValues.length;
+      
+      const maxVal = Math.max(...cmValues) + 2;
+      const minVal = Math.min(...cmValues) - 2;
       const range = maxVal - minVal || 1;
       
-      const paddingLeft = 50;
-      const paddingRight = 30;
-      const paddingTop = 40;
-      const paddingBottom = 50;
-      const chartW = w - paddingLeft - paddingRight;
-      const chartH = h - paddingTop - paddingBottom;
-      const pointGap = chartW / (data.length - 1);
+      const chartArea = {
+        left: 48,
+        right: w - 28,
+        top: 24,
+        bottom: h - 32,
+        width: w - 48 - 28,
+        height: h - 24 - 32
+      };
+      
+      const pointGap = chartArea.width / (data.length - 1);
       
       contributionChartPoints = [];
+      
+      // Helper for rounded rectangles
+      function roundRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.arcTo(x + width, y, x + width, y + radius, radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+        ctx.lineTo(x + radius, y + height);
+        ctx.arcTo(x, y + height, x, y + height - radius, radius);
+        ctx.lineTo(x, y + radius);
+        ctx.arcTo(x, y, x + radius, y, radius);
+        ctx.closePath();
+      }
       
       // Grid lines
       ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
-        const y = paddingTop + (i / 4) * chartH;
+        const y = chartArea.top + (i / 4) * chartArea.height;
         ctx.beginPath();
-        ctx.moveTo(paddingLeft, y);
-        ctx.lineTo(w - paddingRight, y);
+        ctx.moveTo(chartArea.left, y);
+        ctx.lineTo(chartArea.right, y);
         ctx.stroke();
       }
       
@@ -1037,26 +1551,57 @@
       ctx.textBaseline = 'middle';
       for (let i = 0; i <= 4; i++) {
         const val = maxVal - (range * (i / 4));
-        const y = paddingTop + (i / 4) * chartH;
-        ctx.fillText(val.toFixed(1) + '%', paddingLeft - 10, y);
+        const y = chartArea.top + (i / 4) * chartArea.height;
+        ctx.fillText(val.toFixed(1) + '%', chartArea.left - 10, y);
       }
       
-      // Draw line
+      // Draw average CM line (dashed red)
+      const avgY = chartArea.top + chartArea.height - ((avgCM - minVal) / range) * chartArea.height;
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = 'rgba(214, 69, 69, 0.6)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(chartArea.left, avgY);
+      ctx.lineTo(chartArea.right, avgY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Average label with rounded background
+      const avgText = `Avg ${avgCM.toFixed(1)}%`;
+      ctx.font = 'bold 11px sans-serif';
+      const avgTextWidth = ctx.measureText(avgText).width;
+      const avgLabelX = chartArea.right - avgTextWidth - 8;
+      const avgLabelY = avgY;
+      
+      // Background for avg label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.strokeStyle = 'rgba(214, 69, 69, 0.3)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, avgLabelX - 6, avgLabelY - 10, avgTextWidth + 12, 18, 4);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.fillStyle = 'rgba(214, 69, 69, 0.9)';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(avgText, avgLabelX, avgLabelY);
+      
+      // Draw main line
       ctx.beginPath();
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
       data.forEach((d, i) => {
-        const x = paddingLeft + i * pointGap;
-        const y = paddingTop + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        const x = chartArea.left + i * pointGap;
+        const y = chartArea.top + chartArea.height - ((cmValues[i] - minVal) / range) * chartArea.height;
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       });
       ctx.stroke();
       
-      // Draw points and store positions
+      // Draw points and labels with rounded backgrounds
       data.forEach((d, i) => {
-        const x = paddingLeft + i * pointGap;
-        const y = paddingTop + chartH - ((cmValues[i] - minVal) / range) * chartH;
+        const x = chartArea.left + i * pointGap;
+        const y = chartArea.top + chartArea.height - ((cmValues[i] - minVal) / range) * chartArea.height;
         
         contributionChartPoints.push({
           x, y,
@@ -1083,16 +1628,25 @@
         ctx.font = '11px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillText(d.month, x, h - paddingBottom + 10);
+        ctx.fillText(d.month, x, chartArea.bottom + 10);
         
-        // Value labels - smart positioning to avoid overlap
-        ctx.fillStyle = '#0b1220';
+        // Value labels with rounded background - alternate above/below
+        const labelText = cmValues[i].toFixed(1) + '%';
         ctx.font = 'bold 11px sans-serif';
-        ctx.textBaseline = 'bottom';
+        const labelWidth = ctx.measureText(labelText).width;
+        const labelY = (i % 2 === 0) ? y - 12 : y + 12;
         
-        // Alternate above/below to reduce overlap
-        const labelY = (i % 2 === 0) ? y - 12 : y + 20;
-        ctx.fillText(cmValues[i].toFixed(1) + '%', x, labelY);
+        // Background for value label (fix readability on gridlines)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.strokeStyle = 'rgba(200, 200, 200, 0.4)';
+        ctx.lineWidth = 1;
+        roundRect(ctx, x - labelWidth/2 - 5, labelY - 9, labelWidth + 10, 16, 4);
+        ctx.fill();
+        ctx.stroke();
+        
+        ctx.fillStyle = '#0b1220';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(labelText, x, labelY);
       });
       
       // Title
@@ -1100,7 +1654,30 @@
       ctx.font = 'bold 13px sans-serif';
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
-      ctx.fillText('CM %', paddingLeft, 10);
+      ctx.fillText('CM %', chartArea.left, 10);
+      
+      // Generate chart explanation (unchanged logic)
+      const firstCM = cmValues[0];
+      const lastCM = cmValues[cmValues.length - 1];
+      const cmChange = lastCM - firstCM;
+      
+      let trendText = '';
+      let interpretation = '';
+      
+      if (cmChange > 2) {
+        trendText = '<strong>Uptrend:</strong> Your contribution margin is improving over time.';
+        interpretation = 'This is excellent! You\'re getting better at controlling variable costs or increasing prices. Each sale is becoming more profitable.';
+      } else if (cmChange < -2) {
+        trendText = '<strong>Downtrend:</strong> Your contribution margin is declining.';
+        interpretation = 'This needs attention. Variable costs might be rising, or you\'re discounting too much. Review your cost structure and pricing.';
+      } else {
+        trendText = '<strong>Stable:</strong> Your contribution margin is relatively consistent.';
+        interpretation = 'Good stability. You have predictable unit economics, which helps with forecasting and planning.';
+      }
+      
+      document.getElementById('cmChartExplanation').innerHTML = `
+        ${trendText} Average: <strong>${avgCM.toFixed(1)}%</strong>. ${interpretation}
+      `;
     }
     
     // ========== RUN-RATE FUNCTIONS ==========
@@ -1128,20 +1705,36 @@
       
       document.getElementById('runrateKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label">Run-rate ARR (Current)</div>
+          <div class="kpi-box-label">
+            <span class="term-helper" data-definition="Annual Recurring Revenue at current run-rate. This is your MRR (Monthly Recurring Revenue) × 12. It shows what your yearly revenue would be if you maintained this month's performance.">Run-rate ARR (Current)</span>
+          </div>
           <div class="kpi-box-value">${formatCurrency(runrateARR)}</div>
+          <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Based on latest MRR</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Forecast ARR (6mo)</div>
+          <div class="kpi-box-label">
+            <span class="term-helper" data-definition="Projected ARR in 6 months if your current growth rate continues. Calculated by extrapolating your recent expansion and churn trends. Helps answer: 'Where will we be by mid-year?'">Forecast ARR (6mo)</span>
+          </div>
           <div class="kpi-box-value">${formatCurrency(forecastARR)}</div>
+          <div style="font-size: 11px; color: ${forecastARR > runrateARR ? '#059669' : '#d97706'}; margin-top: 4px;">
+            ${((forecastARR - runrateARR) / runrateARR * 100).toFixed(1)}% growth
+          </div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Avg Monthly Burn</div>
+          <div class="kpi-box-label">
+            <span class="term-helper" data-definition="Gross Burn: Total operating expenses per month, before accounting for any revenue. This is the raw cash going out the door to run the business (salaries, rent, software, marketing, etc).">Gross Burn</span>
+          </div>
+          <div class="kpi-box-value">${formatCurrency(avgOpEx)}</div>
+          <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">Operating expenses/mo</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-box-label">
+            <span class="term-helper" data-definition="Net Burn: Cash consumed per month after accounting for revenue. Formula: Operating Expenses minus Gross Profit (Revenue × Gross Margin). Negative means you're profitable!">Net Burn</span>
+          </div>
           <div class="kpi-box-value">${formatCurrency(Math.abs(monthlyBurn))}</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-box-label">Current Customers</div>
-          <div class="kpi-box-value">${lastMonth.customers.toLocaleString()}</div>
+          <div style="font-size: 11px; color: ${monthlyBurn < 0 ? '#059669' : '#d97706'}; margin-top: 4px;">
+            ${monthlyBurn < 0 ? 'Profitable!' : 'Burning cash'}
+          </div>
         </div>
       `;
       
@@ -1204,6 +1797,108 @@
       document.getElementById('runrateTable').innerHTML = tableHTML;
       
       renderRunrateChart(displayData);
+      
+      // Also trigger cash runway calculation
+      computeCashRunway();
+    }
+    
+    // ========== CASH & RUNWAY FUNCTIONS ==========
+    
+    function computeCashRunway() {
+      const cashBalance = parseFloat(document.getElementById('cashBalance').value) || 0;
+      const data = runrateData[currentScenario];
+      
+      // Calculate net burn (OpEx minus Gross Profit)
+      const avgOpEx = data.reduce((sum, d) => sum + d.opex, 0) / data.length;
+      const avgRev = data.reduce((sum, d) => sum + d.mrr, 0) / data.length;
+      const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
+      const netBurn = avgOpEx - (avgRev * (avgGM / 100));
+      
+      const EPSILON = 100; // Near-breakeven threshold ($100/mo)
+      let widgetHTML = '';
+      
+      if (netBurn <= 0) {
+        // Cash generating - profitable
+        widgetHTML = `
+          <div class="cash-widget-title">
+            <span>💰</span>
+            <span>Cash Position: <span class="term-helper" data-definition="Your business is profitable - generating more cash than burning each month. This means infinite runway and no need for external capital.">Cash Generating</span></span>
+          </div>
+          <div class="cash-generating">
+            ✓ Your business is profitable! You generate <strong>${formatCurrency(Math.abs(netBurn))}/month</strong> in positive cash flow. No external capital needed.
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.6; color: var(--muted);">
+            <strong style="color: var(--text);">Cash Flow Breakdown:</strong><br>
+            Starting Cash: ${formatCurrency(cashBalance)}<br>
+            Gross Profit (Revenue × <span class="term-helper" data-definition="GM: Gross Margin - the percentage of revenue left after variable costs. Higher GM means more cash from each dollar of revenue.">GM</span>%): +${formatCurrency(avgRev * (avgGM / 100))}<br>
+            <span class="term-helper" data-definition="OpEx: Operating Expenses - all the costs to run your business (salaries, rent, marketing, etc), excluding cost of goods sold.">OpEx</span>: -${formatCurrency(avgOpEx)}<br>
+            Net Cash Flow: <span style="color: #059669;">+${formatCurrency(Math.abs(netBurn))}/mo</span>
+          </div>
+        `;
+      } else if (netBurn > 0 && netBurn < EPSILON) {
+        // Near breakeven - cap runway display
+        widgetHTML = `
+          <div class="cash-widget-title">
+            <span>⚖️</span>
+            <span><span class="term-helper" data-definition="Runway: The number of months you can continue operating before running out of cash at your current burn rate.">Cash Runway</span>: Near Breakeven</span>
+          </div>
+          <div class="runway-months">60+ months</div>
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
+            Effective runway is very long due to minimal <span class="term-helper" data-definition="Net Burn: Cash consumed per month after revenue. Very low burn means you're close to self-sustaining.">net burn</span> (${formatCurrency(netBurn)}/mo)
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.6; color: var(--muted);">
+            <strong style="color: var(--text);">Cash Flow Breakdown:</strong><br>
+            Starting Cash: ${formatCurrency(cashBalance)}<br>
+            Gross Profit (Revenue × GM%): +${formatCurrency(avgRev * (avgGM / 100))}<br>
+            OpEx: -${formatCurrency(avgOpEx)}<br>
+            Net Burn: <span style="color: #d97706;">-${formatCurrency(netBurn)}/mo</span>
+          </div>
+        `;
+      } else {
+        // Normal burn - calculate runway
+        const runwayMonths = cashBalance / netBurn;
+        const runwayPercent = Math.min(100, (runwayMonths / 24) * 100);
+        
+        const today = new Date();
+        const cashZeroDate = new Date(today);
+        cashZeroDate.setMonth(cashZeroDate.getMonth() + Math.floor(runwayMonths));
+        const dateStr = cashZeroDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        
+        widgetHTML = `
+          <div class="cash-widget-title">
+            <span>⏱️</span>
+            <span><span class="term-helper" data-definition="Runway: The number of months you can continue operating before running out of cash at your current burn rate. Critical for planning fundraising timing.">Cash Runway</span></span>
+          </div>
+          <div class="runway-months">${runwayMonths.toFixed(1)} months</div>
+          <div class="runway-bar">
+            <div class="runway-fill" style="width: ${runwayPercent}%"></div>
+          </div>
+          <div style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">
+            Cash depletes: <strong>${dateStr}</strong> | Monthly <span class="term-helper" data-definition="Burn Rate: How much cash your business consumes each month after accounting for revenue. High burn requires frequent fundraising.">burn</span>: <strong>${formatCurrency(netBurn)}</strong>
+          </div>
+        `;
+        
+        if (runwayMonths < 12) {
+          const fundingNeed = netBurn * (18 - runwayMonths);
+          widgetHTML += `
+            <div class="funding-warning">
+              ⚠️ <strong>Funding Alert:</strong> Runway < 12 months. Consider raising <span class="term-helper" data-definition="The amount of capital needed to extend your runway to a comfortable 18+ months, giving you breathing room for growth and fundraising.">~${formatCurrency(fundingNeed)}</span> to extend runway to 18 months.
+            </div>
+          `;
+        }
+        
+        widgetHTML += `
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.6; color: var(--muted);">
+            <strong style="color: var(--text);">Cash Flow Breakdown:</strong><br>
+            Starting Cash: ${formatCurrency(cashBalance)}<br>
+            Gross Profit (Revenue × GM%): +${formatCurrency(avgRev * (avgGM / 100))}<br>
+            OpEx: -${formatCurrency(avgOpEx)}<br>
+            Net Burn: <span style="color: #dc2626;">-${formatCurrency(netBurn)}/mo</span>
+          </div>
+        `;
+      }
+      
+      document.getElementById('cashWidget').innerHTML = widgetHTML;
     }
     
     function renderRunrateChart(displayData) {

@@ -645,3 +645,95 @@ img { max-width: 100%; display: block; }
   .project-card { transition: none; }
   .to-top { transition: none; }
 }
+
+/* Unit Economics Module Enhancements */
+
+/* Fix helper icon alignment with headers */
+.section-header-with-help {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.module-section-title {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(15, 118, 110, 0.10);
+  border: 1px solid rgba(15, 118, 110, 0.20);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: help;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.help-icon::before {
+  content: '?';
+  line-height: 1;
+}
+
+.help-icon:hover::after {
+  content: attr(data-help);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  padding: 12px 16px;
+  background: var(--text);
+  color: white;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 10px;
+  white-space: normal;
+  width: 320px;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  font-weight: 400;
+  text-align: left;
+}
+
+/* Inline term helper */
+.term-helper {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted rgba(15, 118, 110, 0.4);
+  color: var(--accent);
+}
+
+.term-helper:hover::after {
+  content: attr(data-definition);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: var(--text);
+  color: white;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 8px;
+  white-space: normal;
+  width: 260px;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+  font-weight: 400;
+}
+
+/* Remove unprofessional ALL-CAPS from table headers */
+.data-table th,
+.sensitivity-table th {
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
