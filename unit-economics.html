@@ -114,6 +114,11 @@
       display: inline-block;
       margin-bottom: 12px;
     }
+    .data-badge.random {
+      background: #fef3c7;
+      border: 1px solid #fbbf24;
+      color: #92400e;
+    }
     .sidebar-buttons {
       display: flex;
       flex-direction: column;
@@ -622,6 +627,10 @@
       border-radius: var(--radius);
       text-align: center;
       margin-top: 20px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .efficiency-score {
       font-size: 48px;
@@ -650,6 +659,10 @@
       line-height: 1.6;
       max-width: 500px;
       margin: 0 auto;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     /* Integration Diagram */
@@ -783,9 +796,18 @@
         <div class="sidebar-section">
           <div class="sidebar-title">Scenario</div>
           <div class="scenario-tabs">
-            <button class="scenario-tab active" onclick="setScenario('base')" data-scenario="base">Base Case</button>
-            <button class="scenario-tab" onclick="setScenario('upside')" data-scenario="upside">Upside</button>
-            <button class="scenario-tab" onclick="setScenario('downside')" data-scenario="downside">Downside</button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="scenario-tab active" onclick="setScenario('base')" data-scenario="base" style="flex: 1;">Base Case</button>
+              <span class="help-icon" id="baseScenarioHelp" data-help="Loading..." style="flex-shrink: 0;"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="scenario-tab" onclick="setScenario('upside')" data-scenario="upside" style="flex: 1;">Upside</button>
+              <span class="help-icon" id="upsideScenarioHelp" data-help="Loading..." style="flex-shrink: 0;"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button class="scenario-tab" onclick="setScenario('downside')" data-scenario="downside" style="flex: 1;">Downside</button>
+              <span class="help-icon" id="downsideScenarioHelp" data-help="Loading..." style="flex-shrink: 0;"></span>
+            </div>
           </div>
         </div>
       </aside>
@@ -844,21 +866,27 @@
               <!-- KPIs populated by JS -->
             </div>
             
-            <!-- Capital Efficiency Score -->
-            <div class="efficiency-score-card" id="efficiencyScore">
-              <!-- Populated by JS -->
-            </div>
-            
-            <!-- Payback Sensitivity Analysis -->
-            <div style="margin-top: 24px;">
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                <h3 style="font-size: 16px; font-weight: 650; margin: 0;">
-                  <span class="term-helper" data-definition="Sensitivity analysis tests how much an outcome changes when one assumption moves slightly. It reveals which assumptions are most critical and where your model is most fragile.">Payback Sensitivity</span> — Stress Testing Assumptions
-                </h3>
-              </div>
-              <table class="sensitivity-table" id="sensitivityTable">
+            <!-- Capital Efficiency & Sensitivity Section - Fixed height to prevent layout shift -->
+            <div style="min-height: 550px;">
+              <!-- Capital Efficiency Score -->
+              <div class="efficiency-score-card" id="efficiencyScore">
                 <!-- Populated by JS -->
-              </table>
+              </div>
+              
+              <!-- Payback Sensitivity Analysis -->
+              <div style="margin-top: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                  <h3 style="font-size: 16px; font-weight: 650; margin: 0;">
+                    <span class="term-helper" data-definition="Sensitivity analysis tests how much an outcome changes when one assumption moves slightly. It reveals which assumptions are most critical and where your model is most fragile.">Payback Sensitivity</span> — Stress Testing Assumptions
+                  </h3>
+                  <span class="help-icon" data-help="These scenarios test common real-world shocks that directly impact payback: Churn +1% (retention risk), Gross Margin -5% (unit economics pressure), and ARPA -10% (revenue quality).
+
+Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp reflects cost pressure from vendor price increases or infrastructure scaling. ARPA -10% models competitive pricing pressure or customer downgrades." style="margin-left: auto;"></span>
+                </div>
+                <table class="sensitivity-table" id="sensitivityTable">
+                  <!-- Populated by JS -->
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -1090,10 +1118,17 @@
     let currentScenario = 'base';
     let dataMode = 'sample';
     
-    let cacLtvInputs = {
+    // Immutable sample assumptions - always restore from this
+    const SAMPLE_ASSUMPTIONS = {
       base: { newCustomers: 120, marketingSpend: 48000, salesSpend: 72000, arpa: 120, grossMargin: 72, churnRate: 3.5 },
       upside: { newCustomers: 180, marketingSpend: 48000, salesSpend: 72000, arpa: 135, grossMargin: 75, churnRate: 2.8 },
       downside: { newCustomers: 80, marketingSpend: 48000, salesSpend: 72000, arpa: 105, grossMargin: 68, churnRate: 5.2 }
+    };
+    
+    let cacLtvInputs = {
+      base: { ...SAMPLE_ASSUMPTIONS.base },
+      upside: { ...SAMPLE_ASSUMPTIONS.upside },
+      downside: { ...SAMPLE_ASSUMPTIONS.downside }
     };
     
     let contributionData = { base: [], upside: [], downside: [] };
@@ -1238,13 +1273,29 @@
     function useSampleData() {
       dataMode = 'sample';
       document.getElementById('dataModeBadge').textContent = 'Sample Data';
+      document.getElementById('dataModeBadge').classList.remove('random');
+      
+      // HARD RESET: Restore cacLtvInputs from immutable constant
+      cacLtvInputs = {
+        base: { ...SAMPLE_ASSUMPTIONS.base },
+        upside: { ...SAMPLE_ASSUMPTIONS.upside },
+        downside: { ...SAMPLE_ASSUMPTIONS.downside }
+      };
+      
+      // Restore all contribution and runrate data
       initializeSampleData();
+      
+      // Reload inputs into UI
+      loadScenarioInputs();
+      
+      // Refresh all KPIs/charts/tables
       renderAll();
     }
     
     function randomizeAll() {
-      dataMode = 'sample';
+      dataMode = 'random';
       document.getElementById('dataModeBadge').textContent = 'Randomized Data';
+      document.getElementById('dataModeBadge').classList.add('random');
       
       ['base', 'upside', 'downside'].forEach(scenario => {
         const mult = scenario === 'upside' ? 1.15 : scenario === 'downside' ? 0.85 : 1.0;
@@ -1381,10 +1432,10 @@
       
       // === PAYBACK SENSITIVITY TABLE ===
       const scenarios = [
-        { label: 'Baseline', churnAdj: 0, gmAdj: 0, arpaAdj: 0 },
-        { label: 'Churn +1%', churnAdj: 1, gmAdj: 0, arpaAdj: 0 },
-        { label: 'Gross Margin -5%', churnAdj: 0, gmAdj: -5, arpaAdj: 0 },
-        { label: 'ARPA -10%', churnAdj: 0, gmAdj: 0, arpaAdj: -0.10 }
+        { label: 'Baseline', tooltip: 'Current assumptions with no stress applied', churnAdj: 0, gmAdj: 0, arpaAdj: 0 },
+        { label: 'Churn <span style="color: #059669;">+1%</span>', tooltip: 'What if monthly churn increases by 1 percentage point? Tests retention risk.', churnAdj: 1, gmAdj: 0, arpaAdj: 0 },
+        { label: 'Gross Margin <span style="color: #dc2626;">-5%</span>', tooltip: 'What if gross margin drops by 5 percentage points? Tests unit economics pressure from rising costs.', churnAdj: 0, gmAdj: -5, arpaAdj: 0 },
+        { label: 'ARPA <span style="color: #dc2626;">-10%</span>', tooltip: 'What if average revenue per account drops 10%? Tests pricing pressure and revenue quality.', churnAdj: 0, gmAdj: 0, arpaAdj: -0.10 }
       ];
       
       let sensitivityHTML = `
@@ -1412,7 +1463,7 @@
         
         sensitivityHTML += `
           <tr>
-            <td><strong>${s.label}</strong></td>
+            <td><strong><span class="term-helper" data-definition="${s.tooltip}">${s.label}</span></strong></td>
             <td>${stressedPayback.toFixed(1)}</td>
             <td class="${changeClass}">${changeSymbol}${change.toFixed(1)} mo</td>
             <td class="${changeClass}">${changeSymbol}${pctChange.toFixed(1)}%</td>
@@ -1550,38 +1601,7 @@
         ctx.fillText(val.toFixed(1) + '%', chartArea.left - 10, y);
       }
       
-      // Draw average CM line (dashed red)
-      const avgY = chartArea.top + chartArea.height - ((avgCM - minVal) / range) * chartArea.height;
-      ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = 'rgba(214, 69, 69, 0.6)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(chartArea.left, avgY);
-      ctx.lineTo(chartArea.right, avgY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      
-      // Average label with rounded background
-      const avgText = `Avg ${avgCM.toFixed(1)}%`;
-      ctx.font = 'bold 11px sans-serif';
-      const avgTextWidth = ctx.measureText(avgText).width;
-      const avgLabelX = chartArea.right - avgTextWidth - 8;
-      const avgLabelY = avgY;
-      
-      // Background for avg label
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.strokeStyle = 'rgba(214, 69, 69, 0.3)';
-      ctx.lineWidth = 1;
-      roundRect(ctx, avgLabelX - 6, avgLabelY - 10, avgTextWidth + 12, 18, 4);
-      ctx.fill();
-      ctx.stroke();
-      
-      ctx.fillStyle = 'rgba(214, 69, 69, 0.9)';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(avgText, avgLabelX, avgLabelY);
-      
-      // Draw main line
+      // Draw main line FIRST (bottom layer)
       ctx.beginPath();
       ctx.strokeStyle = '#0f766e';
       ctx.lineWidth = 3;
@@ -1593,7 +1613,38 @@
       });
       ctx.stroke();
       
-      // Draw points and labels with rounded backgrounds
+      // Draw average CM line SECOND (dashed red) - appears on top of main line
+      const avgY = chartArea.top + chartArea.height - ((avgCM - minVal) / range) * chartArea.height;
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = 'rgba(214, 69, 69, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(chartArea.left, avgY);
+      ctx.lineTo(chartArea.right, avgY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Average label with rounded background THIRD - appears on top
+      const avgText = `Avg ${avgCM.toFixed(1)}%`;
+      ctx.font = 'bold 11px sans-serif';
+      const avgTextWidth = ctx.measureText(avgText).width;
+      const avgLabelX = chartArea.right - avgTextWidth - 8;
+      const avgLabelY = avgY;
+      
+      // Background for avg label
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.strokeStyle = 'rgba(214, 69, 69, 0.4)';
+      ctx.lineWidth = 1;
+      roundRect(ctx, avgLabelX - 6, avgLabelY - 10, avgTextWidth + 12, 18, 4);
+      ctx.fill();
+      ctx.stroke();
+      
+      ctx.fillStyle = 'rgba(214, 69, 69, 0.95)';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(avgText, avgLabelX, avgLabelY);
+      
+      // Draw points and labels LAST (top layer)
       data.forEach((d, i) => {
         const x = chartArea.left + i * pointGap;
         const y = chartArea.top + chartArea.height - ((cmValues[i] - minVal) / range) * chartArea.height;
@@ -2306,9 +2357,45 @@
     // ========== RENDER ALL ==========
     
     function renderAll() {
+      updateScenarioTooltips();
       computeCACLTV();
       renderContribution();
       renderRunrate();
+    }
+    
+    // Update scenario tooltips with current data
+    function updateScenarioTooltips() {
+      ['base', 'upside', 'downside'].forEach(scenario => {
+        const inputs = cacLtvInputs[scenario];
+        const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+        const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+        
+        let description = '';
+        let comparison = '';
+        
+        if (scenario === 'base') {
+          description = 'Base Case: Standard performance with balanced assumptions.';
+          comparison = '';
+        } else if (scenario === 'upside') {
+          const baseCac = (cacLtvInputs.base.marketingSpend + cacLtvInputs.base.salesSpend) / cacLtvInputs.base.newCustomers;
+          const conversionPct = ((inputs.newCustomers / cacLtvInputs.base.newCustomers - 1) * 100).toFixed(0);
+          const arpaPct = ((inputs.arpa / cacLtvInputs.base.arpa - 1) * 100).toFixed(0);
+          description = 'Upside: Optimistic scenario.';
+          comparison = ` ${conversionPct > 0 ? '+' : ''}${conversionPct}% conversion,`;
+        } else {
+          const conversionPct = ((inputs.newCustomers / cacLtvInputs.base.newCustomers - 1) * 100).toFixed(0);
+          const arpaPct = ((inputs.arpa / cacLtvInputs.base.arpa - 1) * 100).toFixed(0);
+          description = 'Downside: Conservative scenario.';
+          comparison = ` ${conversionPct}% conversion,`;
+        }
+        
+        const tooltip = `${description}${comparison} ${inputs.churnRate.toFixed(1)}% churn, $${Math.round(inputs.arpa)} ARPA, ${inputs.grossMargin.toFixed(0)}% gross margin, ~${payback.toFixed(1)} month payback.`;
+        
+        const helpIcon = document.getElementById(`${scenario}ScenarioHelp`);
+        if (helpIcon) {
+          helpIcon.setAttribute('data-help', tooltip);
+        }
+      });
     }
     
     // ========== INIT ==========
