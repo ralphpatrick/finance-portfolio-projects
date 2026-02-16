@@ -201,9 +201,93 @@
       font-size: 14px;
     }
 
+    /* Main layout with sidebar */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px 64px 24px;
+    }
+    
+    /* Sticky sidebar */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .data-badge {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .sidebar-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+    }
+    .btn-small {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 140ms ease;
+      white-space: nowrap;
+    }
+    .btn-small:hover {
+      border-color: rgba(12, 23, 45, 0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .btn-small:active {
+      transform: translateY(1px);
+    }
+    .btn-primary {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 18px rgba(11,18,32,0.12);
+    }
+
     /* Main content */
     .main-content {
-      padding: 32px 0 64px 0;
+      min-width: 0;
+      padding: 32px 0 0 0;
     }
 
     .section {
@@ -557,6 +641,20 @@
     }
 
     /* Responsive */
+    @media (max-width: 1024px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+      .sidebar-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+
     @media (max-width: 980px) {
       .info-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -650,12 +748,6 @@
           <h1 class="module-title">Indirect Cost & Headcount CoE</h1>
           <p class="module-subtitle">Making overhead costs transparent and controllable.</p>
         </div>
-        <div class="module-actions">
-          <button class="btn btn-accent" onclick="downloadTemplate()">
-            <span>📥</span>
-            <span>Download Template</span>
-          </button>
-        </div>
       </div>
 
       <div class="info-grid">
@@ -681,81 +773,86 @@
 
   <!-- Main Content -->
   <main class="main-content">
-    <div class="container">
-      <!-- Alert -->
-      <div class="alert alert-info">
-        <div class="alert-icon">ℹ</div>
-        <div class="alert-content">
-          <h4>Sample Data Loaded</h4>
-          <p>Currently showing sample data for a mid-sized tech company. Upload your own data using the template below to see personalized insights.</p>
+    <!-- Main Layout with Sidebar -->
+    <div class="module-layout">
+      
+      <!-- Sticky Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Data Mode</div>
+          <div class="data-badge" id="dataModeBadge">Sample Data</div>
         </div>
-      </div>
-
-      <!-- Upload Section -->
-      <section class="section">
-        <div class="card">
-          <h2 class="section-title">
-            <span>📊</span>
-            <span>Data Management</span>
-          </h2>
-          
-          <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-            <div class="upload-icon">📁</div>
-            <div class="upload-title">Upload Your Data</div>
-            <div class="upload-subtitle">Drag and drop your Excel file here, or click to browse</div>
-            <div class="module-actions">
-              <button class="btn btn-ghost" onclick="event.stopPropagation(); loadSampleData()">
-                Use Sample Data
-              </button>
-            </div>
-          </div>
-          
-          <input 
-            type="file" 
-            id="fileInput" 
-            class="file-input" 
-            accept=".xlsx,.xls,.csv"
-            onchange="handleFileUpload(event)"
-          />
-        </div>
-      </section>
-
-      <!-- Key Metrics -->
-      <section class="section">
-        <h2 class="section-title">
-          <span>📈</span>
-          <span>Key Metrics</span>
-        </h2>
         
-        <div class="metrics-grid">
-          <div class="metric-card animate-in">
-            <div class="metric-header">
-              <div class="metric-label">Total Headcount</div>
-              <div class="metric-trend trend-up">+12%</div>
+        <div class="sidebar-section">
+          <div class="sidebar-title">Actions</div>
+          <div class="sidebar-buttons">
+            <button onclick="loadSampleData()" class="btn-small btn-full">Use Sample Data</button>
+            <button onclick="downloadTemplate()" class="btn-small btn-primary btn-full">📥 Download Template</button>
+            <div style="position: relative; width: 100%;">
+              <button class="btn-small btn-full" onclick="document.getElementById('fileInput').click()" style="background: white; border: 1px solid var(--border);">
+                📁 Upload CSV
+              </button>
+              <input 
+                type="file" 
+                id="fileInput" 
+                class="file-input" 
+                accept=".xlsx,.xls,.csv"
+                onchange="handleFileUpload(event)"
+                style="position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"
+              />
             </div>
-            <div class="metric-value" id="totalHeadcount">247</div>
-            <div class="metric-subtitle">vs. 221 prior year</div>
-          </div>
-
-          <div class="metric-card animate-in" style="animation-delay: 100ms">
-            <div class="metric-header">
-              <div class="metric-label">Total Indirect Cost</div>
-              <div class="metric-trend trend-up">+8%</div>
-            </div>
-            <div class="metric-value" id="totalCost">$18.2M</div>
-            <div class="metric-subtitle">vs. $16.8M prior year</div>
-          </div>
-
-          <div class="metric-card animate-in" style="animation-delay: 200ms">
-            <div class="metric-header">
-              <div class="metric-label">Cost per Head</div>
-              <div class="metric-trend trend-down">-4%</div>
-            </div>
-            <div class="metric-value" id="costPerHead">$73.7K</div>
-            <div class="metric-subtitle">vs. $76.0K prior year</div>
           </div>
         </div>
-      </section>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div style="min-width: 0;">
+        <div class="container" style="width: 100%; max-width: 100%;">
+          <!-- Alert -->
+          <div class="alert alert-info">
+            <div class="alert-icon">ℹ</div>
+            <div class="alert-content">
+              <h4>Sample Data Loaded</h4>
+              <p>Currently showing sample data for a mid-sized tech company. Upload your own data using the template to see personalized insights.</p>
+            </div>
+          </div>
+
+          <!-- Key Metrics -->
+          <section class="section">
+            <h2 class="section-title">
+              <span>📈</span>
+              <span>Key Metrics</span>
+            </h2>
+            
+            <div class="metrics-grid">
+              <div class="metric-card animate-in">
+                <div class="metric-header">
+                  <div class="metric-label">Total Headcount</div>
+                  <div class="metric-trend trend-up">+12%</div>
+                </div>
+                <div class="metric-value" id="totalHeadcount">247</div>
+                <div class="metric-subtitle">vs. 221 prior year</div>
+              </div>
+
+              <div class="metric-card animate-in" style="animation-delay: 100ms">
+                <div class="metric-header">
+                  <div class="metric-label">Total Indirect Cost</div>
+                  <div class="metric-trend trend-up">+8%</div>
+                </div>
+                <div class="metric-value" id="totalCost">$18.2M</div>
+                <div class="metric-subtitle">vs. $16.8M prior year</div>
+              </div>
+
+              <div class="metric-card animate-in" style="animation-delay: 200ms">
+                <div class="metric-header">
+                  <div class="metric-label">Cost per Head</div>
+                  <div class="metric-trend trend-down">-4%</div>
+                </div>
+                <div class="metric-value" id="costPerHead">$73.7K</div>
+                <div class="metric-subtitle">vs. $76.0K prior year</div>
+              </div>
+            </div>
+          </section>
 
       <!-- Tabs -->
       <div class="tabs">
@@ -875,6 +972,8 @@
         </div>
       </div>
     </div>
+      </div> <!-- End main content area -->
+    </div> <!-- End module-layout -->
   </main>
 
   <script>
@@ -980,6 +1079,12 @@
     function loadSampleData() {
       currentData = generateRandomData();
       renderAllData();
+      
+      // Update sidebar badge
+      const badge = document.getElementById('dataModeBadge');
+      if (badge) {
+        badge.textContent = 'Sample Data';
+      }
       
       // Show success message
       showNotification('Sample data randomized successfully!', 'success');
@@ -1289,6 +1394,16 @@
           if (parsedData) {
             currentData = parsedData;
             renderAllData();
+            
+            // Update sidebar badge
+            const badge = document.getElementById('dataModeBadge');
+            if (badge) {
+              badge.textContent = 'Your Data';
+              badge.style.background = 'rgba(5, 150, 105, 0.10)';
+              badge.style.borderColor = 'rgba(5, 150, 105, 0.20)';
+              badge.style.color = 'var(--success)';
+            }
+            
             showNotification('File uploaded successfully!', 'success');
           } else {
             showNotification('Invalid file format. Please use the template.', 'error');
@@ -1513,27 +1628,29 @@
       }, 4000);
     }
 
-    // Drag and drop
+    // Drag and drop (if uploadArea exists for backwards compatibility)
     const uploadArea = document.getElementById('uploadArea');
     
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('dragover');
-    });
+    if (uploadArea) {
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
 
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('dragover');
-    });
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
 
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('dragover');
-      
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        handleFileUpload({ target: { files } });
-      }
-    });
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileUpload({ target: { files } });
+        }
+      });
+    }
 
     // Download template
     function downloadTemplate() {
