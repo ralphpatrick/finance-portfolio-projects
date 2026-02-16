@@ -386,58 +386,6 @@
       flex-shrink: 0;
     }
     
-    /* Tooltip styling for help icons */
-    .help-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(15, 118, 110, 0.10);
-      border: 1px solid rgba(15, 118, 110, 0.20);
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: help;
-      position: relative;
-      flex-shrink: 0;
-    }
-    
-    .help-icon::before {
-      content: '?';
-      line-height: 1;
-    }
-    
-    /* Tooltip hover styling - using textContent approach */
-    .help-tooltip {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-bottom: 8px;
-      padding: 12px 16px;
-      background: rgba(11, 18, 32, 0.95);
-      color: white;
-      font-size: 12px;
-      line-height: 1.6;
-      border-radius: 10px;
-      white-space: pre-line;
-      width: 360px;
-      max-width: 90vw;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      font-weight: 400;
-      text-align: left;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 150ms ease;
-    }
-    
-    .help-icon:hover .help-tooltip {
-      opacity: 1;
-    }
-    
     @media (max-width: 980px) {
       .module-layout {
         grid-template-columns: 1fr;
@@ -511,6 +459,24 @@
         <div id="dataModeBadge" class="data-badge">Sample Data</div>
       </div>
 
+      <!-- Starting Cash Balance -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">STARTING CASH</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <input 
+            type="number" 
+            id="cashBalanceInput" 
+            value="2400000" 
+            step="100000"
+            style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: var(--font-sans); width: 100%;"
+            onchange="updateCashBalance()"
+          />
+          <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">
+            Cash in bank. Used to calculate runway.
+          </div>
+        </div>
+      </div>
+
       <!-- Actions -->
       <div class="sidebar-section">
         <div class="sidebar-title">ACTIONS</div>
@@ -527,21 +493,15 @@
         <div class="scenario-tabs">
           <button class="scenario-tab active" data-scenario="base" onclick="onScenarioChange('base')">
             <span>Base Case</span>
-            <span class="help-icon">
-              <span class="help-tooltip">Standard performance assumptions with balanced growth and costs</span>
-            </span>
+            <span class="help-icon" data-help="Standard performance assumptions with balanced growth and costs"></span>
           </button>
           <button class="scenario-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
             <span>Upside</span>
-            <span class="help-icon">
-              <span class="help-tooltip">Optimistic scenario: +15% capacity, higher utilization, lower attrition</span>
-            </span>
+            <span class="help-icon" data-help="Optimistic scenario: +25% capacity, higher utilization, lower attrition"></span>
           </button>
           <button class="scenario-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
             <span>Downside</span>
-            <span class="help-icon">
-              <span class="help-tooltip">Conservative scenario: -15% capacity, lower utilization, higher attrition</span>
-            </span>
+            <span class="help-icon" data-help="Conservative scenario: -25% capacity, lower utilization, higher attrition"></span>
           </button>
         </div>
       </div>
@@ -553,9 +513,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Summary</h2>
-          <span class="help-icon">
-            <span class="help-tooltip">High-level view of headcount, costs, and runway across all functions</span>
-          </span>
+          <span class="help-icon" data-help="Quick snapshot to spot problems fast: Are we overstaffed? Burning too much cash? Team overloaded? This tells you at a glance."></span>
         </div>
         <div id="summaryKPIs" class="kpi-grid"></div>
       </section>
@@ -564,8 +522,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Org Structure by Function</h2>
-          <span class="help-icon" id="opexHelp">
-          </span>
+          <span class="help-icon" id="opexHelp" data-help="Shows where your money goes each month. Helps you compare team sizes and costs across Sales, Engineering, G&A, and Ops."></span>
         </div>
         
         <div class="module-card">
@@ -589,8 +546,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Fully Loaded Cost Structure</h2>
-          <span class="help-icon" id="fullyLoadedCostHelp">
-          </span>
+          <span class="help-icon" id="fullyLoadedCostHelp" data-help="The real cost of an employee isn't just their salary. This breaks down benefits, taxes, bonuses, and one-time costs so you know what hiring actually costs."></span>
         </div>
         <div id="fullyLoadedCosts"></div>
       </section>
@@ -599,8 +555,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Capacity & Utilization</h2>
-          <span class="help-icon" id="utilizationHelp">
-          </span>
+          <span class="help-icon" id="utilizationHelp" data-help="Shows if your team is underwater (too much work) or underutilized (paying for capacity you don't need). Critical for timing your next hire."></span>
         </div>
         
         <div class="module-card">
@@ -621,8 +576,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Hiring Justification Logic</h2>
-          <span class="help-icon" id="hiringTriggersHelp">
-          </span>
+          <span class="help-icon" id="hiringTriggersHelp" data-help="Takes the guesswork out of hiring. Shows exactly when to hire (team is overloaded) vs. when to delay (cash is tight). Based on data, not gut feel."></span>
         </div>
         <div id="hiringTriggers"></div>
       </section>
@@ -631,8 +585,7 @@
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Hiring Strategy Comparison</h2>
-          <span class="help-icon" id="runwayHelp">
-          </span>
+          <span class="help-icon" id="runwayHelp" data-help="Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk team burnout. This shows the tradeoff so you can choose wisely."></span>
         </div>
 
         <div class="module-card">
@@ -930,7 +883,32 @@
       badge.className = dataMode === 'sample' ? 'data-badge' : 'data-badge random';
     }
 
-    // ========== TOOLTIP ENGINE (textContent approach) ==========
+    function updateCashBalance() {
+      const input = document.getElementById('cashBalanceInput');
+      const newCash = parseFloat(input.value) || 2400000;
+      
+      // Update the active dataset's runway cash
+      if (activeDataset) {
+        activeDataset.runway.cash = newCash;
+        
+        // Also update baseDataset so scenario changes preserve the new cash value
+        if (baseDataset) {
+          baseDataset.runway.cash = newCash;
+        }
+        
+        // Re-render to show updated runway
+        renderAll();
+      }
+    }
+
+    function syncCashBalanceInput() {
+      const input = document.getElementById('cashBalanceInput');
+      if (activeDataset && input) {
+        input.value = activeDataset.runway.cash;
+      }
+    }
+
+    // ========== TOOLTIP ENGINE (data-help approach matching style.css) ==========
     
     function updateTooltips() {
       if (!activeDataset) return;
@@ -948,34 +926,30 @@
       }, 0) / FUNCTIONS.length;
       const runway = data.runway.cash / data.runway.burn;
       
-      // Opex tooltip
-      const opexHelp = document.querySelector('#opexHelp .help-tooltip');
+      // Update section tooltips with current data
+      const opexHelp = document.querySelector('#opexHelp');
       if (opexHelp) {
-        opexHelp.textContent = `Operating Expenses (Opex)\n\nDefinition: All operating costs including fully loaded headcount costs. Current total: $${formatCurrency(totalCost, 0)}/month\n\nCalculation: Sum of all function costs (salary + benefits + taxes + bonus + one-time costs)\n\nNote: Opex % of Revenue measures efficiency—lower is better (typical SaaS: 60-80%)`;
+        opexHelp.setAttribute('data-help', `Shows where your money goes each month. Currently spending ${formatCurrency(totalCost, 0)}/month total. Helps you compare team sizes and costs across Sales, Engineering, G&A, and Ops.`);
       }
       
-      // Fully Loaded Cost tooltip
-      const fullyLoadedHelp = document.querySelector('#fullyLoadedCostHelp .help-tooltip');
+      const fullyLoadedHelp = document.querySelector('#fullyLoadedCostHelp');
       if (fullyLoadedHelp) {
-        fullyLoadedHelp.textContent = `Fully Loaded Cost\n\nDefinition: Total cost of an employee including salary, benefits, taxes, bonuses, equipment, recruiting, and onboarding.\n\nCalculation: Base Salary + Benefits (15-25%) + Taxes (7-9%) + Bonus (10-20%) + One-time costs (equipment ~$3.5K, recruiting ~$8K, onboarding ~$4.5K)\n\nTypical Range: 1.3-1.5x base salary annually`;
+        fullyLoadedHelp.setAttribute('data-help', `The real cost of an employee isn't just their salary. This breaks down benefits, taxes, bonuses, and one-time costs so you know what hiring actually costs.`);
       }
       
-      // Utilization tooltip
-      const utilizationHelp = document.querySelector('#utilizationHelp .help-tooltip');
+      const utilizationHelp = document.querySelector('#utilizationHelp');
       if (utilizationHelp) {
-        utilizationHelp.textContent = `Utilization (%)\n\nDefinition: Percentage of available capacity being used. Measures how efficiently headcount is deployed.\n\nCalculation: (Actual Demand ÷ Available Capacity) × 100. Current avg: ${avgUtil.toFixed(1)}%\n\nTypical Range: 70-85% (healthy), >85% (bottleneck risk), <70% (overcapacity)`;
+        utilizationHelp.setAttribute('data-help', `Shows if your team is underwater (too much work) or underutilized (paying for capacity you don't need). Current avg: ${avgUtil.toFixed(1)}%. Critical for timing your next hire.`);
       }
       
-      // Hiring Triggers tooltip
-      const hiringTriggersHelp = document.querySelector('#hiringTriggersHelp .help-tooltip');
+      const hiringTriggersHelp = document.querySelector('#hiringTriggersHelp');
       if (hiringTriggersHelp) {
-        hiringTriggersHelp.textContent = `Hiring Triggers\n\nDefinition: Data-driven rules for when to hire or delay hiring decisions.\n\nRules in this model:\n• Recommend hire if: Utilization >85% for 2+ months OR Backlog growth >15%/month\n• Recommend delay if: Runway <6 months\n• Monitor if: Utilization <70% (potential overcapacity)\n\nPurpose: Prevents both understaffing (team burnout) and overstaffing (cash burn)`;
+        hiringTriggersHelp.setAttribute('data-help', `Takes the guesswork out of hiring. Shows exactly when to hire (team is overloaded) vs. when to delay (cash is tight). Based on data, not gut feel.`);
       }
       
-      // Runway tooltip
-      const runwayHelp = document.querySelector('#runwayHelp .help-tooltip');
+      const runwayHelp = document.querySelector('#runwayHelp');
       if (runwayHelp) {
-        runwayHelp.textContent = `Runway (Months of Cash)\n\nDefinition: Months of cash remaining at current burn rate. Critical metric for capital planning.\n\nCalculation: Cash Balance ($${formatCurrency(data.runway.cash, 0)}) ÷ Monthly Burn ($${formatCurrency(data.runway.burn, 0)}) = ${runway.toFixed(1)} months\n\nTypical Range: 6-18 months (healthy), <6 months (critical), >18 months (comfortable)`;
+        runwayHelp.setAttribute('data-help', `Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk team burnout. Current runway: ${runway.toFixed(1)} months. This shows the tradeoff so you can choose wisely.`);
       }
     }
 
@@ -1008,12 +982,18 @@
           <div class="kpi-box-sub">Fully loaded</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Avg Utilization</div>
+          <div class="kpi-box-label">
+            Avg Utilization
+            <span class="help-icon" data-help="What % of your team's capacity is being used. >85% = overloaded (hire soon), 70-85% = healthy, <70% = underutilized (delay hiring)." style="margin-left: 4px;"></span>
+          </div>
           <div class="kpi-box-value" style="color: ${avgUtil > 85 ? COLORS.warning : avgUtil > 75 ? COLORS.caution : COLORS.success};">${avgUtil.toFixed(1)}%</div>
           <div class="kpi-box-sub">${avgUtil > 85 ? 'Consider hiring' : avgUtil < 70 ? 'Underutilized' : 'Healthy range'}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Runway</div>
+          <div class="kpi-box-label">
+            Runway
+            <span class="help-icon" data-help="Months until you run out of cash at current burn rate. <6 months = critical, 6-12 months = tight, >12 months = comfortable." style="margin-left: 4px;"></span>
+          </div>
           <div class="kpi-box-value" style="color: ${runway < 6 ? COLORS.warning : runway < 12 ? COLORS.caution : COLORS.success};">${runway.toFixed(1)} mo</div>
           <div class="kpi-box-sub">At current burn</div>
         </div>
@@ -1237,6 +1217,15 @@
               <div class="card-title">${func.name}</div>
               <div style="font-size: 13px; color: var(--muted);">${func.headcount} employees</div>
             </div>
+            <div style="padding: 12px 16px; background: rgba(246,248,251,0.7); border-left: 3px solid ${COLORS.functions[FUNCTIONS.indexOf(func.name)]}; border-radius: 8px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--text);">
+              ${func.name === 'Sales' ? 
+                'What it costs to close deals. Includes reps, managers, and sales ops. Higher comp plans (bonuses) reflect commission structures.' :
+              func.name === 'Engineering' ?
+                'What it costs to build product. Includes developers, product managers, designers. High salary reflects competitive tech talent market.' :
+              func.name === 'G&A' ?
+                'What it costs to run the company. Includes finance, HR, legal, admin. Enables the business to function but doesn\'t directly generate revenue.' :
+                'What it costs to serve customers. Includes support, success, implementation. Scales with customer count and complexity.'}
+            </div>
             <div class="kpi-grid">
               <div class="kpi-box">
                 <div class="kpi-box-label">Monthly/Head</div>
@@ -1247,11 +1236,17 @@
                 <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(annualPerHead, 0)}</div>
               </div>
               <div class="kpi-box">
-                <div class="kpi-box-label">Monthly Run Rate</div>
+                <div class="kpi-box-label">
+                  Monthly Run Rate
+                  <span class="help-icon" data-help="Recurring monthly cost (salary + benefits + taxes + bonus). This is what you pay every month, excluding one-time costs." style="margin-left: 4px;"></span>
+                </div>
                 <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(runRate, 0)}</div>
               </div>
               <div class="kpi-box">
-                <div class="kpi-box-label">One-Time Costs</div>
+                <div class="kpi-box-label">
+                  One-Time Costs
+                  <span class="help-icon" data-help="Upfront costs when hiring (equipment, recruiting fees, onboarding). You pay these once, not every month. Spikes your burn rate in hiring months." style="margin-left: 4px;"></span>
+                </div>
                 <div class="kpi-box-value" style="font-size: 18px; color: ${oneTime > 0 ? COLORS.caution : COLORS.success};">${formatCurrency(oneTime, 0)}</div>
               </div>
             </div>
@@ -1386,7 +1381,14 @@
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
       
-      let html = '<thead><tr><th>Function</th><th>Capacity</th><th>Demand</th><th>Utilization</th><th>Backlog</th><th>Backlog %</th></tr></thead><tbody>';
+      let html = `<thead><tr>
+        <th>Function</th>
+        <th>Capacity <span class="help-icon" data-help="Max output your team can produce (accounts for new hire ramp-up: 25%/50%/75%/100% over 4 months)." style="margin-left: 4px;"></span></th>
+        <th>Demand <span class="help-icon" data-help="Actual workload or requests coming in. When demand > capacity, you have a backlog." style="margin-left: 4px;"></span></th>
+        <th>Utilization <span class="help-icon" data-help="Demand ÷ Capacity. Shows how hard your team is working. >85% = hire, 70-85% = healthy, <70% = underutilized." style="margin-left: 4px;"></span></th>
+        <th>Backlog <span class="help-icon" data-help="Work piling up because demand exceeds capacity. Growing backlog = need to hire." style="margin-left: 4px;"></span></th>
+        <th>Backlog %</th>
+      </tr></thead><tbody>`;
       
       last.functions.forEach(func => {
         const util = (func.capacity.demand / func.capacity.capacity) * 100;
@@ -1901,6 +1903,7 @@ Notes:
       renderStrategyComparison();
       setupChartInteractions();
       updateTooltips();
+      syncCashBalanceInput();
     }
 
     // ========== INIT ==========
