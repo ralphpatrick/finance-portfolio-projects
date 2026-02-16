@@ -865,6 +865,30 @@
         min-height: auto;
       }
     }
+    
+    /* Capital Allocation & Working Capital Styles */
+    .allocation-results,
+    .wc-results {
+      transition: opacity 0.3s ease;
+    }
+    
+    .allocation-results .strong,
+    .wc-results .strong {
+      color: #059669;
+      font-weight: 600;
+    }
+    
+    .allocation-results .moderate,
+    .wc-results .moderate {
+      color: #d97706;
+      font-weight: 600;
+    }
+    
+    .allocation-results .fragile,
+    .wc-results .fragile {
+      color: #dc2626;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -942,6 +966,16 @@
             </div>
           </div>
         </div>
+        
+        <div class="sidebar-section">
+          <div class="sidebar-title">Cash Controls</div>
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 4px;">
+              <span class="term-helper" data-definition="Starting Cash Balance: The amount of cash you have today before adding future profit or burn. Used to estimate runway and funding requirements.">Starting Cash</span> ($)
+            </label>
+            <input type="number" id="cashBalance" value="2400000" onchange="computeCashRunway(); renderBoardView(); computeCapitalAllocation(); computeWorkingCapital();" style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px;">
+          </div>
+        </div>
       </aside>
 
       <!-- Main Content -->
@@ -991,6 +1025,68 @@
                 <div class="board-narrative-title"><span class="term-helper" data-definition="Recommendation: Plain-English strategic guidance based on your current financial position. Tells you whether to prioritize efficiency, scale cautiously, or invest in growth.">Recommendation</span></div>
                 <div class="board-narrative-content" id="boardRecommendation">—</div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Capital Allocation: Growth Investment Scenario -->
+        <section class="module-section">
+          <div class="section-header-with-help">
+            <h2 class="module-section-title"><span class="term-helper" data-definition="Capital Allocation: Evaluate the financial impact of a proposed growth investment. Helps determine if incremental spending creates or destroys value based on your unit economics.">Capital Allocation</span> — Growth Investment Scenario</h2>
+          </div>
+          
+          <div class="module-card">
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">
+              Model the operational impact of a growth investment without complex valuation math. Focused on payback and runway impact.
+            </p>
+            
+            <div class="input-grid" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="input-field">
+                <label><span class="term-helper" data-definition="Growth Investment: One-time or staged capital deployment for expansion. Examples: hiring sales team, launching new market, building product feature.">Growth Investment</span> ($)</label>
+                <input type="number" id="growthInvestment" value="500000" onchange="computeCapitalAllocation()">
+              </div>
+              <div class="input-field">
+                <label><span class="term-helper" data-definition="Expected New Customers: Incremental customers from this investment over the measurement period (typically 12 months).">Expected New Customers</span></label>
+                <input type="number" id="expectedNewCustomers" value="250" onchange="computeCapitalAllocation()">
+              </div>
+            </div>
+            
+            <!-- Results Display -->
+            <div class="allocation-results" id="allocationResults" style="margin-top: 20px;">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Working Capital Impact -->
+        <section class="module-section">
+          <div class="section-header-with-help">
+            <h2 class="module-section-title"><span class="term-helper" data-definition="Working Capital: Cash tied up between spending money and collecting it. Includes AR (money owed to you), AP (money you owe), and deferred revenue (cash received but not yet earned).">Working Capital</span> — Cash Flow Timing Impact</h2>
+          </div>
+          
+          <div class="module-card">
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">
+              Simple approximation for planning purposes. Not a full balance sheet model.
+            </p>
+            
+            <div class="input-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <div class="input-field">
+                <label><span class="term-helper" data-definition="AR Days: Average time customers take to pay. Higher AR days delays cash collection. Typical SaaS: 30-60 days.">AR Days</span></label>
+                <input type="number" id="arDays" value="45" onchange="computeWorkingCapital()">
+              </div>
+              <div class="input-field">
+                <label><span class="term-helper" data-definition="AP Days: Average time you take to pay vendors. Higher AP days keeps cash longer. Typical: 30-60 days.">AP Days</span></label>
+                <input type="number" id="apDays" value="30" onchange="computeWorkingCapital()">
+              </div>
+              <div class="input-field">
+                <label><span class="term-helper" data-definition="Deferred Revenue %: Cash collected before service is delivered. Higher % can improve near-term cash. Common in SaaS with annual contracts.">Deferred Revenue</span> (%)</label>
+                <input type="number" step="1" id="deferredRevPct" value="40" onchange="computeWorkingCapital()">
+              </div>
+            </div>
+            
+            <!-- Results Display -->
+            <div class="wc-results" id="wcResults" style="margin-top: 20px;">
+              <!-- Populated by JS -->
             </div>
           </div>
         </section>
@@ -1160,13 +1256,6 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
           <div class="module-card">
             <div class="card-header">
               <h3 class="card-title">Liquidity & Survival Analysis</h3>
-            </div>
-
-            <div class="input-grid">
-              <div class="input-field">
-                <label>Starting <span class="term-helper" data-definition="Cash Balance: Total cash you have available right now to fund operations. This is your financial cushion and determines how long you can survive at your current burn rate.">Cash Balance</span> ($)</label>
-                <input type="number" id="cashBalance" value="2400000" onchange="computeCashRunway(); renderBoardView();">
-              </div>
             </div>
 
             <div class="cash-widget" id="cashWidget">
@@ -1536,6 +1625,85 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       renderAll();
     }
     
+    // ========== CAPITAL EFFICIENCY EVALUATOR (Centralized) ==========
+    
+    /**
+     * Centralized capital efficiency scoring function
+     * Returns consistent scoring across all views (CAC/LTV card, Board View, etc.)
+     * 
+     * Thresholds (Director-level standards):
+     * - LTV:CAC: >=4 strong, >=3 moderate, <3 weak
+     * - Payback: <=12 strong, <=18 moderate, >18 weak  
+     * - Gross Margin: >=70 strong, >=60 moderate, <60 weak
+     * 
+     * Weighting: 40% LTV:CAC, 30% Payback, 30% Gross Margin
+     */
+    function evaluateCapitalEfficiency({ ltvToCac, paybackMonths, grossMargin }) {
+      let score = 0;
+      let ltvScore = 0;
+      let paybackScore = 0;
+      let marginScore = 0;
+      
+      // Factor 1: LTV:CAC Ratio (0-40 points)
+      if (ltvToCac >= 4) {
+        ltvScore = 40;
+      } else if (ltvToCac >= 3) {
+        ltvScore = 30;
+      } else if (ltvToCac >= 2) {
+        ltvScore = 20;
+      } else if (ltvToCac >= 1) {
+        ltvScore = 10;
+      }
+      
+      // Factor 2: Payback Period (0-30 points)
+      if (paybackMonths <= 6) {
+        paybackScore = 30;
+      } else if (paybackMonths <= 12) {
+        paybackScore = 25;
+      } else if (paybackMonths <= 18) {
+        paybackScore = 15;
+      } else if (paybackMonths <= 24) {
+        paybackScore = 5;
+      }
+      
+      // Factor 3: Gross Margin (0-30 points)
+      if (grossMargin >= 70) {
+        marginScore = 30;
+      } else if (grossMargin >= 60) {
+        marginScore = 20;
+      } else if (grossMargin >= 55) {
+        marginScore = 10;
+      }
+      
+      score = ltvScore + paybackScore + marginScore;
+      
+      // Determine rating
+      let rating = '';
+      let interpretation = '';
+      
+      if (score >= 75) {
+        rating = 'Strong';
+        interpretation = 'Your growth creates significantly more value than it consumes. You can scale efficiently without requiring constant external capital. Investors see this as a compounding machine.';
+      } else if (score >= 50) {
+        rating = 'Moderate';
+        interpretation = 'Your unit economics support sustainable growth, but you\'ll need periodic capital injections to fund expansion. Focus on improving either LTV (reduce churn, increase ARPA) or CAC (improve conversion rates).';
+      } else {
+        rating = 'Fragile';
+        interpretation = 'Growth requires significant external capital to sustain. Each new customer consumes more cash than it generates in the short term. You must either improve unit economics or secure substantial funding before scaling aggressively.';
+      }
+      
+      return {
+        score,
+        rating,
+        interpretation,
+        breakdown: {
+          ltvScore,
+          paybackScore,
+          marginScore
+        }
+      };
+    }
+    
     // ========== CAC/LTV FUNCTIONS ==========
     
     function computeCACLTV() {
@@ -1566,48 +1734,21 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
         </div>
       `;
       
-      // === CAPITAL EFFICIENCY SCORE ===
-      let score = 0;
-      let rating = '';
-      let interpretation = '';
+      // === CAPITAL EFFICIENCY SCORE (using centralized evaluator) ===
+      const efficiency = evaluateCapitalEfficiency({
+        ltvToCac: ratio,
+        paybackMonths: payback,
+        grossMargin: inputs.grossMargin
+      });
       
-      // Factor 1: LTV:CAC Ratio (0-40 points)
-      if (ratio >= 4) score += 40;
-      else if (ratio >= 3) score += 30;
-      else if (ratio >= 2) score += 20;
-      else if (ratio >= 1) score += 10;
-      
-      // Factor 2: Payback Period (0-30 points)
-      if (payback <= 6) score += 30;
-      else if (payback <= 12) score += 20;
-      else if (payback <= 18) score += 10;
-      else if (payback <= 24) score += 5;
-      
-      // Factor 3: Gross Margin (0-30 points)
-      if (inputs.grossMargin >= 75) score += 30;
-      else if (inputs.grossMargin >= 65) score += 20;
-      else if (inputs.grossMargin >= 55) score += 10;
-      
-      // Determine rating and interpretation
-      if (score >= 75) {
-        rating = 'Strong';
-        interpretation = 'Your growth creates significantly more value than it consumes. You can scale efficiently without requiring constant external capital. Investors see this as a compounding machine.';
-      } else if (score >= 50) {
-        rating = 'Moderate';
-        interpretation = 'Your unit economics support sustainable growth, but you\'ll need periodic capital injections to fund expansion. Focus on improving either LTV (reduce churn, increase ARPA) or CAC (improve conversion rates).';
-      } else {
-        rating = 'Fragile';
-        interpretation = 'Growth requires significant external capital to sustain. Each new customer consumes more cash than it generates in the short term. You must either improve unit economics or secure substantial funding before scaling aggressively.';
-      }
-      
-      const scoreClass = rating.toLowerCase();
+      const scoreClass = efficiency.rating.toLowerCase();
       document.getElementById('efficiencyScore').innerHTML = `
         <div class="efficiency-rating" style="color: var(--muted);">
           <span class="term-helper" data-definition="This score combines three key signals: LTV:CAC ratio (40 points max), payback period (30 points max), and gross margin (30 points max). Total 100 points possible. Higher score means growth creates value faster than it consumes cash. 75+ is strong, 50-74 is moderate, under 50 needs improvement.">Capital Efficiency</span> Score
         </div>
-        <div class="efficiency-score ${scoreClass}">${score}/100</div>
-        <div class="efficiency-rating ${scoreClass}">${rating}</div>
-        <div class="efficiency-interpretation">${interpretation}</div>
+        <div class="efficiency-score ${scoreClass}">${efficiency.score}/100</div>
+        <div class="efficiency-rating ${scoreClass}">${efficiency.rating}</div>
+        <div class="efficiency-interpretation">${efficiency.interpretation}</div>
       `;
       
       // === PAYBACK SENSITIVITY TABLE ===
@@ -2469,39 +2610,19 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
       const netBurn = avgOpEx - (avgRev * (avgGM / 100));
       
-      // Capital Efficiency Score (matching computeCACLTV logic)
-      let score = 0;
-      
-      // Factor 1: LTV:CAC Ratio (0-40 points)
-      if (ltvCacRatio >= 5) score += 40;
-      else if (ltvCacRatio >= 4) score += 35;
-      else if (ltvCacRatio >= 3) score += 25;
-      else if (ltvCacRatio >= 2) score += 15;
-      else if (ltvCacRatio >= 1.5) score += 5;
-      
-      // Factor 2: Payback Period (0-30 points)
-      if (payback <= 6) score += 30;
-      else if (payback <= 12) score += 20;
-      else if (payback <= 18) score += 10;
-      else if (payback <= 24) score += 5;
-      
-      // Factor 3: Gross Margin (0-30 points)
-      if (inputs.grossMargin >= 75) score += 30;
-      else if (inputs.grossMargin >= 65) score += 20;
-      else if (inputs.grossMargin >= 55) score += 10;
-      
-      // Determine rating
-      let rating = '';
-      if (score >= 75) rating = 'Strong';
-      else if (score >= 50) rating = 'Moderate';
-      else rating = 'Fragile';
+      // Capital Efficiency Score (using centralized evaluator)
+      const efficiency = evaluateCapitalEfficiency({
+        ltvToCac: ltvCacRatio,
+        paybackMonths: payback,
+        grossMargin: inputs.grossMargin
+      });
       
       // === 1. CAPITAL HEALTH KPI ===
       const healthElement = document.getElementById('boardCapitalHealth');
-      healthElement.textContent = rating;
-      healthElement.className = 'board-kpi-value ' + rating.toLowerCase();
+      healthElement.textContent = efficiency.rating;
+      healthElement.className = 'board-kpi-value ' + efficiency.rating.toLowerCase();
       
-      document.getElementById('boardCapitalNote').textContent = `${score}/100 efficiency score`;
+      document.getElementById('boardCapitalNote').textContent = `${efficiency.score}/100 efficiency score`;
       
       // === 2. RUNWAY KPI ===
       const EPSILON = 100;
@@ -2557,7 +2678,11 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       }
       
       document.getElementById('boardFundingGap').textContent = fundingGap === 0 ? '$0' : `~${formatCurrency(fundingGap)}`;
-      document.getElementById('boardFundingNote').textContent = fundingNote;
+      
+      // PART 2: Add bridge math explanation
+      const bridgeMath = `<div style="font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic;">Net Burn = OpEx − (MRR × <span class="term-helper" data-definition="GM (Gross Margin) is used here as a proxy for contribution margin. It represents revenue after variable costs but does not include all costs below gross profit. For precise cash planning, consider full variable cost structure.">GM</span>%) = ${formatCurrency(avgOpEx)} − ${formatCurrency(avgRev * (avgGM / 100))} = ${formatCurrency(netBurn)}/mo</div>`;
+      
+      document.getElementById('boardFundingNote').innerHTML = fundingNote + bridgeMath;
       
       // === 4. PRIMARY RISK ===
       let riskText = '';
@@ -2600,20 +2725,195 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       
       document.getElementById('boardLevers').innerHTML = leversText;
       
-      // === 6. RECOMMENDATION ===
+      // === 6. RECOMMENDATION (using centralized rating) ===
       let recommendation = '';
       
-      if (rating === 'Fragile' || (netBurn > 0 && cashBalance / netBurn < 12)) {
+      if (efficiency.rating === 'Fragile' || (netBurn > 0 && cashBalance / netBurn < 12)) {
         recommendation = `<strong>Prioritize Efficiency Before Scaling:</strong> Current unit economics are fragile and/or runway is short. Focus on improving LTV:CAC, reducing churn, and extending runway before aggressive growth investments. Prove model sustainability first.`;
-      } else if (rating === 'Moderate' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
+      } else if (efficiency.rating === 'Moderate' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
         recommendation = `<strong>Scale Selectively:</strong> Unit economics support sustainable growth, but maintain CAC and churn discipline. Expand cautiously into proven channels. Avoid over-hiring or premature market expansion that could compress margins.`;
-      } else if (rating === 'Strong' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
+      } else if (efficiency.rating === 'Strong' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
         recommendation = `<strong>Invest in Growth with Guardrails:</strong> Strong unit economics and healthy runway support aggressive scaling. Invest in new channels, geographies, or products—but maintain rigorous monitoring of CAC, churn, and payback to avoid efficiency erosion.`;
       } else {
         recommendation = `<strong>Improve Efficiency and Extend Runway:</strong> Focus on the top levers identified above. Balance growth ambitions with the need to demonstrate capital efficiency and reach a comfortable runway before next fundraise.`;
       }
       
       document.getElementById('boardRecommendation').innerHTML = recommendation;
+    }
+    
+    // ========== CAPITAL ALLOCATION FUNCTIONS ==========
+    
+    function computeCapitalAllocation() {
+      const investment = parseFloat(document.getElementById('growthInvestment').value) || 0;
+      const newCustomers = parseFloat(document.getElementById('expectedNewCustomers').value) || 0;
+      const inputs = cacLtvInputs[currentScenario];
+      
+      if (investment <= 0 || newCustomers <= 0) {
+        document.getElementById('allocationResults').innerHTML = '<div style="font-size: 13px; color: var(--muted); font-style: italic;">Enter growth investment and expected new customers to see analysis.</div>';
+        return;
+      }
+      
+      // Reuse existing unit economics
+      const arpa = inputs.arpa;
+      const grossMargin = inputs.grossMargin;
+      const churnRate = inputs.churnRate;
+      
+      // Compute incremental metrics
+      const effectiveCAC = investment / newCustomers;
+      const monthlyGrossProfit = arpa * (grossMargin / 100);
+      const paybackMonths = effectiveCAC / monthlyGrossProfit;
+      
+      // Incremental annual revenue (accounting for churn)
+      const avgCustomerLifeMonths = 1 / (churnRate / 100);
+      const incrementalRevenue = newCustomers * arpa * Math.min(avgCustomerLifeMonths, 12);
+      const incrementalGrossProfit = incrementalRevenue * (grossMargin / 100);
+      
+      // Impact on runway (assumes investment increases monthly OpEx via amortization)
+      const data = runrateData[currentScenario];
+      const avgOpEx = data.reduce((sum, d) => sum + d.opex, 0) / data.length;
+      const avgRev = data.reduce((sum, d) => sum + d.mrr, 0) / data.length;
+      const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
+      const currentNetBurn = avgOpEx - (avgRev * (avgGM / 100));
+      
+      // Adjusted burn (adds new customers to revenue, amortizes investment over 12 months)
+      const monthlyInvestmentCost = investment / 12;
+      const newMRR = newCustomers * arpa;
+      const adjustedNetBurn = (avgOpEx + monthlyInvestmentCost) - ((avgRev + newMRR) * (avgGM / 100));
+      
+      const cashBalance = parseFloat(document.getElementById('cashBalance').value) || 0;
+      const currentRunway = currentNetBurn > 0 ? cashBalance / currentNetBurn : 999;
+      const adjustedRunway = adjustedNetBurn > 0 ? cashBalance / adjustedNetBurn : 999;
+      const runwayImpact = adjustedRunway - currentRunway;
+      
+      // Decision logic
+      let decision = '';
+      let decisionClass = '';
+      
+      if (paybackMonths <= 12 && runwayImpact >= -3) {
+        decision = 'Accretive Growth';
+        decisionClass = 'strong';
+      } else if (paybackMonths > 24 || runwayImpact < -6) {
+        decision = 'Capital Destructive';
+        decisionClass = 'fragile';
+      } else {
+        decision = 'Neutral / Proceed with Caution';
+        decisionClass = 'moderate';
+      }
+      
+      // Display results
+      document.getElementById('allocationResults').innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+          <div class="kpi-box">
+            <div class="kpi-box-label">Effective CAC</div>
+            <div class="kpi-box-value" style="font-size: 20px;">${formatCurrency(effectiveCAC)}</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label"><span class="term-helper" data-definition="Simple Payback: Months to recover investment through gross profit. Does not include time value of money or discount rates.">Simple Payback</span></div>
+            <div class="kpi-box-value" style="font-size: 20px;">${paybackMonths.toFixed(1)} mo</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">Incremental Gross Profit (12mo)</div>
+            <div class="kpi-box-value" style="font-size: 20px;">${formatCurrency(incrementalGrossProfit)}</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label"><span class="term-helper" data-definition="Runway Impact: Change in months of runway after accounting for investment cost and new revenue. Negative means runway shortens; positive means it extends.">Runway Impact</span></div>
+            <div class="kpi-box-value" style="font-size: 20px; color: ${runwayImpact >= 0 ? '#059669' : '#dc2626'};">${runwayImpact >= 0 ? '+' : ''}${runwayImpact.toFixed(1)} mo</div>
+          </div>
+        </div>
+        
+        <div style="padding: 16px; background: rgba(246, 248, 251, 0.5); border: 1px solid var(--border); border-radius: 12px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text);">
+            Decision: <span class="${decisionClass}" style="font-size: 16px;">${decision}</span>
+          </div>
+          <div style="font-size: 13px; line-height: 1.6; color: var(--muted);">
+            ${paybackMonths <= 12 
+              ? `Quick payback (${paybackMonths.toFixed(1)} months) suggests this investment recovers quickly through gross profit.`
+              : paybackMonths > 24
+              ? `Long payback (${paybackMonths.toFixed(1)} months) means extended cash drag before break-even.`
+              : `Moderate payback (${paybackMonths.toFixed(1)} months) is manageable but requires monitoring.`
+            }
+            ${runwayImpact >= 0
+              ? ` Investment extends runway by ${runwayImpact.toFixed(1)} months—revenue growth outpaces burn increase.`
+              : Math.abs(runwayImpact) > 6
+              ? ` <strong>Warning:</strong> Runway shortens by ${Math.abs(runwayImpact).toFixed(1)} months—significant liquidity risk.`
+              : ` Runway shortens by ${Math.abs(runwayImpact).toFixed(1)} months—acceptable if ROI materializes.`
+            }
+          </div>
+        </div>
+      `;
+    }
+    
+    // ========== WORKING CAPITAL FUNCTIONS ==========
+    
+    function computeWorkingCapital() {
+      const arDays = parseFloat(document.getElementById('arDays').value) || 0;
+      const apDays = parseFloat(document.getElementById('apDays').value) || 0;
+      const deferredRevPct = parseFloat(document.getElementById('deferredRevPct').value) || 0;
+      
+      const data = runrateData[currentScenario];
+      const avgRev = data.reduce((sum, d) => sum + d.mrr, 0) / data.length;
+      const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
+      const avgOpEx = data.reduce((sum, d) => sum + d.opex, 0) / data.length;
+      
+      // Approximate COGS from gross margin
+      const cogs = avgRev * (1 - avgGM / 100);
+      
+      // Working capital components
+      const arImpact = (avgRev * arDays) / 30; // Cash tied up in receivables
+      const apBenefit = (cogs * apDays) / 30; // Cash preserved by delaying payment
+      const deferredRevBenefit = (avgRev * (deferredRevPct / 100)); // Cash received upfront
+      
+      const netWCImpact = -arImpact + apBenefit + deferredRevBenefit;
+      
+      // Adjusted runway
+      const cashBalance = parseFloat(document.getElementById('cashBalance').value) || 0;
+      const netBurn = avgOpEx - (avgRev * (avgGM / 100));
+      
+      const baseRunway = netBurn > 0 ? cashBalance / netBurn : 999;
+      const adjustedCash = cashBalance + netWCImpact;
+      const adjustedRunway = netBurn > 0 ? adjustedCash / netBurn : 999;
+      const runwayDelta = adjustedRunway - baseRunway;
+      
+      // Display results
+      document.getElementById('wcResults').innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+          <div class="kpi-box">
+            <div class="kpi-box-label">AR Impact</div>
+            <div class="kpi-box-value" style="font-size: 18px; color: #dc2626;">-${formatCurrency(Math.abs(arImpact))}</div>
+            <div style="font-size: 11px; color: var(--muted);">Cash tied up</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">AP Benefit</div>
+            <div class="kpi-box-value" style="font-size: 18px; color: #059669;">+${formatCurrency(apBenefit)}</div>
+            <div style="font-size: 11px; color: var(--muted);">Payment delay</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">Deferred Rev</div>
+            <div class="kpi-box-value" style="font-size: 18px; color: #059669;">+${formatCurrency(deferredRevBenefit)}</div>
+            <div style="font-size: 11px; color: var(--muted);">Upfront cash</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">Net WC Impact</div>
+            <div class="kpi-box-value" style="font-size: 18px; color: ${netWCImpact >= 0 ? '#059669' : '#dc2626'};">${netWCImpact >= 0 ? '+' : ''}${formatCurrency(netWCImpact)}</div>
+          </div>
+        </div>
+        
+        <div style="padding: 16px; background: rgba(246, 248, 251, 0.5); border: 1px solid var(--border); border-radius: 12px;">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text);">
+            Adjusted Runway: ${adjustedRunway > 900 ? 'Cash Generating' : adjustedRunway.toFixed(1) + ' months'}
+            <span style="color: ${runwayDelta >= 0 ? '#059669' : '#dc2626'}; margin-left: 8px;">
+              (${runwayDelta >= 0 ? '+' : ''}${runwayDelta.toFixed(1)} mo from WC)
+            </span>
+          </div>
+          <div style="font-size: 13px; line-height: 1.6; color: var(--muted);">
+            ${netWCImpact > 0 
+              ? `Positive WC (${formatCurrency(netWCImpact)}) provides liquidity cushion—deferred revenue and AP outweigh AR drag.`
+              : `Negative WC (${formatCurrency(Math.abs(netWCImpact))}) consumes cash—receivables collection lags outpace payment delays.`
+            }
+            <div style="margin-top: 8px; font-style: italic;">Working capital approximation for planning purposes.</div>
+          </div>
+        </div>
+      `;
     }
     
     // ========== CSV DOWNLOADS ==========
@@ -2706,6 +3006,8 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
     function renderAll() {
       updateScenarioTooltips();
       computeCACLTV();
+      computeCapitalAllocation();
+      computeWorkingCapital();
       renderContribution();
       renderRunrate();
       renderBoardView();
