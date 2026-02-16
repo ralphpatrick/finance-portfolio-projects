@@ -733,6 +733,138 @@
         flex-wrap: wrap;
       }
     }
+    
+    /* Board View Styles */
+    .board-view-container {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      min-height: 520px;
+    }
+    
+    .board-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .board-kpi-card {
+      padding: 16px;
+      background: rgba(246, 248, 251, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .board-kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    
+    .board-kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .board-kpi-value.strong {
+      color: #059669;
+    }
+    
+    .board-kpi-value.moderate {
+      color: #d97706;
+    }
+    
+    .board-kpi-value.fragile {
+      color: #dc2626;
+    }
+    
+    .board-kpi-value.cash-generating {
+      color: #059669;
+    }
+    
+    .board-kpi-value.near-breakeven {
+      color: #d97706;
+    }
+    
+    .board-kpi-value.normal-burn {
+      color: var(--text);
+    }
+    
+    .board-kpi-note {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .board-narrative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    
+    .board-narrative-card {
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .board-narrative-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    
+    .board-narrative-content {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    @media (max-width: 1024px) {
+      .board-kpi-grid,
+      .board-narrative-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .board-view-container {
+        min-height: auto;
+      }
+      
+      .board-kpi-card,
+      .board-narrative-card {
+        min-height: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -814,6 +946,54 @@
 
       <!-- Main Content -->
       <div class="main-content">
+
+        <!-- Board View - Executive Summary -->
+        <section class="module-section">
+          <div class="section-header-with-help">
+            <h2 class="module-section-title"><span class="term-helper" data-definition="Board View: Executive summary of your business's financial health, runway, and key priorities. Designed for quick board-level decision making without diving into detailed metrics.">Board View</span> — Executive Summary</h2>
+          </div>
+          
+          <div class="board-view-container">
+            <!-- Headline KPIs -->
+            <div class="board-kpi-grid">
+              <div class="board-kpi-card">
+                <div class="board-kpi-label"><span class="term-helper" data-definition="Capital Health: Overall assessment of your unit economics and capital efficiency. Strong means you create more value than you consume. Fragile means growth requires significant external capital.">Capital Health</span></div>
+                <div class="board-kpi-value" id="boardCapitalHealth">—</div>
+                <div class="board-kpi-note" id="boardCapitalNote"></div>
+              </div>
+              
+              <div class="board-kpi-card">
+                <div class="board-kpi-label"><span class="term-helper" data-definition="Runway: Number of months your business can operate before depleting cash reserves at the current burn rate. Critical for planning fundraising timing and managing liquidity risk.">Runway</span></div>
+                <div class="board-kpi-value" id="boardRunway">—</div>
+                <div class="board-kpi-note" id="boardRunwayDate"></div>
+              </div>
+              
+              <div class="board-kpi-card">
+                <div class="board-kpi-label"><span class="term-helper" data-definition="Funding Requirement: Amount of capital needed to extend runway to a healthy 12+ months. Zero means you're already well-funded or profitable. Higher amounts indicate urgent fundraising needs.">Funding Requirement</span></div>
+                <div class="board-kpi-value" id="boardFundingGap">—</div>
+                <div class="board-kpi-note" id="boardFundingNote"></div>
+              </div>
+            </div>
+            
+            <!-- Executive Narrative -->
+            <div class="board-narrative-grid">
+              <div class="board-narrative-card">
+                <div class="board-narrative-title"><span class="term-helper" data-definition="Primary Risk: The most critical financial risk facing your business right now based on current metrics. This is where management attention should focus first.">Primary Risk</span></div>
+                <div class="board-narrative-content" id="boardRisk">—</div>
+              </div>
+              
+              <div class="board-narrative-card">
+                <div class="board-narrative-title"><span class="term-helper" data-definition="Top Levers: The 1-2 most impactful actions you can take to improve unit economics and capital efficiency. These are prioritized based on your current weak points.">Top Levers</span></div>
+                <div class="board-narrative-content" id="boardLevers">—</div>
+              </div>
+              
+              <div class="board-narrative-card">
+                <div class="board-narrative-title"><span class="term-helper" data-definition="Recommendation: Plain-English strategic guidance based on your current financial position. Tells you whether to prioritize efficiency, scale cautiously, or invest in growth.">Recommendation</span></div>
+                <div class="board-narrative-content" id="boardRecommendation">—</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- CAC / LTV Engine -->
         <section class="module-section">
@@ -985,7 +1165,7 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
             <div class="input-grid">
               <div class="input-field">
                 <label>Starting <span class="term-helper" data-definition="Cash Balance: Total cash you have available right now to fund operations. This is your financial cushion and determines how long you can survive at your current burn rate.">Cash Balance</span> ($)</label>
-                <input type="number" id="cashBalance" value="2400000" onchange="computeCashRunway()">
+                <input type="number" id="cashBalance" value="2400000" onchange="computeCashRunway(); renderBoardView();">
               </div>
             </div>
 
@@ -2269,6 +2449,173 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       reader.readAsText(file);
     }
     
+    // ========== BOARD VIEW RENDER ==========
+    
+    function renderBoardView() {
+      // Get current inputs and computed values
+      const inputs = cacLtvInputs[currentScenario];
+      const cashBalance = parseFloat(document.getElementById('cashBalance').value) || 0;
+      
+      // Recompute key metrics (matching computeCACLTV logic)
+      const cac = (inputs.marketingSpend + inputs.salesSpend) / inputs.newCustomers;
+      const ltv = (inputs.arpa * (inputs.grossMargin / 100)) / (inputs.churnRate / 100);
+      const ltvCacRatio = ltv / cac;
+      const payback = cac / (inputs.arpa * (inputs.grossMargin / 100));
+      
+      // Get run-rate data for burn calculation
+      const data = runrateData[currentScenario];
+      const avgOpEx = data.reduce((sum, d) => sum + d.opex, 0) / data.length;
+      const avgRev = data.reduce((sum, d) => sum + d.mrr, 0) / data.length;
+      const avgGM = data.reduce((sum, d) => sum + d.gm, 0) / data.length;
+      const netBurn = avgOpEx - (avgRev * (avgGM / 100));
+      
+      // Capital Efficiency Score (matching computeCACLTV logic)
+      let score = 0;
+      
+      // Factor 1: LTV:CAC Ratio (0-40 points)
+      if (ltvCacRatio >= 5) score += 40;
+      else if (ltvCacRatio >= 4) score += 35;
+      else if (ltvCacRatio >= 3) score += 25;
+      else if (ltvCacRatio >= 2) score += 15;
+      else if (ltvCacRatio >= 1.5) score += 5;
+      
+      // Factor 2: Payback Period (0-30 points)
+      if (payback <= 6) score += 30;
+      else if (payback <= 12) score += 20;
+      else if (payback <= 18) score += 10;
+      else if (payback <= 24) score += 5;
+      
+      // Factor 3: Gross Margin (0-30 points)
+      if (inputs.grossMargin >= 75) score += 30;
+      else if (inputs.grossMargin >= 65) score += 20;
+      else if (inputs.grossMargin >= 55) score += 10;
+      
+      // Determine rating
+      let rating = '';
+      if (score >= 75) rating = 'Strong';
+      else if (score >= 50) rating = 'Moderate';
+      else rating = 'Fragile';
+      
+      // === 1. CAPITAL HEALTH KPI ===
+      const healthElement = document.getElementById('boardCapitalHealth');
+      healthElement.textContent = rating;
+      healthElement.className = 'board-kpi-value ' + rating.toLowerCase();
+      
+      document.getElementById('boardCapitalNote').textContent = `${score}/100 efficiency score`;
+      
+      // === 2. RUNWAY KPI ===
+      const EPSILON = 100;
+      let runwayText = '';
+      let runwayClass = '';
+      let runwayNote = '';
+      
+      if (netBurn <= 0) {
+        runwayText = 'Cash Generating';
+        runwayClass = 'cash-generating';
+        runwayNote = `+${formatCurrency(Math.abs(netBurn))}/mo positive cash flow`;
+      } else if (netBurn > 0 && netBurn < EPSILON) {
+        runwayText = '60+ months';
+        runwayClass = 'near-breakeven';
+        runwayNote = `Near breakeven (${formatCurrency(netBurn)}/mo burn)`;
+      } else {
+        const runwayMonths = cashBalance / netBurn;
+        runwayText = `${runwayMonths.toFixed(1)} months`;
+        runwayClass = 'normal-burn';
+        
+        const today = new Date();
+        const depletionDate = new Date(today);
+        depletionDate.setMonth(depletionDate.getMonth() + Math.floor(runwayMonths));
+        const dateStr = depletionDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        runwayNote = `Cash depletes: ${dateStr}`;
+      }
+      
+      const runwayElement = document.getElementById('boardRunway');
+      runwayElement.textContent = runwayText;
+      runwayElement.className = 'board-kpi-value ' + runwayClass;
+      document.getElementById('boardRunwayDate').textContent = runwayNote;
+      
+      // === 3. FUNDING REQUIREMENT KPI ===
+      const targetMonths = 12;
+      let fundingGap = 0;
+      let fundingNote = '';
+      
+      if (netBurn <= 0) {
+        fundingGap = 0;
+        fundingNote = 'No funding needed (profitable)';
+      } else if (netBurn < EPSILON) {
+        fundingGap = 0;
+        fundingNote = 'No funding needed (near breakeven)';
+      } else {
+        const runwayMonths = cashBalance / netBurn;
+        if (runwayMonths >= targetMonths) {
+          fundingGap = 0;
+          fundingNote = `Runway already >${targetMonths} months`;
+        } else {
+          fundingGap = netBurn * (targetMonths - runwayMonths);
+          fundingNote = `To reach ${targetMonths} months runway`;
+        }
+      }
+      
+      document.getElementById('boardFundingGap').textContent = fundingGap === 0 ? '$0' : `~${formatCurrency(fundingGap)}`;
+      document.getElementById('boardFundingNote').textContent = fundingNote;
+      
+      // === 4. PRIMARY RISK ===
+      let riskText = '';
+      
+      if (inputs.churnRate >= 5.0) {
+        riskText = `<strong>Retention Risk:</strong> ${inputs.churnRate.toFixed(1)}% monthly churn is elevated. Losing ${Math.round(inputs.churnRate)}% of customers each month erodes revenue and increases CAC burden. Focus on product-market fit and customer success.`;
+      } else if (payback > 18) {
+        riskText = `<strong>Payback Risk:</strong> ${payback.toFixed(1)} month payback period is long. You're waiting ${Math.round(payback)} months to recover acquisition costs. Improve conversion efficiency or increase ARPA to accelerate payback.`;
+      } else if (inputs.grossMargin < 60) {
+        riskText = `<strong>Margin Pressure:</strong> ${inputs.grossMargin.toFixed(0)}% gross margin is compressed. Limited cushion for operating expenses and profit. Evaluate COGS, infrastructure costs, and pricing power.`;
+      } else if (netBurn > 0 && cashBalance / netBurn < 12) {
+        riskText = `<strong>Liquidity Risk:</strong> Less than 12 months runway. Plan fundraising now or aggressively reduce burn. Missing fundraising windows can force down-rounds or emergency cuts.`;
+      } else {
+        riskText = `<strong>No Critical Red Flags:</strong> Key metrics are within acceptable ranges. Continue monitoring CAC trends, churn rates, and gross margin sustainability as you scale.`;
+      }
+      
+      document.getElementById('boardRisk').innerHTML = riskText;
+      
+      // === 5. TOP LEVERS ===
+      let leversText = '';
+      const leversList = [];
+      
+      if (inputs.churnRate >= 4.5) {
+        leversList.push(`<strong>Reduce Churn:</strong> Target ${Math.max(2.5, inputs.churnRate - 2).toFixed(1)}% churn through better onboarding, proactive support, and product improvements.`);
+      }
+      
+      if (inputs.grossMargin < 65) {
+        leversList.push(`<strong>Improve Gross Margin:</strong> Target 70%+ margin by optimizing infrastructure costs, renegotiating vendor contracts, or increasing pricing.`);
+      }
+      
+      if (ltvCacRatio < 3 || cac > inputs.arpa * 12) {
+        leversList.push(`<strong>CAC Efficiency:</strong> LTV:CAC is ${ltvCacRatio.toFixed(1)}x. Improve conversion rates, reduce sales cycle length, or optimize marketing spend to lower CAC.`);
+      }
+      
+      if (leversList.length === 0) {
+        leversText = `<strong>Maintain Discipline:</strong> Unit economics are healthy. Focus on maintaining current efficiency as you scale. Monitor CAC, churn, and margin vigilantly during growth phases.`;
+      } else {
+        leversText = leversList.slice(0, 2).join('<br><br>');
+      }
+      
+      document.getElementById('boardLevers').innerHTML = leversText;
+      
+      // === 6. RECOMMENDATION ===
+      let recommendation = '';
+      
+      if (rating === 'Fragile' || (netBurn > 0 && cashBalance / netBurn < 12)) {
+        recommendation = `<strong>Prioritize Efficiency Before Scaling:</strong> Current unit economics are fragile and/or runway is short. Focus on improving LTV:CAC, reducing churn, and extending runway before aggressive growth investments. Prove model sustainability first.`;
+      } else if (rating === 'Moderate' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
+        recommendation = `<strong>Scale Selectively:</strong> Unit economics support sustainable growth, but maintain CAC and churn discipline. Expand cautiously into proven channels. Avoid over-hiring or premature market expansion that could compress margins.`;
+      } else if (rating === 'Strong' && (netBurn <= 0 || cashBalance / netBurn >= 12)) {
+        recommendation = `<strong>Invest in Growth with Guardrails:</strong> Strong unit economics and healthy runway support aggressive scaling. Invest in new channels, geographies, or products—but maintain rigorous monitoring of CAC, churn, and payback to avoid efficiency erosion.`;
+      } else {
+        recommendation = `<strong>Improve Efficiency and Extend Runway:</strong> Focus on the top levers identified above. Balance growth ambitions with the need to demonstrate capital efficiency and reach a comfortable runway before next fundraise.`;
+      }
+      
+      document.getElementById('boardRecommendation').innerHTML = recommendation;
+    }
+    
     // ========== CSV DOWNLOADS ==========
     
     function downloadCACLTVCSV() {
@@ -2361,6 +2708,7 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
       computeCACLTV();
       renderContribution();
       renderRunrate();
+      renderBoardView();
     }
     
     // Update scenario tooltips with current data
