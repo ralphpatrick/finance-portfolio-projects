@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
-    /* Module-specific styles matching unit-economics.html */
+    /* ── Module-specific styles ── */
     .module-hero {
       padding: 48px 0 32px 0;
       border-bottom: 1px solid var(--border);
@@ -56,51 +56,53 @@
       background: rgba(246,248,251,0.8);
       color: var(--text);
     }
-    
-    /* Main layout with sidebar */
+
+    /* ── Main layout with sidebar ── */
     .module-layout {
       display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
       align-items: start;
-      max-width: 1400px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 32px 24px;
+      padding: 24px 32px;
     }
-    
-    /* Sticky sidebar */
+
+    /* ── Sticky sidebar ── */
     .sidebar {
       position: sticky;
       top: 80px;
-      padding: 20px;
+      padding: 16px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-soft);
     }
-    .sidebar-section {
-      margin-bottom: 24px;
-    }
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-    }
+    .sidebar-section { margin-bottom: 18px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
     .sidebar-title {
-      font-size: 13px;
-      font-weight: 650;
-      color: var(--text);
-      margin-bottom: 12px;
-      letter-spacing: 0.03em;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
     .data-badge {
-      font-size: 12px;
-      padding: 6px 12px;
+      font-size: 11px;
+      padding: 3px 9px;
       border-radius: 999px;
       background: rgba(15,118,110,0.10);
       border: 1px solid rgba(15,118,110,0.20);
       color: var(--accent);
       font-weight: 600;
       display: inline-block;
-      margin-bottom: 12px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .data-badge.random {
       background: #fef3c7;
@@ -110,22 +112,22 @@
     .sidebar-buttons {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
-    
-    /* Scenario tabs in sidebar */
+
+    /* ── Scenario tabs in sidebar ── */
     .scenario-tabs {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .scenario-tab {
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: white;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       transition: all 140ms ease;
       text-align: left;
@@ -134,7 +136,7 @@
       justify-content: space-between;
     }
     .scenario-tab:hover {
-      border-color: rgba(12, 23, 45, 0.18);
+      border-color: rgba(12,23,45,0.18);
       box-shadow: 0 4px 12px rgba(11,18,32,0.06);
     }
     .scenario-tab.active {
@@ -142,16 +144,12 @@
       color: white;
       border-color: var(--text);
     }
-    
-    /* Main content area */
-    .main-content {
-      min-width: 0;
-    }
-    
-    /* Module sections */
-    .module-section {
-      padding: 0 0 48px 0;
-    }
+
+    /* ── Main content area ── */
+    .main-content { min-width: 0; }
+
+    /* ── Module sections ── */
+    .module-section { padding: 0 0 48px 0; }
     .module-section-title {
       font-size: 24px;
       margin-bottom: 20px;
@@ -173,15 +171,12 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-    .card-title {
-      font-size: 18px;
-      font-weight: 650;
-    }
-    
-    /* Buttons */
+    .card-title { font-size: 18px; font-weight: 650; }
+
+    /* ── Buttons ── */
     .btn-small {
-      padding: 8px 14px;
-      font-size: 13px;
+      padding: 7px 12px;
+      font-size: 12px;
       border-radius: 999px;
       font-weight: 600;
       border: 1px solid var(--border);
@@ -191,27 +186,19 @@
       white-space: nowrap;
     }
     .btn-small:hover {
-      border-color: rgba(12, 23, 45, 0.18);
+      border-color: rgba(12,23,45,0.18);
       box-shadow: 0 4px 12px rgba(11,18,32,0.06);
     }
-    .btn-small:active {
-      transform: translateY(1px);
-    }
+    .btn-small:active { transform: translateY(1px); }
     .btn-primary {
       background: var(--text);
       color: white;
       border-color: var(--text);
     }
-    .btn-primary:hover {
-      box-shadow: 0 6px 18px rgba(11,18,32,0.12);
-    }
-    .btn-full {
-      width: 100%;
-      justify-content: center;
-      display: flex;
-    }
-    
-    /* KPI grid */
+    .btn-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .btn-full { width: 100%; justify-content: center; display: flex; }
+
+    /* ── KPI grid ── */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -232,17 +219,10 @@
       align-items: center;
       gap: 6px;
     }
-    .kpi-box-value {
-      font-size: 20px;
-      font-weight: 650;
-    }
-    .kpi-box-sub {
-      font-size: 12px;
-      margin-top: 6px;
-      color: var(--muted);
-    }
-    
-    /* Charts */
+    .kpi-box-value { font-size: 20px; font-weight: 650; }
+    .kpi-box-sub { font-size: 12px; margin-top: 6px; color: var(--muted); }
+
+    /* ── Charts ── */
     .chart-container {
       margin: 20px 0;
       padding: 20px;
@@ -251,18 +231,11 @@
       background: white;
       position: relative;
     }
-    .chart-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    .chart-canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
+    .chart-wrapper { position: relative; width: 100%; }
+    .chart-canvas { display: block; width: 100%; height: auto; }
     .chart-tooltip {
       position: absolute;
-      background: rgba(11, 18, 32, 0.95);
+      background: rgba(11,18,32,0.95);
       color: white;
       padding: 10px 14px;
       border-radius: 8px;
@@ -272,18 +245,12 @@
       transition: opacity 150ms ease;
       z-index: 100;
       white-space: nowrap;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .chart-tooltip.visible {
-      opacity: 1;
-    }
-    .chart-tooltip strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 13px;
-    }
-    
-    /* Tables */
+    .chart-tooltip.visible { opacity: 1; }
+    .chart-tooltip strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+    /* ── Tables ── */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -297,20 +264,17 @@
       font-weight: 650;
       color: var(--text);
       font-size: 12px;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
+      text-transform: none;
     }
     .data-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
     }
-    .data-table tr:last-child td {
-      border-bottom: none;
-    }
-    .data-table tr:hover {
-      background: rgba(246,248,251,0.5);
-    }
-    
-    /* Hiring recommendation boxes */
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover { background: rgba(246,248,251,0.5); }
+
+    /* ── Hiring recommendation boxes ── */
     .hiring-rec {
       padding: 16px;
       border-radius: var(--radius-sm);
@@ -318,29 +282,21 @@
       border: 1px solid;
     }
     .hiring-rec.recommend {
-      background: rgba(5, 150, 105, 0.08);
-      border-color: rgba(5, 150, 105, 0.20);
+      background: rgba(5,150,105,0.06);
+      border-color: rgba(5,150,105,0.18);
     }
     .hiring-rec.caution {
-      background: rgba(217, 119, 6, 0.08);
-      border-color: rgba(217, 119, 6, 0.20);
+      background: rgba(217,119,6,0.06);
+      border-color: rgba(217,119,6,0.18);
     }
     .hiring-rec.delay {
-      background: rgba(239, 68, 68, 0.08);
-      border-color: rgba(239, 68, 68, 0.20);
+      background: rgba(239,68,68,0.06);
+      border-color: rgba(239,68,68,0.18);
     }
-    .hiring-rec-title {
-      font-size: 15px;
-      font-weight: 650;
-      margin-bottom: 8px;
-    }
-    .hiring-rec-reason {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text);
-    }
-    
-    /* Tradeoff comparison */
+    .hiring-rec-title { font-size: 15px; font-weight: 650; margin-bottom: 8px; }
+    .hiring-rec-reason { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+    /* ── Tradeoff comparison ── */
     .tradeoff-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -353,59 +309,557 @@
       border-radius: var(--radius-sm);
       background: rgba(246,248,251,0.5);
     }
-    .tradeoff-title {
-      font-size: 16px;
-      font-weight: 650;
-      margin-bottom: 12px;
-    }
-    .tradeoff-section {
-      margin-bottom: 12px;
-    }
-    .tradeoff-section:last-child {
-      margin-bottom: 0;
-    }
-    .tradeoff-label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .tradeoff-list {
+    .tradeoff-title { font-size: 16px; font-weight: 650; margin-bottom: 12px; }
+    .tradeoff-section { margin-bottom: 12px; }
+    .tradeoff-section:last-child { margin-bottom: 0; }
+    .tradeoff-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .tradeoff-list { display: grid; gap: 6px; }
+    .tradeoff-item { display: flex; gap: 8px; font-size: 13px; line-height: 1.5; }
+    .tradeoff-item::before { content: '•'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════════
+       BOARD DECISION CARD (NEW — CFO upgrade)
+    ═══════════════════════════════════════════════ */
+    .board-decision-card {
+      background: white;
+      border: 1.5px solid rgba(11,18,32,0.14);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(11,18,32,0.06);
       display: grid;
-      gap: 6px;
+      grid-template-columns: auto 1fr;
+      gap: 0 20px;
+      align-items: start;
     }
-    .tradeoff-item {
+    .bd-verdict-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 120px;
+    }
+    .bd-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .bd-decision {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .bd-confidence-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid;
+      width: fit-content;
+      letter-spacing: 0.03em;
+    }
+    .bd-conf-high  { background: rgba(11,18,32,0.06); border-color: rgba(11,18,32,0.18); color: var(--text); }
+    .bd-conf-med   { background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.22); color: #92400e; }
+    .bd-conf-low   { background: rgba(107,114,128,0.08); border-color: rgba(107,114,128,0.22); color: #374151; }
+    .bd-rationale-col { border-left: 1px solid var(--border); padding-left: 20px; }
+    .bd-bullets { display: grid; gap: 6px; margin-top: 6px; }
+    .bd-bullet {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
       display: flex;
       gap: 8px;
-      font-size: 13px;
-      line-height: 1.5;
     }
-    .tradeoff-item::before {
-      content: '•';
-      color: var(--accent);
-      font-weight: 700;
+    .bd-bullet::before {
+      content: '—';
+      color: var(--muted);
+      font-weight: 600;
       flex-shrink: 0;
     }
-    
-    @media (max-width: 980px) {
-      .module-layout {
-        grid-template-columns: 1fr;
-      }
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-      .kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .tradeoff-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Decision color variants */
+    .bd-hire     { color: #059669; }
+    .bd-nohire   { color: #dc2626; }
+    .bd-slow     { color: #d97706; }
+    .bd-cut      { color: #dc2626; }
+    .bd-raise    { color: #1b4d7a; }
+
+    /* ── Signal badges inside BD card ── */
+    .bd-signals { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .bd-signal {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid;
     }
-    
+    .sig-green  { background: rgba(5,150,105,0.08);  border-color: rgba(5,150,105,0.22);  color: #065f46; }
+    .sig-yellow { background: rgba(217,119,6,0.08);  border-color: rgba(217,119,6,0.22);  color: #92400e; }
+    .sig-red    { background: rgba(239,68,68,0.08);  border-color: rgba(239,68,68,0.22);  color: #991b1b; }
+
+    /* ── Raise Plan callout (shown when decision = RAISE) ── */
+    .raise-plan-callout {
+      margin-top: 16px;
+      padding: 16px 18px;
+      background: rgba(27,77,122,0.05);
+      border: 1.5px solid rgba(27,77,122,0.18);
+      border-radius: var(--radius-sm);
+      display: grid;
+      gap: 10px;
+    }
+    .raise-plan-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .raise-plan-badge {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      background: rgba(27,77,122,0.12);
+      border: 1px solid rgba(27,77,122,0.22);
+      color: #1b4d7a;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .raise-plan-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1b4d7a;
+    }
+    .raise-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .raise-plan-metric {
+      padding: 10px 12px;
+      border: 1px solid rgba(27,77,122,0.12);
+      border-radius: 10px;
+      background: white;
+    }
+    .raise-plan-metric-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .raise-plan-metric-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1b4d7a;
+    }
+    .raise-plan-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    @media (max-width: 640px) {
+      .raise-plan-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       HIRING PLAN TABLE (NEW — deterministic 12-month)
+    ═══════════════════════════════════════════════ */
+    .hiring-plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 16px;
+    }
+    .hiring-plan-table th {
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-align: center;
+      text-transform: none;
+    }
+    .hiring-plan-table th:first-child { text-align: left; }
+    .hiring-plan-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      color: var(--text);
+    }
+    .hiring-plan-table td:first-child { text-align: left; font-weight: 600; }
+    .hiring-plan-table tr:last-child td { border-bottom: none; }
+    .hiring-plan-table tr:hover { background: rgba(246,248,251,0.5); }
+    .hp-hire    { color: #059669; font-weight: 700; }
+    .hp-ramp    { color: #d97706; font-size: 11px; }
+    .hp-cost    { color: #dc2626; font-size: 11px; }
+    .hp-none    { color: var(--muted); }
+    .plan-tabs  { display: flex; gap: 8px; margin-bottom: 16px; }
+    .plan-tab {
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 120ms ease;
+    }
+    .plan-tab.active { background: var(--text); color: white; border-color: var(--text); }
+
+    /* ── Tooltip system (single, lightweight) ── */
+    [data-tt] {
+      position: relative;
+      cursor: help;
+    }
+    [data-tt]::after {
+      content: attr(data-tt);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 9px 13px;
+      background: rgba(11,18,32,0.96);
+      color: #f6f8fb;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.55;
+      border-radius: 9px;
+      white-space: normal;
+      width: 270px;
+      max-width: calc(100vw - 40px);
+      z-index: 9999;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+      text-align: left;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, visibility 0.15s ease;
+    }
+    [data-tt]:hover::after { opacity: 1; visibility: visible; }
+
+    /* Tiny ? badge for labels */
+    .tt-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: rgba(93,107,122,0.12);
+      border: 1px solid rgba(93,107,122,0.22);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: help;
+      vertical-align: middle;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Glossary inline term tooltip */
+    .gl-term {
+      border-bottom: 1px dotted rgba(93,107,122,0.40);
+      cursor: help;
+    }
+
+    /* Legacy help-icon kept for sidebar (existing) */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.18);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .help-icon::before { content: '?'; line-height: 1; }
+    .help-icon[data-help]::after {
+      content: attr(data-help);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 9px 13px;
+      background: rgba(11,18,32,0.95);
+      color: white;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 8px;
+      white-space: normal;
+      width: 260px;
+      max-width: calc(100vw - 40px);
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      font-weight: 400;
+      text-align: left;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, visibility 0.15s ease;
+    }
+    .help-icon[data-help]:hover::after { opacity: 1; visibility: visible; }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .module-layout { grid-template-columns: 1fr; padding: 16px; }
+      .sidebar { position: relative; top: 0; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .tradeoff-grid { grid-template-columns: 1fr; }
+      .board-decision-card { grid-template-columns: 1fr; }
+      .bd-rationale-col { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 8px; }
+    }
     @media (max-width: 560px) {
-      .kpi-grid {
-        grid-template-columns: 1fr;
-      }
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       ASSUMPTIONS CARD (CFO upgrade) — collapsible
+    ═══════════════════════════════════════════════ */
+
+    /* Sidebar sections hidden when assumptions panel is open */
+    .sidebar-section.js-hideable { transition: opacity 180ms ease, max-height 220ms ease, margin-bottom 180ms ease; }
+    .sidebar-section.js-hideable.is-hidden {
+      opacity: 0;
+      max-height: 0 !important;
+      margin-bottom: 0 !important;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Assumptions trigger button (replaces plain title) */
+    .assump-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font: inherit;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+    .assump-trigger-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .assump-trigger-label .tt-icon { flex-shrink: 0; }
+    .assump-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 220ms ease;
+      line-height: 1;
+    }
+    .assump-chevron.open { transform: rotate(180deg); }
+
+    /* The collapsible body */
+    .assump-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease, opacity 220ms ease;
+      opacity: 0;
+    }
+    .assump-body.open {
+      max-height: 1200px;
+      opacity: 1;
+    }
+
+    .assumptions-card {
+      background: rgba(246,248,251,0.6);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-top: 0;
+    }
+    .assump-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+    .assump-row:last-child { margin-bottom: 0; }
+    .assump-label {
+      font-size: 11px;
+      color: var(--muted);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .assump-input {
+      width: 58px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: var(--font-sans);
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .assump-input::-webkit-outer-spin-button,
+    .assump-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .assump-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .assump-input.invalid {
+      border-color: #dc2626;
+      background: rgba(220,38,38,0.05);
+    }
+    .assump-divider {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 7px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       EXPORT DROPDOWN (CFO upgrade)
+    ═══════════════════════════════════════════════ */
+    .export-wrap {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .export-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 140ms ease;
+    }
+    .export-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .export-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 140ms ease;
+    }
+    .export-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(11,18,32,0.12);
+      z-index: 200;
+      overflow: hidden;
+    }
+    .export-dropdown.open { display: block; }
+    .export-item {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: left;
+      background: white;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      transition: background 100ms ease;
+    }
+    .export-item:last-child { border-bottom: none; }
+    .export-item:hover { background: rgba(246,248,251,0.8); }
+    .export-toast {
+      position: fixed;
+      bottom: 70px;
+      right: 18px;
+      padding: 10px 16px;
+      background: rgba(11,18,32,0.92);
+      color: white;
+      font-size: 13px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 250ms ease, transform 250ms ease;
+    }
+    .export-toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ═══════════════════════════════════════════════
+       BOARD DECISION — Rule fired + values vs thresholds
+    ═══════════════════════════════════════════════ */
+    .bd-rule-fired {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: rgba(246,248,251,0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .bd-rule-fired strong { color: var(--text); font-size: 11px; }
+    .bd-values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .bd-value-chip {
+      padding: 6px 9px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.6);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .bd-value-chip .bv-label { color: var(--muted); }
+    .bd-value-chip .bv-val { font-weight: 700; color: var(--text); }
+    .bd-value-chip .bv-thresh { color: var(--muted); font-size: 10px; }
+
+    /* ═══════════════════════════════════════════════
+       COMP INFLATION KNOB (CFO upgrade)
+    ═══════════════════════════════════════════════ */
+    .inflation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(27,77,122,0.08);
+      border: 1px solid rgba(27,77,122,0.18);
+      color: #1b4d7a;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -416,12 +870,11 @@
       <nav class="nav">
         <a href="index.html" class="brand">
           <span class="brand-mark"></span>
-          <span>FP&A Portfolio</span>
+          <span>FP&amp;A Portfolio</span>
         </a>
-        <div class="nav-links">
-          <a href="index.html#projects">Modules</a>
-          <a href="index.html#about">About</a>
-        </div>
+        <a href="index.html" class="btn btn-ghost" style="font-size:13px; gap:6px;">
+          ← Back to Portfolio
+        </a>
       </nav>
     </div>
   </header>
@@ -430,11 +883,11 @@
   <div class="module-hero" style="background: white;">
     <div class="container">
       <div class="module-label">
-        <span>FP&A Module</span>
+        <span>FP&amp;A Module</span>
         <span style="color: var(--border);">•</span>
-        <span>Cost Control & Workforce Planning</span>
+        <span>Cost Control &amp; Workforce Planning</span>
       </div>
-      <h1 class="module-title">Indirect Cost & Headcount CoE</h1>
+      <h1 class="module-title">Indirect Cost &amp; Headcount CoE</h1>
       <div class="module-pill">Center of Excellence</div>
       <p class="module-subtitle">
         Senior-level headcount planning with fully loaded costs, capacity modeling, and hiring vs. runway tradeoffs
@@ -445,6 +898,7 @@
         <span class="chip">Capacity Modeling</span>
         <span class="chip">Hiring Triggers</span>
         <span class="chip">Runway Impact</span>
+        <span class="chip">Board Decision</span>
       </div>
     </div>
   </div>
@@ -453,20 +907,37 @@
   <div class="module-layout">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <!-- Data Mode -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">DATA MODE</div>
-        <div id="dataModeBadge" class="data-badge">Sample Data</div>
+
+      <!-- Scenarios — shown first per request -->
+      <div class="sidebar-section js-hideable" id="sidebarScenario">
+        <div class="sidebar-title">Scenario</div>
+        <div class="scenario-tabs">
+          <button class="scenario-tab active" data-scenario="base" onclick="onScenarioChange('base')">
+            <span>Base Case</span>
+            <span class="help-icon" data-help="Standard performance assumptions with balanced growth and costs."></span>
+          </button>
+          <button class="scenario-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
+            <span>Upside</span>
+            <span class="help-icon" data-help="Optimistic: +15% capacity, higher utilization, lower attrition."></span>
+          </button>
+          <button class="scenario-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
+            <span>Downside</span>
+            <span class="help-icon" data-help="Conservative: -15% capacity, lower utilization, higher attrition."></span>
+          </button>
+        </div>
       </div>
 
       <!-- Starting Cash Balance -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">STARTING CASH</div>
+      <div class="sidebar-section js-hideable" id="sidebarCash">
+        <div class="sidebar-title">
+          Starting Cash
+          <span class="tt-icon" data-tt="Total cash in the bank today. The model uses this to calculate how many months you can operate before running out of money.">?</span>
+        </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <input 
-            type="number" 
-            id="cashBalanceInput" 
-            value="2400000" 
+          <input
+            type="number"
+            id="cashBalanceInput"
+            value="2400000"
             step="100000"
             style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: var(--font-sans); width: 100%;"
             onchange="updateCashBalance()"
@@ -477,56 +948,171 @@
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">ACTIONS</div>
+    <!-- Actions (with Data Mode badge merged into header) -->
+      <div class="sidebar-section js-hideable" id="sidebarActions">
+        <div class="sidebar-title">
+          <span>Actions</span>
+          <div id="dataModeBadge" class="data-badge">Sample Data</div>
+        </div>
         <div class="sidebar-buttons">
           <button class="btn-small btn-full" onclick="onUseSample()">Use Sample</button>
           <button class="btn-small btn-full" onclick="onRandomizeAll()">Randomize All</button>
           <button class="btn-small btn-full" onclick="downloadTemplates()">Download Templates</button>
+          <!-- Export dropdown -->
+          <div class="export-wrap">
+            <button class="export-btn" id="exportBtn" onclick="toggleExport(event)">
+              <span>Export ▾</span>
+            </button>
+            <div class="export-dropdown" id="exportDropdown">
+              <button class="export-item" onclick="exportHiringPlanCSV()">📄 Export Hiring Plan (CSV)</button>
+              <button class="export-item" onclick="exportFunctionCostCSV()">📊 Export Function Cost Table (CSV)</button>
+              <button class="export-item" onclick="copyBoardSummary()">📋 Copy Board Summary</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="exportToast" class="export-toast"></div>
+
+      <!-- Assumptions (auditable) — collapsible, always last -->
+      <div class="sidebar-section" id="sidebarAssumptions">
+        <!-- Clickable header trigger -->
+        <button class="assump-trigger" onclick="toggleAssumptions()" aria-expanded="false" id="assumpTrigger">
+          <span class="assump-trigger-label">
+            Assumptions
+            <span class="tt-icon" data-tt="All model thresholds live here. Change any value and every KPI, chart, and decision updates instantly. Fully auditable for board review.">?</span>
+          </span>
+          <span class="assump-chevron" id="assumpChevron">▼</span>
+        </button>
+
+        <!-- Collapsible body -->
+        <div class="assump-body" id="assumpBody">
+          <div class="assumptions-card">
+
+            <!-- Utilization thresholds -->
+            <div class="assump-divider">Utilization Thresholds</div>
+            <div class="assump-row">
+              <label class="assump-label" for="aUtilYellow">
+                <span data-tt="The utilization % at which the team enters 'caution' territory. Below this = potential overcapacity. Default 70%.">Yellow start (%)</span>
+              </label>
+              <input class="assump-input" id="aUtilYellow" type="number" value="70" min="1" max="100" step="1" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aUtilRed">
+                <span data-tt="The utilization % at which the team is over-capacity. Above this = must hire. Default 85%.">Red start (%)</span>
+              </label>
+              <input class="assump-input" id="aUtilRed" type="number" value="85" min="1" max="100" step="1" onchange="onAssumpChange()">
+            </div>
+
+            <!-- Runway guardrails -->
+            <div class="assump-divider">Runway Guardrails (months)</div>
+            <div class="assump-row">
+              <label class="assump-label" for="aRunwayCritical">
+                <span data-tt="Runway below this triggers CUT BURN. Cash emergency zone. Default 6 months.">Critical (&lt;)</span>
+              </label>
+              <input class="assump-input" id="aRunwayCritical" type="number" value="6" min="1" max="60" step="1" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aRunwayCaution">
+                <span data-tt="Runway below this triggers RAISE (if util is high). Caution zone. Default 12 months.">Caution (&lt;)</span>
+              </label>
+              <input class="assump-input" id="aRunwayCaution" type="number" value="12" min="1" max="60" step="1" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aRunwaySafeHire">
+                <span data-tt="Minimum runway needed before aggressive strategy fires a hire. Default 12 months.">Safe to Hire (Agg)</span>
+              </label>
+              <input class="assump-input" id="aRunwaySafeHire" type="number" value="12" min="1" max="60" step="1" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aRunwaySafeCon">
+                <span data-tt="Minimum runway needed before conservative strategy fires a hire. Higher bar. Default 15 months.">Safe to Hire (Con)</span>
+              </label>
+              <input class="assump-input" id="aRunwaySafeCon" type="number" value="15" min="1" max="60" step="1" onchange="onAssumpChange()">
+            </div>
+
+            <!-- Ramp duration -->
+            <div class="assump-divider">Hire Parameters</div>
+            <div class="assump-row">
+              <label class="assump-label" for="aRampMonths">
+                <span data-tt="How many months until a new hire reaches full productivity. Ramp curve: 25%→60%→100%. Longer ramp = delayed capacity relief. Default 3.">Ramp duration (mo)</span>
+              </label>
+              <input class="assump-input" id="aRampMonths" type="number" value="3" min="1" max="12" step="1" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aOneTimeCost">
+                <span data-tt="Recruiting + onboarding cost per new hire. Hits cash in the month hired. Drives one-time cost spike in the hiring plan. Default $16,000.">One-time cost/hire ($)</span>
+              </label>
+              <input class="assump-input" id="aOneTimeCost" type="number" value="16000" min="0" max="200000" step="500" style="width:72px;" onchange="onAssumpChange()">
+            </div>
+
+            <!-- Comp inflation -->
+            <div class="assump-divider">CFO Control Knob</div>
+            <div class="assump-row">
+              <label class="assump-label" for="aCompInflation">
+                <span data-tt="Annual salary inflation % applied to payroll costs. Models merit increases and market comp drift. Applied monthly (÷12) to salary, benefits, taxes, bonus. Default 6%.">Comp inflation (%/yr)</span>
+              </label>
+              <input class="assump-input" id="aCompInflation" type="number" value="6" min="0" max="50" step="0.5" onchange="onAssumpChange()">
+            </div>
+
+            <!-- Scenario multipliers -->
+            <div class="assump-divider">Scenario Multipliers</div>
+            <div class="assump-row">
+              <label class="assump-label" for="aScenarUpside">
+                <span data-tt="Capacity multiplier for the Upside scenario. >1 = more capacity and headcount. Default 1.15 (+15%).">Upside multiplier</span>
+              </label>
+              <input class="assump-input" id="aScenarUpside" type="number" value="1.15" min="0.5" max="3" step="0.05" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aScenarDownside">
+                <span data-tt="Capacity multiplier for the Downside scenario. <1 = lower capacity and headcount. Default 0.85 (-15%).">Downside multiplier</span>
+              </label>
+              <input class="assump-input" id="aScenarDownside" type="number" value="0.85" min="0.1" max="1" step="0.05" onchange="onAssumpChange()">
+            </div>
+            <div class="assump-row">
+              <label class="assump-label" for="aScenarUtilShift">
+                <span data-tt="Utilization demand shift applied in Upside (+) and Downside (-) scenarios. Default ±10 percentage points.">Upside util shift (%pt)</span>
+              </label>
+              <input class="assump-input" id="aScenarUtilShift" type="number" value="10" min="0" max="30" step="1" onchange="onAssumpChange()">
+            </div>
+
+            <!-- Reset to defaults -->
+            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);">
+              <button class="btn-small btn-full" onclick="resetAssumptions()" style="font-size:11px; color: var(--muted);">↺ Reset to defaults</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Scenarios -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">SCENARIO</div>
-        <div class="scenario-tabs">
-          <button class="scenario-tab active" data-scenario="base" onclick="onScenarioChange('base')">
-            <span>Base Case</span>
-            <span class="help-icon" data-help="Standard performance assumptions with balanced growth and costs"></span>
-          </button>
-          <button class="scenario-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
-            <span>Upside</span>
-            <span class="help-icon" data-help="Optimistic scenario: +25% capacity, higher utilization, lower attrition"></span>
-          </button>
-          <button class="scenario-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
-            <span>Downside</span>
-            <span class="help-icon" data-help="Conservative scenario: -25% capacity, lower utilization, higher attrition"></span>
-          </button>
-        </div>
-      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Summary KPIs -->
+
+      <!-- ══ SUMMARY SECTION ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Summary</h2>
-          <span class="help-icon" data-help="Quick snapshot to spot problems fast: Are we overstaffed? Burning too much cash? Team overloaded? This tells you at a glance."></span>
+          <span class="help-icon" id="summaryHelp" data-help="Quick snapshot: are we overstaffed? Burning too much cash? Team overloaded? At a glance view for the CFO or board."></span>
         </div>
+
+        <!-- Board Decision Card (NEW) -->
+        <div id="boardDecisionCard" class="board-decision-card"></div>
+
         <div id="summaryKPIs" class="kpi-grid"></div>
       </section>
 
-      <!-- Org Structure -->
+      <!-- ══ ORG STRUCTURE ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Org Structure by Function</h2>
-          <span class="help-icon" id="opexHelp" data-help="Shows where your money goes each month. Helps you compare team sizes and costs across Sales, Engineering, G&A, and Ops."></span>
+          <span class="help-icon" id="opexHelp" data-help="Shows where your money goes each month. Compare team sizes and costs across Sales, Engineering, G&amp;A, and Ops."></span>
         </div>
-        
+
         <div class="module-card">
-          <div class="card-title" style="margin-bottom: 16px;">Headcount by Function</div>
+          <div class="card-title" style="margin-bottom: 16px;">
+            Headcount by Function
+            <span class="tt-icon" data-tt="Number of employees per team per month. Watching headcount growth helps you see whether hiring is front-loaded or spread over time.">?</span>
+          </div>
           <div class="chart-wrapper">
             <canvas id="headcountChart" class="chart-canvas"></canvas>
             <div id="headcountTooltip" class="chart-tooltip"></div>
@@ -534,7 +1120,10 @@
         </div>
 
         <div class="module-card">
-          <div class="card-title" style="margin-bottom: 16px;">Opex by Function</div>
+          <div class="card-title" style="margin-bottom: 16px;">
+            Opex by Function
+            <span class="tt-icon" data-tt="Operating expenditure (Opex): the monthly cash cost of running each team, including salaries, benefits, taxes, bonuses, and one-time hiring costs.">?</span>
+          </div>
           <div class="chart-wrapper">
             <canvas id="opexChart" class="chart-canvas"></canvas>
             <div id="opexTooltip" class="chart-tooltip"></div>
@@ -542,24 +1131,27 @@
         </div>
       </section>
 
-      <!-- Fully Loaded Costs -->
+      <!-- ══ FULLY LOADED COSTS ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Fully Loaded Cost Structure</h2>
-          <span class="help-icon" id="fullyLoadedCostHelp" data-help="The real cost of an employee isn't just their salary. This breaks down benefits, taxes, bonuses, and one-time costs so you know what hiring actually costs."></span>
+          <span class="help-icon" id="fullyLoadedCostHelp" data-help="The real cost of an employee isn't just salary. This breaks down benefits, taxes, bonuses, and one-time costs so you know what hiring truly costs."></span>
         </div>
         <div id="fullyLoadedCosts"></div>
       </section>
 
-      <!-- Capacity & Utilization -->
+      <!-- ══ CAPACITY &amp; UTILIZATION ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-          <h2 class="module-section-title" style="margin: 0;">Capacity & Utilization</h2>
-          <span class="help-icon" id="utilizationHelp" data-help="Shows if your team is underwater (too much work) or underutilized (paying for capacity you don't need). Critical for timing your next hire."></span>
+          <h2 class="module-section-title" style="margin: 0;">Capacity &amp; Utilization</h2>
+          <span class="help-icon" id="utilizationHelp" data-help="Shows if your team is underwater (too much work) or underutilized (paying for idle capacity). Critical for timing your next hire."></span>
         </div>
-        
+
         <div class="module-card">
-          <div class="card-title" style="margin-bottom: 16px;">Utilization by Function</div>
+          <div class="card-title" style="margin-bottom: 16px;">
+            Utilization by Function
+            <span class="tt-icon" data-tt="Utilization = Demand ÷ Capacity. Shows what percent of team capacity is consumed. Above 85% signals overload; below 70% suggests overcapacity.">?</span>
+          </div>
           <div class="chart-wrapper">
             <canvas id="utilizationChart" class="chart-canvas"></canvas>
             <div id="utilizationTooltip" class="chart-tooltip"></div>
@@ -572,24 +1164,27 @@
         </div>
       </section>
 
-      <!-- Hiring Triggers -->
+      <!-- ══ HIRING TRIGGERS ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Hiring Justification Logic</h2>
-          <span class="help-icon" id="hiringTriggersHelp" data-help="Takes the guesswork out of hiring. Shows exactly when to hire (team is overloaded) vs. when to delay (cash is tight). Based on data, not gut feel."></span>
+          <span class="help-icon" id="hiringTriggersHelp" data-help="Takes the guesswork out of hiring decisions. Shows when to hire (team is overloaded) vs. delay (cash is tight). Data-driven, not gut feel."></span>
         </div>
         <div id="hiringTriggers"></div>
       </section>
 
-      <!-- Hiring vs Runway Tradeoff -->
+      <!-- ══ HIRING STRATEGY COMPARISON ══ -->
       <section class="module-section">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
           <h2 class="module-section-title" style="margin: 0;">Hiring Strategy Comparison</h2>
-          <span class="help-icon" id="runwayHelp" data-help="Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk team burnout. This shows the tradeoff so you can choose wisely."></span>
+          <span class="help-icon" id="runwayHelp" data-help="Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk team burnout. This shows the tradeoff explicitly."></span>
         </div>
 
         <div class="module-card">
-          <div class="card-title" style="margin-bottom: 16px;">Runway Impact</div>
+          <div class="card-title" style="margin-bottom: 16px;">
+            Runway Impact
+            <span class="tt-icon" data-tt="Runway = months of cash remaining at the current burn rate. Conservative hiring preserves runway; aggressive hiring shortens it. Both trajectories shown.">?</span>
+          </div>
           <div class="chart-wrapper">
             <canvas id="runwayChart" class="chart-canvas"></canvas>
             <div id="runwayTooltip" class="chart-tooltip"></div>
@@ -597,7 +1192,26 @@
         </div>
 
         <div id="strategyComparison"></div>
+
+        <!-- Hiring Plan Table (NEW — deterministic) -->
+        <div class="module-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                12-Month Hiring Plan
+                <span class="tt-icon" data-tt="Deterministic month-by-month plan. Conservative delays hires until utilization ≥85% AND runway ≥15 mo. Aggressive hires when utilization ≥85% and runway ≥12 mo. Includes recruiting/onboarding cost and 3-month ramp.">?</span>
+              </div>
+              <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Derived from utilization and runway thresholds — no randomness</div>
+            </div>
+          </div>
+          <div class="plan-tabs">
+            <button class="plan-tab active" id="planTabCon" onclick="showPlanTab('conservative')">Conservative</button>
+            <button class="plan-tab" id="planTabAgg" onclick="showPlanTab('aggressive')">Aggressive</button>
+          </div>
+          <div id="hiringPlanTable"></div>
+        </div>
       </section>
+
     </main>
   </div>
 
@@ -613,7 +1227,63 @@
       muted: '#5d6b7a'
     };
 
-    // ========== FIXED SAMPLE DATASET (12 MONTHS WITH VARIANCE) ==========
+    // ========== LIVE ASSUMPTIONS (single source of truth) ==========
+    // All model thresholds read from here; inputs write here; renderAll() re-reads.
+    let ASSUMP = {
+      utilYellow:      70,   // % — caution starts
+      utilRed:         85,   // % — overloaded starts
+      runwayCritical:  6,    // months — cut burn
+      runwayCaution:   12,   // months — RAISE zone
+      runwaySafeHire:  12,   // months — aggressive threshold
+      runwaySafeCon:   15,   // months — conservative threshold
+      rampMonths:      3,    // months to full productivity
+      oneTimeCost:     16000,// $ per hire (recruiting + onboarding)
+      compInflation:   6,    // % per year comp inflation
+      scenarUpside:    1.15, // multiplier for upside scenario
+      scenarDownside:  0.85, // multiplier for downside scenario
+      scenarUtilShift: 10    // percentage-point demand shift for upside/downside
+    };
+
+    function readAssumptions() {
+      function safeInput(id, min, max, fallback) {
+        const el = document.getElementById(id);
+        if (!el) return fallback;
+        const v = parseFloat(el.value);
+        if (!isFinite(v) || isNaN(v) || v < min || v > max) {
+          el.classList.add('invalid');
+          return null; // invalid → caller should use existing value
+        }
+        el.classList.remove('invalid');
+        return v;
+      }
+      const d = ASSUMP_DEFAULTS || {};
+      const updates = {
+        utilYellow:      safeInput('aUtilYellow',      1,    100,  d.utilYellow      || 70),
+        utilRed:         safeInput('aUtilRed',          1,    100,  d.utilRed         || 85),
+        runwayCritical:  safeInput('aRunwayCritical',   0,    60,   d.runwayCritical  || 6),
+        runwayCaution:   safeInput('aRunwayCaution',    0,    60,   d.runwayCaution   || 12),
+        runwaySafeHire:  safeInput('aRunwaySafeHire',   0,    60,   d.runwaySafeHire  || 12),
+        runwaySafeCon:   safeInput('aRunwaySafeCon',    0,    60,   d.runwaySafeCon   || 15),
+        rampMonths:      safeInput('aRampMonths',       1,    12,   d.rampMonths      || 3),
+        oneTimeCost:     safeInput('aOneTimeCost',      0,    500000, d.oneTimeCost   || 16000),
+        compInflation:   safeInput('aCompInflation',    0,    50,   d.compInflation   || 6),
+        scenarUpside:    safeInput('aScenarUpside',     0.5,  5,    d.scenarUpside    || 1.15),
+        scenarDownside:  safeInput('aScenarDownside',   0.1,  1,    d.scenarDownside  || 0.85),
+        scenarUtilShift: safeInput('aScenarUtilShift',  0,    40,   d.scenarUtilShift || 10)
+      };
+      // Only update ASSUMP where values are valid (null = keep existing)
+      Object.keys(updates).forEach(k => { if (updates[k] !== null) ASSUMP[k] = updates[k]; });
+    }
+
+    function onAssumpChange() {
+      readAssumptions();
+      if (baseDataset) {
+        activeDataset = applyScenario(baseDataset, scenario);
+        renderAll();
+      }
+    }
+
+    // ========== FIXED SAMPLE DATASET ==========
     const SAMPLE_DATA = {
       months: [
         {
@@ -729,34 +1399,94 @@
     };
 
     // ========== STATE MANAGEMENT ==========
-    let dataMode = 'sample'; // 'sample' or 'random'
-    let scenario = 'base'; // 'base', 'upside', 'downside'
-    let baseDataset = null; // Raw dataset without scenario multipliers
-    let activeDataset = null; // Dataset with scenario multipliers applied
+    let dataMode = 'sample';
+    let scenario = 'base';
+    let baseDataset = null;
+    let activeDataset = null;
+    let activePlanTab = 'conservative';
 
-    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const FUNCTIONS = ['Sales', 'Engineering', 'G&A', 'Ops'];
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const FUNCTIONS = ['Sales','Engineering','G&A','Ops'];
 
-    // Chart points for tooltips
     let headcountChartPoints = [];
     let opexChartPoints = [];
     let utilizationChartPoints = [];
     let runwayChartPoints = [];
 
-    // ========== DATA FUNCTIONS ==========
-    
-    function deepCopy(obj) {
-      return JSON.parse(JSON.stringify(obj));
+    // ========== GLOSSARY (single source of truth for all finance term tooltips) ==========
+    // Each entry: [shortLabel, fullDefinition (≤220 chars)]
+    const GLOSSARY = {
+      'Runway':          'Months of cash left at the current burn rate. Under 6 months = critical. Tells you when to start fundraising or cut costs.',
+      'Burn Rate':       'How much cash you spend each month. Higher burn = shorter runway. Used to calculate runway and model hiring decisions.',
+      'Utilization':     'How much of your team\'s capacity is actually being used. Above 85% = overloaded (hire soon). Below 70% = paying for idle capacity.',
+      'Headcount':       'Total number of employees. Drives costs, capacity, and burn rate. Key input to every financial forecast.',
+      'Opex':            'Operating Expenditure: the recurring cash cost of running the business — salaries, benefits, taxes, bonuses. Excludes one-time costs.',
+      'Fully Loaded Cost': 'The true cost of an employee beyond base salary. Includes benefits, payroll taxes, bonus accrual, equipment, and recruiting costs.',
+      'Run Rate':        'Annualized view of a current monthly figure. E.g., $200K/month run rate = $2.4M/year. Used for forecasting and investor reporting.',
+      'One-Time Costs':  'Upfront costs per new hire: equipment, recruiter fees, onboarding. Not recurring — but spike cash burn in the month incurred.',
+      'Capacity':        'Maximum output your team can produce in a period, accounting for productivity ramp of new hires (25% → 60% → 100% over 3 months).',
+      'Demand':          'Actual workload flowing into a team. When demand consistently exceeds capacity, it signals a hiring need.',
+      'Backlog':         'Work piling up because demand exceeds capacity. A growing backlog risks customer SLA misses, churn, and revenue loss.',
+      'Backlog %':       'Backlog as a percentage of total capacity. Above 20% = serious delivery risk. Customers and leadership will notice.',
+      'Conservative':    'Hiring strategy that prioritizes cash preservation. Hires 1 person only when utilization ≥ 85% AND runway ≥ 15 months.',
+      'Aggressive':      'Hiring strategy that prioritizes team capacity. Hires 2 people when utilization ≥ 85% AND runway ≥ 12 months.',
+      'Delta':           'The difference between Conservative and Aggressive scenarios. Shows the direct financial cost of moving faster.',
+      'Monthly Run Rate':'Recurring monthly spend excluding one-time costs. The baseline burn used for runway calculations.',
+      'Annual/Head':     'Monthly cost per employee × 12. Used for headcount budget submissions and board-level compensation benchmarking.',
+      'Monthly/Head':    'Fully loaded monthly cost per employee. Includes salary, benefits, payroll tax, and bonus accrual.',
+      'Story Points':    'Engineering output unit. Measures completed work items, weighted by complexity. Used to track engineering team capacity.',
+      'FTE Available':   'Full-Time Equivalent capacity in G&A. Tracks how many operational support hours are available vs. allocated.',
+      'Proj. Util':      'Projected utilization in a future month, accounting for demand growth and the ramp-up of planned new hires.',
+      'Proj. Runway':    'Projected months of cash remaining, after deducting one-time hiring costs from the current cash balance.',
+      'Ramp':            'New hire productivity ramp: 25% capacity in Month 1, 60% in Month 2, 100% from Month 3. Reflects real-world onboarding time.',
+      'Confidence':      'How strongly the data supports the recommendation. HIGH = both signals clearly align. MED = signals are mixed. LOW = data near threshold.',
+      'HIRE':            'Both utilization and runway support adding headcount now. Team is overloaded AND cash position is healthy. Act now before bottlenecks compound.',
+      'DON\'T HIRE':     'Either cash is too tight or the team is underutilized. Hiring now would burn capital without solving a real capacity problem.',
+      'SLOW GROWTH':     'Runway is comfortable but team isn\'t fully loaded. Hire selectively in bottlenecked functions only. Hold in underutilized areas.',
+      'CUT BURN':        'Runway is under 6 months. Immediate priority: reduce monthly spend, delay hiring, and/or accelerate path to revenue.',
+      'RAISE':           'Team is overloaded but runway is too short to hire safely. Raise capital first, then build headcount after closing the round.',
+      'Implied Raise':   'Estimated fundraise size needed to extend runway to target. Calculated as: monthly burn × (target runway − current runway).',
+      'Target Runway':   'The desired months of runway post-fundraise. 18 months is the standard — gives 6 months to deploy capital plus buffer before next raise.',
+      'Comp Inflation':  'Annual % increase applied to recurring payroll costs (salary, benefits, taxes, bonus). Models merit raises and market comp drift. Applied monthly (rate÷12) to each data period.',
+      'Hiring Lead Time':'Months between approving a hire and the new employee\'s start date. Delays capacity relief and shifts when one-time costs hit cash.',
+    };
+
+    /**
+     * gl(term) — wraps a finance term in a tooltip span using the GLOSSARY.
+     * Falls back to plain text if term isn't in the glossary.
+     */
+    function gl(term, displayText) {
+      const label = displayText || term;
+      const def = GLOSSARY[term];
+      if (!def) return label;
+      // Escape the definition for use in a data attribute
+      const safe = def.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      return `<span class="gl-term" data-tt="${safe}">${label}</span>`;
     }
 
-    function loadSampleData() {
-      return deepCopy(SAMPLE_DATA);
+    // ========== SAFE NUMBER HELPERS ==========
+
+    function safeNum(val, fallback = 0) {
+      if (val === null || val === undefined) return fallback;
+      const n = Number(val);
+      return (isFinite(n) && !isNaN(n)) ? n : fallback;
     }
+
+    function fmtSafe(val, decimals = 1) {
+      const n = safeNum(val);
+      return isFinite(n) ? n.toFixed(decimals) : '—';
+    }
+
+    // ========== DATA FUNCTIONS ==========
+
+    function deepCopy(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+    function loadSampleData() { return deepCopy(SAMPLE_DATA); }
 
     function generateRandomData() {
       const data = {
         months: [],
-        runway: { 
+        runway: {
           cash: 1600000 + Math.random() * 1400000,
           burn: 140000 + Math.random() * 90000
         }
@@ -764,8 +1494,7 @@
 
       MONTHS.forEach((month, mi) => {
         const monthData = { month, functions: [] };
-
-        FUNCTIONS.forEach((func, fi) => {
+        FUNCTIONS.forEach((func) => {
           const baseHC = Math.floor(10 + Math.random() * 25);
           const hireRate = (0.2 + Math.random() * 0.5);
           const growth = Math.floor(mi * hireRate);
@@ -776,12 +1505,11 @@
           const benefits = salaryMonth * (0.16 + Math.random() * 0.08);
           const taxes = salaryMonth * (0.07 + Math.random() * 0.02);
           const bonus = salaryMonth * (0.11 + Math.random() * 0.08);
-          
           const newHires = mi === 0 ? 0 : Math.floor(hireRate * (0.9 + Math.random() * 0.2));
           const equipment = newHires * (2000 + Math.random() * 3500);
           const recruiting = newHires * (5000 + Math.random() * 11000);
           const onboarding = newHires * (3000 + Math.random() * 6000);
-          
+
           let capacityMetric, capacity, demand;
           if (func === 'Sales') {
             capacityMetric = 'Deals/month';
@@ -802,51 +1530,399 @@
           }
 
           monthData.functions.push({
-            name: func,
-            headcount,
+            name: func, headcount,
             costs: { salary: salaryMonth, benefits, taxes, bonus, equipment, recruiting, onboarding },
             capacity: { metric: capacityMetric, capacity, demand }
           });
         });
-
         data.months.push(monthData);
       });
-
       return data;
     }
 
     function applyScenario(baseData, scenarioName) {
-      const mult = scenarioName === 'upside' ? 1.15 : scenarioName === 'downside' ? 0.85 : 1.0;
-      const utilBoost = scenarioName === 'upside' ? 0.10 : scenarioName === 'downside' ? -0.10 : 0;
-      
+      const mult = scenarioName === 'upside' ? ASSUMP.scenarUpside : scenarioName === 'downside' ? ASSUMP.scenarDownside : 1.0;
+      const utilBoost = scenarioName === 'upside' ? ASSUMP.scenarUtilShift / 100 : scenarioName === 'downside' ? -(ASSUMP.scenarUtilShift / 100) : 0;
       const scenarioData = deepCopy(baseData);
-      
-      scenarioData.months.forEach(month => {
+      // Apply comp inflation: annualRate/12 per month index
+      const monthlyInflation = ASSUMP.compInflation / 100 / 12;
+      scenarioData.months.forEach((month, mi) => {
+        const inflFactor = Math.pow(1 + monthlyInflation, mi);
         month.functions.forEach(func => {
-          // Apply multipliers to headcount (affects staffing levels)
           func.headcount = Math.round(func.headcount * mult);
-          
-          // Apply multipliers to costs (proportional to headcount changes)
-          const costKeys = ['salary', 'benefits', 'taxes', 'bonus', 'equipment', 'recruiting', 'onboarding'];
+          const costKeys = ['salary','benefits','taxes','bonus','equipment','recruiting','onboarding'];
           costKeys.forEach(key => {
             if (func.costs[key]) {
-              func.costs[key] = Math.round(func.costs[key] * mult);
+              // Apply scenario mult, then inflation only to recurring (not one-time)
+              const isOneTime = key === 'equipment' || key === 'recruiting' || key === 'onboarding';
+              func.costs[key] = Math.round(func.costs[key] * mult * (isOneTime ? 1 : inflFactor));
             }
           });
-          
-          // Apply multipliers to capacity
           func.capacity.capacity = Math.round(func.capacity.capacity * mult);
-          const newDemand = Math.round(func.capacity.demand * (1 + utilBoost));
-          func.capacity.demand = newDemand;
+          func.capacity.demand = Math.round(func.capacity.demand * (1 + utilBoost));
         });
       });
-      
       return scenarioData;
     }
 
+    // ========== MULTI-FACTOR DECISION ENGINE ==========
+
+    function computeDecision(avgUtil, runway) {
+      const u = safeNum(avgUtil);
+      const r = safeNum(runway);
+      const rCrit   = ASSUMP.runwayCritical;
+      const rCaution= ASSUMP.runwayCaution;
+      const uRed    = ASSUMP.utilRed;
+      const uYellow = ASSUMP.utilYellow;
+
+      // Near-threshold LOW confidence detection
+      const runwayNear = Math.abs(r - rCrit) <= 1 || Math.abs(r - rCaution) <= 1;
+      const utilNear   = Math.abs(u - uRed) <= 2 || Math.abs(u - uYellow) <= 2;
+      const near = runwayNear || utilNear;
+
+      let decision, cssClass, confidence, ruleText;
+
+      if (r < rCrit) {
+        decision = 'CUT BURN';  cssClass = 'bd-cut';
+        confidence = near ? 'LOW' : 'HIGH';
+        ruleText = `Rule: Runway < ${rCrit} mo → CUT BURN`;
+      } else if (r < rCaution && u >= uRed) {
+        decision = 'RAISE';     cssClass = 'bd-raise';
+        confidence = near ? 'LOW' : 'MED';
+        ruleText = `Rule: Runway ${rCrit}–${rCaution} mo AND Util ≥ ${uRed}% → RAISE`;
+      } else if (r >= rCaution && u >= uRed) {
+        decision = 'HIRE';      cssClass = 'bd-hire';
+        confidence = near ? 'LOW' : 'HIGH';
+        ruleText = `Rule: Runway ≥ ${rCaution} mo AND Util ≥ ${uRed}% → HIRE`;
+      } else if (r >= rCaution && u >= uYellow && u < uRed) {
+        decision = 'SLOW GROWTH'; cssClass = 'bd-slow';
+        confidence = near ? 'LOW' : 'MED';
+        ruleText = `Rule: Runway ≥ ${rCaution} mo AND Util ${uYellow}–${uRed}% → SLOW GROWTH`;
+      } else if (u < uYellow && r < rCaution) {
+        decision = 'DON\'T HIRE'; cssClass = 'bd-nohire';
+        confidence = near ? 'LOW' : 'HIGH';
+        ruleText = `Rule: Util < ${uYellow}% AND Runway < ${rCaution} mo → DON'T HIRE`;
+      } else {
+        decision = 'DON\'T HIRE'; cssClass = 'bd-nohire';
+        confidence = near ? 'LOW' : 'MED';
+        ruleText = `Rule: Util < ${uRed}% OR Runway insufficient → DON'T HIRE`;
+      }
+
+      // Capacity signal
+      const capSig = u >= uRed ? { label: 'Capacity: Overloaded', cls: 'sig-red' }
+                   : u >= uYellow ? { label: 'Capacity: Healthy', cls: 'sig-yellow' }
+                   :                { label: 'Capacity: Underutilized', cls: 'sig-green' };
+
+      // Cash signal
+      const cashSig = r < rCrit    ? { label: 'Runway: Critical', cls: 'sig-red' }
+                   : r < rCaution  ? { label: 'Runway: Caution', cls: 'sig-yellow' }
+                   :                  { label: 'Runway: Safe', cls: 'sig-green' };
+
+      // Build rationale bullets
+      const bullets = [];
+      bullets.push(`Avg utilization ${fmtSafe(u)}% — ${u >= uRed ? 'team is at or beyond sustainable capacity' : u >= uYellow ? 'healthy loading, monitor trend' : 'below target, overcapacity risk'}.`);
+      bullets.push(`Runway ${fmtSafe(r)} months — ${r < rCrit ? `critical: less than ${rCrit} months of cash remaining` : r < rCaution ? `caution: ${rCrit}–${rCaution} month window, fundraise or cut costs` : `comfortable: >${rCaution} months of operating capital`}.`);
+      if (decision === 'RAISE') bullets.push('Team is maxed but cash is tight — raise capital before headcount, then hire.');
+      if (decision === 'CUT BURN') bullets.push('Immediate priority: reduce monthly spend or accelerate revenue before any new hires.');
+      if (decision === 'SLOW GROWTH') bullets.push('Hire selectively in overloaded functions only; hold headcount in underutilized areas.');
+
+      return { decision, cssClass, confidence, capSig, cashSig, bullets, ruleText,
+               vals: { u, r, uRed, uYellow, rCrit, rCaution } };
+    }
+
+    // ========== DETERMINISTIC HIRING PLAN ==========
+
+    function computeHiringPlan(avgUtil, runway, strategy) {
+      // Uses ASSUMP for all thresholds
+      const utilThreshold   = ASSUMP.utilRed;
+      const runwayThreshold = strategy === 'aggressive' ? ASSUMP.runwaySafeHire : ASSUMP.runwaySafeCon;
+      const rampMo          = Math.max(1, Math.round(ASSUMP.rampMonths));
+      const costPerHire     = ASSUMP.oneTimeCost;
+
+      // Ramp curve: interpolate based on rampMonths
+      // Always starts at 25%, ends at 100%, midpoints fill proportionally
+      function getRampCurve(months) {
+        if (months <= 1) return [1.0];
+        if (months === 2) return [0.25, 1.0];
+        if (months === 3) return [0.25, 0.60, 1.0];
+        // >3 months: linear ramp from 25% to 100%
+        const curve = [];
+        for (let i = 0; i < months; i++) {
+          curve.push(+(0.25 + (0.75 * i / (months - 1))).toFixed(2));
+        }
+        return curve;
+      }
+      const rampCurve = getRampCurve(rampMo);
+      const rampLabel = rampCurve.map(v => Math.round(v * 100) + '%').join('→');
+
+      const planMonths = MONTHS.slice(0, 12);
+      const rows = [];
+
+      let curUtil = safeNum(avgUtil);
+      let curRunway = safeNum(runway);
+      const baseBurnPerHead = 8500;
+
+      planMonths.forEach((mon, idx) => {
+        const shouldHire = curUtil >= utilThreshold && curRunway >= runwayThreshold;
+        const hires = shouldHire ? (strategy === 'aggressive' ? 2 : 1) : 0;
+        const oneTimeCost = hires > 0 ? hires * costPerHire : 0;
+        const demandGrowth = 0.008;
+        curUtil = Math.min(100, curUtil * (1 + demandGrowth));
+        // Full ramp kicks in after rampMo months
+        if (idx >= rampMo && rows[idx - rampMo] && rows[idx - rampMo].hires > 0) {
+          curUtil = Math.max(0, curUtil - (rows[idx - rampMo].hires * (strategy === 'aggressive' ? 4.5 : 3.5)));
+        }
+        curRunway = Math.max(0, curRunway - (1 + (oneTimeCost / (curRunway > 0 ? baseBurnPerHead * 10 : 1))));
+
+        rows.push({
+          month: mon,
+          hires,
+          oneTimeCost,
+          util: curUtil,
+          runway: curRunway,
+          rampNote: hires > 0 ? `${rampLabel} over ${rampMo} mo` : ''
+        });
+      });
+
+      return rows;
+    }
+
+    // ========== EXPORT FUNCTIONS ==========
+
+    function toggleExport(e) {
+      e.stopPropagation();
+      const dd = document.getElementById('exportDropdown');
+      dd.classList.toggle('open');
+      // Close on outside click
+      if (dd.classList.contains('open')) {
+        setTimeout(() => {
+          document.addEventListener('click', closeExportOnce);
+        }, 10);
+      }
+    }
+    function closeExportOnce() {
+      document.getElementById('exportDropdown').classList.remove('open');
+      document.removeEventListener('click', closeExportOnce);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('exportToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    function csvEscape(v) {
+      const s = String(v == null ? '' : v);
+      if (s.includes(',') || s.includes('"') || s.includes('\n')) return '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+
+    function blobDownload(content, filename, mime) {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function exportHiringPlanCSV() {
+      document.getElementById('exportDropdown').classList.remove('open');
+      if (!activeDataset) { showToast('No data loaded.'); return; }
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      const avgUtil = last.functions.reduce((s, f) => s + ((f.capacity.demand / safeNum(f.capacity.capacity, 1)) * 100), 0) / FUNCTIONS.length;
+      const runway  = safeNum(data.runway.cash / data.runway.burn);
+
+      const conPlan = computeHiringPlan(avgUtil, runway, 'conservative');
+      const aggPlan = computeHiringPlan(avgUtil, runway, 'aggressive');
+
+      const headers = ['Month','Con_Hires','Con_OneTimeCost','Con_Util%','Con_Runway_mo','Agg_Hires','Agg_OneTimeCost','Agg_Util%','Agg_Runway_mo'];
+      const rows = conPlan.map((cr, i) => {
+        const ar = aggPlan[i];
+        return [cr.month, cr.hires, cr.oneTimeCost, cr.util.toFixed(1), cr.runway.toFixed(1), ar.hires, ar.oneTimeCost, ar.util.toFixed(1), ar.runway.toFixed(1)];
+      });
+
+      const csv = [headers, ...rows].map(r => r.map(csvEscape).join(',')).join('\n');
+      // Metadata footer
+      const meta = [
+        '',
+        `Assumptions used`,
+        `Util Red,${ASSUMP.utilRed}%`,
+        `Util Yellow,${ASSUMP.utilYellow}%`,
+        `Runway Critical,${ASSUMP.runwayCritical} mo`,
+        `Runway Caution,${ASSUMP.runwayCaution} mo`,
+        `Safe to Hire (Agg),${ASSUMP.runwaySafeHire} mo`,
+        `Safe to Hire (Con),${ASSUMP.runwaySafeCon} mo`,
+        `Ramp Duration,${ASSUMP.rampMonths} mo`,
+        `One-Time Cost/Hire,$${ASSUMP.oneTimeCost}`,
+        `Comp Inflation,${ASSUMP.compInflation}%/yr`,
+        `Scenario,${scenario}`,
+        `Exported,${new Date().toISOString()}`
+      ].join('\n');
+
+      blobDownload(csv + '\n' + meta, 'hiring-plan.csv', 'text/csv');
+      showToast('✓ Hiring Plan exported');
+    }
+
+    function exportFunctionCostCSV() {
+      document.getElementById('exportDropdown').classList.remove('open');
+      if (!activeDataset) { showToast('No data loaded.'); return; }
+      const data = activeDataset;
+      const headers = ['Month','Function','Headcount','Salary','Benefits','Taxes','Bonus','Equipment','Recruiting','Onboarding','Total_Fully_Loaded','Per_Head_Monthly'];
+      const rows = [];
+      data.months.forEach(month => {
+        month.functions.forEach(func => {
+          const c = func.costs;
+          const total = c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding;
+          const perHead = func.headcount > 0 ? total / func.headcount : 0;
+          rows.push([month.month, func.name, func.headcount, c.salary.toFixed(0), c.benefits.toFixed(0), c.taxes.toFixed(0), c.bonus.toFixed(0), c.equipment.toFixed(0), c.recruiting.toFixed(0), c.onboarding.toFixed(0), total.toFixed(0), perHead.toFixed(0)]);
+        });
+      });
+      const meta = [
+        '',
+        `Comp Inflation Applied,${ASSUMP.compInflation}%/yr`,
+        `Scenario,${scenario}`,
+        `Exported,${new Date().toISOString()}`
+      ].join('\n');
+      const csv = [headers, ...rows].map(r => r.map(csvEscape).join(',')).join('\n');
+      blobDownload(csv + '\n' + meta, 'function-costs.csv', 'text/csv');
+      showToast('✓ Function Cost Table exported');
+    }
+
+    function copyBoardSummary() {
+      document.getElementById('exportDropdown').classList.remove('open');
+      if (!activeDataset) { showToast('No data loaded.'); return; }
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      const totalHC   = last.functions.reduce((s, f) => s + f.headcount, 0);
+      const totalCost = last.functions.reduce((s, f) => { const c = f.costs; return s + c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding; }, 0);
+      const avgUtil   = last.functions.reduce((s, f) => s + ((f.capacity.demand / safeNum(f.capacity.capacity, 1)) * 100), 0) / FUNCTIONS.length;
+      const runway    = safeNum(data.runway.cash / data.runway.burn);
+      const dec       = computeDecision(avgUtil, runway);
+
+      const lines = [
+        '╔══ INDIRECT COST & HEADCOUNT BOARD SUMMARY ══╗',
+        `  Date: ${new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'})}`,
+        `  Scenario: ${scenario.toUpperCase()}`,
+        '',
+        '── DECISION ──────────────────────────────────',
+        `  Verdict:    ${dec.decision}`,
+        `  Confidence: ${dec.confidence}`,
+        `  ${dec.ruleText}`,
+        '',
+        '── VALUES vs THRESHOLDS ──────────────────────',
+        `  Utilization: ${fmtSafe(avgUtil)}%   (Red ≥ ${ASSUMP.utilRed}% · Yellow ≥ ${ASSUMP.utilYellow}%)`,
+        `  Runway:      ${isFinite(runway) ? fmtSafe(runway) + ' mo' : '—'}   (Critical < ${ASSUMP.runwayCritical} · Caution < ${ASSUMP.runwayCaution})`,
+        '',
+        '── KPIs ──────────────────────────────────────',
+        `  Total Headcount:  ${totalHC}  (across ${FUNCTIONS.length} functions)`,
+        `  Monthly Opex:     ${formatCurrency(totalCost, 0)}  (fully loaded)`,
+        `  Starting Cash:    ${formatCurrency(data.runway.cash, 0)}`,
+        `  Monthly Burn:     ${formatCurrency(data.runway.burn, 0)}`,
+        '',
+        '── FUNCTION BREAKDOWN ────────────────────────',
+        ...last.functions.map(f => {
+          const c = f.costs;
+          const tot = c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding;
+          const util = ((f.capacity.demand / safeNum(f.capacity.capacity, 1)) * 100).toFixed(1);
+          return `  ${f.name.padEnd(12)} HC: ${String(f.headcount).padEnd(4)} Util: ${util}%   Cost: ${formatCurrency(tot, 0)}/mo`;
+        }),
+        '',
+        '── ASSUMPTIONS ───────────────────────────────',
+        `  Comp Inflation: ${ASSUMP.compInflation}%/yr`,
+        `  Ramp Duration:  ${ASSUMP.rampMonths} months`,
+        `  One-time/Hire:  ${formatCurrency(ASSUMP.oneTimeCost, 0)}`,
+        `  Scenario Mults: Upside ${ASSUMP.scenarUpside}x / Downside ${ASSUMP.scenarDownside}x`,
+        '',
+        '╚════════════════════════════════════════════╝'
+      ];
+
+      const text = lines.join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('✓ Board Summary copied to clipboard')).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('✓ Board Summary copied'); }
+      catch(e) { showToast('⚠ Copy failed — use Ctrl+A then Ctrl+C'); }
+      document.body.removeChild(ta);
+    }
+
+    // ========== ASSUMPTIONS PANEL TOGGLE ==========
+
+    let assumpOpen = false;
+
+    function toggleAssumptions() {
+      assumpOpen = !assumpOpen;
+      const body    = document.getElementById('assumpBody');
+      const chevron = document.getElementById('assumpChevron');
+      const trigger = document.getElementById('assumpTrigger');
+      body.classList.toggle('open', assumpOpen);
+      chevron.classList.toggle('open', assumpOpen);
+      trigger.setAttribute('aria-expanded', String(assumpOpen));
+
+      // Hide/show the other sidebar sections
+      ['sidebarScenario','sidebarCash','sidebarActions'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('is-hidden', assumpOpen);
+      });
+    }
+
+    // ========== DEFAULTS (single source for reset) ==========
+    const ASSUMP_DEFAULTS = {
+      utilYellow: 70, utilRed: 85,
+      runwayCritical: 6, runwayCaution: 12,
+      runwaySafeHire: 12, runwaySafeCon: 15,
+      rampMonths: 3, oneTimeCost: 16000,
+      compInflation: 6,
+      scenarUpside: 1.15, scenarDownside: 0.85, scenarUtilShift: 10
+    };
+
+    const ASSUMP_INPUT_MAP = {
+      utilYellow: 'aUtilYellow', utilRed: 'aUtilRed',
+      runwayCritical: 'aRunwayCritical', runwayCaution: 'aRunwayCaution',
+      runwaySafeHire: 'aRunwaySafeHire', runwaySafeCon: 'aRunwaySafeCon',
+      rampMonths: 'aRampMonths', oneTimeCost: 'aOneTimeCost',
+      compInflation: 'aCompInflation',
+      scenarUpside: 'aScenarUpside', scenarDownside: 'aScenarDownside',
+      scenarUtilShift: 'aScenarUtilShift'
+    };
+
+    function resetAssumptions() {
+      // Write defaults back to inputs
+      Object.keys(ASSUMP_DEFAULTS).forEach(key => {
+        const el = document.getElementById(ASSUMP_INPUT_MAP[key]);
+        if (el) {
+          el.value = ASSUMP_DEFAULTS[key];
+          el.classList.remove('invalid');
+        }
+      });
+      // Apply to ASSUMP object
+      Object.assign(ASSUMP, ASSUMP_DEFAULTS);
+      // Re-render
+      if (baseDataset) {
+        activeDataset = applyScenario(baseDataset, scenario);
+        renderAll();
+      }
+    }
+
     // ========== EVENT HANDLERS ==========
-    
+
     function onUseSample() {
+      // Reset assumptions to defaults first
+      resetAssumptions();
       baseDataset = loadSampleData();
       dataMode = 'sample';
       activeDataset = applyScenario(baseDataset, scenario);
@@ -863,18 +1939,18 @@
     }
 
     function onScenarioChange(newScenario) {
-      console.log('🔄 Scenario change:', scenario, '→', newScenario);
       scenario = newScenario;
-      
-      // Update active tab
-      document.querySelectorAll('.scenario-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
       document.querySelector(`[data-scenario="${newScenario}"]`).classList.add('active');
-      
-      // Apply scenario to existing baseDataset (NO regeneration)
       activeDataset = applyScenario(baseDataset, scenario);
-      console.log('✅ Dataset updated with scenario multiplier, rendering charts...');
       renderAll();
-      console.log('✅ Render complete');
+    }
+
+    function showPlanTab(tab) {
+      activePlanTab = tab;
+      document.getElementById('planTabCon').classList.toggle('active', tab === 'conservative');
+      document.getElementById('planTabAgg').classList.toggle('active', tab === 'aggressive');
+      renderHiringPlanTable();
     }
 
     function updateDataModeBadge() {
@@ -886,212 +1962,244 @@
     function updateCashBalance() {
       const input = document.getElementById('cashBalanceInput');
       const newCash = parseFloat(input.value) || 2400000;
-      
-      // Update the active dataset's runway cash
       if (activeDataset) {
         activeDataset.runway.cash = newCash;
-        
-        // Also update baseDataset so scenario changes preserve the new cash value
-        if (baseDataset) {
-          baseDataset.runway.cash = newCash;
-        }
-        
-        // Re-render to show updated runway
+        if (baseDataset) baseDataset.runway.cash = newCash;
         renderAll();
       }
     }
 
     function syncCashBalanceInput() {
       const input = document.getElementById('cashBalanceInput');
-      if (activeDataset && input) {
-        input.value = activeDataset.runway.cash;
-      }
+      if (activeDataset && input) input.value = activeDataset.runway.cash;
     }
 
-    // ========== TOOLTIP ENGINE (data-help approach matching style.css) ==========
-    
+    // ========== TOOLTIP ENGINE (data-help legacy, kept for sidebar) ==========
+
     function updateTooltips() {
       if (!activeDataset) return;
-      
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
-      const totalHC = last.functions.reduce((s, f) => s + f.headcount, 0);
       const totalCost = last.functions.reduce((s, f) => {
         const c = f.costs;
         return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
       }, 0);
       const avgUtil = last.functions.reduce((s, f) => {
-        const util = (f.capacity.demand / f.capacity.capacity) * 100;
-        return s + util;
+        return s + ((f.capacity.demand / f.capacity.capacity) * 100);
       }, 0) / FUNCTIONS.length;
-      const runway = data.runway.cash / data.runway.burn;
-      
-      // Update section tooltips with current data
+      const runway = safeNum(data.runway.cash / data.runway.burn);
+
       const opexHelp = document.querySelector('#opexHelp');
-      if (opexHelp) {
-        opexHelp.setAttribute('data-help', `Shows where your money goes each month. Currently spending ${formatCurrency(totalCost, 0)}/month total. Helps you compare team sizes and costs across Sales, Engineering, G&A, and Ops.`);
-      }
-      
-      const fullyLoadedHelp = document.querySelector('#fullyLoadedCostHelp');
-      if (fullyLoadedHelp) {
-        fullyLoadedHelp.setAttribute('data-help', `The real cost of an employee isn't just their salary. This breaks down benefits, taxes, bonuses, and one-time costs so you know what hiring actually costs.`);
-      }
-      
-      const utilizationHelp = document.querySelector('#utilizationHelp');
-      if (utilizationHelp) {
-        utilizationHelp.setAttribute('data-help', `Shows if your team is underwater (too much work) or underutilized (paying for capacity you don't need). Current avg: ${avgUtil.toFixed(1)}%. Critical for timing your next hire.`);
-      }
-      
-      const hiringTriggersHelp = document.querySelector('#hiringTriggersHelp');
-      if (hiringTriggersHelp) {
-        hiringTriggersHelp.setAttribute('data-help', `Takes the guesswork out of hiring. Shows exactly when to hire (team is overloaded) vs. when to delay (cash is tight). Based on data, not gut feel.`);
-      }
-      
+      if (opexHelp) opexHelp.setAttribute('data-help', `Shows where your money goes each month. Currently spending ${formatCurrency(totalCost, 0)}/month total across ${FUNCTIONS.length} functions.`);
+
+      const utilHelp = document.querySelector('#utilizationHelp');
+      if (utilHelp) utilHelp.setAttribute('data-help', `Shows if your team is underwater (too much work) or underutilized. Current avg: ${fmtSafe(avgUtil)}%. >85% = hire, 70-85% = healthy, <70% = delay.`);
+
       const runwayHelp = document.querySelector('#runwayHelp');
-      if (runwayHelp) {
-        runwayHelp.setAttribute('data-help', `Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk team burnout. Current runway: ${runway.toFixed(1)} months. This shows the tradeoff so you can choose wisely.`);
-      }
+      if (runwayHelp) runwayHelp.setAttribute('data-help', `Hire fast = solve bottlenecks but burn cash faster. Hire slow = preserve runway but risk burnout. Current runway: ${fmtSafe(runway)} months.`);
     }
 
     // ========== RENDERING FUNCTIONS ==========
-    
+
     function renderSummaryKPIs() {
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
-      
+
       const totalHC = last.functions.reduce((s, f) => s + f.headcount, 0);
       const totalCost = last.functions.reduce((s, f) => {
         const c = f.costs;
         return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
       }, 0);
       const avgUtil = last.functions.reduce((s, f) => {
-        const util = (f.capacity.demand / f.capacity.capacity) * 100;
-        return s + util;
+        const cap = safeNum(f.capacity.capacity, 1);
+        return s + ((f.capacity.demand / cap) * 100);
       }, 0) / FUNCTIONS.length;
-      const runway = data.runway.cash / data.runway.burn;
+      const runway = safeNum(data.runway.cash / data.runway.burn);
+
+      // Board decision
+      const dec = computeDecision(avgUtil, runway);
+      renderBoardDecisionCard(dec, avgUtil, runway);
 
       document.getElementById('summaryKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label">Total Headcount</div>
+          <div class="kpi-box-label">
+            Total Headcount <span class="tt-icon" data-tt="${GLOSSARY['Headcount'].replace(/"/g,'&quot;')}">?</span>
+          </div>
           <div class="kpi-box-value">${totalHC}</div>
           <div class="kpi-box-sub">Across ${FUNCTIONS.length} functions</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Monthly Opex</div>
+          <div class="kpi-box-label">
+            Monthly Opex <span class="tt-icon" data-tt="${GLOSSARY['Opex'].replace(/"/g,'&quot;')}">?</span>
+          </div>
           <div class="kpi-box-value">${formatCurrency(totalCost, 0)}</div>
-          <div class="kpi-box-sub">Fully loaded</div>
+          <div class="kpi-box-sub">Fully loaded · <span class="inflation-badge" data-tt="Comp inflation of ${ASSUMP.compInflation}%/yr is applied to recurring payroll costs over the 12-month dataset.">${ASSUMP.compInflation}%/yr inflation</span></div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">
-            Avg Utilization
-            <span class="help-icon" data-help="What % of your team's capacity is being used. >85% = overloaded (hire soon), 70-85% = healthy, <70% = underutilized (delay hiring)." style="margin-left: 4px;"></span>
+            Avg Utilization <span class="tt-icon" data-tt="${GLOSSARY['Utilization'].replace(/"/g,'&quot;')}">?</span>
           </div>
-          <div class="kpi-box-value" style="color: ${avgUtil > 85 ? COLORS.warning : avgUtil > 75 ? COLORS.caution : COLORS.success};">${avgUtil.toFixed(1)}%</div>
-          <div class="kpi-box-sub">${avgUtil > 85 ? 'Consider hiring' : avgUtil < 70 ? 'Underutilized' : 'Healthy range'}</div>
+          <div class="kpi-box-value" style="color: ${avgUtil > ASSUMP.utilRed ? COLORS.warning : avgUtil > ASSUMP.utilYellow ? COLORS.caution : COLORS.success};">${fmtSafe(avgUtil)}%</div>
+          <div class="kpi-box-sub">${avgUtil > ASSUMP.utilRed ? 'Consider hiring' : avgUtil < ASSUMP.utilYellow ? 'Underutilized' : 'Healthy range'}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">
-            Runway
-            <span class="help-icon" data-help="Months until you run out of cash at current burn rate. <6 months = critical, 6-12 months = tight, >12 months = comfortable." style="margin-left: 4px;"></span>
+            Runway <span class="tt-icon" data-tt="${GLOSSARY['Runway'].replace(/"/g,'&quot;')}">?</span>
           </div>
-          <div class="kpi-box-value" style="color: ${runway < 6 ? COLORS.warning : runway < 12 ? COLORS.caution : COLORS.success};">${runway.toFixed(1)} mo</div>
-          <div class="kpi-box-sub">At current burn</div>
+          <div class="kpi-box-value" style="color: ${runway < ASSUMP.runwayCritical ? COLORS.warning : runway < ASSUMP.runwayCaution ? COLORS.caution : COLORS.success};">${isFinite(runway) ? fmtSafe(runway) + ' mo' : '—'}</div>
+          <div class="kpi-box-sub">At current ${gl('Burn Rate', 'burn rate')}</div>
+        </div>
+      `;
+    }
+
+    function renderBoardDecisionCard(dec, avgUtil, runway) {
+      const confClass = dec.confidence === 'HIGH' ? 'bd-conf-high' : dec.confidence === 'MED' ? 'bd-conf-med' : 'bd-conf-low';
+      const bulletsHtml = dec.bullets.map(b => `<div class="bd-bullet">${b}</div>`).join('');
+
+      // ── Raise Plan callout (deterministic — only when decision = RAISE) ──
+      let raisePlanHtml = '';
+      if (dec.decision === 'RAISE') {
+        const data = activeDataset;
+        const monthlyBurn = safeNum(data.runway.cash / runway / runway) || safeNum(data.runway.burn); // fallback to stored burn
+        // Use the stored burn rate for accuracy
+        const burn = safeNum(data.runway.burn);
+        const targetRunway = 18; // months — standard pre-Series ask
+        const impliedRaise = Math.max(0, burn * (targetRunway - runway));
+        // Start fundraising when runway hits 9–12 months (standard lead time)
+        const startAt = Math.max(1, Math.round(runway - 9)); // months from now
+        const startLabel = startAt <= 1 ? 'Immediately' : `In ~${startAt} month${startAt !== 1 ? 's' : ''}`;
+
+        raisePlanHtml = `
+          <div class="raise-plan-callout">
+            <div class="raise-plan-header">
+              <span class="raise-plan-badge">Raise Plan</span>
+              <span class="raise-plan-title">Fundraising roadmap based on current financials</span>
+            </div>
+            <div class="raise-plan-grid">
+              <div class="raise-plan-metric">
+                <div class="raise-plan-metric-label">${gl('Implied Raise')}</div>
+                <div class="raise-plan-metric-value">${formatCurrency(impliedRaise, 0)}</div>
+              </div>
+              <div class="raise-plan-metric">
+                <div class="raise-plan-metric-label">${gl('Target Runway')} (post-close)</div>
+                <div class="raise-plan-metric-value">${targetRunway} months</div>
+              </div>
+              <div class="raise-plan-metric">
+                <div class="raise-plan-metric-label">Start Fundraising</div>
+                <div class="raise-plan-metric-value" style="font-size:13px;">${startLabel}</div>
+              </div>
+            </div>
+            <div class="raise-plan-note">
+              <strong>Logic:</strong> Implied raise = monthly ${gl('Burn Rate')} (${formatCurrency(burn, 0)}) × (target ${targetRunway} mo − current ${fmtSafe(runway)} mo ${gl('Runway')}).
+              Begin investor outreach when ${gl('Runway')} reaches 9–12 months to allow a standard 6-month fundraising process.
+              Hiring should pause until round is closed.
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('boardDecisionCard').innerHTML = `
+        <div class="bd-verdict-col">
+          <div class="bd-label">Board Decision</div>
+          <div class="bd-decision ${dec.cssClass}" data-tt="${(GLOSSARY[dec.decision] || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">${dec.decision}</div>
+          <div class="bd-confidence-pill ${confClass}" data-tt="${(GLOSSARY['Confidence'] || '').replace(/"/g,'&quot;')}">
+            Confidence: ${dec.confidence}
+          </div>
+          <div class="bd-signals">
+            <span class="bd-signal ${dec.capSig.cls}" data-tt="${(GLOSSARY['Utilization'] || '').replace(/"/g,'&quot;')}">${dec.capSig.label}</span>
+            <span class="bd-signal ${dec.cashSig.cls}" data-tt="${(GLOSSARY['Runway'] || '').replace(/"/g,'&quot;')}">${dec.cashSig.label}</span>
+          </div>
+          <!-- Rule fired (transparency) -->
+          <div class="bd-rule-fired">
+            <strong>${dec.ruleText}</strong>
+          </div>
+        </div>
+        <div class="bd-rationale-col">
+          <div class="bd-label">Rationale</div>
+          <!-- Values vs thresholds -->
+          <div class="bd-values-grid">
+            <div class="bd-value-chip">
+              <div class="bv-label">Utilization</div>
+              <div class="bv-val" style="color:${dec.vals.u >= dec.vals.uRed ? COLORS.warning : dec.vals.u >= dec.vals.uYellow ? COLORS.caution : COLORS.success};">${fmtSafe(dec.vals.u)}%</div>
+              <div class="bv-thresh">Red ≥ ${dec.vals.uRed}% · Yellow ≥ ${dec.vals.uYellow}%</div>
+            </div>
+            <div class="bd-value-chip">
+              <div class="bv-label">Runway</div>
+              <div class="bv-val" style="color:${dec.vals.r < dec.vals.rCrit ? COLORS.warning : dec.vals.r < dec.vals.rCaution ? COLORS.caution : COLORS.success};">${isFinite(dec.vals.r) ? fmtSafe(dec.vals.r) + ' mo' : '—'}</div>
+              <div class="bv-thresh">Critical &lt; ${dec.vals.rCrit} · Caution &lt; ${dec.vals.rCaution}</div>
+            </div>
+          </div>
+          <div class="bd-bullets" style="margin-top:10px;">${bulletsHtml}</div>
+          ${raisePlanHtml}
         </div>
       `;
     }
 
     function renderHeadcountChart() {
       const canvas = document.getElementById('headcountChart');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
-      
       const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
       canvas.width = rect.width * dpr;
       canvas.height = 320 * dpr;
       canvas.style.width = rect.width + 'px';
       canvas.style.height = '320px';
       ctx.scale(dpr, dpr);
-      
+
       const w = rect.width;
       const h = 320;
       const padding = { top: 40, right: 60, bottom: 50, left: 60 };
       const chartW = w - padding.left - padding.right;
       const chartH = h - padding.top - padding.bottom;
-      
+
       const data = activeDataset;
       headcountChartPoints = [];
-      
-      const maxHC = Math.max(...data.months.map(m => m.functions.reduce((s, f) => s + f.headcount, 0))) * 1.1;
-      
-      // Grid
-      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
+
+      const totals = data.months.map(m => m.functions.reduce((s, f) => s + f.headcount, 0));
+      const maxHCRaw = Math.max(...totals.filter(v => isFinite(v)));
+      const maxHC = (isFinite(maxHCRaw) && maxHCRaw > 0) ? maxHCRaw * 1.1 : 10;
+
+      ctx.strokeStyle = 'rgba(12,23,45,0.08)';
       ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (i / 4) * chartH;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(w - padding.right, y);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(w - padding.right, y); ctx.stroke();
       }
-      
-      // Y-axis
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
+      ctx.fillStyle = COLORS.muted; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       for (let i = 0; i <= 4; i++) {
         const val = maxHC * (1 - i / 4);
         const y = padding.top + (i / 4) * chartH;
         ctx.fillText(Math.round(val).toString(), padding.left - 10, y);
       }
-      
-      // Stacked bars
+
       const barWidth = chartW / data.months.length;
-      
       data.months.forEach((month, mi) => {
         const x = padding.left + mi * barWidth + barWidth * 0.1;
         const barW = barWidth * 0.8;
         let yOffset = 0;
-        
         month.functions.forEach((func, fi) => {
           const height = (func.headcount / maxHC) * chartH;
           const y = padding.top + chartH - yOffset - height;
-          
           ctx.fillStyle = COLORS.functions[fi];
           ctx.fillRect(x, y, barW, height);
-          
-          headcountChartPoints.push({
-            x: x + barW / 2,
-            y: y + height / 2,
-            month: month.month,
-            function: func.name,
-            headcount: func.headcount
-          });
-          
+          headcountChartPoints.push({ x: x + barW / 2, y: y + height / 2, month: month.month, function: func.name, headcount: func.headcount });
           yOffset += height;
         });
       });
-      
-      // Month labels
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
+
+      ctx.fillStyle = COLORS.muted; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       data.months.forEach((month, i) => {
         if (i % 2 === 0 || data.months.length <= 6) {
-          const x = padding.left + i * barWidth + barWidth / 2;
-          ctx.fillText(month.month, x, h - padding.bottom + 10);
+          ctx.fillText(month.month, padding.left + i * barWidth + barWidth / 2, h - padding.bottom + 10);
         }
       });
-      
-      // Legend
+
       let legendX = padding.left;
       FUNCTIONS.forEach((func, i) => {
-        ctx.fillStyle = COLORS.functions[i];
-        ctx.fillRect(legendX, 15, 16, 10);
-        ctx.fillStyle = '#0b1220';
-        ctx.font = '11px sans-serif';
-        ctx.textAlign = 'left';
+        ctx.fillStyle = COLORS.functions[i]; ctx.fillRect(legendX, 15, 16, 10);
+        ctx.fillStyle = '#0b1220'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
         ctx.fillText(func, legendX + 20, 22);
         legendX += ctx.measureText(func).width + 35;
       });
@@ -1099,101 +2207,72 @@
 
     function renderOpexChart() {
       const canvas = document.getElementById('opexChart');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
-      
       const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
       canvas.width = rect.width * dpr;
       canvas.height = 320 * dpr;
       canvas.style.width = rect.width + 'px';
       canvas.style.height = '320px';
       ctx.scale(dpr, dpr);
-      
-      const w = rect.width;
-      const h = 320;
+
+      const w = rect.width; const h = 320;
       const padding = { top: 40, right: 60, bottom: 50, left: 70 };
       const chartW = w - padding.left - padding.right;
       const chartH = h - padding.top - padding.bottom;
-      
+
       const data = activeDataset;
       opexChartPoints = [];
-      
-      const maxOpex = Math.max(...data.months.map(m => m.functions.reduce((s, f) => {
+
+      const totalsOpex = data.months.map(m => m.functions.reduce((s, f) => {
         const c = f.costs;
         return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
-      }, 0))) * 1.1;
-      
-      // Grid
-      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
-      ctx.lineWidth = 1;
+      }, 0));
+      const maxOpexRaw = Math.max(...totalsOpex.filter(v => isFinite(v)));
+      const maxOpex = (isFinite(maxOpexRaw) && maxOpexRaw > 0) ? maxOpexRaw * 1.1 : 1;
+
+      ctx.strokeStyle = 'rgba(12,23,45,0.08)'; ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (i / 4) * chartH;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(w - padding.right, y);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(w - padding.right, y); ctx.stroke();
       }
-      
-      // Y-axis
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
+      ctx.fillStyle = COLORS.muted; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       for (let i = 0; i <= 4; i++) {
         const val = maxOpex * (1 - i / 4);
         const y = padding.top + (i / 4) * chartH;
         ctx.fillText('$' + (val / 1000).toFixed(0) + 'K', padding.left - 10, y);
       }
-      
-      // Stacked bars
+
       const barWidth = chartW / data.months.length;
-      
       data.months.forEach((month, mi) => {
         const x = padding.left + mi * barWidth + barWidth * 0.1;
         const barW = barWidth * 0.8;
         let yOffset = 0;
-        
         month.functions.forEach((func, fi) => {
           const c = func.costs;
           const totalCost = c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding;
           const height = (totalCost / maxOpex) * chartH;
           const y = padding.top + chartH - yOffset - height;
-          
           ctx.fillStyle = COLORS.functions[fi];
           ctx.fillRect(x, y, barW, height);
-          
-          opexChartPoints.push({
-            x: x + barW / 2,
-            y: y + height / 2,
-            month: month.month,
-            function: func.name,
-            cost: totalCost
-          });
-          
+          opexChartPoints.push({ x: x + barW / 2, y: y + height / 2, month: month.month, function: func.name, cost: totalCost });
           yOffset += height;
         });
       });
-      
-      // Month labels
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
+
+      ctx.fillStyle = COLORS.muted; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       data.months.forEach((month, i) => {
         if (i % 2 === 0 || data.months.length <= 6) {
-          const x = padding.left + i * barWidth + barWidth / 2;
-          ctx.fillText(month.month, x, h - padding.bottom + 10);
+          ctx.fillText(month.month, padding.left + i * barWidth + barWidth / 2, h - padding.bottom + 10);
         }
       });
-      
-      // Legend
+
       let legendX = padding.left;
       FUNCTIONS.forEach((func, i) => {
-        ctx.fillStyle = COLORS.functions[i];
-        ctx.fillRect(legendX, 15, 16, 10);
-        ctx.fillStyle = '#0b1220';
-        ctx.font = '11px sans-serif';
-        ctx.textAlign = 'left';
+        ctx.fillStyle = COLORS.functions[i]; ctx.fillRect(legendX, 15, 16, 10);
+        ctx.fillStyle = '#0b1220'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
         ctx.fillText(func, legendX + 20, 22);
         legendX += ctx.measureText(func).width + 35;
       });
@@ -1202,15 +2281,15 @@
     function renderFullyLoadedCosts() {
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
-      
       let html = '';
+
       last.functions.forEach(func => {
         const c = func.costs;
         const runRate = c.salary + c.benefits + c.taxes + c.bonus;
         const oneTime = c.equipment + c.recruiting + c.onboarding;
-        const perHead = runRate / func.headcount;
+        const perHead = safeNum(runRate / (func.headcount || 1));
         const annualPerHead = perHead * 12;
-        
+
         html += `
           <div class="module-card">
             <div class="card-header">
@@ -1218,7 +2297,7 @@
               <div style="font-size: 13px; color: var(--muted);">${func.headcount} employees</div>
             </div>
             <div style="padding: 12px 16px; background: rgba(246,248,251,0.7); border-left: 3px solid ${COLORS.functions[FUNCTIONS.indexOf(func.name)]}; border-radius: 8px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--text);">
-              ${func.name === 'Sales' ? 
+              ${func.name === 'Sales' ?
                 'What it costs to close deals. Includes reps, managers, and sales ops. Higher comp plans (bonuses) reflect commission structures.' :
               func.name === 'Engineering' ?
                 'What it costs to build product. Includes developers, product managers, designers. High salary reflects competitive tech talent market.' :
@@ -1228,24 +2307,26 @@
             </div>
             <div class="kpi-grid">
               <div class="kpi-box">
-                <div class="kpi-box-label">Monthly/Head</div>
+                <div class="kpi-box-label">
+                  Monthly/Head <span class="tt-icon" data-tt="${GLOSSARY['Monthly/Head'].replace(/"/g,'&quot;')}">?</span>
+                </div>
                 <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(perHead, 0)}</div>
               </div>
               <div class="kpi-box">
-                <div class="kpi-box-label">Annual/Head</div>
+                <div class="kpi-box-label">
+                  Annual/Head <span class="tt-icon" data-tt="${GLOSSARY['Annual/Head'].replace(/"/g,'&quot;')}">?</span>
+                </div>
                 <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(annualPerHead, 0)}</div>
               </div>
               <div class="kpi-box">
                 <div class="kpi-box-label">
-                  Monthly Run Rate
-                  <span class="help-icon" data-help="Recurring monthly cost (salary + benefits + taxes + bonus). This is what you pay every month, excluding one-time costs." style="margin-left: 4px;"></span>
+                  Monthly Run Rate <span class="tt-icon" data-tt="${GLOSSARY['Monthly Run Rate'].replace(/"/g,'&quot;')}">?</span>
                 </div>
                 <div class="kpi-box-value" style="font-size: 18px;">${formatCurrency(runRate, 0)}</div>
               </div>
               <div class="kpi-box">
                 <div class="kpi-box-label">
-                  One-Time Costs
-                  <span class="help-icon" data-help="Upfront costs when hiring (equipment, recruiting fees, onboarding). You pay these once, not every month. Spikes your burn rate in hiring months." style="margin-left: 4px;"></span>
+                  One-Time Costs <span class="tt-icon" data-tt="${GLOSSARY['One-Time Costs'].replace(/"/g,'&quot;')}">?</span>
                 </div>
                 <div class="kpi-box-value" style="font-size: 18px; color: ${oneTime > 0 ? COLORS.caution : COLORS.success};">${formatCurrency(oneTime, 0)}</div>
               </div>
@@ -1263,115 +2344,88 @@
           </div>
         `;
       });
-      
+
       document.getElementById('fullyLoadedCosts').innerHTML = html;
     }
 
     function renderUtilizationChart() {
       const canvas = document.getElementById('utilizationChart');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
-      
       const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
       canvas.width = rect.width * dpr;
       canvas.height = 280 * dpr;
       canvas.style.width = rect.width + 'px';
       canvas.style.height = '280px';
       ctx.scale(dpr, dpr);
-      
-      const w = rect.width;
-      const h = 280;
+
+      const w = rect.width; const h = 280;
       const padding = { top: 40, right: 40, bottom: 50, left: 60 };
       const chartW = w - padding.left - padding.right;
       const chartH = h - padding.top - padding.bottom;
-      
       const data = activeDataset;
       utilizationChartPoints = [];
-      
-      // Function lines
+
       FUNCTIONS.forEach((func, fi) => {
         const utilData = data.months.map(m => {
           const f = m.functions.find(fn => fn.name === func);
-          if (!f) return 0;
-          return (f.capacity.demand / f.capacity.capacity) * 100;
+          if (!f || !f.capacity.capacity) return 0;
+          return safeNum((f.capacity.demand / f.capacity.capacity) * 100);
         });
-        
         const barWidth = chartW / data.months.length;
-        
-        ctx.beginPath();
-        ctx.strokeStyle = COLORS.functions[fi];
-        ctx.lineWidth = 2.5;
-        
+        ctx.beginPath(); ctx.strokeStyle = COLORS.functions[fi]; ctx.lineWidth = 2.5;
         data.months.forEach((month, mi) => {
           const x = padding.left + mi * barWidth + barWidth / 2;
           const util = utilData[mi];
           const y = padding.top + chartH - (util / 100) * chartH;
-          
-          if (mi === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-          
-          utilizationChartPoints.push({
-            x, y,
-            month: month.month,
-            function: func,
-            utilization: util
-          });
+          if (mi === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          utilizationChartPoints.push({ x, y, month: month.month, function: func, utilization: util });
         });
-        
         ctx.stroke();
-        
-        // Points
         data.months.forEach((month, mi) => {
           const x = padding.left + mi * barWidth + barWidth / 2;
           const util = utilData[mi];
           const y = padding.top + chartH - (util / 100) * chartH;
-          
-          ctx.fillStyle = COLORS.functions[fi];
-          ctx.beginPath();
-          ctx.arc(x, y, 3, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillStyle = COLORS.functions[fi]; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
         });
       });
-      
-      // Grid
-      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
-      ctx.lineWidth = 1;
+
+      // Threshold lines
+      [ASSUMP.utilRed, ASSUMP.utilYellow].forEach(pct => {
+        const y = padding.top + chartH - (pct / 100) * chartH;
+        ctx.beginPath();
+        ctx.strokeStyle = pct === ASSUMP.utilRed ? 'rgba(220,38,38,0.25)' : 'rgba(217,119,6,0.22)';
+        ctx.setLineDash([4, 4]); ctx.lineWidth = 1;
+        ctx.moveTo(padding.left, y); ctx.lineTo(w - padding.right, y); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = pct === ASSUMP.utilRed ? 'rgba(220,38,38,0.55)' : 'rgba(217,119,6,0.55)';
+        ctx.font = '10px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+        ctx.fillText(pct + '%', w - padding.right + 3, y + 1);
+      });
+
+      ctx.strokeStyle = 'rgba(12,23,45,0.08)'; ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (i / 4) * chartH;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(w - padding.right, y);
-        ctx.stroke();
-        
+        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(w - padding.right, y); ctx.stroke();
         const val = 100 * (1 - i / 4);
-        ctx.fillStyle = COLORS.muted;
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'middle';
+        ctx.fillStyle = COLORS.muted; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
         ctx.fillText(val.toFixed(0) + '%', padding.left - 10, y);
       }
-      
-      // Month labels
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
+
+      ctx.fillStyle = COLORS.muted; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       data.months.forEach((month, i) => {
         if (i % 2 === 0 || data.months.length <= 6) {
           const barWidth = chartW / data.months.length;
-          const x = padding.left + i * barWidth + barWidth / 2;
-          ctx.fillText(month.month, x, h - padding.bottom + 10);
+          ctx.fillText(month.month, padding.left + i * barWidth + barWidth / 2, h - padding.bottom + 10);
         }
       });
-      
-      // Legend
+
       let legendX = padding.left;
       FUNCTIONS.forEach((func, i) => {
-        ctx.fillStyle = COLORS.functions[i];
-        ctx.fillRect(legendX, 15, 16, 2.5);
-        ctx.fillStyle = '#0b1220';
-        ctx.font = '11px sans-serif';
-        ctx.textAlign = 'left';
+        ctx.fillStyle = COLORS.functions[i]; ctx.fillRect(legendX, 15, 16, 2.5);
+        ctx.fillStyle = '#0b1220'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
         ctx.fillText(func, legendX + 20, 19);
         legendX += ctx.measureText(func).width + 35;
       });
@@ -1380,80 +2434,93 @@
     function renderCapacityTable() {
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
-      
+
       let html = `<thead><tr>
         <th>Function</th>
-        <th>Capacity <span class="help-icon" data-help="Max output your team can produce (accounts for new hire ramp-up: 25%/50%/75%/100% over 4 months)." style="margin-left: 4px;"></span></th>
-        <th>Demand <span class="help-icon" data-help="Actual workload or requests coming in. When demand > capacity, you have a backlog." style="margin-left: 4px;"></span></th>
-        <th>Utilization <span class="help-icon" data-help="Demand ÷ Capacity. Shows how hard your team is working. >85% = hire, 70-85% = healthy, <70% = underutilized." style="margin-left: 4px;"></span></th>
-        <th>Backlog <span class="help-icon" data-help="Work piling up because demand exceeds capacity. Growing backlog = need to hire." style="margin-left: 4px;"></span></th>
-        <th>Backlog %</th>
+        <th>Capacity
+          <span class="tt-icon" data-tt="${GLOSSARY['Capacity'].replace(/"/g,'&quot;')}">?</span>
+        </th>
+        <th>Demand
+          <span class="tt-icon" data-tt="${GLOSSARY['Demand'].replace(/"/g,'&quot;')}">?</span>
+        </th>
+        <th>Utilization
+          <span class="tt-icon" data-tt="${GLOSSARY['Utilization'].replace(/"/g,'&quot;')}">?</span>
+        </th>
+        <th>Backlog
+          <span class="tt-icon" data-tt="${GLOSSARY['Backlog'].replace(/"/g,'&quot;')}">?</span>
+        </th>
+        <th>Backlog %
+          <span class="tt-icon" data-tt="${GLOSSARY['Backlog %'].replace(/"/g,'&quot;')}">?</span>
+        </th>
       </tr></thead><tbody>`;
-      
+
       last.functions.forEach(func => {
-        const util = (func.capacity.demand / func.capacity.capacity) * 100;
-        const backlog = Math.max(0, func.capacity.demand - func.capacity.capacity);
-        const backlogPct = (backlog / func.capacity.capacity) * 100;
-        
-        const utilColor = util > 85 ? COLORS.warning : util > 75 ? COLORS.caution : COLORS.success;
+        const cap = safeNum(func.capacity.capacity, 1);
+        const util = safeNum((func.capacity.demand / cap) * 100);
+        const backlog = Math.max(0, func.capacity.demand - cap);
+        const backlogPct = safeNum((backlog / cap) * 100);
+        const utilColor = util > ASSUMP.utilRed ? COLORS.warning : util > ASSUMP.utilYellow ? COLORS.caution : COLORS.success;
         const backlogColor = backlogPct > 20 ? COLORS.warning : backlogPct > 0 ? COLORS.caution : COLORS.success;
-        
+
         html += `
           <tr>
             <td style="font-weight: 600;">${func.name}</td>
             <td>${func.capacity.capacity} ${func.capacity.metric}</td>
             <td>${func.capacity.demand}</td>
-            <td style="color: ${utilColor}; font-weight: 600;">${util.toFixed(1)}%</td>
+            <td style="color: ${utilColor}; font-weight: 600;">${fmtSafe(util)}%</td>
             <td style="color: ${backlogColor}; font-weight: 600;">${backlog}</td>
-            <td style="color: ${backlogColor}; font-weight: 600;">${backlogPct.toFixed(1)}%</td>
+            <td style="color: ${backlogColor}; font-weight: 600;">${fmtSafe(backlogPct)}%</td>
           </tr>
         `;
       });
-      
+
       html += '</tbody>';
       document.getElementById('capacityTable').innerHTML = html;
     }
 
     function renderHiringTriggers() {
       const data = activeDataset;
-      const runway = data.runway.cash / data.runway.burn;
-      
+      const runway = safeNum(data.runway.cash / data.runway.burn);
+      const uRed    = ASSUMP.utilRed;
+      const uYellow = ASSUMP.utilYellow;
+      const rCrit   = ASSUMP.runwayCritical;
       let html = '';
-      
+
       FUNCTIONS.forEach((fname, fi) => {
         const recent = data.months.slice(-3).map(m => m.functions[fi]);
         const avgUtil = recent.reduce((s, f) => {
-          return s + ((f.capacity.demand / f.capacity.capacity) * 100);
+          const cap = safeNum(f.capacity.capacity, 1);
+          return s + ((f.capacity.demand / cap) * 100);
         }, 0) / recent.length;
-        
+
         const backlogs = recent.map(f => Math.max(0, f.capacity.demand - f.capacity.capacity));
         const backlogGrowth = backlogs.length > 1 ? ((backlogs[backlogs.length - 1] - backlogs[0]) / Math.max(1, backlogs[0])) * 100 : 0;
-        
+
         let recType, message, reasons = [];
-        
-        if (runway < 6) {
+
+        if (runway < rCrit) {
           recType = 'delay';
           message = `Delay hiring in ${fname}`;
-          reasons.push(`Runway is ${runway.toFixed(1)} months (< 6 month threshold)`);
-          reasons.push('Preserve cash until revenue materializes or funding secured');
-        } else if (avgUtil > 85 || backlogGrowth > 15) {
+          reasons.push(`Runway is ${fmtSafe(runway)} months (< ${rCrit}-month threshold).`);
+          reasons.push('Preserve cash until revenue inflects or funding is secured.');
+        } else if (avgUtil > uRed || backlogGrowth > 15) {
           recType = 'recommend';
           message = `Recommend hiring in ${fname}`;
-          if (avgUtil > 85) reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (> 85% threshold for 2+ months)`);
-          if (backlogGrowth > 15) reasons.push(`Backlog growth ${backlogGrowth.toFixed(1)}% (> 15% threshold)`);
-          reasons.push('Team at capacity risk—hire to maintain delivery velocity');
-        } else if (avgUtil < 70) {
+          if (avgUtil > uRed) reasons.push(`Utilization at ${fmtSafe(avgUtil)}% (> ${uRed}% for 2+ months).`);
+          if (backlogGrowth > 15) reasons.push(`Backlog growth ${fmtSafe(backlogGrowth)}% (> 15% threshold).`);
+          reasons.push('Team is at capacity risk — hire to maintain delivery velocity.');
+        } else if (avgUtil < uYellow) {
           recType = 'caution';
           message = `Monitor capacity in ${fname}`;
-          reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (< 70%)—potential overcapacity`);
-          reasons.push('Consider workload distribution or delay next hire');
+          reasons.push(`Utilization at ${fmtSafe(avgUtil)}% (< ${uYellow}%) — potential overcapacity.`);
+          reasons.push('Consider workload redistribution or delay next hire.');
         } else {
           recType = 'caution';
           message = `No action needed for ${fname}`;
-          reasons.push(`Utilization at ${avgUtil.toFixed(1)}% (healthy 70-85% range)`);
-          reasons.push('Team appropriately sized for current demand');
+          reasons.push(`Utilization at ${fmtSafe(avgUtil)}% — healthy ${uYellow}–${uRed}% range.`);
+          reasons.push('Team appropriately sized for current demand.');
         }
-        
+
         html += `
           <div class="hiring-rec ${recType}">
             <div class="hiring-rec-title">${message}</div>
@@ -1463,186 +2530,164 @@
           </div>
         `;
       });
-      
+
       document.getElementById('hiringTriggers').innerHTML = html;
     }
 
     function renderRunwayChart() {
       const canvas = document.getElementById('runwayChart');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
-      
       const rect = canvas.getBoundingClientRect();
+      if (!rect.width) return;
       canvas.width = rect.width * dpr;
       canvas.height = 260 * dpr;
       canvas.style.width = rect.width + 'px';
       canvas.style.height = '260px';
       ctx.scale(dpr, dpr);
-      
-      const w = rect.width;
-      const h = 260;
+
+      const w = rect.width; const h = 260;
       const padding = { top: 40, right: 60, bottom: 50, left: 60 };
       const chartW = w - padding.left - padding.right;
       const chartH = h - padding.top - padding.bottom;
-      
+
       const data = activeDataset;
       runwayChartPoints = [];
-      
-      // Trajectories
+
       const conservative = [];
       const aggressive = [];
-      
-      let conCash = data.runway.cash;
-      let aggCash = data.runway.cash;
-      
+
+      let conCash = safeNum(data.runway.cash);
+      let aggCash = safeNum(data.runway.cash);
+
       data.months.forEach((month, mi) => {
         const burn = month.functions.reduce((s, f) => {
           const c = f.costs;
           return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
         }, 0);
-        
-        const conBurn = burn * (mi === 0 ? 1 : 0.92);
+
+        const conBurn = safeNum(burn * (mi === 0 ? 1 : 0.92));
         conCash -= conBurn;
-        conservative.push(Math.max(0, conCash / conBurn));
-        
-        const aggBurn = burn * (mi === 0 ? 1 : 1.13);
+        const conRunwayVal = (conBurn > 0) ? Math.max(0, conCash / conBurn) : 0;
+        conservative.push(isFinite(conRunwayVal) ? conRunwayVal : 0);
+
+        const aggBurn = safeNum(burn * (mi === 0 ? 1 : 1.13));
         aggCash -= aggBurn;
-        aggressive.push(Math.max(0, aggCash / aggBurn));
+        const aggRunwayVal = (aggBurn > 0) ? Math.max(0, aggCash / aggBurn) : 0;
+        aggressive.push(isFinite(aggRunwayVal) ? aggRunwayVal : 0);
       });
-      
-      const maxRunway = Math.max(...conservative, ...aggressive) * 1.1;
-      
-      // Grid
-      ctx.strokeStyle = 'rgba(12, 23, 45, 0.08)';
-      ctx.lineWidth = 1;
+
+      // FIXED: safe max computation from both arrays
+      const allVals = [...conservative, ...aggressive].filter(v => isFinite(v) && !isNaN(v));
+      const maxRunwayRaw = allVals.length > 0 ? Math.max(...allVals) : 1;
+      const maxRunway = (isFinite(maxRunwayRaw) && maxRunwayRaw > 0) ? maxRunwayRaw * 1.1 : 1;
+
+      ctx.strokeStyle = 'rgba(12,23,45,0.08)'; ctx.lineWidth = 1;
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (i / 4) * chartH;
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(w - padding.right, y);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(w - padding.right, y); ctx.stroke();
       }
-      
-      // Y-axis
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = 'bold 11px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
+
+      ctx.fillStyle = COLORS.muted; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
       for (let i = 0; i <= 4; i++) {
         const val = maxRunway * (1 - i / 4);
         const y = padding.top + (i / 4) * chartH;
         ctx.fillText(val.toFixed(1) + ' mo', padding.left - 10, y);
       }
-      
-      const barWidth = chartW / data.months.length;
-      
+
+      const barWidth = chartW / (data.months.length || 1);
+
       // Conservative line
-      ctx.beginPath();
-      ctx.strokeStyle = COLORS.accent;
-      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.strokeStyle = COLORS.accent; ctx.lineWidth = 2.5;
       conservative.forEach((runway, i) => {
         const x = padding.left + i * barWidth + barWidth / 2;
         const y = padding.top + chartH - (runway / maxRunway) * chartH;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       });
       ctx.stroke();
-      
+
       // Aggressive line
-      ctx.beginPath();
-      ctx.strokeStyle = COLORS.warning;
-      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.strokeStyle = COLORS.warning; ctx.lineWidth = 2.5;
       aggressive.forEach((runway, i) => {
         const x = padding.left + i * barWidth + barWidth / 2;
         const y = padding.top + chartH - (runway / maxRunway) * chartH;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       });
       ctx.stroke();
-      
+
       // Points
       conservative.forEach((runway, i) => {
         const x = padding.left + i * barWidth + barWidth / 2;
         const y = padding.top + chartH - (runway / maxRunway) * chartH;
-        
-        ctx.fillStyle = COLORS.accent;
-        ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
+        ctx.fillStyle = COLORS.accent; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
         runwayChartPoints.push({ x, y, month: data.months[i].month, runway, strategy: 'conservative' });
       });
-      
+
       aggressive.forEach((runway, i) => {
         const x = padding.left + i * barWidth + barWidth / 2;
         const y = padding.top + chartH - (runway / maxRunway) * chartH;
-        
-        ctx.fillStyle = COLORS.warning;
-        ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
+        ctx.fillStyle = COLORS.warning; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
         runwayChartPoints.push({ x, y, month: data.months[i].month, runway, strategy: 'aggressive' });
       });
-      
-      // Month labels
-      ctx.fillStyle = COLORS.muted;
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
+
+      ctx.fillStyle = COLORS.muted; ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       data.months.forEach((month, i) => {
         if (i % 2 === 0 || data.months.length <= 6) {
-          const x = padding.left + i * barWidth + barWidth / 2;
-          ctx.fillText(month.month, x, h - padding.bottom + 10);
+          ctx.fillText(month.month, padding.left + i * barWidth + barWidth / 2, h - padding.bottom + 10);
         }
       });
-      
-      // Legend
-      ctx.fillStyle = COLORS.accent;
-      ctx.fillRect(padding.left, 15, 20, 2.5);
-      ctx.fillStyle = '#0b1220';
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'left';
+
+      ctx.fillStyle = COLORS.accent; ctx.fillRect(padding.left, 15, 20, 2.5);
+      ctx.fillStyle = '#0b1220'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
       ctx.fillText('Conservative Hiring', padding.left + 25, 19);
-      
-      ctx.fillStyle = COLORS.warning;
-      ctx.fillRect(padding.left + 160, 15, 20, 2.5);
+      ctx.fillStyle = COLORS.warning; ctx.fillRect(padding.left + 160, 15, 20, 2.5);
       ctx.fillText('Aggressive Hiring', padding.left + 185, 19);
     }
 
     function renderStrategyComparison() {
       const data = activeDataset;
       const last = data.months[data.months.length - 1];
-      
-      const currentHC = last.functions.reduce((s, f) => s + f.headcount, 0);
+
+      const currentHC   = last.functions.reduce((s, f) => s + f.headcount, 0);
       const currentCost = last.functions.reduce((s, f) => {
         const c = f.costs;
         return s + (c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding);
       }, 0);
       const currentUtil = last.functions.reduce((s, f) => {
-        return s + ((f.capacity.demand / f.capacity.capacity) * 100);
+        const cap = safeNum(f.capacity.capacity, 1);
+        return s + ((f.capacity.demand / cap) * 100);
       }, 0) / FUNCTIONS.length;
-      
-      const conHC = Math.round(currentHC * 1.06);
-      const conCost = currentCost * 1.06;
-      const conUtil = Math.min(currentUtil * 1.09, 96);
-      const conRunway = data.runway.cash / (currentCost * 1.06);
-      
-      const aggHC = Math.round(currentHC * 1.17);
-      const aggCost = currentCost * 1.17;
-      const aggUtil = Math.max(currentUtil * 0.91, 62);
-      const aggRunway = data.runway.cash / (currentCost * 1.17);
-      
+
+      const conHC     = Math.round(currentHC * 1.06);
+      const conCost   = currentCost * 1.06;
+      const conUtil   = Math.min(safeNum(currentUtil * 1.09), 96);
+      const conRunway = safeNum(data.runway.cash / (currentCost * 1.06));
+
+      const aggHC     = Math.round(currentHC * 1.17);
+      const aggCost   = currentCost * 1.17;
+      const aggUtil   = Math.max(safeNum(currentUtil * 0.91), 62);
+      const aggRunway = safeNum(data.runway.cash / (currentCost * 1.17));
+
       const html = `
         <div class="module-card">
-          <div class="card-title" style="margin-bottom: 16px;">Strategy Comparison (6-month projection)</div>
+          <div class="card-title" style="margin-bottom: 16px;">
+            Strategy Comparison
+            <span style="font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 8px;">6-month projection</span>
+          </div>
           <table class="data-table">
             <thead>
               <tr>
                 <th>Metric</th>
-                <th>Conservative</th>
-                <th>Aggressive</th>
-                <th>Delta</th>
+                <th>Conservative
+                  <span class="tt-icon" data-tt="${GLOSSARY['Conservative'].replace(/"/g,'&quot;')}">?</span>
+                </th>
+                <th>Aggressive
+                  <span class="tt-icon" data-tt="${GLOSSARY['Aggressive'].replace(/"/g,'&quot;')}">?</span>
+                </th>
+                <th>Delta
+                  <span class="tt-icon" data-tt="${GLOSSARY['Delta'].replace(/"/g,'&quot;')}">?</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -1653,33 +2698,37 @@
                 <td style="color: ${COLORS.accent};">+${aggHC - conHC}</td>
               </tr>
               <tr>
-                <td style="font-weight: 600;">Monthly Opex</td>
+                <td style="font-weight: 600;">Monthly Opex
+                  <span class="tt-icon" data-tt="${GLOSSARY['Opex'].replace(/"/g,'&quot;')}">?</span>
+                </td>
                 <td>${formatCurrency(conCost, 0)}</td>
                 <td>${formatCurrency(aggCost, 0)}</td>
                 <td style="color: ${COLORS.warning};">+${formatCurrency(aggCost - conCost, 0)}</td>
               </tr>
               <tr>
                 <td style="font-weight: 600;">Avg Utilization</td>
-                <td style="color: ${conUtil > 85 ? COLORS.warning : COLORS.caution};">${conUtil.toFixed(1)}%</td>
-                <td style="color: ${aggUtil < 70 ? COLORS.caution : COLORS.success};">${aggUtil.toFixed(1)}%</td>
-                <td>${(aggUtil - conUtil).toFixed(1)}%</td>
+                <td style="color: ${conUtil > 85 ? COLORS.warning : COLORS.caution};">${fmtSafe(conUtil)}%</td>
+                <td style="color: ${aggUtil < 70 ? COLORS.caution : COLORS.success};">${fmtSafe(aggUtil)}%</td>
+                <td>${(safeNum(aggUtil) - safeNum(conUtil)).toFixed(1)}%</td>
               </tr>
               <tr>
-                <td style="font-weight: 600;">Runway</td>
-                <td style="color: ${conRunway < 6 ? COLORS.warning : COLORS.success};">${conRunway.toFixed(1)} mo</td>
-                <td style="color: ${aggRunway < 6 ? COLORS.warning : COLORS.caution};">${aggRunway.toFixed(1)} mo</td>
-                <td style="color: ${conRunway > aggRunway ? COLORS.success : COLORS.warning};">${(conRunway - aggRunway > 0 ? '+' : '')}${(conRunway - aggRunway).toFixed(1)} mo</td>
+                <td style="font-weight: 600;">Runway
+                  <span class="tt-icon" data-tt="${GLOSSARY['Runway'].replace(/"/g,'&quot;')}">?</span>
+                </td>
+                <td style="color: ${conRunway < ASSUMP.runwayCritical ? COLORS.warning : COLORS.success};">${isFinite(conRunway) ? fmtSafe(conRunway) + ' mo' : '—'}</td>
+                <td style="color: ${aggRunway < ASSUMP.runwayCritical ? COLORS.warning : COLORS.caution};">${isFinite(aggRunway) ? fmtSafe(aggRunway) + ' mo' : '—'}</td>
+                <td style="color: ${conRunway > aggRunway ? COLORS.success : COLORS.warning};">${isFinite(conRunway - aggRunway) ? ((conRunway - aggRunway > 0 ? '+' : '') + (conRunway - aggRunway).toFixed(1) + ' mo') : '—'}</td>
               </tr>
             </tbody>
           </table>
-          
+
           <div class="tradeoff-grid">
             <div class="tradeoff-box">
               <div class="tradeoff-title">Conservative Hiring</div>
               <div class="tradeoff-section">
                 <div class="tradeoff-label">What you gain:</div>
                 <div class="tradeoff-list">
-                  <div class="tradeoff-item">Extended runway (+${(conRunway - aggRunway).toFixed(1)} months vs aggressive)</div>
+                  <div class="tradeoff-item">Extended runway (+${isFinite(conRunway - aggRunway) ? (conRunway - aggRunway).toFixed(1) : '—'} months vs aggressive)</div>
                   <div class="tradeoff-item">Lower cash burn risk</div>
                   <div class="tradeoff-item">More time to prove unit economics</div>
                 </div>
@@ -1687,184 +2736,149 @@
               <div class="tradeoff-section">
                 <div class="tradeoff-label">What you risk:</div>
                 <div class="tradeoff-list">
-                  <div class="tradeoff-item">Team burnout (${conUtil.toFixed(1)}% utilization)</div>
+                  <div class="tradeoff-item">Team burnout (${fmtSafe(conUtil)}% utilization)</div>
                   <div class="tradeoff-item">Delivery bottlenecks and missed deadlines</div>
                   <div class="tradeoff-item">Lost revenue opportunities</div>
                 </div>
               </div>
             </div>
-            
+
             <div class="tradeoff-box">
               <div class="tradeoff-title">Aggressive Hiring</div>
               <div class="tradeoff-section">
                 <div class="tradeoff-label">What you gain:</div>
                 <div class="tradeoff-list">
-                  <div class="tradeoff-item">Healthy utilization (${aggUtil.toFixed(1)}%)</div>
+                  <div class="tradeoff-item">Healthy utilization (${fmtSafe(aggUtil)}%)</div>
                   <div class="tradeoff-item">Faster execution and product velocity</div>
-                  <div class="tradeoff-item">Capacity for revenue growth</div>
+                  <div class="tradeoff-item">Capacity headroom for revenue growth</div>
                 </div>
               </div>
               <div class="tradeoff-section">
                 <div class="tradeoff-label">What you risk:</div>
                 <div class="tradeoff-list">
-                  <div class="tradeoff-item">Shortened runway (${aggRunway.toFixed(1)} months)</div>
+                  <div class="tradeoff-item">Shortened runway (${isFinite(aggRunway) ? fmtSafe(aggRunway) : '—'} months)</div>
                   <div class="tradeoff-item">Higher burn rate (+${formatCurrency(aggCost - conCost, 0)}/mo)</div>
                   <div class="tradeoff-item">Pressure to raise capital sooner</div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div style="margin-top: 20px; padding: 16px; background: rgba(246,248,251,0.5); border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6;">
             <strong>Strategic Recommendation:</strong> ${
-              conRunway < 9 
-                ? 'With <9 months runway, prioritize conservative hiring. Focus on high-ROI roles. Defer nice-to-have hires until funding secured or revenue inflects.'
-                : aggUtil > 82
-                ? 'Current utilization suggests aggressive hiring is justified. Team is near capacity—invest in growth before bottlenecks limit revenue.'
-                : 'Balanced approach: hire strategically in bottlenecked functions (>85% util), delay in underutilized areas (<70% util).'
+              conRunway < 9
+                ? 'With &lt;9 months runway, prioritize conservative hiring. Focus on high-ROI roles. Defer nice-to-have hires until funding is secured or revenue inflects.'
+                : aggUtil > ASSUMP.utilRed - 3
+                ? 'Current utilization suggests aggressive hiring is justified. Team is near capacity — invest in growth before bottlenecks limit revenue.'
+                : `Balanced approach: hire strategically in bottlenecked functions (&gt;${ASSUMP.utilRed}% util), delay in underutilized areas (&lt;${ASSUMP.utilYellow}% util).`
             }
           </div>
         </div>
       `;
-      
+
       document.getElementById('strategyComparison').innerHTML = html;
     }
 
+    function renderHiringPlanTable() {
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      const avgUtil = last.functions.reduce((s, f) => {
+        const cap = safeNum(f.capacity.capacity, 1);
+        return s + ((f.capacity.demand / cap) * 100);
+      }, 0) / FUNCTIONS.length;
+      const runway = safeNum(data.runway.cash / data.runway.burn);
+
+      const plan = computeHiringPlan(avgUtil, runway, activePlanTab);
+
+      let html = `
+        <table class="hiring-plan-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Hires <span class="tt-icon" data-tt="${GLOSSARY['Headcount'].replace(/"/g,'&quot;')}">?</span></th>
+              <th>One-Time Cost <span class="tt-icon" data-tt="${GLOSSARY['One-Time Costs'].replace(/"/g,'&quot;')}">?</span></th>
+              <th>Ramp <span class="tt-icon" data-tt="${GLOSSARY['Ramp'].replace(/"/g,'&quot;')}">?</span></th>
+              <th>Proj. Util <span class="tt-icon" data-tt="${GLOSSARY['Proj. Util'].replace(/"/g,'&quot;')}">?</span></th>
+              <th>Proj. Runway <span class="tt-icon" data-tt="${GLOSSARY['Proj. Runway'].replace(/"/g,'&quot;')}">?</span></th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      plan.forEach(row => {
+        html += `
+          <tr>
+            <td>${row.month}</td>
+            <td>${row.hires > 0 ? `<span class="hp-hire">+${row.hires}</span>` : `<span class="hp-none">—</span>`}</td>
+            <td>${row.oneTimeCost > 0 ? `<span class="hp-cost">${formatCurrency(row.oneTimeCost, 0)}</span>` : `<span class="hp-none">—</span>`}</td>
+            <td>${row.rampNote ? `<span class="hp-ramp">${row.rampNote}</span>` : `<span class="hp-none">—</span>`}</td>
+            <td style="color: ${row.util > ASSUMP.utilRed ? COLORS.warning : row.util < ASSUMP.utilYellow ? COLORS.caution : COLORS.success};">${fmtSafe(row.util)}%</td>
+            <td style="color: ${row.runway < ASSUMP.runwayCritical ? COLORS.warning : row.runway < ASSUMP.runwayCaution ? COLORS.caution : COLORS.success};">${fmtSafe(row.runway)} mo</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+        <div style="margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.6;">
+          <strong>Plan logic:</strong>
+          ${activePlanTab === 'aggressive'
+            ? `Hire 2 heads when utilization ≥ ${ASSUMP.utilRed}% AND runway ≥ ${ASSUMP.runwaySafeHire} months. Demand grows ~0.8%/month organically.`
+            : `Hire 1 head when utilization ≥ ${ASSUMP.utilRed}% AND runway ≥ ${ASSUMP.runwaySafeCon} months (higher bar). Demand grows ~0.8%/month organically.`}
+          New hires ramp over ${ASSUMP.rampMonths} months. One-time cost per hire: ${formatCurrency(ASSUMP.oneTimeCost, 0)}.
+          ${ASSUMP.compInflation > 0 ? `Comp inflation applied at ${ASSUMP.compInflation}%/yr.` : ''}
+        </div>
+      `;
+
+      document.getElementById('hiringPlanTable').innerHTML = html;
+    }
+
     // ========== CHART INTERACTIONS ==========
-    
+
     function setupChartInteractions() {
-      const hcCanvas = document.getElementById('headcountChart');
-      const hcTooltip = document.getElementById('headcountTooltip');
-      
-      hcCanvas.addEventListener('mousemove', (e) => {
-        const rect = hcCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        let closest = null;
-        let minDist = 40;
-        
-        headcountChartPoints.forEach(p => {
-          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
-          if (dist < minDist) {
-            minDist = dist;
-            closest = p;
-          }
+      const pairs = [
+        { canvas: 'headcountChart', tooltip: 'headcountTooltip', points: () => headcountChartPoints,
+          fmt: p => `<strong>${p.month}</strong><br>${p.function}: ${p.headcount} employees` },
+        { canvas: 'opexChart', tooltip: 'opexTooltip', points: () => opexChartPoints,
+          fmt: p => `<strong>${p.month}</strong><br>${p.function}: ${formatCurrency(p.cost, 0)}` },
+        { canvas: 'utilizationChart', tooltip: 'utilizationTooltip', points: () => utilizationChartPoints,
+          fmt: p => `<strong>${p.month}</strong><br>${p.function}: ${fmtSafe(p.utilization)}%` },
+        { canvas: 'runwayChart', tooltip: 'runwayTooltip', points: () => runwayChartPoints,
+          fmt: p => `<strong>${p.month}</strong><br>${p.strategy}: ${fmtSafe(p.runway)} months` }
+      ];
+
+      pairs.forEach(({ canvas, tooltip, points, fmt }) => {
+        const cv = document.getElementById(canvas);
+        const tt = document.getElementById(tooltip);
+        if (!cv || !tt) return;
+
+        cv.addEventListener('mousemove', e => {
+          const rect = cv.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          let closest = null, minDist = 35;
+          points().forEach(p => {
+            const d = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
+            if (d < minDist) { minDist = d; closest = p; }
+          });
+          if (closest) {
+            tt.innerHTML = fmt(closest);
+            tt.style.left = (x + 15) + 'px';
+            tt.style.top  = (y - 10) + 'px';
+            tt.classList.add('visible');
+          } else { tt.classList.remove('visible'); }
         });
-        
-        if (closest) {
-          hcTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${closest.headcount} employees`;
-          hcTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-          hcTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-          hcTooltip.classList.add('visible');
-        } else {
-          hcTooltip.classList.remove('visible');
-        }
+        cv.addEventListener('mouseleave', () => tt.classList.remove('visible'));
       });
-      
-      hcCanvas.addEventListener('mouseleave', () => hcTooltip.classList.remove('visible'));
-      
-      const opexCanvas = document.getElementById('opexChart');
-      const opexTooltip = document.getElementById('opexTooltip');
-      
-      opexCanvas.addEventListener('mousemove', (e) => {
-        const rect = opexCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        let closest = null;
-        let minDist = 40;
-        
-        opexChartPoints.forEach(p => {
-          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
-          if (dist < minDist) {
-            minDist = dist;
-            closest = p;
-          }
-        });
-        
-        if (closest) {
-          opexTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${formatCurrency(closest.cost, 0)}`;
-          opexTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-          opexTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-          opexTooltip.classList.add('visible');
-        } else {
-          opexTooltip.classList.remove('visible');
-        }
-      });
-      
-      opexCanvas.addEventListener('mouseleave', () => opexTooltip.classList.remove('visible'));
-      
-      const utilCanvas = document.getElementById('utilizationChart');
-      const utilTooltip = document.getElementById('utilizationTooltip');
-      
-      utilCanvas.addEventListener('mousemove', (e) => {
-        const rect = utilCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        let closest = null;
-        let minDist = 25;
-        
-        utilizationChartPoints.forEach(p => {
-          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
-          if (dist < minDist) {
-            minDist = dist;
-            closest = p;
-          }
-        });
-        
-        if (closest) {
-          utilTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.function}: ${closest.utilization.toFixed(1)}%`;
-          utilTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-          utilTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-          utilTooltip.classList.add('visible');
-        } else {
-          utilTooltip.classList.remove('visible');
-        }
-      });
-      
-      utilCanvas.addEventListener('mouseleave', () => utilTooltip.classList.remove('visible'));
-      
-      const runwayCanvas = document.getElementById('runwayChart');
-      const runwayTooltip = document.getElementById('runwayTooltip');
-      
-      runwayCanvas.addEventListener('mousemove', (e) => {
-        const rect = runwayCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        let closest = null;
-        let minDist = 25;
-        
-        runwayChartPoints.forEach(p => {
-          const dist = Math.sqrt((x - p.x) ** 2 + (y - p.y) ** 2);
-          if (dist < minDist) {
-            minDist = dist;
-            closest = p;
-          }
-        });
-        
-        if (closest) {
-          runwayTooltip.innerHTML = `<strong>${closest.month}</strong><br>${closest.strategy}: ${closest.runway.toFixed(1)} months`;
-          runwayTooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-          runwayTooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-          runwayTooltip.classList.add('visible');
-        } else {
-          runwayTooltip.classList.remove('visible');
-        }
-      });
-      
-      runwayCanvas.addEventListener('mouseleave', () => runwayTooltip.classList.remove('visible'));
     }
 
     // ========== HELPERS ==========
-    
+
     function formatCurrency(value, decimals = 2) {
-      return '$' + value.toLocaleString('en-US', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-      });
+      const v = safeNum(value);
+      if (!isFinite(v)) return '—';
+      return '$' + v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     }
 
     function downloadTemplates() {
@@ -1879,16 +2893,12 @@ Notes:
 - Demand_Value: Current workload
 - One-time costs calculated automatically
 - Ramp curves applied automatically for new hires`;
-
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'headcount-template.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      a.href = url; a.download = 'headcount-template.csv';
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
     function renderAll() {
@@ -1901,17 +2911,19 @@ Notes:
       renderHiringTriggers();
       renderRunwayChart();
       renderStrategyComparison();
+      renderHiringPlanTable();
       setupChartInteractions();
       updateTooltips();
       syncCashBalanceInput();
     }
 
     // ========== INIT ==========
-    
+
     window.addEventListener('DOMContentLoaded', () => {
-      onUseSample(); // Load sample data on init
+      readAssumptions();
+      onUseSample();
     });
-    
+
     window.addEventListener('resize', () => {
       renderHeadcountChart();
       renderOpexChart();
