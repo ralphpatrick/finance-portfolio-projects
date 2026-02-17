@@ -508,17 +508,32 @@
     }
     .plan-tab.active { background: var(--text); color: white; border-color: var(--text); }
 
-    /* ── Tooltip system (single, lightweight) ── */
-    [data-tt] {
-      position: relative;
-      cursor: help;
+    /* ── Tooltip system — rendered by JS into #tt-root on <body> ── */
+    /* CSS ::after approach removed: caused clipping, flicker, and z-index bugs */
+    [data-tt] { cursor: help; }
+
+    /* ── Kill-switch: neutralize ALL ::after tooltip rules from style.css ── */
+    /* style.css still has .help-icon::after and .term-helper::after active;  */
+    /* override them here so only the JS #tt-root tooltip fires.              */
+    .help-icon::after,
+    .help-icon[data-help]::after,
+    .term-helper::after,
+    .term-helper:hover::after,
+    [data-tt]::after,
+    [data-tt]:hover::after,
+    .help-icon:hover::after {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
-    [data-tt]::after {
-      content: attr(data-tt);
-      position: absolute;
-      bottom: calc(100% + 7px);
-      left: 50%;
-      transform: translateX(-50%);
+
+    /* Tooltip bubble (injected once into body by initTooltips()) */
+    #tt-root {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
       padding: 9px 13px;
       background: rgba(11,18,32,0.96);
       color: #f6f8fb;
@@ -528,16 +543,14 @@
       border-radius: 9px;
       white-space: normal;
       width: 270px;
-      max-width: calc(100vw - 40px);
-      z-index: 9999;
+      max-width: calc(100vw - 24px);
       box-shadow: 0 4px 14px rgba(0,0,0,0.28);
       text-align: left;
-      pointer-events: none;
       opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.15s ease, visibility 0.15s ease;
+      transition: opacity 120ms ease;
+      font-family: var(--font-sans);
     }
-    [data-tt]:hover::after { opacity: 1; visibility: visible; }
+    #tt-root.tt-visible { opacity: 1; }
 
     /* Tiny ? badge for labels */
     .tt-icon {
@@ -564,7 +577,7 @@
       cursor: help;
     }
 
-    /* Legacy help-icon kept for sidebar (existing) */
+    /* Legacy help-icon kept for sidebar — tooltip now handled by JS initTooltips() via data-help attr */
     .help-icon {
       display: inline-flex;
       align-items: center;
@@ -582,31 +595,6 @@
       flex-shrink: 0;
     }
     .help-icon::before { content: '?'; line-height: 1; }
-    .help-icon[data-help]::after {
-      content: attr(data-help);
-      position: absolute;
-      bottom: calc(100% + 8px);
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 9px 13px;
-      background: rgba(11,18,32,0.95);
-      color: white;
-      font-size: 12px;
-      line-height: 1.5;
-      border-radius: 8px;
-      white-space: normal;
-      width: 260px;
-      max-width: calc(100vw - 40px);
-      z-index: 10000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      font-weight: 400;
-      text-align: left;
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.15s ease, visibility 0.15s ease;
-    }
-    .help-icon[data-help]:hover::after { opacity: 1; visibility: visible; }
 
     /* ── Responsive ── */
     @media (max-width: 980px) {
@@ -2917,9 +2905,79 @@ Notes:
       syncCashBalanceInput();
     }
 
+    // ========== TOOLTIP ENGINE (body-level, no clipping, no flicker) ==========
+    // Replaces CSS ::after approach. Uses a single fixed-position div on <body>.
+
+    function initTooltips() {
+      // Create singleton tooltip element
+      let ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      let hideTimer = null;
+
+      function showTT(text, targetEl) {
+        clearTimeout(hideTimer);
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        positionTT(targetEl);
+      }
+
+      function hideTT() {
+        // Small delay so moving between adjacent elements doesn't flash
+        hideTimer = setTimeout(() => ttEl.classList.remove('tt-visible'), 80);
+      }
+
+      function positionTT(el) {
+        const rect = el.getBoundingClientRect();
+        const ttW = 270;
+        const gap = 8;
+
+        // Default: above the element, centered
+        let left = rect.left + rect.width / 2 - ttW / 2;
+        let top  = rect.top - gap;
+
+        // Clamp to viewport horizontally
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+
+        // If above would go off-screen, flip below
+        const ttH = ttEl.offsetHeight || 60;
+        if (top - ttH < 8) {
+          top = rect.bottom + gap;
+          ttEl.style.transform = 'translateY(0)';
+        } else {
+          top = rect.top - gap;
+          ttEl.style.transform = 'translateY(-100%)';
+        }
+
+        ttEl.style.left = left + 'px';
+        ttEl.style.top  = top  + 'px';
+      }
+
+      // Event delegation on document — catches dynamically rendered elements too
+      document.addEventListener('mouseover', e => {
+        const el = e.target.closest('[data-tt], [data-help]');
+        if (!el) return;
+        const text = el.getAttribute('data-tt') || el.getAttribute('data-help');
+        if (text) showTT(text, el);
+      });
+
+      document.addEventListener('mouseout', e => {
+        const el = e.target.closest('[data-tt], [data-help]');
+        if (el) hideTT();
+      });
+
+      // Reposition on scroll/resize without re-triggering show/hide
+      window.addEventListener('scroll', () => ttEl.classList.remove('tt-visible'), { passive: true });
+    }
+
     // ========== INIT ==========
 
     window.addEventListener('DOMContentLoaded', () => {
+      initTooltips();
       readAssumptions();
       onUseSample();
     });
