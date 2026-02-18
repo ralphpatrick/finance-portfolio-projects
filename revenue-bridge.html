@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenue Bridge & Cohort Retention · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .module-hero { padding: 48px 0 32px 0; border-bottom: 1px solid var(--border); }
+    .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
+    .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
+    .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
+    .module-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .sidebar { position: sticky; top: 80px; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title { font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 12px; letter-spacing: 0.03em; }
+    .sidebar-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
+    .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .btn-small:active { transform: translateY(1px); }
+    .btn-primary { background: var(--text); color: white; border-color: var(--text); }
+    .input-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .input-row label { font-size: 12px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .input-row input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: var(--font-sans); background: white; width: 100%; }
+    .input-row input:focus { outline: none; border-color: var(--accent); }
+    .main-content { min-width: 0; }
+    
+    
+    
+    
+    
+    
+    
+    
+    .decision-driver strong { color: rgba(255,255,255,0.9); }
+    .module-section { padding: 0 0 40px 0; }
+    .module-section-title { font-size: 22px; margin-bottom: 18px; letter-spacing: -0.02em; font-weight: 700; }
+    .module-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-box { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.6); }
+    .kpi-box-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .kpi-box-value { font-size: 22px; font-weight: 700; }
+    .kpi-box-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .board-block { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.5); }
+    .board-block-title { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+    .board-block ul { margin: 0; padding: 0 0 0 16px; display: grid; gap: 6px; }
+    .board-block ul li { font-size: 13px; }
+    .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
+    .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .chart-wrap { position: relative; width: 100%; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
+    .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: center; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-size: 11px; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
+    .help-icon::before { content: '?'; }
+    .help-icon:hover::after { content: attr(data-help); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; padding: 10px 14px; background: var(--text); color: white; font-size: 12px; line-height: 1.5; border-radius: 10px; white-space: normal; width: 280px; z-index: 1000; box-shadow: var(--shadow); font-weight: 400; text-align: left; }
+    .section-header-with-help { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .data-badge { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 10px; }
+    .data-badge.random { background: #fef3c7; border: 1px solid #fbbf24; color: #92400e; }
+    .quality-badge { display: inline-flex; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+    .quality-good { background: rgba(15,118,110,0.12); color: var(--accent); border: 1px solid rgba(15,118,110,0.25); }
+    .quality-warn { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
+    .quality-bad { background: rgba(239,68,68,0.10); color: #b91c1c; border: 1px solid rgba(239,68,68,0.25); }
+    .heat-cell { padding: 6px 4px; font-size: 12px; font-weight: 600; text-align: center; border-radius: 6px; }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; } .board-grid { grid-template-columns: 1fr; } }
+  
+    /* ---- Decision Box (matches commercial-sales.html) ---- */
+    .decision-box {
+      background: white;
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
+      margin-bottom: 24px;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .decision-box--positive {
+      border-color: #0f766e;
+      background: #f0fdf9;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10), var(--shadow-soft);
+    }
+    .decision-box--positive .decision-box-eyebrow { color: #0f766e; }
+    .decision-box--positive .verdict-action        { color: #0f766e; }
+    .decision-box--positive .decision-box-bullets li::before { color: #0f766e; }
+    .decision-box--warning {
+      border-color: #d97706;
+      background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), var(--shadow-soft);
+    }
+    .decision-box--warning .decision-box-eyebrow { color: #d97706; }
+    .decision-box--warning .verdict-action        { color: #d97706; }
+    .decision-box--warning .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--negative {
+      border-color: #dc2626;
+      background: #fef2f2;
+      box-shadow: 0 0 0 4px rgba(220,38,38,0.10), var(--shadow-soft);
+    }
+    .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
+    .decision-box--negative .verdict-action        { color: #dc2626; }
+    .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .decision-box-verdict {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .decision-box-verdict .verdict-action { color: var(--accent); }
+    .decision-box-bullets {
+      list-style: none;
+      margin: 0 0 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .decision-box-bullets li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .decision-box-next {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .decision-box-next span { color: var(--accent-2); }
+    .decision-box-fallback {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        FP&amp;A Portfolio
+      </a>
+      <div class="nav-cta">
+        <a href="index.html#projects" class="btn btn-ghost">&larr; Back to Portfolio</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="module-hero">
+    <div class="container">
+      <div class="module-label">Revenue · Cohorts · Retention</div>
+      <h1 class="module-title">Revenue Bridge & <span class="accent">Cohort Retention</span></h1>
+      <p class="module-subtitle">Explain why revenue changed and whether growth is healthy or leaking.</p>
+      <div class="feature-chips">
+        <span class="chip">Revenue Bridge / Waterfall</span>
+        <span class="chip">Net Revenue Retention (NRR)</span>
+        <span class="chip">Gross Revenue Retention (GRR)</span>
+        <span class="chip">Cohort Table</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="module-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">DATA CONTROLS</div>
+        <span class="data-badge" id="data-badge">No data loaded</span>
+        <div class="sidebar-buttons">
+          <button class="btn-small btn-primary" onclick="loadSample()">Use Sample Data</button>
+          <button class="btn-small" onclick="randomizeData()">Randomize Data</button>
+          <button class="btn-small" onclick="resetDefaults()">Reset to Defaults</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">ASSUMPTIONS</div>
+        <div class="input-row">
+          <label>Starting Customers <span class="help-icon" data-help="How many paying customers you have at the start of the analysis period."></span></label>
+          <input type="number" id="inp-customers" value="500" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>New Customers / Mo <span class="help-icon" data-help="How many brand-new customers you add each month through sales/marketing."></span></label>
+          <input type="number" id="inp-newcust" value="60" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>ARPA ($/mo) <span class="help-icon" data-help="Average Revenue Per Account — what each customer pays per month on average."></span></label>
+          <input type="number" id="inp-arpa" value="350" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Monthly Churn % <span class="help-icon" data-help="Percent of customers who cancel or stop paying each month. 5% monthly = ~46% annual churn."></span></label>
+          <input type="number" id="inp-churn" value="4" step="0.5" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Expansion % <span class="help-icon" data-help="Monthly revenue growth from existing customers upgrading, buying add-ons, or expanding usage."></span></label>
+          <input type="number" id="inp-expansion" value="2" step="0.5" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Price Change % / Mo <span class="help-icon" data-help="Monthly price change applied to existing base. 0 = no pricing action."></span></label>
+          <input type="number" id="inp-price" value="0" step="0.5" oninput="compute()">
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+            <div class="decision-box" id="decisionBox">
+        <div class="decision-box-eyebrow">Decision</div>
+        <div class="decision-box-fallback" id="decisionFallback">Load sample data or adjust assumptions to see the decision.</div>
+        <div id="decisionContent" style="display:none;">
+          <div class="decision-box-verdict" id="decisionVerdict"></div>
+          <ul class="decision-box-bullets" id="decisionBullets"></ul>
+          <div class="decision-box-next" id="decisionNext"></div>
+        </div>
+      </div>
+
+      <!-- Board View -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Board View</h2>
+          <span class="help-icon" data-help="Executive summary of revenue health and growth quality."></span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-box"><div class="kpi-box-label">NRR</div><div class="kpi-box-value" id="kpi-nrr">—</div><div class="kpi-box-sub">net revenue retention</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">GRR</div><div class="kpi-box-value" id="kpi-grr">—</div><div class="kpi-box-sub">gross revenue retention</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Churn Rate</div><div class="kpi-box-value" id="kpi-churn">—</div><div class="kpi-box-sub">monthly</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Expansion</div><div class="kpi-box-value" id="kpi-expansion">—</div><div class="kpi-box-sub">monthly upsell rate</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Revenue Growth</div><div class="kpi-box-value" id="kpi-revgrowth">—</div><div class="kpi-box-sub">month 1 → month 12</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Growth Quality</div><div class="kpi-box-value" id="kpi-quality" style="font-size:14px;padding-top:4px">—</div><div class="kpi-box-sub">acquisition vs. retention</div></div>
+        </div>
+        <div class="module-card">
+          <div id="what-means" class="what-means"><p>Load data to see summary.</p></div>
+          <div class="board-grid">
+            <div class="board-block">
+              <div class="board-block-title">⚠ RISKS & WATCHOUTS</div>
+              <ul id="risks-list"><li>—</li></ul>
+            </div>
+            <div class="board-block">
+              <div class="board-block-title">🔧 LEVERS TO PULL</div>
+              <ul id="levers-list"><li>—</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bridge Chart -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Revenue Bridge (Month 1 → Month 12)</h2>
+          <span class="help-icon" data-help="Waterfall chart showing how revenue moves from start to end: new customers added, upsell expansion, and churn removed."></span>
+        </div>
+        <div class="module-card"><div class="chart-wrap"><canvas id="chart-bridge" height="180"></canvas></div></div>
+      </div>
+
+      <!-- Revenue Trend -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">12-Month Revenue Trend</h2>
+          <span class="help-icon" data-help="Total monthly recurring revenue broken into new, expansion, and churned revenue components."></span>
+        </div>
+        <div class="module-card"><div class="chart-wrap"><canvas id="chart-trend" height="180"></canvas></div></div>
+      </div>
+
+      <!-- Cohort Table -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Cohort Retention Table</h2>
+          <span class="help-icon" data-help="Shows what % of each monthly cohort is still paying by Month 1, 3, 6, 12. Darker green = better retention."></span>
+        </div>
+        <div class="module-card" style="overflow-x:auto;">
+          <table class="data-table" id="cohort-table"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<a class="to-top" href="#main" aria-label="Back to top">↑</a>
+<script src="main.js"></script>
+<script>
+  let chartBridge = null, chartTrend = null;
+  const fmtK = (n) => { const abs=Math.abs(n); const sign=n<0?'-':''; if(abs>=1000000) return sign+'$'+(abs/1000000).toFixed(1)+'M'; if(abs>=1000) return sign+'$'+(abs/1000).toFixed(0)+'K'; return sign+'$'+Math.round(abs); };
+  const pct = (n) => n.toFixed(1) + '%';
+
+  const SAMPLE = { customers: 500, newcust: 60, arpa: 350, churn: 4, expansion: 2, price: 0 };
+
+  function getInputs() {
+    return {
+      customers: +document.getElementById('inp-customers').value,
+      newcust: +document.getElementById('inp-newcust').value,
+      arpa: +document.getElementById('inp-arpa').value,
+      churn: +document.getElementById('inp-churn').value / 100,
+      expansion: +document.getElementById('inp-expansion').value / 100,
+      price: +document.getElementById('inp-price').value / 100,
+    };
+  }
+
+  function setInputs(v) {
+    document.getElementById('inp-customers').value = v.customers;
+    document.getElementById('inp-newcust').value = v.newcust;
+    document.getElementById('inp-arpa').value = v.arpa;
+    document.getElementById('inp-churn').value = v.churn;
+    document.getElementById('inp-expansion').value = v.expansion;
+    document.getElementById('inp-price').value = v.price;
+  }
+
+  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function randomizeData() {
+    const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
+    setInputs({ customers:r(100,2000,50), newcust:r(10,200,10), arpa:r(50,1500,50), churn:r(1,15,0.5), expansion:r(0,8,0.5), price:r(-1,3,0.5) });
+    document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+  }
+  function resetDefaults() { loadSample(); }
+
+  function compute() {
+    const inp = getInputs();
+    const { customers, newcust, arpa, churn, expansion, price } = inp;
+
+    // Build 12-month model
+    const months = [];
+    let custs = customers, rev = customers * arpa;
+    for (let i = 0; i < 12; i++) {
+      const churnRev = rev * churn;
+      const expRev = rev * expansion;
+      const priceAdj = rev * price;
+      const newRev = newcust * arpa;
+      const endRev = rev - churnRev + expRev + newRev + priceAdj;
+      const endCusts = custs - Math.round(custs * churn) + newcust;
+      months.push({ startRev: rev, newRev, expRev, churnRev, priceAdj, endRev, custs: endCusts });
+      rev = endRev;
+      custs = endCusts;
+    }
+
+    // NRR = (start + expansion - churn) / start
+    const nrr = (months[0].startRev + months[0].expRev - months[0].churnRev) / months[0].startRev * 100;
+    const grr = (months[0].startRev - months[0].churnRev) / months[0].startRev * 100;
+    const revGrowth = (months[11].endRev - months[0].startRev) / months[0].startRev * 100;
+
+    let quality = '', qualityClass = '';
+    if (nrr >= 110) { quality = '🟢 World-class'; qualityClass = 'quality-good'; }
+    else if (nrr >= 100) { quality = '✅ Healthy'; qualityClass = 'quality-good'; }
+    else if (nrr >= 90) { quality = '⚠ Leaking'; qualityClass = 'quality-warn'; }
+    else { quality = '🔴 Acquisition-dependent'; qualityClass = 'quality-bad'; }
+
+    document.getElementById('kpi-nrr').textContent = pct(nrr);
+    document.getElementById('kpi-grr').textContent = pct(grr);
+    document.getElementById('kpi-churn').textContent = pct(churn * 100);
+    document.getElementById('kpi-expansion').textContent = pct(expansion * 100);
+    document.getElementById('kpi-revgrowth').textContent = pct(revGrowth);
+    document.getElementById('kpi-quality').innerHTML = `<span class="${qualityClass} quality-badge" style="font-size:12px">${quality}</span>`;
+
+    // Decision
+    let decision, bullets, driver;
+    if (nrr < 90) {
+      decision = 'Fix churn and expansion before scaling acquisition.';
+      bullets = [`NRR of ${pct(nrr)} means existing revenue base is shrinking`, `GRR of ${pct(grr)} — losing ${pct(100-grr)} of base revenue to churn each month`, `At current churn, new customer spend is just backfilling losses`, `Improving NRR to 100%+ should be the #1 priority`];
+      driver = `Monthly churn (${pct(churn*100)}) — reducing by 1% saves ${fmtK(months[0].startRev * 0.01)} per month immediately.`;
+    } else if (nrr < 100) {
+      decision = 'Improve retention; growth is acquisition-dependent.';
+      bullets = [`NRR at ${pct(nrr)} — expansion partially offsets churn but not fully`, `GRR of ${pct(grr)} shows base revenue is at risk without new sales`, `Expansion revenue (${pct(expansion*100)}/mo) is healthy — needs to grow further`, `Fix retention to reduce dependency on new customer adds`];
+      driver = `Expansion rate (${pct(expansion*100)}) — adding 1% more expansion raises NRR by ~1pp.`;
+    } else {
+      decision = 'Healthy retention — scale acquisition aggressively.';
+      bullets = [`NRR of ${pct(nrr)} — existing base is self-growing without new sales`, `GRR of ${pct(grr)} is strong; churn is well-managed`, `Revenue growing ${pct(revGrowth)} over 12 months driven by real retention`, `Invest in CAC/acquisition to compound this growth engine`];
+      driver = `NRR (${pct(nrr)}) — every $1 of ARR today will be worth $${(nrr/100).toFixed(2)} in 12 months without new sales.`;
+    }
+
+    const state = nrr < 90 ? 'negative' : (nrr < 100 ? 'warning' : 'positive');
+    setDecisionBox(state, 'Decision:', decision, bullets, driver);
+
+    document.getElementById('what-means').innerHTML = `<p>Starting with <strong>${customers.toLocaleString()} customers</strong> at ${fmtK(months[0].startRev)}/mo, the business ${nrr >= 100 ? 'grows its existing base' : 'is shrinking its existing base'} with NRR of <strong>${pct(nrr)}</strong>. Revenue reaches ${fmtK(months[11].endRev)}/mo by month 12. Growth quality is <strong>${quality.replace(/[🟢✅⚠🔴]/g, '').trim()}</strong> — ${nrr >= 100 ? 'existing customers are expanding revenue faster than churn removes it.' : 'new customer adds are needed just to stay flat.'}</p>`;
+
+    document.getElementById('risks-list').innerHTML = [
+      `Churn at ${pct(churn*100)}/mo = ~${pct(Math.min(1-(1-churn)**12, 1)*100)} annual — at risk of compounding`,
+      `NRR below 100% means growth stalls without aggressive acquisition`,
+      `New customer dependency: ${fmtK(newcust*arpa)}/mo from new adds required to grow`,
+    ].map(r=>`<li>${r}</li>`).join('');
+    document.getElementById('levers-list').innerHTML = [
+      `Reduce churn: implement onboarding, success check-ins, NPS alerts`,
+      `Drive expansion: seat expansion, feature upsell, consumption pricing`,
+      `Price increases: ${price === 0 ? 'not currently modeled — even 1%/mo adds ' + fmtK(months[0].startRev * 0.01) + '/mo' : `currently modeled at ${pct(price*100)}/mo`}`,
+    ].map(r=>`<li>${r}</li>`).join('');
+
+    // Bridge Chart (waterfall as stacked bar)
+    const totalNew = months.reduce((a,m)=>a+m.newRev,0);
+    const totalExp = months.reduce((a,m)=>a+m.expRev,0);
+    const totalChurn = months.reduce((a,m)=>a+m.churnRev,0);
+    const totalPrice = months.reduce((a,m)=>a+m.priceAdj,0);
+
+    const bCtx = document.getElementById('chart-bridge').getContext('2d');
+    if (chartBridge) chartBridge.destroy();
+    chartBridge = new Chart(bCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Starting Revenue', '+ New Customers', '+ Expansion', '- Churn', '± Price Change', 'Ending Revenue'],
+        datasets: [{
+          label: 'Amount',
+          data: [months[0].startRev, totalNew, totalExp, -totalChurn, totalPrice, months[11].endRev],
+          backgroundColor: ['rgba(27,77,122,0.8)','rgba(15,118,110,0.8)','rgba(20,150,120,0.8)','rgba(239,68,68,0.8)','rgba(251,191,36,0.8)','rgba(27,77,122,0.8)'],
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtK(ctx.parsed.y) } } },
+        scales: {
+          y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Trend Chart
+    const tCtx = document.getElementById('chart-trend').getContext('2d');
+    if (chartTrend) chartTrend.destroy();
+    chartTrend = new Chart(tCtx, {
+      type: 'bar',
+      data: {
+        labels: months.map((_,i)=>'M'+(i+1)),
+        datasets: [
+          { label: 'Base Revenue', data: months.map(m=>m.startRev), backgroundColor: 'rgba(27,77,122,0.6)', borderRadius: 4 },
+          { label: 'New', data: months.map(m=>m.newRev), backgroundColor: 'rgba(15,118,110,0.8)', borderRadius: 4 },
+          { label: 'Expansion', data: months.map(m=>m.expRev), backgroundColor: 'rgba(20,150,120,0.6)', borderRadius: 4 },
+          { label: 'Churn (lost)', data: months.map(m=>-m.churnRev), backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 4 },
+        ]
+      },
+      options: {
+        responsive: true, plugins: { legend: { position: 'top', labels: { font: { size: 12 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtK(ctx.parsed.y) } } },
+        scales: {
+          x: { stacked: false, grid: { display: false } },
+          y: { stacked: false, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } }
+        }
+      }
+    });
+
+    // Cohort Table
+    const milestones = [0,1,2,3,5,8,11];
+    const cohortMonths = Math.min(6, 12);
+    let tableHtml = '<thead><tr><th>Cohort</th>' + milestones.map(m=>`<th>Mo ${m===0?'0':m}</th>`).join('') + '</tr></thead><tbody>';
+    for (let c = 0; c < cohortMonths; c++) {
+      tableHtml += `<tr><td style="font-weight:650">Cohort ${c+1}</td>`;
+      for (const mo of milestones) {
+        if (mo < c) { tableHtml += `<td>—</td>`; continue; }
+        const elapsed = mo - c;
+        const ret = Math.pow(1 - churn, elapsed) * 100;
+        const r = Math.max(0, Math.round(ret));
+        const bg = r >= 80 ? 'rgba(15,118,110,0.15)' : r >= 60 ? 'rgba(251,191,36,0.15)' : 'rgba(239,68,68,0.12)';
+        tableHtml += `<td><div class="heat-cell" style="background:${bg}">${r}%</div></td>`;
+      }
+      tableHtml += '</tr>';
+    }
+    tableHtml += '</tbody>';
+    document.getElementById('cohort-table').innerHTML = tableHtml;
+  }
+
+  loadSample();
+
+  function setDecisionBox(state, verdict, verdictAction, bullets, next) {
+    // state: 'positive' | 'warning' | 'negative'
+    const box = document.getElementById('decisionBox');
+    box.classList.remove('decision-box--positive','decision-box--warning','decision-box--negative');
+    box.classList.add('decision-box--' + state);
+    document.getElementById('decisionFallback').style.display = 'none';
+    document.getElementById('decisionContent').style.display = '';
+    document.getElementById('decisionVerdict').innerHTML = verdict + ' <span class="verdict-action">' + verdictAction + '</span>';
+    document.getElementById('decisionBullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
+    document.getElementById('decisionNext').innerHTML = 'Top driver: <span>' + next + '</span>';
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capex & Financing Decisions · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .module-hero { padding: 48px 0 32px 0; border-bottom: 1px solid var(--border); }
+    .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
+    .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
+    .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
+    .module-layout { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .sidebar { position: sticky; top: 80px; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); max-height: calc(100vh - 120px); overflow-y: auto; }
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title { font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 12px; letter-spacing: 0.03em; }
+    .sidebar-sub { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; margin: 10px 0 8px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .sidebar-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
+    .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .btn-small:active { transform: translateY(1px); }
+    .btn-primary { background: var(--text); color: white; border-color: var(--text); }
+    .input-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+    .input-row label { font-size: 12px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .input-row input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: var(--font-sans); background: white; width: 100%; }
+    .input-row input:focus { outline: none; border-color: var(--accent); }
+    .main-content { min-width: 0; }
+    
+    
+    
+    
+    
+    
+    
+    
+    .decision-driver strong { color: rgba(255,255,255,0.9); }
+    .module-section { padding: 0 0 40px 0; }
+    .module-section-title { font-size: 22px; margin-bottom: 18px; letter-spacing: -0.02em; font-weight: 700; }
+    .module-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-box { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.6); }
+    .kpi-box-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .kpi-box-value { font-size: 20px; font-weight: 700; }
+    .kpi-box-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .kpi-box.highlight { border-color: var(--accent); background: rgba(15,118,110,0.06); }
+    .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .board-block { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.5); }
+    .board-block-title { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+    .board-block ul { margin: 0; padding: 0 0 0 16px; display: grid; gap: 6px; }
+    .board-block ul li { font-size: 13px; }
+    .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
+    .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .chart-wrap { position: relative; width: 100%; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
+    .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover { background: rgba(246,248,251,0.5); }
+    .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-size: 11px; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
+    .help-icon::before { content: '?'; }
+    .help-icon:hover::after { content: attr(data-help); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; padding: 10px 14px; background: var(--text); color: white; font-size: 12px; line-height: 1.5; border-radius: 10px; white-space: normal; width: 280px; z-index: 1000; box-shadow: var(--shadow); font-weight: 400; text-align: left; }
+    .section-header-with-help { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .data-badge { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 10px; }
+    .data-badge.random { background: #fef3c7; border: 1px solid #fbbf24; color: #92400e; }
+    .option-tabs { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
+    .option-tab { padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 140ms; }
+    .option-tab.best { border-color: var(--accent); background: rgba(15,118,110,0.08); color: var(--accent); }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; max-height: none; } .board-grid { grid-template-columns: 1fr; } }
+  
+    /* ---- Decision Box (matches commercial-sales.html) ---- */
+    .decision-box {
+      background: white;
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
+      margin-bottom: 24px;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .decision-box--positive {
+      border-color: #0f766e;
+      background: #f0fdf9;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10), var(--shadow-soft);
+    }
+    .decision-box--positive .decision-box-eyebrow { color: #0f766e; }
+    .decision-box--positive .verdict-action        { color: #0f766e; }
+    .decision-box--positive .decision-box-bullets li::before { color: #0f766e; }
+    .decision-box--warning {
+      border-color: #d97706;
+      background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), var(--shadow-soft);
+    }
+    .decision-box--warning .decision-box-eyebrow { color: #d97706; }
+    .decision-box--warning .verdict-action        { color: #d97706; }
+    .decision-box--warning .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--negative {
+      border-color: #dc2626;
+      background: #fef2f2;
+      box-shadow: 0 0 0 4px rgba(220,38,38,0.10), var(--shadow-soft);
+    }
+    .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
+    .decision-box--negative .verdict-action        { color: #dc2626; }
+    .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .decision-box-verdict {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .decision-box-verdict .verdict-action { color: var(--accent); }
+    .decision-box-bullets {
+      list-style: none;
+      margin: 0 0 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .decision-box-bullets li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .decision-box-next {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .decision-box-next span { color: var(--accent-2); }
+    .decision-box-fallback {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        FP&amp;A Portfolio
+      </a>
+      <div class="nav-cta">
+        <a href="index.html#projects" class="btn btn-ghost">&larr; Back to Portfolio</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="module-hero">
+    <div class="container">
+      <div class="module-label">Capex · Depreciation · Financing</div>
+      <h1 class="module-title">Capex & <span class="accent">Financing Decisions</span></h1>
+      <p class="module-subtitle">Buy cash, finance with a loan, or lease — and what each does to your cash and runway.</p>
+      <div class="feature-chips">
+        <span class="chip">Cash vs Loan vs Lease</span>
+        <span class="chip">NPV Comparison</span>
+        <span class="chip">Payback Period</span>
+        <span class="chip">Depreciation Schedule</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="module-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">DATA CONTROLS</div>
+        <span class="data-badge" id="data-badge">No data loaded</span>
+        <div class="sidebar-buttons">
+          <button class="btn-small btn-primary" onclick="loadSample()">Use Sample Data</button>
+          <button class="btn-small" onclick="randomizeData()">Randomize Data</button>
+          <button class="btn-small" onclick="resetDefaults()">Reset to Defaults</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">ASSET DETAILS</div>
+        <div class="input-row">
+          <label>Asset Cost ($) <span class="help-icon" data-help="The total purchase price of the asset — e.g., a machine, vehicle, or equipment."></span></label>
+          <input type="number" id="inp-cost" value="250000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Useful Life (years) <span class="help-icon" data-help="How many years the asset will be used before it's replaced or worn out."></span></label>
+          <input type="number" id="inp-life" value="5" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Salvage Value ($) <span class="help-icon" data-help="What the asset is worth at the end of its useful life — what you can sell it for."></span></label>
+          <input type="number" id="inp-salvage" value="25000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has before making this financing decision."></span></label>
+          <input type="number" id="inp-startcash" value="600000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Discount Rate (%) <span class="help-icon" data-help="Your cost of capital — used to discount future cash flows to today's value (NPV)."></span></label>
+          <input type="number" id="inp-discount" value="10" step="0.5" oninput="compute()">
+        </div>
+        <div class="sidebar-sub">OPTION B — LOAN</div>
+        <div class="input-row">
+          <label>Interest Rate (%) <span class="help-icon" data-help="Annual interest rate on the loan. The bank's fee for lending you money."></span></label>
+          <input type="number" id="inp-rate" value="8" step="0.5" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Loan Term (months) <span class="help-icon" data-help="How many months to repay the loan. Longer = smaller payments but more total interest."></span></label>
+          <input type="number" id="inp-term" value="48" step="6" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Down Payment ($) <span class="help-icon" data-help="How much you pay upfront when taking the loan. Reduces the amount financed."></span></label>
+          <input type="number" id="inp-down" value="50000" oninput="compute()">
+        </div>
+        <div class="sidebar-sub">OPTION C — LEASE</div>
+        <div class="input-row">
+          <label>Monthly Lease ($) <span class="help-icon" data-help="Fixed monthly payment to use the asset without owning it. Like renting."></span></label>
+          <input type="number" id="inp-lease" value="5200" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Lease Term (months) <span class="help-icon" data-help="How long the lease agreement lasts. After this, return or renew."></span></label>
+          <input type="number" id="inp-leaseTerm" value="60" step="6" oninput="compute()">
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+            <div class="decision-box" id="decisionBox">
+        <div class="decision-box-eyebrow">Decision</div>
+        <div class="decision-box-fallback" id="decisionFallback">Load sample data or adjust assumptions to see the decision.</div>
+        <div id="decisionContent" style="display:none;">
+          <div class="decision-box-verdict" id="decisionVerdict"></div>
+          <ul class="decision-box-bullets" id="decisionBullets"></ul>
+          <div class="decision-box-next" id="decisionNext"></div>
+        </div>
+      </div>
+
+      <!-- Option comparison tabs -->
+      <div class="option-tabs" id="option-tabs">
+        <div class="option-tab" id="tab-cash"><strong>Option A: Pay Cash</strong><div style="font-size:11px;margin-top:4px;color:var(--muted)" id="tab-cash-sub">—</div></div>
+        <div class="option-tab" id="tab-loan"><strong>Option B: Loan</strong><div style="font-size:11px;margin-top:4px;color:var(--muted)" id="tab-loan-sub">—</div></div>
+        <div class="option-tab" id="tab-lease"><strong>Option C: Lease</strong><div style="font-size:11px;margin-top:4px;color:var(--muted)" id="tab-lease-sub">—</div></div>
+      </div>
+
+      <!-- Board View -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Board View</h2>
+          <span class="help-icon" data-help="Executive summary comparing all three financing options."></span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-box"><div class="kpi-box-label">Recommended</div><div class="kpi-box-value" id="kpi-rec" style="font-size:16px">—</div><div class="kpi-box-sub">best option</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Cash Option NPV</div><div class="kpi-box-value" id="kpi-npv-cash">—</div><div class="kpi-box-sub">total cost (PV)</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Loan Option NPV</div><div class="kpi-box-value" id="kpi-npv-loan">—</div><div class="kpi-box-sub">total cost (PV)</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Lease Option NPV</div><div class="kpi-box-value" id="kpi-npv-lease">—</div><div class="kpi-box-sub">total cost (PV)</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Monthly Payment</div><div class="kpi-box-value" id="kpi-loanpmt">—</div><div class="kpi-box-sub">loan monthly</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Annual Depreciation</div><div class="kpi-box-value" id="kpi-depr">—</div><div class="kpi-box-sub">straight-line</div></div>
+        </div>
+        <div class="module-card">
+          <div id="what-means" class="what-means"><p>Load data to see summary.</p></div>
+          <div class="board-grid">
+            <div class="board-block"><div class="board-block-title">⚠ RISKS & WATCHOUTS</div><ul id="risks-list"><li>—</li></ul></div>
+            <div class="board-block"><div class="board-block-title">🔧 LEVERS TO PULL</div><ul id="levers-list"><li>—</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cash Impact Chart -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Cash Balance Impact Over Time</h2>
+          <span class="help-icon" data-help="How each financing option affects your cash balance month by month over the full comparison period."></span>
+        </div>
+        <div class="module-card"><div class="chart-wrap"><canvas id="chart-cash" height="180"></canvas></div></div>
+      </div>
+
+      <!-- Monthly Payment Comparison -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Monthly Cash Outflow Comparison</h2>
+          <span class="help-icon" data-help="Compares the monthly cash you spend under each option. Cash option has no ongoing payments after purchase."></span>
+        </div>
+        <div class="module-card"><div class="chart-wrap"><canvas id="chart-payments" height="120"></canvas></div></div>
+      </div>
+
+      <!-- Depreciation Schedule -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Straight-Line Depreciation Schedule</h2>
+          <span class="help-icon" data-help="Straight-line depreciation spreads the cost evenly over the asset's useful life. This affects P&L, not cash directly."></span>
+        </div>
+        <div class="module-card" style="overflow-x:auto;">
+          <table class="data-table" id="depr-table">
+            <thead><tr><th>Year</th><th>Opening BV</th><th>Depreciation</th><th>Closing BV</th></tr></thead>
+            <tbody id="depr-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<a class="to-top" href="#main" aria-label="Back to top">↑</a>
+<script src="main.js"></script>
+<script>
+  let chartCash = null, chartPay = null;
+  const fmtK = (n) => { const abs=Math.abs(n); const sign=n<0?'-':''; if(abs>=1000000) return sign+'$'+(abs/1000000).toFixed(1)+'M'; if(abs>=1000) return sign+'$'+(abs/1000).toFixed(0)+'K'; return sign+'$'+Math.round(abs); };
+  const fmt = (n) => '$' + Math.round(n).toLocaleString();
+
+  const SAMPLE = { cost:250000, life:5, salvage:25000, startcash:600000, discount:10, rate:8, term:48, down:50000, lease:5200, leaseTerm:60 };
+
+  function getInputs() {
+    return {
+      cost: +document.getElementById('inp-cost').value,
+      life: +document.getElementById('inp-life').value,
+      salvage: +document.getElementById('inp-salvage').value,
+      startcash: +document.getElementById('inp-startcash').value,
+      discount: +document.getElementById('inp-discount').value / 100,
+      rate: +document.getElementById('inp-rate').value / 100,
+      term: +document.getElementById('inp-term').value,
+      down: +document.getElementById('inp-down').value,
+      lease: +document.getElementById('inp-lease').value,
+      leaseTerm: +document.getElementById('inp-leaseTerm').value,
+    };
+  }
+
+  function setInputs(v) {
+    Object.keys(v).forEach(k => { const el = document.getElementById('inp-' + k); if (el) el.value = v[k]; });
+  }
+
+  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function randomizeData() {
+    const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
+    setInputs({ cost:r(50000,1000000,10000), life:r(3,10,1), salvage:r(0,50000,5000), startcash:r(100000,2000000,50000), discount:r(6,15,0.5), rate:r(4,15,0.5), term:r(24,72,12), down:r(0,100000,5000), lease:r(500,20000,100), leaseTerm:r(24,84,12) });
+    document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+  }
+  function resetDefaults() { loadSample(); }
+
+  function loanPayment(principal, monthlyRate, months) {
+    if (monthlyRate === 0) return principal / months;
+    return principal * monthlyRate * Math.pow(1+monthlyRate, months) / (Math.pow(1+monthlyRate, months) - 1);
+  }
+
+  function npv(cashflows, rate) {
+    const monthly = rate / 12;
+    return cashflows.reduce((sum, cf, i) => sum + cf / Math.pow(1 + monthly, i + 1), 0);
+  }
+
+  function compute() {
+    const inp = getInputs();
+    const { cost, life, salvage, startcash, discount, rate, term, down, lease, leaseTerm } = inp;
+
+    // Depreciation
+    const annualDepr = (cost - salvage) / life;
+    const deprRows = [];
+    let bv = cost;
+    for (let y = 1; y <= life; y++) {
+      deprRows.push({ year: y, open: bv, depr: annualDepr, close: bv - annualDepr });
+      bv -= annualDepr;
+    }
+
+    // Loan calcs
+    const loanAmt = cost - down;
+    const monthlyRate = rate / 12;
+    const monthlyPayment = loanPayment(loanAmt, monthlyRate, term);
+    const totalLoanCost = down + monthlyPayment * term;
+
+    // Compare periods (use max of all terms)
+    const periods = Math.max(term, leaseTerm, life * 12);
+    const months = Math.min(periods, 72); // cap at 72 months for display
+
+    // Cash balances
+    const cashCashFlow = Array.from({length: months}, (_, i) => i === 0 ? startcash - cost : startcash - cost);
+    const loanCashFlow = [];
+    const leaseCashFlow = [];
+
+    let cashBal = startcash - cost;
+    let loanBal = startcash - down;
+    let leaseBal = startcash;
+
+    const cashBalArr = [], loanBalArr = [], leaseBalArr = [];
+    const loanPayArr = [], leasePayArr = [];
+
+    for (let i = 0; i < months; i++) {
+      cashBalArr.push(cashBal);
+      const lp = i < term ? monthlyPayment : 0;
+      const lsp = i < leaseTerm ? lease : 0;
+      loanBal -= lp;
+      leaseBal -= lsp;
+      loanBalArr.push(loanBal);
+      leaseBalArr.push(leaseBal);
+      loanPayArr.push(lp);
+      leasePayArr.push(lsp);
+    }
+
+    // NPV of costs (negative cash out)
+    const cashFlows_cash = Array.from({length: months}, (_,i) => i===0 ? cost : 0);
+    cashFlows_cash[months-1] -= salvage; // salvage recovery at end
+    const cashFlows_loan = [down, ...Array.from({length: months-1}, (_,i) => i < term-1 ? monthlyPayment : 0)];
+    const cashFlows_lease = Array.from({length: months}, (_,i) => i < leaseTerm ? lease : 0);
+
+    const npvCash = npv(cashFlows_cash, discount);
+    const npvLoan = npv(cashFlows_loan, discount);
+    const npvLease = npv(cashFlows_lease, discount);
+
+    // Runway impact
+    const runwayCash = startcash >= cost ? (startcash - cost) : -1;
+    const runwayLoan = startcash - down;
+
+    // Recommendation
+    const minNPV = Math.min(npvCash, npvLoan, npvLease);
+    let rec = '', recKey = '';
+    if (startcash < cost) { rec = 'Option B: Loan'; recKey = 'loan'; }
+    else if (minNPV === npvCash && startcash >= cost * 1.3) { rec = 'Option A: Pay Cash'; recKey = 'cash'; }
+    else if (minNPV === npvLoan) { rec = 'Option B: Loan'; recKey = 'loan'; }
+    else { rec = 'Option C: Lease'; recKey = 'lease'; }
+
+    // Highlight best option tab
+    ['cash','loan','lease'].forEach(opt => {
+      const tab = document.getElementById('tab-' + opt);
+      tab.className = 'option-tab' + (opt === recKey ? ' best' : '');
+    });
+    document.getElementById('tab-cash-sub').textContent = 'NPV cost: ' + fmtK(npvCash);
+    document.getElementById('tab-loan-sub').textContent = 'NPV cost: ' + fmtK(npvLoan);
+    document.getElementById('tab-lease-sub').textContent = 'NPV cost: ' + fmtK(npvLease);
+
+    // KPIs
+    document.getElementById('kpi-rec').textContent = rec;
+    document.getElementById('kpi-npv-cash').textContent = fmtK(npvCash);
+    document.getElementById('kpi-npv-loan').textContent = fmtK(npvLoan);
+    document.getElementById('kpi-npv-lease').textContent = fmtK(npvLease);
+    document.getElementById('kpi-loanpmt').textContent = fmtK(monthlyPayment);
+    document.getElementById('kpi-depr').textContent = fmtK(annualDepr);
+
+    // Decision
+    const bullets = [
+      `${rec} has lowest NPV cost at ${fmtK(minNPV)}`,
+      startcash < cost ? `Cash purchase not viable — only ${fmtK(startcash)} available vs ${fmtK(cost)} needed` : `Cash purchase leaves ${fmtK(startcash - cost)} in reserve`,
+      `Loan: ${fmtK(down)} down + ${fmtK(monthlyPayment)}/mo × ${term}mo = ${fmtK(totalLoanCost)} total cost`,
+      `Lease: ${fmtK(lease)}/mo × ${leaseTerm}mo = ${fmtK(lease*leaseTerm)} total — no ownership`,
+    ];
+    const driver = `NPV spread: Cash ${fmtK(npvCash)} vs Loan ${fmtK(npvLoan)} vs Lease ${fmtK(npvLease)} — difference of ${fmtK(Math.max(npvCash,npvLoan,npvLease)-minNPV)} over analysis period.`;
+
+    // State: positive if cash is ample + good NPV, negative if cash is tight, warning otherwise
+    const capexState = startcash < cost ? 'negative' : (startcash < cost * 1.2 ? 'warning' : 'positive');
+    setDecisionBox(capexState, 'Recommendation:', `${rec} — lowest NPV cost at ${fmtK(minNPV)}`, bullets, driver);
+
+    document.getElementById('what-means').innerHTML = `<p>You are evaluating a <strong>${fmtK(cost)}</strong> asset with a <strong>${life}-year</strong> useful life and <strong>${fmtK(salvage)}</strong> salvage value. Straight-line depreciation is <strong>${fmtK(annualDepr)}/year</strong>. The <strong>${rec}</strong> minimizes the present value cost of acquiring this asset. ${startcash < cost ? 'Note: starting cash is insufficient for outright purchase.' : `Starting cash of ${fmtK(startcash)} is sufficient for any option.`}</p>`;
+
+    document.getElementById('risks-list').innerHTML = [
+      `Cash option ties up ${fmtK(cost)} immediately — reduces flexibility`,
+      `Loan exposes you to interest rate risk if variable — total interest: ${fmtK(monthlyPayment*term - loanAmt)}`,
+      `Lease has no residual value — you own nothing after ${leaseTerm} months`,
+    ].map(r=>`<li>${r}</li>`).join('');
+    document.getElementById('levers-list').innerHTML = [
+      `Negotiate down payment lower on loan to preserve cash`,
+      `Compare lease vs buy at different useful life assumptions`,
+      `Factor in tax depreciation benefits (asset ownership) vs lease deduction`,
+    ].map(r=>`<li>${r}</li>`).join('');
+
+    // Cash Balance Chart
+    const labels = Array.from({length: months}, (_,i) => 'M'+(i+1));
+    const cashCtx = document.getElementById('chart-cash').getContext('2d');
+    if (chartCash) chartCash.destroy();
+    chartCash = new Chart(cashCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Pay Cash', data: cashBalArr, borderColor: 'rgba(27,77,122,0.9)', backgroundColor: 'rgba(27,77,122,0.05)', fill: true, tension: 0.2, pointRadius: 0 },
+          { label: 'Loan', data: loanBalArr, borderColor: 'rgba(15,118,110,0.9)', backgroundColor: 'rgba(15,118,110,0.05)', fill: true, tension: 0.2, pointRadius: 0 },
+          { label: 'Lease', data: leaseBalArr, borderColor: 'rgba(251,146,60,0.9)', backgroundColor: 'rgba(251,146,60,0.05)', fill: true, tension: 0.2, pointRadius: 0 },
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtK(ctx.parsed.y) } } },
+        scales: { y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } } }
+      }
+    });
+
+    // Payment comparison bar
+    const payCtx = document.getElementById('chart-payments').getContext('2d');
+    if (chartPay) chartPay.destroy();
+    chartPay = new Chart(payCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Pay Cash (Upfront)', 'Loan (Monthly)', 'Lease (Monthly)'],
+        datasets: [{
+          label: '$',
+          data: [0, monthlyPayment, lease],
+          backgroundColor: ['rgba(27,77,122,0.7)', 'rgba(15,118,110,0.7)', 'rgba(251,146,60,0.7)'],
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtK(ctx.parsed.y) + '/mo' } } },
+        scales: { y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } }, x: { grid: { display: false } } }
+      }
+    });
+
+    // Depreciation table
+    document.getElementById('depr-tbody').innerHTML = deprRows.map(r =>
+      `<tr><td>Year ${r.year}</td><td>${fmt(r.open)}</td><td>${fmt(r.depr)}</td><td>${fmt(r.close)}</td></tr>`
+    ).join('');
+  }
+
+  loadSample();
+
+  function setDecisionBox(state, verdict, verdictAction, bullets, next) {
+    // state: 'positive' | 'warning' | 'negative'
+    const box = document.getElementById('decisionBox');
+    box.classList.remove('decision-box--positive','decision-box--warning','decision-box--negative');
+    box.classList.add('decision-box--' + state);
+    document.getElementById('decisionFallback').style.display = 'none';
+    document.getElementById('decisionContent').style.display = '';
+    document.getElementById('decisionVerdict').innerHTML = verdict + ' <span class="verdict-action">' + verdictAction + '</span>';
+    document.getElementById('decisionBullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
+    document.getElementById('decisionNext').innerHTML = 'Top driver: <span>' + next + '</span>';
+  }
+
+</script>
+</body>
+</html>

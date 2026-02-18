@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI Tree & Driver Sensitivity · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .module-hero { padding: 48px 0 32px 0; border-bottom: 1px solid var(--border); }
+    .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
+    .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
+    .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
+    .module-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .sidebar { position: sticky; top: 80px; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title { font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 12px; letter-spacing: 0.03em; }
+    .sidebar-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
+    .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .btn-small:active { transform: translateY(1px); }
+    .btn-primary { background: var(--text); color: white; border-color: var(--text); }
+    .input-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+    .input-row label { font-size: 12px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .input-row input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: var(--font-sans); background: white; width: 100%; }
+    .input-row input:focus { outline: none; border-color: var(--accent); }
+    .main-content { min-width: 0; }
+    
+    
+    
+    
+    
+    
+    
+    
+    .decision-driver strong { color: rgba(255,255,255,0.9); }
+    .module-section { padding: 0 0 40px 0; }
+    .module-section-title { font-size: 22px; margin-bottom: 18px; letter-spacing: -0.02em; font-weight: 700; }
+    .module-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-box { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.6); }
+    .kpi-box-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .kpi-box-value { font-size: 22px; font-weight: 700; }
+    .kpi-box-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .board-block { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.5); }
+    .board-block-title { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+    .board-block ul { margin: 0; padding: 0 0 0 16px; display: grid; gap: 6px; }
+    .board-block ul li { font-size: 13px; }
+    .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
+    .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .chart-wrap { position: relative; width: 100%; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
+    .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover { background: rgba(246,248,251,0.5); }
+    .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-size: 11px; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
+    .help-icon::before { content: '?'; }
+    .help-icon:hover::after { content: attr(data-help); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; padding: 10px 14px; background: var(--text); color: white; font-size: 12px; line-height: 1.5; border-radius: 10px; white-space: normal; width: 280px; z-index: 1000; box-shadow: var(--shadow); font-weight: 400; text-align: left; }
+    .section-header-with-help { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .data-badge { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 10px; }
+    .data-badge.random { background: #fef3c7; border: 1px solid #fbbf24; color: #92400e; }
+    /* KPI Tree */
+    .kpi-tree { display: grid; gap: 0; }
+    .tree-row { display: grid; gap: 10px; align-items: center; margin-bottom: 6px; }
+    .tree-row-2 { grid-template-columns: 1fr auto 1fr; }
+    .tree-row-1 { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto; }
+    .tree-row-wide { grid-template-columns: repeat(4, 1fr); }
+    .tree-node { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.6); }
+    .tree-node.root { background: var(--text); color: white; border-color: var(--text); }
+    .tree-node.positive { border-color: rgba(15,118,110,0.3); background: rgba(15,118,110,0.06); }
+    .tree-node.negative { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
+    .tree-node-label { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .tree-node.root .tree-node-label { color: rgba(255,255,255,0.5); }
+    .tree-node-value { font-size: 16px; font-weight: 700; }
+    .tree-node.root .tree-node-value { color: white; }
+    .tree-arrow { display: grid; place-items: center; color: var(--muted); font-size: 18px; }
+    .tree-connector { display: flex; justify-content: center; align-items: center; height: 20px; }
+    .tree-connector-line { width: 2px; height: 20px; background: var(--border); }
+    .sens-pos { color: var(--accent); font-weight: 600; }
+    .sens-neg { color: #ef4444; font-weight: 600; }
+    .rank-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .rank-1 { background: rgba(251,191,36,0.2); color: #92400e; border: 1px solid rgba(251,191,36,0.4); }
+    .rank-2 { background: rgba(156,163,175,0.2); color: #4b5563; border: 1px solid rgba(156,163,175,0.3); }
+    .rank-3 { background: rgba(180,150,100,0.15); color: #78350f; border: 1px solid rgba(180,150,100,0.3); }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; } .board-grid { grid-template-columns: 1fr; } .tree-row-wide { grid-template-columns: 1fr 1fr; } }
+  
+    /* ---- Decision Box (matches commercial-sales.html) ---- */
+    .decision-box {
+      background: white;
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
+      margin-bottom: 24px;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .decision-box--positive {
+      border-color: #0f766e;
+      background: #f0fdf9;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10), var(--shadow-soft);
+    }
+    .decision-box--positive .decision-box-eyebrow { color: #0f766e; }
+    .decision-box--positive .verdict-action        { color: #0f766e; }
+    .decision-box--positive .decision-box-bullets li::before { color: #0f766e; }
+    .decision-box--warning {
+      border-color: #d97706;
+      background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), var(--shadow-soft);
+    }
+    .decision-box--warning .decision-box-eyebrow { color: #d97706; }
+    .decision-box--warning .verdict-action        { color: #d97706; }
+    .decision-box--warning .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--negative {
+      border-color: #dc2626;
+      background: #fef2f2;
+      box-shadow: 0 0 0 4px rgba(220,38,38,0.10), var(--shadow-soft);
+    }
+    .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
+    .decision-box--negative .verdict-action        { color: #dc2626; }
+    .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .decision-box-verdict {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .decision-box-verdict .verdict-action { color: var(--accent); }
+    .decision-box-bullets {
+      list-style: none;
+      margin: 0 0 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .decision-box-bullets li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .decision-box-next {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .decision-box-next span { color: var(--accent-2); }
+    .decision-box-fallback {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        FP&amp;A Portfolio
+      </a>
+      <div class="nav-cta">
+        <a href="index.html#projects" class="btn btn-ghost">&larr; Back to Portfolio</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="module-hero">
+    <div class="container">
+      <div class="module-label">KPI Tree · Driver Sensitivity · Runway</div>
+      <h1 class="module-title">KPI Tree & <span class="accent">Driver Sensitivity</span></h1>
+      <p class="module-subtitle">See what really drives profit and runway — and which levers matter most.</p>
+      <div class="feature-chips">
+        <span class="chip">KPI Decomposition Tree</span>
+        <span class="chip">Tornado Sensitivity Chart</span>
+        <span class="chip">Top 3 Drivers Ranked</span>
+        <span class="chip">Runway Analysis</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="module-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">DATA CONTROLS</div>
+        <span class="data-badge" id="data-badge">No data loaded</span>
+        <div class="sidebar-buttons">
+          <button class="btn-small btn-primary" onclick="loadSample()">Use Sample Data</button>
+          <button class="btn-small" onclick="randomizeData()">Randomize Data</button>
+          <button class="btn-small" onclick="resetDefaults()">Reset to Defaults</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">ASSUMPTIONS</div>
+        <div class="input-row">
+          <label>Price ($/unit) <span class="help-icon" data-help="The average selling price per unit, subscription, or transaction."></span></label>
+          <input type="number" id="inp-price" value="120" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Volume (units/mo) <span class="help-icon" data-help="How many units, customers, or transactions per month."></span></label>
+          <input type="number" id="inp-volume" value="3000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>COGS % <span class="help-icon" data-help="Cost of Goods Sold as % of revenue — what it costs to deliver each unit."></span></label>
+          <input type="number" id="inp-cogs" value="40" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Monthly OpEx ($) <span class="help-icon" data-help="All operating expenses except COGS — salaries, rent, marketing, software, etc."></span></label>
+          <input type="number" id="inp-opex" value="180000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Monthly Churn % <span class="help-icon" data-help="% of customers or revenue lost each month. Affects sustainable volume over time."></span></label>
+          <input type="number" id="inp-churn" value="3" step="0.5" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>CAC ($/customer) <span class="help-icon" data-help="Customer Acquisition Cost — how much you spend on sales & marketing to win each new customer."></span></label>
+          <input type="number" id="inp-cac" value="450" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Starting Cash ($) <span class="help-icon" data-help="Current cash balance used to calculate runway months."></span></label>
+          <input type="number" id="inp-cash" value="1500000" oninput="compute()">
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content">
+            <div class="decision-box" id="decisionBox">
+        <div class="decision-box-eyebrow">Decision</div>
+        <div class="decision-box-fallback" id="decisionFallback">Load sample data or adjust assumptions to see the decision.</div>
+        <div id="decisionContent" style="display:none;">
+          <div class="decision-box-verdict" id="decisionVerdict"></div>
+          <ul class="decision-box-bullets" id="decisionBullets"></ul>
+          <div class="decision-box-next" id="decisionNext"></div>
+        </div>
+      </div>
+
+      <!-- Board View -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Board View</h2>
+          <span class="help-icon" data-help="Top-line KPIs and the three levers that matter most to EBITDA and runway."></span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-box"><div class="kpi-box-label">Runway</div><div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">EBITDA / Mo</div><div class="kpi-box-value" id="kpi-ebitda">—</div><div class="kpi-box-sub">earnings before interest/tax</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Gross Margin</div><div class="kpi-box-value" id="kpi-gm">—</div><div class="kpi-box-sub">% after COGS</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Revenue / Mo</div><div class="kpi-box-value" id="kpi-revenue">—</div><div class="kpi-box-sub">price × volume</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">LTV/CAC</div><div class="kpi-box-value" id="kpi-ltvcac">—</div><div class="kpi-box-sub">unit economics ratio</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Top Driver</div><div class="kpi-box-value" id="kpi-topdriver" style="font-size:14px">—</div><div class="kpi-box-sub">highest runway impact</div></div>
+        </div>
+        <div class="module-card">
+          <div id="what-means" class="what-means"><p>Load data to see summary.</p></div>
+          <div class="board-grid">
+            <div class="board-block"><div class="board-block-title">⚠ RISKS & WATCHOUTS</div><ul id="risks-list"><li>—</li></ul></div>
+            <div class="board-block"><div class="board-block-title">🔧 RECOMMENDED ACTIONS</div><ul id="levers-list"><li>—</li></ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Tree -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">KPI Decomposition Tree</h2>
+          <span class="help-icon" data-help="Shows how top-line metrics break down into their drivers. Follow the tree to see what moves the needle."></span>
+        </div>
+        <div class="module-card">
+          <div id="kpi-tree"></div>
+        </div>
+      </div>
+
+      <!-- Tornado Chart -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Driver Sensitivity — Runway Impact (±5%)</h2>
+          <span class="help-icon" data-help="Tornado chart: shows how much runway changes when each driver moves +5% or −5%. Wider bar = bigger impact = higher priority."></span>
+        </div>
+        <div class="module-card"><div class="chart-wrap"><canvas id="chart-tornado" height="180"></canvas></div></div>
+      </div>
+
+      <!-- Sensitivity Table -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Sensitivity Table</h2>
+          <span class="help-icon" data-help="Detailed table showing EBITDA and runway impact for each driver at +5% and −5%."></span>
+        </div>
+        <div class="module-card" style="overflow-x:auto;">
+          <table class="data-table" id="sens-table">
+            <thead><tr><th>Rank</th><th>Driver</th><th>Base Value</th><th>+5% → EBITDA Change</th><th>+5% → Runway Change</th><th>−5% → EBITDA Change</th><th>−5% → Runway Change</th></tr></thead>
+            <tbody id="sens-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<a class="to-top" href="#main" aria-label="Back to top">↑</a>
+<script src="main.js"></script>
+<script>
+  let chartTornado = null;
+  const fmtK = (n) => { const abs=Math.abs(n); const sign=n<0?'-':''; if(abs>=1000000) return sign+'$'+(abs/1000000).toFixed(1)+'M'; if(abs>=1000) return sign+'$'+(abs/1000).toFixed(0)+'K'; return sign+'$'+Math.round(abs); };
+  const pct = (n) => n.toFixed(1)+'%';
+
+  const SAMPLE = { price:120, volume:3000, cogs:40, opex:180000, churn:3, cac:450, cash:1500000 };
+
+  function getInputs() {
+    return {
+      price: +document.getElementById('inp-price').value,
+      volume: +document.getElementById('inp-volume').value,
+      cogs: +document.getElementById('inp-cogs').value / 100,
+      opex: +document.getElementById('inp-opex').value,
+      churn: +document.getElementById('inp-churn').value / 100,
+      cac: +document.getElementById('inp-cac').value,
+      cash: +document.getElementById('inp-cash').value,
+    };
+  }
+
+  function setInputs(v) {
+    document.getElementById('inp-price').value = v.price;
+    document.getElementById('inp-volume').value = v.volume;
+    document.getElementById('inp-cogs').value = v.cogs;
+    document.getElementById('inp-opex').value = v.opex;
+    document.getElementById('inp-churn').value = v.churn;
+    document.getElementById('inp-cac').value = v.cac;
+    document.getElementById('inp-cash').value = v.cash;
+  }
+
+  function calcMetrics(p) {
+    const revenue = p.price * p.volume;
+    const cogsAmt = revenue * p.cogs;
+    const gp = revenue - cogsAmt;
+    const gm = gp / revenue;
+    const ebitda = gp - p.opex;
+    const burn = ebitda < 0 ? Math.abs(ebitda) : 0;
+    const runway = ebitda < 0 ? p.cash / burn : 999;
+    const ltv = (p.price * (1 - p.cogs)) / p.churn;
+    const ltvcac = ltv / p.cac;
+    return { revenue, cogsAmt, gp, gm, ebitda, burn, runway, ltv, ltvcac };
+  }
+
+  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function randomizeData() {
+    const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
+    setInputs({ price:r(20,500,10), volume:r(200,10000,100), cogs:r(20,75,5), opex:r(50000,600000,10000), churn:r(1,15,0.5), cac:r(100,2000,50), cash:r(200000,5000000,100000) });
+    document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+  }
+  function resetDefaults() { loadSample(); }
+
+  function compute() {
+    const inp = getInputs();
+    const base = calcMetrics(inp);
+
+    // KPIs
+    document.getElementById('kpi-runway').textContent = base.runway >= 99 ? '∞' : base.runway.toFixed(1);
+    document.getElementById('kpi-ebitda').textContent = fmtK(base.ebitda);
+    document.getElementById('kpi-gm').textContent = pct(base.gm * 100);
+    document.getElementById('kpi-revenue').textContent = fmtK(base.revenue);
+    document.getElementById('kpi-ltvcac').textContent = base.ltvcac.toFixed(1) + 'x';
+
+    // Sensitivity drivers: [name, key, direction_note]
+    const drivers = [
+      { name: 'Price', key: 'price', fmt: '$' + inp.price },
+      { name: 'Volume', key: 'volume', fmt: inp.volume.toLocaleString() + '/mo' },
+      { name: 'COGS %', key: 'cogs', fmt: pct(inp.cogs * 100) },
+      { name: 'OpEx', key: 'opex', fmt: fmtK(inp.opex) },
+      { name: 'Churn %', key: 'churn', fmt: pct(inp.churn * 100) },
+    ];
+
+    const sensList = drivers.map(d => {
+      const upInp = { ...inp, [d.key]: inp[d.key] * 1.05 };
+      const downInp = { ...inp, [d.key]: inp[d.key] * 0.95 };
+      const upM = calcMetrics(upInp);
+      const downM = calcMetrics(downInp);
+      const upEBITDA = upM.ebitda - base.ebitda;
+      const downEBITDA = downM.ebitda - base.ebitda;
+      const upRunway = (upM.runway >= 99 ? 999 : upM.runway) - (base.runway >= 99 ? 999 : base.runway);
+      const downRunway = (downM.runway >= 99 ? 999 : downM.runway) - (base.runway >= 99 ? 999 : base.runway);
+      const impact = Math.abs(upRunway) + Math.abs(downRunway);
+      return { ...d, upEBITDA, downEBITDA, upRunway, downRunway, impact };
+    });
+
+    // Sort by impact
+    sensList.sort((a, b) => b.impact - a.impact);
+    const top3 = sensList.slice(0, 3);
+
+    document.getElementById('kpi-topdriver').textContent = '#1 ' + top3[0].name;
+
+    // Decision logic
+    let decision, bullets, driver;
+    if (base.runway < 6 && base.runway > 0) {
+      decision = 'Cut OpEx or raise price now — runway is critical.';
+      bullets = [`Runway: ${base.runway.toFixed(1)} months — needs urgent action`, `EBITDA: ${fmtK(base.ebitda)}/mo — currently burning cash`, `Top lever: ${top3[0].name} — ${fmtK(Math.abs(top3[0].upEBITDA))} EBITDA improvement per +5%`, `LTV/CAC: ${base.ltvcac.toFixed(1)}x — ${base.ltvcac >= 3 ? 'healthy' : 'below 3x target'}`];
+      driver = `${top3[0].name} — improving by 5% extends runway by ${Math.abs(top3[0].upRunway).toFixed(1)} months.`;
+    } else if (base.gm < 0.4) {
+      decision = 'Fix COGS/pricing — gross margin is too thin to scale.';
+      bullets = [`Gross margin: ${pct(base.gm*100)} — below 40% threshold`, `Every $1 of revenue only yields ${fmtK(base.gp/base.revenue*100)}¢ in gross profit`, `EBITDA: ${fmtK(base.ebitda)}/mo`, `Runway: ${base.runway >= 99 ? 'OK' : base.runway.toFixed(1) + 'mo'}`];
+      driver = `COGS % (${pct(inp.cogs*100)}) — reducing by 5% adds ${fmtK(base.revenue*inp.cogs*0.05)} gross profit/mo.`;
+    } else {
+      decision = 'Fundamentals are healthy — invest in growth.';
+      bullets = [`Runway: ${base.runway >= 99 ? 'cash-flow positive' : base.runway.toFixed(1) + ' months'}`, `Gross margin: ${pct(base.gm*100)} — strong foundation`, `EBITDA: ${fmtK(base.ebitda)}/mo`, `LTV/CAC: ${base.ltvcac.toFixed(1)}x — unit economics support growth`];
+      driver = `${top3[0].name} — the single highest-leverage growth lever right now.`;
+    }
+
+    const kpiState = (base.runway < 6 && base.runway > 0) ? 'negative' : (base.gm < 0.4 ? 'warning' : 'positive');
+    setDecisionBox(kpiState, 'Decision:', decision, bullets, driver);
+
+    document.getElementById('what-means').innerHTML = `<p>Revenue of <strong>${fmtK(base.revenue)}/mo</strong> (${fmtK(inp.price)} × ${inp.volume.toLocaleString()} units) generates <strong>${pct(base.gm*100)}</strong> gross margin and <strong>${fmtK(base.ebitda)}</strong> EBITDA per month. ${base.ebitda < 0 ? `The business is burning cash — runway is ${base.runway.toFixed(1)} months.` : 'The business is profitable — cash is growing.'} The top driver of runway is <strong>${top3[0].name}</strong>.</p>`;
+
+    const rankClasses = ['rank-1','rank-2','rank-3'];
+    document.getElementById('risks-list').innerHTML = [
+      `EBITDA: ${fmtK(base.ebitda)} — ${base.ebitda < 0 ? 'burning cash' : 'profitable but watch OpEx growth'}`,
+      `Churn at ${pct(inp.churn*100)}/mo compresses sustainable volume`,
+      `LTV/CAC of ${base.ltvcac.toFixed(1)}x — ${base.ltvcac < 3 ? 'below 3x industry minimum' : 'acceptable but track'}`,
+    ].map(r=>`<li>${r}</li>`).join('');
+    document.getElementById('levers-list').innerHTML = top3.map((d,i) =>
+      `<li><span class="${rankClasses[i]} rank-badge">#${i+1}</span> ${d.name}: +5% → +${Math.abs(d.upRunway) >= 99 ? 'cash positive' : d.upRunway.toFixed(1) + 'mo runway'}</li>`
+    ).join('');
+
+    // KPI Tree
+    const nodeClass = (v) => v > 0 ? 'positive' : v < 0 ? 'negative' : '';
+    document.getElementById('kpi-tree').innerHTML = `
+      <div class="kpi-tree">
+        <div class="tree-row tree-row-1">
+          <div class="tree-node root"><div class="tree-node-label">Runway</div><div class="tree-node-value">${base.runway >= 99 ? '∞ mo' : base.runway.toFixed(1) + ' mo'}</div></div>
+        </div>
+        <div class="tree-connector"><div class="tree-connector-line"></div></div>
+        <div class="tree-row tree-row-2">
+          <div class="tree-node ${nodeClass(base.ebitda)}"><div class="tree-node-label">EBITDA / Mo</div><div class="tree-node-value">${fmtK(base.ebitda)}</div></div>
+          <div class="tree-arrow">÷</div>
+          <div class="tree-node"><div class="tree-node-label">Monthly Burn</div><div class="tree-node-value">${fmtK(base.burn)}</div></div>
+        </div>
+        <div class="tree-connector"><div class="tree-connector-line"></div></div>
+        <div class="tree-row tree-row-2">
+          <div class="tree-node positive"><div class="tree-node-label">Gross Profit</div><div class="tree-node-value">${fmtK(base.gp)}</div></div>
+          <div class="tree-arrow">−</div>
+          <div class="tree-node negative"><div class="tree-node-label">OpEx</div><div class="tree-node-value">${fmtK(inp.opex)}</div></div>
+        </div>
+        <div class="tree-connector"><div class="tree-connector-line"></div></div>
+        <div class="tree-row tree-row-wide">
+          <div class="tree-node"><div class="tree-node-label">Revenue</div><div class="tree-node-value">${fmtK(base.revenue)}</div></div>
+          <div class="tree-node"><div class="tree-node-label">COGS (${pct(inp.cogs*100)})</div><div class="tree-node-value">${fmtK(base.cogsAmt)}</div></div>
+          <div class="tree-node"><div class="tree-node-label">Price</div><div class="tree-node-value">$${inp.price}</div></div>
+          <div class="tree-node"><div class="tree-node-label">Volume</div><div class="tree-node-value">${inp.volume.toLocaleString()}/mo</div></div>
+        </div>
+      </div>`;
+
+    // Tornado chart
+    const tornadoCtx = document.getElementById('chart-tornado').getContext('2d');
+    if (chartTornado) chartTornado.destroy();
+    chartTornado = new Chart(tornadoCtx, {
+      type: 'bar',
+      data: {
+        labels: sensList.map(d => d.name),
+        datasets: [
+          { label: '+5% Impact (months)', data: sensList.map(d => d.upRunway >= 999 ? 0 : d.upRunway), backgroundColor: 'rgba(15,118,110,0.75)', borderRadius: 4 },
+          { label: '−5% Impact (months)', data: sensList.map(d => d.downRunway <= -999 ? 0 : d.downRunway), backgroundColor: 'rgba(239,68,68,0.75)', borderRadius: 4 },
+        ]
+      },
+      options: {
+        indexAxis: 'y', responsive: true,
+        plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.x > 0 ? '+' : '') + ctx.parsed.x.toFixed(1) + ' mo' } } },
+        scales: { x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => (v>0?'+':'')+v+'mo' } }, y: { grid: { display: false } } }
+      }
+    });
+
+    // Sensitivity table
+    const rankLabels = ['🥇','🥈','🥉','',''];
+    document.getElementById('sens-tbody').innerHTML = sensList.map((d, i) => `<tr>
+      <td>${rankLabels[i] || ''}</td>
+      <td><strong>${d.name}</strong></td>
+      <td>${d.fmt}</td>
+      <td class="${d.upEBITDA >= 0 ? 'sens-pos' : 'sens-neg'}">${d.upEBITDA >= 0 ? '+' : ''}${fmtK(d.upEBITDA)}</td>
+      <td class="${d.upRunway >= 0 ? 'sens-pos' : 'sens-neg'}">${d.upRunway >= 999 ? '∞' : (d.upRunway >= 0 ? '+' : '') + d.upRunway.toFixed(1) + 'mo'}</td>
+      <td class="${d.downEBITDA >= 0 ? 'sens-pos' : 'sens-neg'}">${d.downEBITDA >= 0 ? '+' : ''}${fmtK(d.downEBITDA)}</td>
+      <td class="${d.downRunway >= 0 ? 'sens-pos' : 'sens-neg'}">${d.downRunway <= -999 ? '-∞' : (d.downRunway >= 0 ? '+' : '') + d.downRunway.toFixed(1) + 'mo'}</td>
+    </tr>`).join('');
+  }
+
+  loadSample();
+
+  function setDecisionBox(state, verdict, verdictAction, bullets, next) {
+    // state: 'positive' | 'warning' | 'negative'
+    const box = document.getElementById('decisionBox');
+    box.classList.remove('decision-box--positive','decision-box--warning','decision-box--negative');
+    box.classList.add('decision-box--' + state);
+    document.getElementById('decisionFallback').style.display = 'none';
+    document.getElementById('decisionContent').style.display = '';
+    document.getElementById('decisionVerdict').innerHTML = verdict + ' <span class="verdict-action">' + verdictAction + '</span>';
+    document.getElementById('decisionBullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
+    document.getElementById('decisionNext').innerHTML = 'Top driver: <span>' + next + '</span>';
+  }
+
+</script>
+</body>
+</html>

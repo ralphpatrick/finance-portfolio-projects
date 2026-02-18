@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Working Capital FP&A · FP&A Portfolio</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .module-hero { padding: 48px 0 32px 0; border-bottom: 1px solid var(--border); }
+    .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
+    .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
+    .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
+    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
+    .module-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
+    .sidebar { position: sticky; top: 80px; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); }
+    .sidebar-section { margin-bottom: 20px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title { font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 12px; letter-spacing: 0.03em; }
+    .sidebar-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
+    .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .btn-small:active { transform: translateY(1px); }
+    .btn-primary { background: var(--text); color: white; border-color: var(--text); }
+    .input-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .input-row label { font-size: 12px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+    .input-row input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: var(--font-sans); background: white; width: 100%; }
+    .input-row input:focus { outline: none; border-color: var(--accent); }
+    .main-content { min-width: 0; }
+    
+    
+    
+    
+    
+    
+    
+    
+    .decision-driver strong { color: rgba(255,255,255,0.9); }
+    
+    .module-section { padding: 0 0 40px 0; }
+    .module-section-title { font-size: 22px; margin-bottom: 18px; letter-spacing: -0.02em; font-weight: 700; }
+    .module-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-box { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.6); }
+    .kpi-box-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .kpi-box-value { font-size: 22px; font-weight: 700; }
+    .kpi-box-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .board-block { padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: rgba(246,248,251,0.5); }
+    .board-block-title { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+    .board-block ul { margin: 0; padding: 0 0 0 16px; display: grid; gap: 6px; }
+    .board-block ul li { font-size: 13px; color: var(--text); }
+    .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
+    .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
+    .chart-wrap { position: relative; width: 100%; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
+    .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover { background: rgba(246,248,251,0.5); }
+    .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-size: 11px; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
+    .help-icon::before { content: '?'; }
+    .help-icon:hover::after { content: attr(data-help); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; padding: 10px 14px; background: var(--text); color: white; font-size: 12px; line-height: 1.5; border-radius: 10px; white-space: normal; width: 280px; z-index: 1000; box-shadow: var(--shadow); font-weight: 400; text-align: left; }
+    .section-header-with-help { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .data-badge { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 10px; }
+    .data-badge.random { background: #fef3c7; border: 1px solid #fbbf24; color: #92400e; }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; } .board-grid { grid-template-columns: 1fr; } }
+  
+    /* ---- Decision Box (matches commercial-sales.html) ---- */
+    .decision-box {
+      background: white;
+      border: 1.5px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
+      margin-bottom: 24px;
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .decision-box--positive {
+      border-color: #0f766e;
+      background: #f0fdf9;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10), var(--shadow-soft);
+    }
+    .decision-box--positive .decision-box-eyebrow { color: #0f766e; }
+    .decision-box--positive .verdict-action        { color: #0f766e; }
+    .decision-box--positive .decision-box-bullets li::before { color: #0f766e; }
+    .decision-box--warning {
+      border-color: #d97706;
+      background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), var(--shadow-soft);
+    }
+    .decision-box--warning .decision-box-eyebrow { color: #d97706; }
+    .decision-box--warning .verdict-action        { color: #d97706; }
+    .decision-box--warning .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--negative {
+      border-color: #dc2626;
+      background: #fef2f2;
+      box-shadow: 0 0 0 4px rgba(220,38,38,0.10), var(--shadow-soft);
+    }
+    .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
+    .decision-box--negative .verdict-action        { color: #dc2626; }
+    .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .decision-box-verdict {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .decision-box-verdict .verdict-action { color: var(--accent); }
+    .decision-box-bullets {
+      list-style: none;
+      margin: 0 0 10px 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .decision-box-bullets li::before {
+      content: '›';
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .decision-box-next {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .decision-box-next span { color: var(--accent-2); }
+    .decision-box-fallback {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        FP&amp;A Portfolio
+      </a>
+      <div class="nav-cta">
+        <a href="index.html#projects" class="btn btn-ghost">&larr; Back to Portfolio</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="module-hero">
+    <div class="container">
+      <div class="module-label">Balance Sheet · Cash Flow · Working Capital</div>
+      <h1 class="module-title">Working Capital <span class="accent">FP&A</span></h1>
+      <p class="module-subtitle">How collections, payments, and inventory timing affect cash and runway.</p>
+      <div class="feature-chips">
+        <span class="chip">Cash Conversion Cycle</span>
+        <span class="chip">12-Month Cash Forecast</span>
+        <span class="chip">Runway Analysis</span>
+        <span class="chip">AR / AP / Inventory</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="module-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">DATA CONTROLS</div>
+        <span class="data-badge" id="data-badge">No data loaded</span>
+        <div class="sidebar-buttons">
+          <button class="btn-small btn-primary" onclick="loadSample()">Use Sample Data</button>
+          <button class="btn-small" onclick="randomizeData()">Randomize Data</button>
+          <button class="btn-small" onclick="resetDefaults()">Reset to Defaults</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">ASSUMPTIONS</div>
+        <div class="input-row">
+          <label>Monthly Revenue ($) <span class="help-icon" data-help="How much money your business collects from customers each month on average."></span></label>
+          <input type="number" id="inp-revenue" value="500000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>COGS % <span class="help-icon" data-help="Cost of Goods Sold as % of revenue — the direct cost to deliver your product/service."></span></label>
+          <input type="number" id="inp-cogs" value="45" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>DSO — Days <span class="help-icon" data-help="Days Sales Outstanding: how many days it takes to collect cash after invoicing a customer. Lower = faster cash."></span></label>
+          <input type="number" id="inp-dso" value="45" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>DPO — Days <span class="help-icon" data-help="Days Payable Outstanding: how many days before you pay your suppliers. Higher = you keep cash longer."></span></label>
+          <input type="number" id="inp-dpo" value="30" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>DIO — Days <span class="help-icon" data-help="Days Inventory Outstanding: how long inventory sits before being sold. Lower = faster cash conversion."></span></label>
+          <input type="number" id="inp-dio" value="20" step="1" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has today to start the 12-month forecast."></span></label>
+          <input type="number" id="inp-cash" value="1200000" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Monthly Growth % <span class="help-icon" data-help="Expected monthly revenue growth rate. Set to 0 for flat revenue."></span></label>
+          <input type="number" id="inp-growth" value="3" step="0.5" oninput="compute()">
+        </div>
+        <div class="input-row">
+          <label>Monthly OpEx ($) <span class="help-icon" data-help="Operating expenses per month excluding COGS — salaries, rent, software, etc."></span></label>
+          <input type="number" id="inp-opex" value="180000" oninput="compute()">
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+      <!-- DECISION BOX -->
+            <div class="decision-box" id="decisionBox">
+        <div class="decision-box-eyebrow">Decision</div>
+        <div class="decision-box-fallback" id="decisionFallback">Load sample data or adjust assumptions to see the decision.</div>
+        <div id="decisionContent" style="display:none;">
+          <div class="decision-box-verdict" id="decisionVerdict"></div>
+          <ul class="decision-box-bullets" id="decisionBullets"></ul>
+          <div class="decision-box-next" id="decisionNext"></div>
+        </div>
+      </div>
+
+      <!-- BOARD VIEW -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Board View</h2>
+          <span class="help-icon" data-help="Executive summary — the 30-second version of what this data means for leadership."></span>
+        </div>
+
+        <div class="kpi-grid" id="kpi-grid">
+          <div class="kpi-box"><div class="kpi-box-label">Runway</div><div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months remaining</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">CCC</div><div class="kpi-box-value" id="kpi-ccc">—</div><div class="kpi-box-sub">days cycle</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">DSO</div><div class="kpi-box-value" id="kpi-dso">—</div><div class="kpi-box-sub">days to collect</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">DPO</div><div class="kpi-box-value" id="kpi-dpo">—</div><div class="kpi-box-sub">days to pay</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">DIO</div><div class="kpi-box-value" id="kpi-dio">—</div><div class="kpi-box-sub">days in inventory</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Net Cash / Mo</div><div class="kpi-box-value" id="kpi-cashpm">—</div><div class="kpi-box-sub">avg monthly change</div></div>
+        </div>
+
+        <div class="module-card">
+          <div id="what-means" class="what-means"><p>Load data to see summary.</p></div>
+          <div class="board-grid">
+            <div class="board-block">
+              <div class="board-block-title">⚠ RISKS & WATCHOUTS</div>
+              <ul id="risks-list"><li>—</li></ul>
+            </div>
+            <div class="board-block">
+              <div class="board-block-title">🔧 LEVERS TO PULL</div>
+              <ul id="levers-list"><li>—</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CCC CHART -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Cash Conversion Cycle Breakdown</h2>
+          <span class="help-icon" data-help="CCC = DSO + DIO − DPO. Shows how long it takes to turn operations into cash. Lower is better."></span>
+        </div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-ccc" height="120"></canvas></div>
+        </div>
+      </div>
+
+      <!-- CASH BALANCE CHART -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">12-Month Cash Balance Forecast</h2>
+          <span class="help-icon" data-help="Projected cash balance each month based on revenue, COGS, OpEx, and working capital timing."></span>
+        </div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-cash" height="160"></canvas></div>
+        </div>
+      </div>
+
+      <!-- DETAIL TABLE -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">Monthly Detail</h2>
+          <span class="help-icon" data-help="Month-by-month breakdown of revenue, COGS, gross profit, OpEx, and ending cash balance."></span>
+        </div>
+        <div class="module-card" style="overflow-x:auto;">
+          <table class="data-table" id="detail-table">
+            <thead><tr><th>Month</th><th>Revenue</th><th>COGS</th><th>Gross Profit</th><th>OpEx</th><th>Net Cash Flow</th><th>Ending Cash</th></tr></thead>
+            <tbody id="detail-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<a class="to-top" href="#main" aria-label="Back to top">↑</a>
+<script src="main.js"></script>
+<script>
+  let chartCCC = null, chartCash = null;
+
+  const fmt = (n) => '$' + Math.round(n).toLocaleString();
+  const fmtK = (n) => { const abs = Math.abs(n); const sign = n < 0 ? '-' : ''; if (abs >= 1000000) return sign + '$' + (abs/1000000).toFixed(1) + 'M'; if (abs >= 1000) return sign + '$' + (abs/1000).toFixed(0) + 'K'; return sign + '$' + Math.round(abs); };
+
+  function getInputs() {
+    return {
+      revenue: +document.getElementById('inp-revenue').value,
+      cogs: +document.getElementById('inp-cogs').value / 100,
+      dso: +document.getElementById('inp-dso').value,
+      dpo: +document.getElementById('inp-dpo').value,
+      dio: +document.getElementById('inp-dio').value,
+      cash: +document.getElementById('inp-cash').value,
+      growth: +document.getElementById('inp-growth').value / 100,
+      opex: +document.getElementById('inp-opex').value,
+    };
+  }
+
+  function setInputs(vals) {
+    document.getElementById('inp-revenue').value = vals.revenue;
+    document.getElementById('inp-cogs').value = vals.cogs;
+    document.getElementById('inp-dso').value = vals.dso;
+    document.getElementById('inp-dpo').value = vals.dpo;
+    document.getElementById('inp-dio').value = vals.dio;
+    document.getElementById('inp-cash').value = vals.cash;
+    document.getElementById('inp-growth').value = vals.growth;
+    document.getElementById('inp-opex').value = vals.opex;
+  }
+
+  const SAMPLE = { revenue: 500000, cogs: 45, dso: 45, dpo: 30, dio: 20, cash: 1200000, growth: 3, opex: 180000 };
+
+  function loadSample() {
+    setInputs(SAMPLE);
+    document.getElementById('data-badge').textContent = 'Sample Data';
+    document.getElementById('data-badge').className = 'data-badge';
+    compute();
+  }
+
+  function randomizeData() {
+    const r = (a, b, step=1) => Math.round((a + Math.random() * (b - a)) / step) * step;
+    setInputs({
+      revenue: r(200000, 2000000, 50000),
+      cogs: r(30, 70, 5),
+      dso: r(20, 90, 5),
+      dpo: r(15, 60, 5),
+      dio: r(0, 45, 5),
+      cash: r(200000, 5000000, 100000),
+      growth: r(-2, 10, 0.5),
+      opex: r(50000, 500000, 10000),
+    });
+    document.getElementById('data-badge').textContent = 'Randomized Data';
+    document.getElementById('data-badge').className = 'data-badge random';
+    compute();
+  }
+
+  function resetDefaults() {
+    setInputs(SAMPLE);
+    document.getElementById('data-badge').textContent = 'Sample Data';
+    document.getElementById('data-badge').className = 'data-badge';
+    compute();
+  }
+
+  function compute() {
+    const inp = getInputs();
+    const { revenue, cogs, dso, dpo, dio, growth, opex } = inp;
+    let cash = inp.cash;
+
+    // CCC
+    const ccc = dso + dio - dpo;
+
+    // Build 12-month forecast
+    const months = [];
+    const labels = ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'];
+    let totalNet = 0;
+    for (let i = 0; i < 12; i++) {
+      const rev = revenue * Math.pow(1 + growth, i);
+      const cogsAmt = rev * cogs;
+      const gp = rev - cogsAmt;
+      // Working capital adjustment: AR increases tie up cash
+      const arAdj = i === 0 ? -rev * (dso / 30) : -rev * growth * (dso / 30);
+      const apAdj = i === 0 ? cogsAmt * (dpo / 30) : cogsAmt * growth * (dpo / 30);
+      const invAdj = i === 0 ? -cogsAmt * (dio / 30) : -cogsAmt * growth * (dio / 30);
+      const netCF = gp - opex + arAdj + apAdj + invAdj;
+      cash += netCF;
+      totalNet += netCF;
+      months.push({ label: labels[i], rev, cogsAmt, gp, opex, netCF, cash: Math.max(cash, 0) });
+    }
+
+    const avgNetCF = totalNet / 12;
+    const runway = avgNetCF < 0 ? Math.abs(months[0].cash / (totalNet / 12)) : 999;
+    const runwayDisplay = runway >= 99 ? '∞' : runway.toFixed(1);
+
+    // Update KPIs
+    document.getElementById('kpi-runway').textContent = runwayDisplay;
+    document.getElementById('kpi-ccc').textContent = ccc + 'd';
+    document.getElementById('kpi-dso').textContent = dso + 'd';
+    document.getElementById('kpi-dpo').textContent = dpo + 'd';
+    document.getElementById('kpi-dio').textContent = dio + 'd';
+    document.getElementById('kpi-cashpm').textContent = fmtK(avgNetCF);
+
+    // Decision logic
+    let decision = '', bullets = [], driver = '';
+    const runwayNum = runway >= 99 ? 999 : runway;
+    if (runwayNum < 3) {
+      decision = 'Emergency: Tighten collections and extend payables immediately.';
+      bullets = [`Runway is critically low at ${runwayDisplay} months`, `CCC of ${ccc} days is draining cash each cycle`, `Collect faster: reduce DSO from ${dso}d toward 30d`, `Negotiate to extend DPO above current ${dpo}d`];
+      driver = `DSO (${dso}d) — reducing by 15 days adds ~${fmtK(revenue * 15/30)} in immediate cash.`;
+    } else if (runwayNum < 6) {
+      decision = 'Tighten working capital before scaling any spend.';
+      bullets = [`Runway is short at ${runwayDisplay} months — needs improvement`, `CCC = ${ccc} days; target below 35 days`, `AR is tying up ~${fmtK(revenue * dso / 30)} in uncollected revenue`, `Fix working capital before investing in growth`];
+      driver = `CCC (${ccc}d) — each 10-day improvement frees ~${fmtK(revenue * 10/30)} per cycle.`;
+    } else if (ccc > 60) {
+      decision = 'Fix working capital cycle — OK to sustain, not to scale.';
+      bullets = [`Runway OK at ${runwayDisplay} months`, `CCC of ${ccc} days is elevated — watch for deterioration`, `DIO of ${dio}d suggests inventory is moving slowly`, `Scale carefully; protect cash position`];
+      driver = `DIO (${dio}d) — reducing inventory days to 10 frees ${fmtK(revenue * cogs * (dio-10)/30)}.`;
+    } else {
+      decision = 'Working capital is healthy — OK to scale carefully.';
+      bullets = [`Runway: ${runwayDisplay} months — strong position`, `CCC of ${ccc} days is within healthy range`, `Avg monthly net cash: ${fmtK(avgNetCF)}`, `Maintain DPO at ${dpo}d+ and monitor DSO monthly`];
+      driver = `Revenue growth (${inp.growth}%) — each +1% growth adds ${fmtK(revenue * 0.01 * (1-cogs))} monthly to gross profit.`;
+    }
+
+    // Map state
+    const state = runwayNum < 6 ? 'negative' : (ccc > 60 ? 'warning' : 'positive');
+    setDecisionBox(state, 'Decision:', decision, bullets, driver);
+
+    // What this means
+    const cashTrend = months[11].cash > months[0].cash ? 'improving' : 'declining';
+    document.getElementById('what-means').innerHTML = `<p>The business currently holds ${fmtK(months[0].cash - months[0].netCF)} in starting cash. Over 12 months, the cash balance is <strong>${cashTrend}</strong> — ending at ${fmtK(months[11].cash)}. The Cash Conversion Cycle of <strong>${ccc} days</strong> means it takes over ${ccc} days to turn operations into cash. ${avgNetCF >= 0 ? 'The business is cash-flow positive on average.' : 'The business is burning cash on average — action needed.'}</p>`;
+
+    document.getElementById('risks-list').innerHTML = [
+      `CCC could worsen if customers pay slower (DSO drift)`,
+      `Revenue growth increases AR — needs working capital funding`,
+      `OpEx of ${fmtK(opex)}/mo leaves ${fmtK(revenue*(1-cogs)-opex)} gross margin buffer`,
+    ].map(r=>`<li>${r}</li>`).join('');
+
+    document.getElementById('levers-list').innerHTML = [
+      `Reduce DSO: offer 2/10 net 30 discounts to collect faster`,
+      `Extend DPO: negotiate 45-60d terms with key suppliers`,
+      `Reduce DIO: tighten inventory reorder points / consignment`,
+    ].map(r=>`<li>${r}</li>`).join('');
+
+    // CCC Chart
+    const cccCtx = document.getElementById('chart-ccc').getContext('2d');
+    if (chartCCC) chartCCC.destroy();
+    chartCCC = new Chart(cccCtx, {
+      type: 'bar',
+      data: {
+        labels: ['DSO (Collect)', 'DIO (Inventory)', 'DPO (Pay)', 'Net CCC'],
+        datasets: [{
+          label: 'Days',
+          data: [dso, dio, -dpo, ccc],
+          backgroundColor: [
+            'rgba(27,77,122,0.75)', 'rgba(15,118,110,0.75)',
+            'rgba(239,68,68,0.75)', ccc > 50 ? 'rgba(239,68,68,0.9)' : 'rgba(15,118,110,0.9)'
+          ],
+          borderRadius: 8,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + ' days' } } },
+        scales: { x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => v + 'd' } }, y: { grid: { display: false } } }
+      }
+    });
+
+    // Cash Balance Chart
+    const cashCtx = document.getElementById('chart-cash').getContext('2d');
+    if (chartCash) chartCash.destroy();
+    chartCash = new Chart(cashCtx, {
+      type: 'line',
+      data: {
+        labels: months.map(m => m.label),
+        datasets: [{
+          label: 'Cash Balance',
+          data: months.map(m => m.cash),
+          borderColor: months[11].cash > months[0].cash ? 'rgba(15,118,110,1)' : 'rgba(239,68,68,1)',
+          backgroundColor: months[11].cash > months[0].cash ? 'rgba(15,118,110,0.08)' : 'rgba(239,68,68,0.08)',
+          fill: true, tension: 0.4, pointRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.round(ctx.parsed.y).toLocaleString() } } },
+        scales: {
+          y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // Detail Table
+    const tbody = document.getElementById('detail-tbody');
+    tbody.innerHTML = months.map(m => `<tr>
+      <td>${m.label}</td><td>${fmt(m.rev)}</td><td>${fmt(m.cogsAmt)}</td>
+      <td>${fmt(m.gp)}</td><td>${fmt(m.opex)}</td>
+      <td style="color:${m.netCF>=0?'var(--accent)':'#ef4444'}">${fmtK(m.netCF)}</td>
+      <td><strong>${fmtK(m.cash)}</strong></td>
+    </tr>`).join('');
+  }
+
+  // Init
+  loadSample();
+
+  function setDecisionBox(state, verdict, verdictAction, bullets, next) {
+    // state: 'positive' | 'warning' | 'negative'
+    const box = document.getElementById('decisionBox');
+    box.classList.remove('decision-box--positive','decision-box--warning','decision-box--negative');
+    box.classList.add('decision-box--' + state);
+    document.getElementById('decisionFallback').style.display = 'none';
+    document.getElementById('decisionContent').style.display = '';
+    document.getElementById('decisionVerdict').innerHTML = verdict + ' <span class="verdict-action">' + verdictAction + '</span>';
+    document.getElementById('decisionBullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
+    document.getElementById('decisionNext').innerHTML = 'Top driver: <span>' + next + '</span>';
+  }
+
+</script>
+</body>
+</html>
