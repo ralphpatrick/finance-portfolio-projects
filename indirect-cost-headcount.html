@@ -849,6 +849,63 @@
       color: #1b4d7a;
       font-weight: 600;
     }
+
+    /* ── Standardized Decision Box ── */
+    .decision-box {
+      border: 1.5px solid var(--accent, #0f766e);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), 0 8px 18px rgba(11,18,32,0.06);
+      transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    }
+    .decision-box--positive {
+      border-color: #0f766e; background: #f0fdf9;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.10), 0 8px 18px rgba(11,18,32,0.06);
+    }
+    .decision-box--positive .decision-box-eyebrow { color: #0f766e; }
+    .decision-box--positive .verdict-action        { color: #0f766e; }
+    .decision-box--positive .decision-box-bullets li::before { color: #0f766e; }
+    .decision-box--warning {
+      border-color: #d97706; background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), 0 8px 18px rgba(11,18,32,0.06);
+    }
+    .decision-box--warning .decision-box-eyebrow { color: #d97706; }
+    .decision-box--warning .verdict-action        { color: #d97706; }
+    .decision-box--warning .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--negative {
+      border-color: #dc2626; background: #fef2f2;
+      box-shadow: 0 0 0 4px rgba(220,38,38,0.10), 0 8px 18px rgba(11,18,32,0.06);
+    }
+    .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
+    .decision-box--negative .verdict-action        { color: #dc2626; }
+    .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: #0f766e; margin-bottom: 8px;
+    }
+    .decision-box-verdict {
+      font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+      color: #0b1220; margin-bottom: 12px;
+    }
+    .decision-box-verdict .verdict-action { color: #0f766e; }
+    .decision-box-bullets {
+      list-style: none; margin: 0 0 10px 0; padding: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px; color: #5d6b7a;
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.4;
+    }
+    .decision-box-bullets li::before {
+      content: '›'; color: #0f766e; font-weight: 700; flex-shrink: 0;
+    }
+    .decision-box-next {
+      font-size: 12px; font-weight: 600; color: #5d6b7a;
+      border-top: 1px solid rgba(12,23,45,0.10); padding-top: 10px;
+    }
+    .decision-box-next span { color: #1b4d7a; }
   </style>
 </head>
 <body>
@@ -860,7 +917,7 @@
           <span class="brand-mark"></span>
           <span>FP&amp;A Portfolio</span>
         </a>
-        <a href="index.html#projects" class="btn btn-ghost" style="font-size:13px; gap:6px;">
+        <a href="index.html#card-indirect-cost" class="btn btn-ghost" style="font-size:13px; gap:6px;">
           ← Back to Portfolio
         </a>
 
@@ -1084,7 +1141,17 @@
           <span class="help-icon" id="summaryHelp" data-help="Quick snapshot: are we overstaffed? Burning too much cash? Team overloaded? At a glance view for the CFO or board."></span>
         </div>
 
-        <!-- Board Decision Card (NEW) -->
+        <!-- Standardized Decision Box -->
+        <div class="decision-box" id="decisionBox">
+          <div class="decision-box-eyebrow">Decision</div>
+          <div id="decisionContent">
+            <div class="decision-box-verdict" id="decisionVerdict">Loading…</div>
+            <ul class="decision-box-bullets" id="decisionBullets"></ul>
+            <div class="decision-box-next" id="decisionNext"></div>
+          </div>
+        </div>
+
+        <!-- Board Decision Card (detailed breakdown) -->
         <div id="boardDecisionCard" class="board-decision-card"></div>
 
         <div id="summaryKPIs" class="kpi-grid"></div>
@@ -1555,6 +1622,21 @@
     }
 
     // ========== MULTI-FACTOR DECISION ENGINE ==========
+
+
+  // ── Standardized Decision Box helper ──
+  function setDecisionBox(state, verdict, verdictAction, bullets, next) {
+    var box = document.getElementById('decisionBox');
+    if (!box) return;
+    box.classList.remove('decision-box--positive','decision-box--warning','decision-box--negative');
+    box.classList.add('decision-box--' + state);
+    document.getElementById('decisionVerdict').innerHTML =
+      verdict + ' <span class="verdict-action">' + verdictAction + '</span>';
+    document.getElementById('decisionBullets').innerHTML =
+      bullets.map(function(b){ return '<li>' + b + '</li>'; }).join('');
+    document.getElementById('decisionNext').innerHTML =
+      'Top driver: <span>' + next + '</span>';
+  }
 
     function computeDecision(avgUtil, runway) {
       const u = safeNum(avgUtil);
@@ -2042,6 +2124,17 @@
     }
 
     function renderBoardDecisionCard(dec, avgUtil, runway) {
+
+      // ── Standardized Decision Box wiring ──
+      const icState = (dec.decision === 'HIRE') ? 'positive'
+                    : (dec.decision === 'CUT BURN' || dec.decision === "DON'T HIRE") ? 'negative'
+                    : 'warning';
+      const icVerdict = 'Board decision:';
+      const icAction  = dec.decision;
+      const icBullets = dec.bullets.slice(0, 3);
+      const icDriver  = dec.ruleText;
+      setDecisionBox(icState, icVerdict, icAction, icBullets, icDriver);
+
       const confClass = dec.confidence === 'HIGH' ? 'bd-conf-high' : dec.confidence === 'MED' ? 'bd-conf-med' : 'bd-conf-low';
       const bulletsHtml = dec.bullets.map(b => `<div class="bd-bullet">${b}</div>`).join('');
 

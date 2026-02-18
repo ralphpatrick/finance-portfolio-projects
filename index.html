@@ -23,6 +23,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link rel="stylesheet" href="./style.css" />
+  <style>
+    /* Anchor scroll offset — keeps card title visible below sticky nav */
+    #card-core-fpa,
+    #card-commercial-sales,
+    #card-unit-economics,
+    #card-indirect-cost,
+    #card-operations-spend,
+    #card-working-capital,
+    #card-revenue-bridge,
+    #card-capex-financing,
+    #card-kpi-tree {
+      scroll-margin-top: 120px;
+    }
+  </style>
 </head>
 
 <body>
@@ -208,7 +222,7 @@
 
         <div class="project-grid">
           <!-- Project 1 -->
-          <article class="project-card reveal">
+          <article id="card-core-fpa" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Core FP&amp;A foundation</div>
@@ -236,7 +250,7 @@
           </article>
 
           <!-- Project 2 -->
-          <article class="project-card reveal">
+          <article id="card-commercial-sales" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Commercial decision support</div>
@@ -265,7 +279,7 @@
           </article>
 
           <!-- Project 3 -->
-          <article class="project-card reveal">
+          <article id="card-unit-economics" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Growth &amp; scalability</div>
@@ -293,7 +307,7 @@
           </article>
 
           <!-- Project 4 -->
-          <article class="project-card reveal">
+          <article id="card-indirect-cost" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Cost visibility</div>
@@ -321,7 +335,7 @@
           </article>
 
           <!-- Project 5 -->
-          <article class="project-card reveal">
+          <article id="card-operations-spend" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Operational spend</div>
@@ -349,7 +363,7 @@
           </article>
 
           <!-- Project 6: Working Capital -->
-          <article class="project-card reveal">
+          <article id="card-working-capital" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Cash flow · Balance sheet</div>
@@ -374,7 +388,7 @@
           </article>
 
           <!-- Project 7: Revenue Bridge -->
-          <article class="project-card reveal">
+          <article id="card-revenue-bridge" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Revenue · Cohorts · Retention</div>
@@ -399,7 +413,7 @@
           </article>
 
           <!-- Project 8: Capex Financing -->
-          <article class="project-card reveal">
+          <article id="card-capex-financing" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">Capex · Depreciation · Financing</div>
@@ -424,7 +438,7 @@
           </article>
 
           <!-- Project 9: KPI Tree Sensitivity -->
-          <article class="project-card reveal">
+          <article id="card-kpi-tree" class="project-card reveal">
             <div class="project-top">
               <div>
                 <div class="project-label">KPI Tree · Sensitivity · Drivers</div>
