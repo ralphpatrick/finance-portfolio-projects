@@ -1,179 +1,119 @@
-# FP&A Simulator  
-### Industry-Adaptive Financial Planning & Scenario Modeling
+# FP&A Portfolio — Decision-Grade Finance Systems (Ralph Patrick Divina)
 
-An interactive finance system demonstrating how different business models generate revenue, incur costs, and react to operational and risk drivers.
+A production-ready **FP&A portfolio** built as interactive, executive-friendly modules (not screenshots, not static spreadsheets).
 
-Built for CFOs, FP&A teams, hiring managers, and operators.
-
----
-
-## 🚀 What This Is
-
-This is a **live, configurable FP&A environment**.
-
-Users can:
-
-- switch industries  
-- adjust drivers & constraints  
-- compare Base / Upside / Downside  
-- upload their own datasets  
-- generate realistic random data  
-
-…and immediately see the impact across KPIs, forecasts, and charts.
-
-No static spreadsheets.  
-No screenshots pretending to be systems.  
-Everything recalculates in real time.
+This repo showcases how I think and build as a finance operator: **drivers → models → KPIs → scenarios → decision outputs**.
 
 ---
 
-## 🧠 Why This Exists
+## What this is
 
-Finance is not about reporting history.
+Think of this like a “finance playground” for CEOs/CFOs/FP&A Leads:
 
-It is about understanding:
+- You can **change assumptions**
+- run **Base / Upside / Downside**
+- see **KPIs + charts update instantly**
+- get **decision-focused outputs** (not just numbers)
 
-- how the business makes money  
-- what variables matter  
-- where risk hides  
-- what happens when assumptions change  
-
-This simulator proves capability in those areas.
-
----
-
-## 🏭 Industries Supported
-
-1. SaaS  
-2. Media / Advertising / Platforms  
-3. Manufacturing  
-4. Lending  
-5. Real Estate / Property / Leasing  
-
-Each industry includes:
-
-- dedicated drivers  
-- constraint logic  
-- KPI frameworks  
-- scenario presets  
-- visual models  
-- upload templates  
+Built to prove:
+- FP&A system thinking
+- commercial + operating finance fluency
+- modeling architecture (not spreadsheet chaos)
+- narrative + decision-making outputs
 
 ---
 
-## ⚙️ Core Features
+## Live Modules (What to open)
 
-### Interactive Drivers
-Change growth, churn, utilization, pricing, defaults, occupancy, and more.
+Start here:
 
-### Scenario Comparison
-Base / Upside / Downside run simultaneously.  
-The selected scenario is emphasized across metrics.
+- **Home / Portfolio**
+  - `index.html`
 
-### Real-Time Recalculation
-KPIs, charts, and executive commentary update instantly.
+Core modules:
+- **Core FP&A Simulator (industry-adaptive)**
+  - `core-fp&a.html`
+- **SaaS / Fintech Unit Economics**
+  - `unit-economics.html`
+- **Indirect Cost & Headcount CoE**
+  - `indirect-cost-headcount.html`
+- **Operations Finance & Spend Analytics**
+  - `operations-spend.html`
+- **Commercial / Sales Finance Model**
+  - `commercial-sales.html`
 
-### Bring Your Own Data
-Upload CSV / Excel → validated → model updates.
-
-### Random Data Generator
-Create new realistic company profiles with one click.
-
-Perfect for live demos.
-
-### CFO Commentary Engine
-Automatic explanation of what changed and why.
-
----
-
-## 🧩 What Makes This Different
-
-Most portfolios show Excel.
-
-This demonstrates:
-
-✔ system thinking  
-✔ modeling architecture  
-✔ business model fluency  
-✔ cross-industry adaptability  
-✔ decision-focused outputs  
-
-It behaves like internal finance software.
+Shared assets:
+- `style.css` (executive UI system)
+- `main.js` (navigation + reveal behavior)
+- `favicon.png`
 
 ---
 
-## 🛠 Tech Stack
+## How to run (zero setup)
 
-- HTML  
-- CSS  
-- Vanilla JavaScript  
-- Chart.js  
-- PapaParse  
+### Option A — local
+Just open `index.html` in your browser.
 
-No frameworks.  
-Runs anywhere.
-
----
-
-## ▶ How to Run
-
-Open:
-
-```
-index.html
-```
-
-or any module page.
-
-No installation required.
+### Option B — GitHub Pages (recommended)
+1. Repo → **Settings**
+2. **Pages**
+3. Source: `main` branch → `/ (root)`
+4. Save, then open the Pages link
 
 ---
 
-## 📂 Project Structure (Simplified)
+## What makes this “CFO-grade”
 
-```
-/index.html
-/core-fp&a.html
-/indirect-cost-headcount.html
-/style.css
-/main.js
-```
+Most portfolios show Excel. This behaves like internal finance software:
 
----
-
-## 🎯 Audience
-
-Valuable for:
-
-- Heads of FP&A  
-- CFOs  
-- Finance transformation leaders  
-- SaaS / fintech / platform companies  
-- Strategy & planning teams  
+- **Driver-based modeling** (not manual cell pushing)
+- **Scenario logic** (Base/Upside/Downside)
+- **Decision outputs** (e.g., “raise / cut burn / slow growth” style conclusions inside modules)
+- **Executive UX** (fast, clear, readable)
 
 ---
 
-## 📌 Future Ideas
+## Tech Stack
 
-- sensitivity engine  
-- AI narrative assistant  
-- board slide exports  
-- multi-entity modeling  
-- live ERP/API connectors  
+- HTML + CSS
+- Vanilla JavaScript
+- Chart.js (charts)
+- PapaParse (CSV parsing)
+
+No frameworks. Fast to load. Easy to review. Runs anywhere.
 
 ---
 
-## 🙏 Attribution
+## Who this is for
 
-Favicon provided by:
+If you’re hiring for any of these, this repo is meant to be a direct proof of work:
 
-Central bank icons created by J703 – Flaticon  
+- FP&A / Finance Business Partner
+- Finance Ops / Finance Lead
+- Strategic Finance
+- CFO-style IC (systems + insights + execution)
+
+---
+
+## Roadmap (next upgrades)
+
+Ideas I can build next (depending on role/company needs):
+- sensitivity engine (1-click tornado / driver ranking)
+- board-slide export (auto “Board Summary” PDF)
+- multi-entity consolidation layer
+- import templates per industry (standardized CSV schemas)
+- audit trail of assumption changes (“who changed what”)
+
+---
+
+## Links
+
+- GitHub: https://github.com/ralphpatrick  
+- LinkedIn: https://www.linkedin.com/in/ralph-patrick-divina-55534614a/
+
+---
+
+## Attribution
+
+Favicon credit: “Central bank icons created by J703 – Flaticon”  
 https://www.flaticon.com/free-icons/central-bank
-
----
-
-## 📬 Contact
-
-GitHub: https://github.com/ralphpatrick
-
-If this project resonates, I’m always open to conversations about building finance systems that power better decisions.
