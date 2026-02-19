@@ -1,57 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!--
-    FP&A Portfolio — Production-ready static site
-    Notes:
-    - Minimalist, executive-friendly, Apple/consulting-inspired layout
-    - Card-based modules, strong typography, whitespace
-    - Lightweight JS: smooth scroll + subtle reveal animations
-  -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="FP&A Portfolio — Building Finance Systems That Drive Decisions. Forecasting, Commercial Finance, Unit Economics, Spend Analytics." />
   <meta name="theme-color" content="#0B1220" />
-
   <title>FP&A Portfolio — Finance Systems That Drive Decisions</title>
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="favicon.png">
-
-  <!-- Preconnect for performance (optional, no external fonts used by default) -->
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link rel="stylesheet" href="./style.css" />
   <style>
-    /* Anchor scroll offset — keeps card title visible below sticky nav */
-    #pick-problem,
-    #card-core-fpa,
-    #card-commercial-sales,
-    #card-unit-economics,
-    #card-indirect-cost,
-    #card-operations-spend,
-    #card-working-capital,
-    #card-revenue-bridge,
-    #card-capex-financing,
-    #card-kpi-tree {
+    /* Anchor scroll offset */
+    #pick-problem, #start-here, #about, #contact,
+    #card-core-fpa, #card-commercial-sales, #card-unit-economics,
+    #card-indirect-cost, #card-operations-spend, #card-working-capital,
+    #card-revenue-bridge, #card-capex-financing, #card-kpi-tree {
       scroll-margin-top: 80px;
     }
 
-    /* ── Hero full-width (panel removed) ───────────────── */
-    .hero--full .container {
-      display: block;
-      max-width: 860px;
-    }
-    .hero-copy--centered {
-      max-width: 100%;
-      text-align: center;
-    }
-    .hero-copy--centered .eyebrow { justify-content: center; }
+    /* ── Hero full-width ───────────────────────────── */
+    .hero--full .container { display: block; max-width: 860px; }
+    .hero-copy--centered { max-width: 100%; text-align: center; }
+    .hero-copy--centered .eyebrow    { justify-content: center; }
     .hero-copy--centered .hero-actions { justify-content: center; }
     .hero-copy--centered .hero-metrics { justify-content: center; }
 
-    /* ── Problem Launcher ───────────────────────────── */
+    /* ── Problem Grid ──────────────────────────────── */
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -61,14 +36,15 @@
     .problem-card {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 20px 22px;
+      gap: 0;
+      padding: 20px 22px 18px;
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-soft);
       transition: box-shadow 160ms ease, border-color 160ms ease;
+      position: relative;
+      overflow: hidden;
     }
     .problem-card:hover {
       border-color: rgba(15,118,110,0.35);
@@ -78,37 +54,346 @@
       font-size: 15px;
       line-height: 1.55;
       color: var(--text);
-      margin: 0;
+      margin: 0 0 14px 0;
       font-style: italic;
       font-weight: 500;
+      flex: 1;
+    }
+    /* Trust micro-lines */
+    .card-meta {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      background: var(--bg-muted);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .card-meta-row {
+      display: flex;
+      gap: 6px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .card-meta-label {
+      color: var(--muted);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .card-meta-value {
+      color: var(--text);
     }
     .problem-card .btn {
       align-self: flex-start;
       white-space: nowrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── Hover preview overlay ─────────────────────── */
+    .card-preview {
+      position: absolute;
+      inset: 0;
+      background: rgba(11,18,32,0.92);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+      z-index: 1;
+    }
+    .problem-card:hover .card-preview {
+      opacity: 1;
+      pointer-events: none; /* never block btn clicks */
+    }
+    /* The button floats above the preview overlay */
+    .problem-card .btn {
+      z-index: 3;
+    }
+    /* Keep button accessible — push it to the very bottom */
+    .card-preview-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .card-preview-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .card-preview-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .card-preview-kpi {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6ee7b7; /* light teal — visible on dark bg */
+    }
+    @media (hover: none) {
+      .card-preview { display: none; }
     }
     @media (max-width: 640px) {
       .problem-grid { grid-template-columns: 1fr; }
+      .card-preview { display: none; }
+    }
+
+    /* ── Start Here section ────────────────────────── */
+    .start-here-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .start-step {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px 20px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      transition: box-shadow 160ms ease, border-color 160ms ease;
+    }
+    .start-step:hover {
+      border-color: rgba(15,118,110,0.30);
+      box-shadow: 0 4px 18px rgba(11,18,32,0.08);
+    }
+    .start-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 750;
+      flex-shrink: 0;
+    }
+    .start-step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+    .start-step-why {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+    .start-step .btn { align-self: flex-start; margin-top: auto; }
+    @media (max-width: 720px) {
+      .start-here-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Credibility strip ─────────────────────────── */
+    .cred-strip {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .cred-strip-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .cred-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+    }
+    .cred-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    @media (max-width: 560px) {
+      .cred-strip { justify-content: flex-start; }
+    }
+
+    /* ── About section ─────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .about-body {
+      display: grid;
+      gap: 14px;
+    }
+    .about-lead {
+      font-size: 17px;
+      font-weight: 520;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .about-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .about-bullets {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .about-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 520;
+    }
+    .about-bullet-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(15,118,110,0.18);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .about-side {
+      display: grid;
+      gap: 10px;
+    }
+    .about-stat {
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-soft);
+    }
+    .about-stat-value {
+      font-size: 26px;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      color: var(--accent-2);
+    }
+    .about-stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    @media (max-width: 720px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-side { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .about-side { grid-template-columns: 1fr; }
+    }
+
+    /* ── Contact section ───────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .contact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 18px 20px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      transition: box-shadow 160ms, border-color 160ms;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .contact-card:hover {
+      box-shadow: var(--shadow);
+      border-color: rgba(12,23,45,0.16);
+    }
+    .contact-card-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .contact-card-value {
+      font-size: 15px;
+      font-weight: 650;
+    }
+    .contact-card-arrow {
+      margin-top: auto;
+      font-size: 18px;
+      color: var(--muted);
+    }
+    @media (max-width: 640px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* btn-link utility */
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--accent);
+      padding: 0;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <!-- Skip link for accessibility -->
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Top Navigation -->
+  <!-- ── Top Navigation ──────────────────────────────────────── -->
   <header class="site-header" id="top">
     <div class="container nav">
       <a class="brand" href="#top" aria-label="Go to top">
         <span class="brand-mark" aria-hidden="true"></span>
-        <span class="brand-text">FP&A Portfolio</span>
+        <span class="brand-text">FP&amp;A Portfolio</span>
       </a>
 
       <nav class="nav-links" aria-label="Primary">
+        <a href="#start-here">Start Here</a>
         <a href="#pick-problem">Find a Model</a>
         <a href="#projects">All Projects</a>
-        <a href="#system">System View</a>
-        <a href="#contact">Links</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
       </nav>
 
       <div class="nav-cta">
@@ -126,11 +411,11 @@
     <!-- Mobile menu -->
     <div class="mobile-menu" data-mobile-menu>
       <div class="container mobile-menu-inner">
+        <a href="#start-here" class="mobile-link">Start Here</a>
         <a href="#pick-problem" class="mobile-link">Find a Model</a>
-        <a href="#projects" class="mobile-link">All Projects</a>
-        <a href="#system" class="mobile-link">System View</a>
-        <a href="#contact" class="mobile-link">Links</a>
-
+        <a href="#projects"    class="mobile-link">All Projects</a>
+        <a href="#about"       class="mobile-link">About</a>
+        <a href="#contact"     class="mobile-link">Contact</a>
         <div class="mobile-cta">
           <a class="btn btn-ghost" href="#pick-problem">Find a Model</a>
           <a class="btn btn-solid" href="https://github.com/ralphpatrick" target="_blank" rel="noreferrer">View GitHub</a>
@@ -140,7 +425,8 @@
   </header>
 
   <main id="main">
-    <!-- 1) Hero -->
+
+    <!-- ── 1) Hero ─────────────────────────────────────────────── -->
     <section class="hero hero--full">
       <div class="container">
         <div class="hero-copy hero-copy--centered reveal">
@@ -154,13 +440,11 @@
           <p class="hero-one-liner">
             FP&amp;A specialist with end-to-end understanding of the finance engine.
           </p>
-
           <div class="hero-actions">
-            <a class="btn btn-solid" href="#pick-problem">Find Your Model ↓</a>
+            <a class="btn btn-solid" href="#start-here">Start Here ↓</a>
+            <a class="btn btn-ghost" href="#pick-problem">Find Your Model</a>
             <a class="btn btn-ghost" href="#projects">All Projects</a>
-            <a class="btn btn-ghost" href="https://github.com/ralphpatrick" target="_blank" rel="noreferrer">View GitHub</a>
           </div>
-
           <div class="hero-metrics">
             <div class="metric-card">
               <div class="metric-label">Focus</div>
@@ -179,68 +463,295 @@
       </div>
     </section>
 
-    <!-- 2) Problem Launcher -->
-    <section class="section" id="pick-problem">
+    <!-- ── 2) Start Here ───────────────────────────────────────── -->
+    <section class="section section-muted" id="start-here">
       <div class="container">
         <div class="section-head reveal">
-          <h2>What’s the problem you’re solving?</h2>
+          <h2>Start here <span style="font-size:14px;font-weight:500;color:var(--muted);">(recommended path)</span></h2>
           <p class="section-subhead">
-            Pick the question your CFO is asking — open the right model instantly.
+            New here? These three models give you the fastest, clearest picture of how a business is actually performing.
           </p>
         </div>
 
-        <div class="problem-grid">
+        <div class="start-here-grid">
 
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;Our forecast changes every week and no one trusts the numbers.&rdquo;</p>
-            <a class="btn btn-solid" href="core-fp&a.html">Open Core FP&amp;A Simulator &rarr;</a>
+          <div class="start-step reveal">
+            <div class="start-step-num">1</div>
+            <p class="start-step-title">Unit Economics</p>
+            <p class="start-step-why">Can we actually afford to grow? This tells you if spending more on customers makes you richer or just faster at losing money.</p>
+            <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
           </div>
 
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;Sales says pipeline is strong — but we don’t know if those deals actually make money.&rdquo;</p>
-            <a class="btn btn-solid" href="commercial-sales.html">Open Commercial / Sales Finance &rarr;</a>
+          <div class="start-step reveal">
+            <div class="start-step-num">2</div>
+            <p class="start-step-title">Working Capital FP&amp;A</p>
+            <p class="start-step-why">Why does cash keep disappearing even when sales look fine? This maps where money gets stuck — in unpaid invoices, slow payments, or inventory sitting idle.</p>
+            <a class="btn btn-solid" href="working-capital.html">Open Working Capital →</a>
           </div>
 
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;We’re growing fast, but the math on CAC, churn, and payback doesn’t add up.&rdquo;</p>
-            <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;Revenue is flat and no one can explain whether it’s churn, mix shift, or price.&rdquo;</p>
-            <a class="btn btn-solid" href="revenue-bridge.html">Open Revenue Bridge &amp; Cohorts &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;We’re profitable on paper but cash keeps disappearing — collections or inventory?&rdquo;</p>
-            <a class="btn btn-solid" href="working-capital.html">Open Working Capital FP&amp;A &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;OpEx is creeping up every month and no one knows exactly where it’s going.&rdquo;</p>
-            <a class="btn btn-solid" href="operations-spend.html">Open Operations Spend Analytics &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;The team wants to hire 3 more people — I don’t know if we can afford it or what it breaks.&rdquo;</p>
-            <a class="btn btn-solid" href="indirect-cost-headcount.html">Open Indirect Cost &amp; Headcount &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;We need a major asset — buy outright, take a loan, or lease? And what does each do to runway?&rdquo;</p>
-            <a class="btn btn-solid" href="capex-financing.html">Open Capex &amp; Financing &rarr;</a>
-          </div>
-
-          <div class="problem-card reveal">
-            <p class="problem-statement">&ldquo;Everyone has a theory on what to fix — we need to rank the levers that actually move EBITDA.&rdquo;</p>
-            <a class="btn btn-solid" href="kpi-tree-sensitivity.html">Open KPI Tree &amp; Sensitivity &rarr;</a>
+          <div class="start-step reveal">
+            <div class="start-step-num">3</div>
+            <p class="start-step-title">Operations Spend Analytics</p>
+            <p class="start-step-why">Stop leakage and control spend before it becomes a problem. See exactly which vendors, categories, or months are costing more than they should.</p>
+            <a class="btn btn-solid" href="operations-spend.html">Open Ops Spend →</a>
           </div>
 
         </div>
       </div>
     </section>
 
-    <!-- 3) Core Portfolio Projects -->
+    <!-- ── 3) Problem Launcher ─────────────────────────────────── -->
+    <section class="section" id="pick-problem">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>What's the problem you're solving?</h2>
+          <p class="section-subhead">
+            Pick the question your CFO is asking — open the right model instantly. Hover a card to see a sample output.
+          </p>
+        </div>
+
+        <div class="problem-grid">
+
+          <!-- Card 1: Core FP&A -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Stay on plan — no cuts needed this quarter</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Runway: 14.2 months &nbsp;|&nbsp; EBITDA: –$18K/mo</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Headcount cost — 62% of total OpEx</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;Our forecast changes every week and no one trusts the numbers.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Revenue forecast, EBITDA, runway in months</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">CEOs, CFOs, FP&amp;A leads who need one agreed-on plan</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">5–10 min to set assumptions, instant outputs</span></div>
+            </div>
+            <a class="btn btn-solid" href="core-fp&a.html">Open Core FP&amp;A Simulator →</a>
+          </div>
+
+          <!-- Card 2: Commercial / Sales -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Run the promo — but cap discount at 18%</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Promo ROI: 2.3×  &nbsp;|&nbsp; Channel margin: 31%</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Online channel — 48% of total revenue, highest margin</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;Sales says pipeline is strong — but we don't know if those deals actually make money.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Promo ROI, channel profit breakdown, revenue bridge</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">Sales leads, commercial finance, marketing ops</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">Upload a CSV or use sample — 3 min</span></div>
+            </div>
+            <a class="btn btn-solid" href="commercial-sales.html">Open Commercial / Sales Finance →</a>
+          </div>
+
+          <!-- Card 3: Unit Economics -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Slow acquisition spend — payback is too long</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Payback: 18.4 mo  &nbsp;|&nbsp; Runway: 9.1 mo</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Monthly churn — reducing by 1% saves $14K/mo</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;We're growing fast, but the math on customer costs and payback doesn't add up.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Payback period, profitability per customer, runway</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">SaaS, fintech, subscription, growth-stage companies</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">2 min — adjust sliders, read verdict</span></div>
+            </div>
+            <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
+          </div>
+
+          <!-- Card 4: Revenue Bridge -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Fix retention before scaling new customer spend</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Net Revenue Retention: 94%  &nbsp;|&nbsp; Monthly churn: 4.2%</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Existing customer churn eating $21K of new revenue/mo</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;Revenue is flat and no one can explain whether it's churn, mix shift, or price.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Revenue waterfall, retention rate, cohort table</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">Board prep, investor updates, revenue review meetings</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">3 min with sample data</span></div>
+            </div>
+            <a class="btn btn-solid" href="revenue-bridge.html">Open Revenue Bridge &amp; Cohorts →</a>
+          </div>
+
+          <!-- Card 5: Working Capital -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Tighten collections — AR is the cash drain</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Cash cycle: 52 days  &nbsp;|&nbsp; Cash ending: $348K</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Days to collect payment (DSO) — cut by 10 days = +$82K cash</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;We're profitable on paper but cash keeps disappearing — collections or inventory?&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Cash cycle length, 12-month cash forecast, verdict</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">CFOs, treasury, ops finance — any cash-heavy business</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">3 min — enter DSO, DPO, revenue, done</span></div>
+            </div>
+            <a class="btn btn-solid" href="working-capital.html">Open Working Capital FP&amp;A →</a>
+          </div>
+
+          <!-- Card 6: Operations Spend -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Fix leakage first — renegotiate top 3 vendors</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Leakage: $38,400  &nbsp;|&nbsp; Overpay rate: 14.2%</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Vendor C — 41% of all rate card violations</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;OpEx is creeping up every month and no one knows exactly where it's going.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Vendor leakage, spend variance, forecast vs actual</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">Ops finance, procurement, shared services teams</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">Upload CSV or generate random — 2 min</span></div>
+            </div>
+            <a class="btn btn-solid" href="operations-spend.html">Open Operations Spend Analytics →</a>
+          </div>
+
+          <!-- Card 7: Indirect Cost & Headcount -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Delay the hire — runway drops below safe threshold</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">Cost per hire: $8,200/mo  &nbsp;|&nbsp; Runway impact: –2.1 mo</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Engineering headcount — 38% of indirect cost base</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;The team wants to hire 3 more people — I don't know if we can afford it or what it breaks.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Cost per head, department breakdown, runway impact</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">People ops, finance BP, team leads requesting headcount</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">5 min — enter team structure and costs</span></div>
+            </div>
+            <a class="btn btn-solid" href="indirect-cost-headcount.html">Open Indirect Cost &amp; Headcount →</a>
+          </div>
+
+          <!-- Card 8: Capex & Financing -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Finance with a loan — preserves cash, NPV wins</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">NPV advantage: $24,800  &nbsp;|&nbsp; Payback: 3.8 yrs</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Interest rate — 1% change shifts NPV by ~$6,200</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;We need a major asset — buy outright, take a loan, or lease? And what does each do to runway?&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">NPV comparison, payback period, cash flow schedule</span></div>
+              <div class="card-meta-row"><span class="card-meta-value">Best for:</span><span class="card-meta-value">CFOs, ops, anyone evaluating a major purchase</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">3 min — enter asset cost and financing terms</span></div>
+            </div>
+            <a class="btn btn-solid" href="capex-financing.html">Open Capex &amp; Financing →</a>
+          </div>
+
+          <!-- Card 9: KPI Tree & Sensitivity -->
+          <div class="problem-card reveal">
+            <div class="card-preview" aria-hidden="true">
+              <div class="card-preview-row">
+                <span class="card-preview-label">Decision</span>
+                <span class="card-preview-value">Raise price first — highest runway impact per lever</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">KPI</span>
+                <span class="card-preview-kpi">EBITDA: –$22K/mo  &nbsp;|&nbsp; Runway: 11.6 mo</span>
+              </div>
+              <div class="card-preview-row">
+                <span class="card-preview-label">Top driver</span>
+                <span class="card-preview-value">Selling price — +5% adds 2.4 months of runway</span>
+              </div>
+            </div>
+            <p class="problem-statement">&ldquo;Everyone has a theory on what to fix — we need to rank the levers that actually move profit.&rdquo;</p>
+            <div class="card-meta">
+              <div class="card-meta-row"><span class="card-meta-label">Outputs:</span><span class="card-meta-value">Driver ranking, sensitivity chart, top 3 actions</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Best for:</span><span class="card-meta-value">Strategy meetings, quarterly reviews, board prep</span></div>
+              <div class="card-meta-row"><span class="card-meta-label">Time to use:</span><span class="card-meta-value">2 min — enter 7 numbers, get ranked output</span></div>
+            </div>
+            <a class="btn btn-solid" href="kpi-tree-sensitivity.html">Open KPI Tree &amp; Sensitivity →</a>
+          </div>
+
+        </div><!-- end problem-grid -->
+
+        <!-- Credibility strip -->
+        <div class="cred-strip reveal">
+          <span class="cred-strip-label">Built with</span>
+          <span class="cred-item"><span class="cred-dot"></span>Driver-based modeling</span>
+          <span class="cred-item"><span class="cred-dot"></span>Scenario logic (Base / Upside / Downside)</span>
+          <span class="cred-item"><span class="cred-dot"></span>Decision-first outputs</span>
+          <span class="cred-item"><span class="cred-dot"></span>No frameworks — runs anywhere</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── 4) Core Portfolio Projects ─────────────────────────── -->
     <section class="section section-muted" id="projects">
       <div class="container">
         <div class="section-head reveal">
@@ -260,9 +771,7 @@
               </div>
               <span class="pill">Flagship</span>
             </div>
-
             <p class="project-pitch">The backbone of corporate FP&amp;A decision-making.</p>
-
             <div class="project-meta">
               <div class="meta-block">
                 <div class="meta-title">Business problem</div>
@@ -273,9 +782,8 @@
                 <div class="meta-text">Decide: are we on track—or do we need to cut, slow, or push harder?</div>
               </div>
             </div>
-
             <div class="project-actions">
-            <a class="btn btn-solid" href="core-fp&a.html">View Model</a>
+              <a class="btn btn-solid" href="core-fp&a.html">View Model</a>
             </div>
           </article>
 
@@ -288,9 +796,7 @@
               </div>
               <span class="pill">Revenue</span>
             </div>
-
             <p class="project-pitch">Evaluating revenue decisions beyond top-line growth.</p>
-
             <div class="project-meta">
               <div class="meta-block">
                 <div class="meta-title">Business problem</div>
@@ -301,8 +807,6 @@
                 <div class="meta-text">Decide: run the promo, raise prices, or drop the losing channel.</div>
               </div>
             </div>
-
-
             <div class="project-actions">
               <a class="btn btn-solid" href="commercial-sales.html">View Model</a>
             </div>
@@ -317,20 +821,17 @@
               </div>
               <span class="pill">Unit economics</span>
             </div>
-
             <p class="project-pitch">Understanding growth, profitability, and scalability.</p>
-
             <div class="project-meta">
               <div class="meta-block">
                 <div class="meta-title">Business problem</div>
-                <div class="meta-text">Fast growth looks great—until you realize it’s not paying for itself.</div>
+                <div class="meta-text">Fast growth looks great—until you realize it's not paying for itself.</div>
               </div>
               <div class="meta-block">
                 <div class="meta-title">Executive outcome</div>
                 <div class="meta-text">Decide: keep spending to grow, or pull back until the math works.</div>
               </div>
             </div>
-
             <div class="project-actions">
               <a class="btn btn-solid" href="unit-economics.html">View Model</a>
             </div>
@@ -345,9 +846,7 @@
               </div>
               <span class="pill">Cost control</span>
             </div>
-
             <p class="project-pitch">Making overhead costs transparent and controllable.</p>
-
             <div class="project-meta">
               <div class="meta-block">
                 <div class="meta-title">Business problem</div>
@@ -358,9 +857,8 @@
                 <div class="meta-text">Decide: approve the hire, freeze headcount, or restructure the team now.</div>
               </div>
             </div>
-
-          <div class="project-actions">
-            <a class="btn btn-solid" href="indirect-cost-headcount.html">View Model</a>
+            <div class="project-actions">
+              <a class="btn btn-solid" href="indirect-cost-headcount.html">View Model</a>
             </div>
           </article>
 
@@ -373,26 +871,23 @@
               </div>
               <span class="pill">Ops</span>
             </div>
-
             <p class="project-pitch">Controlling spend in complex, operational environments.</p>
-
             <div class="project-meta">
               <div class="meta-block">
                 <div class="meta-title">Business problem</div>
-                <div class="meta-text">Spending keeps rising but no one can explain exactly where it’s going.</div>
+                <div class="meta-text">Spending keeps rising but no one can explain exactly where it's going.</div>
               </div>
               <div class="meta-block">
                 <div class="meta-title">Executive outcome</div>
                 <div class="meta-text">Decide: cut the waste, renegotiate vendors, or freeze discretionary spend.</div>
               </div>
             </div>
-
             <div class="project-actions">
               <a class="btn btn-solid" href="operations-spend.html">View Model</a>
             </div>
           </article>
 
-          <!-- Project 6: Working Capital -->
+          <!-- Project 6 -->
           <article id="card-working-capital" class="project-card reveal">
             <div class="project-top">
               <div>
@@ -417,7 +912,7 @@
             </div>
           </article>
 
-          <!-- Project 7: Revenue Bridge -->
+          <!-- Project 7 -->
           <article id="card-revenue-bridge" class="project-card reveal">
             <div class="project-top">
               <div>
@@ -442,7 +937,7 @@
             </div>
           </article>
 
-          <!-- Project 8: Capex Financing -->
+          <!-- Project 8 -->
           <article id="card-capex-financing" class="project-card reveal">
             <div class="project-top">
               <div>
@@ -467,7 +962,7 @@
             </div>
           </article>
 
-          <!-- Project 9: KPI Tree Sensitivity -->
+          <!-- Project 9 -->
           <article id="card-kpi-tree" class="project-card reveal">
             <div class="project-top">
               <div>
@@ -501,76 +996,42 @@
       </div>
     </section>
 
-    <!-- 4) System View -->
+    <!-- ── 5) System View ──────────────────────────────────────── -->
     <section class="section" id="system">
       <div class="container">
         <div class="section-head reveal">
           <h2>System View</h2>
           <p class="section-subhead">
-            These aren’t isolated spreadsheets. They form a single Finance Operating System.
+            These aren't isolated spreadsheets. They form a single Finance Operating System.
           </p>
         </div>
 
         <div class="system-wrap reveal">
           <div class="system-visual" role="img" aria-label="A system diagram connecting FP&A modules">
             <div class="sys-col">
-              <div class="sys-card">
-                <div class="sys-title">Core FP&A</div>
-                <div class="sys-text">Integrated planning &amp; analysis</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Core FP&amp;A</div><div class="sys-text">Integrated planning &amp; analysis</div></div>
               <div class="sys-arrow" aria-hidden="true">→</div>
-              <div class="sys-card">
-                <div class="sys-title">Commercial</div>
-                <div class="sys-text">Pricing, promos, channels</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Commercial</div><div class="sys-text">Pricing, promos, channels</div></div>
             </div>
-
             <div class="sys-col">
-              <div class="sys-card">
-                <div class="sys-title">Unit Economics</div>
-                <div class="sys-text">Growth, margin, payback</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Unit Economics</div><div class="sys-text">Growth, margin, payback</div></div>
               <div class="sys-arrow" aria-hidden="true">→</div>
-              <div class="sys-card">
-                <div class="sys-title">Operations Spend</div>
-                <div class="sys-text">Run-rate + timing risk</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Operations Spend</div><div class="sys-text">Run-rate + timing risk</div></div>
             </div>
-
             <div class="sys-col">
-              <div class="sys-card">
-                <div class="sys-title">Indirect Cost &amp; Headcount</div>
-                <div class="sys-text">Overhead + headcount clarity</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Indirect Cost &amp; Headcount</div><div class="sys-text">Overhead + headcount clarity</div></div>
               <div class="sys-arrow" aria-hidden="true">→</div>
-              <div class="sys-card">
-                <div class="sys-title">Working Capital</div>
-                <div class="sys-text">CCC, cash forecast, runway</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Working Capital</div><div class="sys-text">CCC, cash forecast, runway</div></div>
             </div>
-
             <div class="sys-col">
-              <div class="sys-card">
-                <div class="sys-title">Revenue Bridge</div>
-                <div class="sys-text">Cohorts, NRR, retention</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Revenue Bridge</div><div class="sys-text">Cohorts, NRR, retention</div></div>
               <div class="sys-arrow" aria-hidden="true">→</div>
-              <div class="sys-card">
-                <div class="sys-title">Capex &amp; Financing</div>
-                <div class="sys-text">Buy vs loan vs lease, NPV</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">Capex &amp; Financing</div><div class="sys-text">Buy vs loan vs lease, NPV</div></div>
             </div>
-
             <div class="sys-col">
-              <div class="sys-card">
-                <div class="sys-title">KPI Tree &amp; Sensitivity</div>
-                <div class="sys-text">Driver ranking, tornado, runway</div>
-              </div>
+              <div class="sys-card"><div class="sys-title">KPI Tree &amp; Sensitivity</div><div class="sys-text">Driver ranking, tornado, runway</div></div>
               <div class="sys-arrow" aria-hidden="true">→</div>
-              <div class="sys-card sys-card-strong">
-                <div class="sys-title">Decision Engine</div>
-                <div class="sys-text">Narratives leaders act on</div>
-              </div>
+              <div class="sys-card sys-card-strong"><div class="sys-title">Decision Engine</div><div class="sys-text">Narratives leaders act on</div></div>
             </div>
           </div>
 
@@ -579,28 +1040,103 @@
               I specialize in FP&amp;A, but understand the full finance engine.
             </div>
             <p class="system-plain">
-              In real life: a leader asks “should we hire, cut, raise prices, push a promo, or slow down?”
+              In real life: a leader asks "should we hire, cut, raise prices, push a promo, or slow down?"
               This system turns that question into numbers you can trust—and a clear recommendation.
             </p>
-
             <div class="system-actions">
               <a class="btn btn-solid" href="#projects">Explore the modules</a>
-              <a class="btn btn-ghost" href="#contact">Open links</a>
+              <a class="btn btn-ghost" href="#contact">Get in touch</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5) Footer / Credibility -->
-    <section class="section section-muted" id="tools">
+    <!-- ── 6) About ────────────────────────────────────────────── -->
+    <section class="section section-muted" id="about">
       <div class="container">
         <div class="section-head reveal">
-          <h2>Credibility</h2>
-          <p class="section-subhead">Tools are just tools. The advantage is the system design.</p>
+          <h2>About</h2>
+          <p class="section-subhead">The person behind the models.</p>
         </div>
 
-        <div class="cred-grid">
+        <div class="about-grid reveal">
+          <div class="about-body">
+            <p class="about-lead">
+              I'm Ralph Patrick Divina — an FP&amp;A specialist who builds finance systems that help leaders make faster, better decisions.
+            </p>
+            <p class="about-sub">
+              This toolkit isn't a slide deck or a set of screenshots. It's a working portfolio of interactive finance models — built the same way I'd build them inside a real company: driver-based inputs, scenario logic, and outputs that tell you exactly what to do next.
+            </p>
+            <p class="about-sub">
+              Every module ends with a decision card: Approve / Flag / Fix. No ambiguity, no "it depends." Finance that actually moves the meeting forward.
+            </p>
+
+            <div class="about-bullets">
+              <div class="about-bullet">
+                <span class="about-bullet-icon">▦</span>
+                Systems thinker — models are modular, reusable, and connected across the finance engine
+              </div>
+              <div class="about-bullet">
+                <span class="about-bullet-icon">↗</span>
+                Planning fluency — from zero-based budgets to rolling forecasts and variance narratives
+              </div>
+              <div class="about-bullet">
+                <span class="about-bullet-icon">◎</span>
+                Decision-oriented — every output answers: what should we do, and why, right now?
+              </div>
+            </div>
+          </div>
+
+          <div class="about-side">
+            <div class="about-stat">
+              <div class="about-stat-value">9</div>
+              <div class="about-stat-label">Interactive finance modules — all live, no login needed</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-value">3</div>
+              <div class="about-stat-label">Scenario modes per model (Base / Upside / Downside)</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-value">0</div>
+              <div class="about-stat-label">Frameworks required — open index.html and go</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-value">1</div>
+              <div class="about-stat-label">Decision output per module — always a clear action</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 7) Contact ──────────────────────────────────────────── -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Contact &amp; Links</h2>
+          <p class="section-subhead">One click to proof — no hunting required.</p>
+        </div>
+
+        <div class="contact-grid reveal">
+          <a class="contact-card" href="https://github.com/ralphpatrick" target="_blank" rel="noreferrer">
+            <span class="contact-card-label">Code &amp; Portfolio</span>
+            <span class="contact-card-value">GitHub</span>
+            <span class="contact-card-arrow">↗</span>
+          </a>
+          <a class="contact-card" href="https://www.linkedin.com/in/ralph-patrick-divina-55534614a/" target="_blank" rel="noreferrer">
+            <span class="contact-card-label">Professional Profile</span>
+            <span class="contact-card-value">LinkedIn / Resume</span>
+            <span class="contact-card-arrow">↗</span>
+          </a>
+          <a class="contact-card" href="mailto:ralphpatrickdivina@gmail.com">
+            <span class="contact-card-label">Direct</span>
+            <span class="contact-card-value">Email</span>
+            <span class="contact-card-arrow">↗</span>
+          </a>
+        </div>
+
+        <div class="cred-grid" style="margin-top:28px;">
           <div class="card reveal">
             <h3>Tooling</h3>
             <div class="tag-row" aria-label="Tools used">
@@ -613,42 +1149,34 @@
               Light mention on purpose—this portfolio is about decision systems, not software flexing.
             </p>
           </div>
-
-          <div class="card reveal" id="contact">
-            <h3>Links</h3>
-            <div class="link-list">
-              <a class="link-item" href="https://github.com/ralphpatrick" target="_blank" rel="noreferrer">
-                <span>GitHub</span><span class="link-arrow" aria-hidden="true">↗</span>
-              </a>
-              <a class="link-item" href="https://www.linkedin.com/in/ralph-patrick-divina-55534614a/" target="_blank" rel="noreferrer">
-                <span>LinkedIn</span><span class="link-arrow" aria-hidden="true">↗</span>
-              </a>
-              <a class="link-item" href="/cdn-cgi/l/email-protection#ccbebcadb8bea5afa7a8a5baa5a2ad8caba1ada5a0e2afa3a1">
-                <span>Email</span><span class="link-arrow" aria-hidden="true">↗</span>
-              </a>
+          <div class="card reveal">
+            <h3>Built for</h3>
+            <div class="tag-row">
+              <span class="tag">FP&amp;A Leads</span>
+              <span class="tag">Finance BPs</span>
+              <span class="tag">CFOs</span>
+              <span class="tag">Strategic Finance</span>
             </div>
             <p class="muted">
-              Keep it simple: one click to proof.
+              If you value clarity, rigor, and decision velocity — this is built for you.
             </p>
           </div>
-
           <div class="card reveal">
             <h3>Closing</h3>
             <p class="closing">
               Built for recruiters, hiring managers, and finance leaders who value clarity, rigor, and decision velocity.
             </p>
             <div class="smallprint">
-              © <span data-year></span> • FP&amp;A Portfolio
+              © <span data-year></span> • FP&amp;A Portfolio · Ralph Patrick Divina
             </div>
           </div>
         </div>
       </div>
     </section>
+
   </main>
 
-  <!-- Back to top -->
   <a class="to-top" href="#top" aria-label="Back to top">↑</a>
-
   <script src="main.js"></script>
 </body>
 </html>

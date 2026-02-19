@@ -88,3 +88,48 @@ window.withStableScroll = function withStableScroll(fn) {
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 })();
+
+// =========================================
+// INDEX ENHANCEMENTS
+// =========================================
+
+// Hero full-width override: ensure hero--full uses single-column container
+// (handled in CSS, no JS needed)
+
+// Active nav link highlighting based on scroll position
+(function () {
+  var sections = ['start-here', 'pick-problem', 'projects', 'about', 'contact'];
+  var navLinks = document.querySelectorAll('.nav-links a, .mobile-menu a');
+
+  if (!navLinks.length) return;
+
+  function getActiveSection() {
+    var scrollY = window.scrollY + 100;
+    var active = '';
+    for (var i = 0; i < sections.length; i++) {
+      var el = document.getElementById(sections[i]);
+      if (el && el.offsetTop <= scrollY) {
+        active = sections[i];
+      }
+    }
+    return active;
+  }
+
+  function updateNav() {
+    var active = getActiveSection();
+    navLinks.forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      var matches = href === '#' + active;
+      if (matches) {
+        a.style.color = 'var(--accent)';
+        a.style.fontWeight = '650';
+      } else {
+        a.style.color = '';
+        a.style.fontWeight = '';
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+})();

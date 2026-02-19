@@ -717,6 +717,43 @@
         font-size: 28px;
       }
     }
+
+    /* ── Next module banner ─────────────────────────── */
+    .next-module-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 18px 24px;
+      background: var(--bg-muted);
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+    }
+    .next-module-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .next-module-title {
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .next-module-why {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .next-module-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -857,7 +894,21 @@
         </div>
       </div>
     </div>
-  </main>
+  
+  <!-- ── Next Module ──────────────────────────────────────── -->
+  <nav class="next-module-bar" aria-label="Next recommended module">
+    <div>
+      <div class="next-module-label">Next recommended</div>
+      <div class="next-module-title">Unit Economics</div>
+      <div class="next-module-why">Plan is set — now validate whether each customer acquisition is actually worth it.</div>
+    </div>
+    <div class="next-module-actions">
+      <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
+      <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+</main>
 
   <script>
     // ============================================
