@@ -55,7 +55,7 @@
     .board-block ul li { font-size: 13px; }
     .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
     .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .chart-wrap { position: relative; width: 100%; }
+    .chart-wrap { position: relative; width: 100%; overflow-anchor: none; }
     .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
     .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
@@ -158,6 +158,9 @@
       font-style: italic;
     }
 
+      .main-content { overflow-anchor: none; }
+    .module-card { overflow-anchor: none; }
+    .data-table { overflow-anchor: none; }
   </style>
 </head>
 <body>
@@ -206,45 +209,45 @@
         <div class="sidebar-title">ASSET DETAILS</div>
         <div class="input-row">
           <label>Asset Cost ($) <span class="help-icon" data-help="The total purchase price of the asset — e.g., a machine, vehicle, or equipment."></span></label>
-          <input type="number" id="inp-cost" value="250000" oninput="compute()">
+          <input type="number" id="inp-cost" value="250000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Useful Life (years) <span class="help-icon" data-help="How many years the asset will be used before it's replaced or worn out."></span></label>
-          <input type="number" id="inp-life" value="5" step="1" oninput="compute()">
+          <input type="number" id="inp-life" value="5" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Salvage Value ($) <span class="help-icon" data-help="What the asset is worth at the end of its useful life — what you can sell it for."></span></label>
-          <input type="number" id="inp-salvage" value="25000" oninput="compute()">
+          <input type="number" id="inp-salvage" value="25000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has before making this financing decision."></span></label>
-          <input type="number" id="inp-startcash" value="600000" oninput="compute()">
+          <input type="number" id="inp-startcash" value="600000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Discount Rate (%) <span class="help-icon" data-help="Your cost of capital — used to discount future cash flows to today's value (NPV)."></span></label>
-          <input type="number" id="inp-discount" value="10" step="0.5" oninput="compute()">
+          <input type="number" id="inp-discount" value="10" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="sidebar-sub">OPTION B — LOAN</div>
         <div class="input-row">
           <label>Interest Rate (%) <span class="help-icon" data-help="Annual interest rate on the loan. The bank's fee for lending you money."></span></label>
-          <input type="number" id="inp-rate" value="8" step="0.5" oninput="compute()">
+          <input type="number" id="inp-rate" value="8" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Loan Term (months) <span class="help-icon" data-help="How many months to repay the loan. Longer = smaller payments but more total interest."></span></label>
-          <input type="number" id="inp-term" value="48" step="6" oninput="compute()">
+          <input type="number" id="inp-term" value="48" step="6" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Down Payment ($) <span class="help-icon" data-help="How much you pay upfront when taking the loan. Reduces the amount financed."></span></label>
-          <input type="number" id="inp-down" value="50000" oninput="compute()">
+          <input type="number" id="inp-down" value="50000" oninput="withStableScroll(compute)">
         </div>
         <div class="sidebar-sub">OPTION C — LEASE</div>
         <div class="input-row">
           <label>Monthly Lease ($) <span class="help-icon" data-help="Fixed monthly payment to use the asset without owning it. Like renting."></span></label>
-          <input type="number" id="inp-lease" value="5200" oninput="compute()">
+          <input type="number" id="inp-lease" value="5200" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Lease Term (months) <span class="help-icon" data-help="How long the lease agreement lasts. After this, return or renew."></span></label>
-          <input type="number" id="inp-leaseTerm" value="60" step="6" oninput="compute()">
+          <input type="number" id="inp-leaseTerm" value="60" step="6" oninput="withStableScroll(compute)">
         </div>
       </div>
     </aside>
@@ -353,13 +356,15 @@
     Object.keys(v).forEach(k => { const el = document.getElementById('inp-' + k); if (el) el.value = v[k]; });
   }
 
-  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function loadSample() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
   function randomizeData() {
+    withStableScroll(function(){
     const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
     setInputs({ cost:r(50000,1000000,10000), life:r(3,10,1), salvage:r(0,50000,5000), startcash:r(100000,2000000,50000), discount:r(6,15,0.5), rate:r(4,15,0.5), term:r(24,72,12), down:r(0,100000,5000), lease:r(500,20000,100), leaseTerm:r(24,84,12) });
     document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+    });
   }
-  function resetDefaults() { loadSample(); }
+  function resetDefaults() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
 
   function loanPayment(principal, monthlyRate, months) {
     if (monthlyRate === 0) return principal / months;

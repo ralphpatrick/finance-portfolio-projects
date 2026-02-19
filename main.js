@@ -3,6 +3,34 @@
    Minimal: mobile nav + reveal animations + back-to-top + footer year
    ========================================= */
 
+/**
+ * withStableScroll(fn)
+ * ─────────────────────────────────────────
+ * Root-cause fix for "view jump on data change":
+ *
+ * When Chart.js calls chart.destroy() + new Chart(), the browser's
+ * scroll-anchoring algorithm detects DOM/layout changes and tries to
+ * keep content visible — which snaps the viewport to the canvas area.
+ * Same happens with large innerHTML replacements that shift layout.
+ *
+ * Strategy: capture scrollY BEFORE the update, let the browser paint,
+ * then restore to the captured position via double-rAF (two frames
+ * ensures the layout has fully settled before we correct).
+ *
+ * Usage:  withStableScroll(() => { myChart.destroy(); compute(); });
+ */
+window.withStableScroll = function withStableScroll(fn) {
+  const scrollY = window.scrollY;
+  fn();
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      if (Math.abs(window.scrollY - scrollY) > 2) {
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+      }
+    });
+  });
+};
+
 (function () {
   // Footer year
   const yearEl = document.querySelector("[data-year]");

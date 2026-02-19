@@ -53,7 +53,7 @@
     .board-block ul li { font-size: 13px; }
     .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
     .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .chart-wrap { position: relative; width: 100%; }
+    .chart-wrap { position: relative; width: 100%; overflow-anchor: none; }
     .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
     .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: center; }
@@ -157,6 +157,9 @@
       font-style: italic;
     }
 
+      .main-content { overflow-anchor: none; }
+    .module-card { overflow-anchor: none; }
+    .data-table { overflow-anchor: none; }
   </style>
 </head>
 <body>
@@ -169,7 +172,7 @@
         FP&amp;A Portfolio
       </a>
       <div class="nav-cta">
-        <a href="index.html#card-revenue-bridge"" class="btn btn-ghost">&larr; Back to Portfolio</a>
+        <a href="index.html#card-revenue-bridge" class="btn btn-ghost">&larr; Back to Portfolio</a>
       </div>
     </nav>
   </div>
@@ -205,27 +208,27 @@
         <div class="sidebar-title">ASSUMPTIONS</div>
         <div class="input-row">
           <label>Starting Customers <span class="help-icon" data-help="How many paying customers you have at the start of the analysis period."></span></label>
-          <input type="number" id="inp-customers" value="500" oninput="compute()">
+          <input type="number" id="inp-customers" value="500" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>New Customers / Mo <span class="help-icon" data-help="How many brand-new customers you add each month through sales/marketing."></span></label>
-          <input type="number" id="inp-newcust" value="60" oninput="compute()">
+          <input type="number" id="inp-newcust" value="60" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>ARPA ($/mo) <span class="help-icon" data-help="Average Revenue Per Account — what each customer pays per month on average."></span></label>
-          <input type="number" id="inp-arpa" value="350" oninput="compute()">
+          <input type="number" id="inp-arpa" value="350" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Monthly Churn % <span class="help-icon" data-help="Percent of customers who cancel or stop paying each month. 5% monthly = ~46% annual churn."></span></label>
-          <input type="number" id="inp-churn" value="4" step="0.5" oninput="compute()">
+          <input type="number" id="inp-churn" value="4" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Expansion % <span class="help-icon" data-help="Monthly revenue growth from existing customers upgrading, buying add-ons, or expanding usage."></span></label>
-          <input type="number" id="inp-expansion" value="2" step="0.5" oninput="compute()">
+          <input type="number" id="inp-expansion" value="2" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Price Change % / Mo <span class="help-icon" data-help="Monthly price change applied to existing base. 0 = no pricing action."></span></label>
-          <input type="number" id="inp-price" value="0" step="0.5" oninput="compute()">
+          <input type="number" id="inp-price" value="0" step="0.5" oninput="withStableScroll(compute)">
         </div>
       </div>
     </aside>
@@ -331,13 +334,15 @@
     document.getElementById('inp-price').value = v.price;
   }
 
-  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function loadSample() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
   function randomizeData() {
+    withStableScroll(function(){
     const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
     setInputs({ customers:r(100,2000,50), newcust:r(10,200,10), arpa:r(50,1500,50), churn:r(1,15,0.5), expansion:r(0,8,0.5), price:r(-1,3,0.5) });
     document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+    });
   }
-  function resetDefaults() { loadSample(); }
+  function resetDefaults() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
 
   function compute() {
     const inp = getInputs();

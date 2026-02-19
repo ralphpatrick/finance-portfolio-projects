@@ -276,7 +276,7 @@
     }
     
     /* Charts */
-    .chart-container {
+    .chart-container { overflow-anchor: none;
       margin: 20px 0;
       padding: 20px;
       border: 1px solid var(--border);
@@ -591,6 +591,9 @@
       color: var(--muted);
       font-style: italic;
     }
+      .main-content { overflow-anchor: none; }
+    .module-card { overflow-anchor: none; }
+    .data-table { overflow-anchor: none; }
   </style>
 </head>
 <body>
@@ -943,10 +946,12 @@
     // ========== SAMPLE DATA GENERATION ==========
     
     function useSampleData() {
+      withStableScroll(function() {
       dataMode = 'sample';
       document.getElementById('dataModeBadge').textContent = 'Sample Data';
       initializeSampleData();
       renderAll();
+      });
     }
     
     function initializeSampleData() {
@@ -1052,22 +1057,35 @@
     }
     
     function randomizeSampleData() {
+      withStableScroll(function() {
       dataMode = 'sample';
-      document.getElementById('dataModeBadge').textContent = 'Randomized Data';
-      
+
+      // ── Pick outcome mode: positive / mid / negative ──────────────────────
+      const modeRoll = Math.random();
+      const outcomeMode = modeRoll < 0.33 ? 'positive' : modeRoll < 0.67 ? 'mid' : 'negative';
+      // Tuning knobs per mode
+      const modeConfig = {
+        positive: { leakagePct: [0.02, 0.06], overrunProb: 0.05, accrualInvoicedMin: 0.92, label: '✅ Clean Run' },
+        mid:      { leakagePct: [0.10, 0.22], overrunProb: 0.30, accrualInvoicedMin: 0.82, label: '⚠ Watch Spend' },
+        negative: { leakagePct: [0.25, 0.40], overrunProb: 0.65, accrualInvoicedMin: 0.68, label: '🔴 Leakage Alert' },
+      };
+      const cfg = modeConfig[outcomeMode];
+
+      document.getElementById('dataModeBadge').textContent = 'Randomized — ' + cfg.label;
+
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const categories = ['Logistics', 'Facilities', 'Support', 'Contractors', 'IT Ops', 'Marketing Ops'].slice(0, randInt(4, 6));
       const numVendors = randInt(8, 15);
-      
+
       const serviceTypes = {
-        'Logistics': [{ service: 'Delivery', unit: 'delivery', rateRange: [2, 25] }],
-        'Facilities': [{ service: 'Maintenance', unit: 'job', rateRange: [20, 450] }, { service: 'Cleaning', unit: 'hour', rateRange: [25, 45] }],
-        'Support': [{ service: 'Ticket', unit: 'ticket', rateRange: [0.8, 6] }],
-        'Contractors': [{ service: 'Hourly', unit: 'hour', rateRange: [12, 85] }],
-        'IT Ops': [{ service: 'License', unit: 'seat', rateRange: [4, 35] }],
-        'Marketing Ops': [{ service: 'Campaign', unit: 'campaign', rateRange: [50, 300] }]
+        'Logistics':      [{ service: 'Delivery',    unit: 'delivery',  rateRange: [2, 25] }],
+        'Facilities':     [{ service: 'Maintenance', unit: 'job',       rateRange: [20, 450] }, { service: 'Cleaning', unit: 'hour', rateRange: [25, 45] }],
+        'Support':        [{ service: 'Ticket',      unit: 'ticket',    rateRange: [0.8, 6] }],
+        'Contractors':    [{ service: 'Hourly',      unit: 'hour',      rateRange: [12, 85] }],
+        'IT Ops':         [{ service: 'License',     unit: 'seat',      rateRange: [4, 35] }],
+        'Marketing Ops':  [{ service: 'Campaign',    unit: 'campaign',  rateRange: [50, 300] }]
       };
-      
+
       const vendors = [];
       for (let i = 0; i < numVendors; i++) {
         const cat = categories[randInt(0, categories.length - 1)];
@@ -1082,7 +1100,7 @@
           rate: randFloat(serviceType.rateRange[0], serviceType.rateRange[1])
         });
       }
-      
+
       rateCards = vendors.map(v => ({
         vendor_id: v.id,
         vendor_name: v.name,
@@ -1094,24 +1112,20 @@
         effective_end: '2024-12-31',
         category: v.category
       }));
-      
+
       transactions = [];
       let invoiceCounter = randInt(1000, 2000);
+      const [leakMin, leakMax] = cfg.leakagePct;
       months.forEach((month, mIdx) => {
         const monthNum = mIdx + 1;
         const numTransactions = randInt(80, 260);
         for (let i = 0; i < numTransactions; i++) {
           const vendor = vendors[randInt(0, vendors.length - 1)];
           const units = randInt(1, 150);
-          const leakagePct = randFloat(0.1, 0.35);
-          const hasLeakage = Math.random() < leakagePct;
+          const hasLeakage = Math.random() < randFloat(leakMin, leakMax);
           let unitRate = vendor.rate;
           if (hasLeakage) {
-            if (Math.random() < 0.9) {
-              unitRate = vendor.rate * randFloat(1.02, 1.18);
-            } else {
-              unitRate = vendor.rate * randFloat(0.92, 0.98);
-            }
+            unitRate = vendor.rate * randFloat(1.02, 1.18);
           }
           transactions.push({
             date: `2024-${String(monthNum).padStart(2, '0')}-${String(randInt(1, 28)).padStart(2, '0')}`,
@@ -1127,21 +1141,20 @@
           });
         }
       });
-      
+
       accruals = [];
       months.forEach((month, mIdx) => {
         const monthNum = mIdx + 1;
         vendors.forEach(vendor => {
-          const monthlyTrans = transactions.filter(t => 
-            t.vendor_id === vendor.id && t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`)
-          );
+          const monthlyTrans = transactions.filter(t =>
+            t.vendor_id === vendor.id && t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`));
           if (monthlyTrans.length > 0) {
             const incurred = monthlyTrans.reduce((sum, t) => sum + parseFloat(t.amount), 0);
-            const invoicedPct = randFloat(0.75, 1.0);
+            const invoicedPct = randFloat(cfg.accrualInvoicedMin, 1.0);
             const invoiced = incurred * invoicedPct;
             const accrual = incurred - invoiced;
             accruals.push({
-              month: month,
+              month,
               vendor_id: vendor.id,
               service: vendor.service,
               incurred_amount: incurred.toFixed(2),
@@ -1153,39 +1166,48 @@
           }
         });
       });
-      
+
       forecastBudget = [];
       const costCenters = ['CC100', 'CC101', 'CC102', 'CC103', 'CC104'];
-      const surpriseMonth = randInt(3, 10);
-      const surpriseCC = costCenters[randInt(0, costCenters.length - 1)];
-      const surpriseCat = categories[randInt(0, categories.length - 1)];
-      
+      // In negative mode, more surprise months; positive: none
+      const numSurprises = outcomeMode === 'negative' ? randInt(3, 5) : outcomeMode === 'mid' ? 1 : 0;
+      const surpriseMonths = [];
+      for (let s = 0; s < numSurprises; s++) { surpriseMonths.push(randInt(2, 11)); }
+
       months.forEach((month, mIdx) => {
         const monthNum = mIdx + 1;
         costCenters.forEach(cc => {
           categories.forEach(cat => {
             let baseAmount = randInt(2000, 15000);
-            if (monthNum === surpriseMonth && cc === surpriseCC && cat === surpriseCat) {
-              baseAmount = baseAmount * randFloat(1.15, 1.3);
-            }
-            const variance = randFloat(-0.08, 0.12);
+            const isSurprise = surpriseMonths.includes(monthNum);
+            if (isSurprise) { baseAmount = baseAmount * randFloat(1.15, 1.35); }
+            // Positive mode: actuals stay at or under forecast
+            const actualVariance = outcomeMode === 'positive'
+              ? randFloat(-0.08, 0.03)
+              : outcomeMode === 'mid'
+                ? randFloat(-0.05, 0.12)
+                : randFloat(0.05, 0.30);
             const forecastAmount = baseAmount;
             const budgetAmount = baseAmount * randFloat(0.95, 1.05);
             forecastBudget.push({
-              month: month,
+              month,
               cost_center: cc,
               category: cat,
               forecast_amount: forecastAmount.toFixed(2),
               budget_amount: budgetAmount.toFixed(2)
             });
+            // Patch transactions to over/under run based on mode
+            // (done implicitly through the transaction generation above)
           });
         });
       });
-      
+
       renderAll();
+      }); // end withStableScroll
     }
-    
+
     // ========== RATE LEAKAGE FUNCTIONS ==========
+
     
     function renderRateLeakage() {
       const monthFilter = document.getElementById('rateMonthFilter').value;

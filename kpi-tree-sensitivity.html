@@ -53,7 +53,7 @@
     .board-block ul li { font-size: 13px; }
     .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
     .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .chart-wrap { position: relative; width: 100%; }
+    .chart-wrap { position: relative; width: 100%; overflow-anchor: none; }
     .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
     .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
@@ -176,6 +176,9 @@
       font-style: italic;
     }
 
+      .main-content { overflow-anchor: none; }
+    .module-card { overflow-anchor: none; }
+    .data-table { overflow-anchor: none; }
   </style>
 </head>
 <body>
@@ -224,31 +227,31 @@
         <div class="sidebar-title">ASSUMPTIONS</div>
         <div class="input-row">
           <label>Price ($/unit) <span class="help-icon" data-help="The average selling price per unit, subscription, or transaction."></span></label>
-          <input type="number" id="inp-price" value="120" oninput="compute()">
+          <input type="number" id="inp-price" value="120" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Volume (units/mo) <span class="help-icon" data-help="How many units, customers, or transactions per month."></span></label>
-          <input type="number" id="inp-volume" value="3000" oninput="compute()">
+          <input type="number" id="inp-volume" value="3000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>COGS % <span class="help-icon" data-help="Cost of Goods Sold as % of revenue — what it costs to deliver each unit."></span></label>
-          <input type="number" id="inp-cogs" value="40" step="1" oninput="compute()">
+          <input type="number" id="inp-cogs" value="40" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Monthly OpEx ($) <span class="help-icon" data-help="All operating expenses except COGS — salaries, rent, marketing, software, etc."></span></label>
-          <input type="number" id="inp-opex" value="180000" oninput="compute()">
+          <input type="number" id="inp-opex" value="180000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Monthly Churn % <span class="help-icon" data-help="% of customers or revenue lost each month. Affects sustainable volume over time."></span></label>
-          <input type="number" id="inp-churn" value="3" step="0.5" oninput="compute()">
+          <input type="number" id="inp-churn" value="3" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>CAC ($/customer) <span class="help-icon" data-help="Customer Acquisition Cost — how much you spend on sales & marketing to win each new customer."></span></label>
-          <input type="number" id="inp-cac" value="450" oninput="compute()">
+          <input type="number" id="inp-cac" value="450" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Starting Cash ($) <span class="help-icon" data-help="Current cash balance used to calculate runway months."></span></label>
-          <input type="number" id="inp-cash" value="1500000" oninput="compute()">
+          <input type="number" id="inp-cash" value="1500000" oninput="withStableScroll(compute)">
         </div>
       </div>
     </aside>
@@ -368,13 +371,15 @@
     return { revenue, cogsAmt, gp, gm, ebitda, burn, runway, ltv, ltvcac };
   }
 
-  function loadSample() { setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }
+  function loadSample() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
   function randomizeData() {
+    withStableScroll(function(){
     const r=(a,b,s=1)=>Math.round((a+Math.random()*(b-a))/s)*s;
     setInputs({ price:r(20,500,10), volume:r(200,10000,100), cogs:r(20,75,5), opex:r(50000,600000,10000), churn:r(1,15,0.5), cac:r(100,2000,50), cash:r(200000,5000000,100000) });
     document.getElementById('data-badge').textContent='Randomized Data'; document.getElementById('data-badge').className='data-badge random'; compute();
+    });
   }
-  function resetDefaults() { loadSample(); }
+  function resetDefaults() { withStableScroll(function(){ setInputs(SAMPLE); document.getElementById('data-badge').textContent='Sample Data'; document.getElementById('data-badge').className='data-badge'; compute(); }); }
 
   function compute() {
     const inp = getInputs();

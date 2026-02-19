@@ -54,7 +54,7 @@
     .board-block ul li { font-size: 13px; color: var(--text); }
     .what-means { margin-bottom: 16px; padding: 14px; border-left: 3px solid var(--accent); background: rgba(15,118,110,0.04); border-radius: 6px; }
     .what-means p { font-size: 14px; color: var(--text); line-height: 1.6; }
-    .chart-wrap { position: relative; width: 100%; }
+    .chart-wrap { position: relative; width: 100%; overflow-anchor: none; }
     .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .data-table th { text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-weight: 650; font-size: 12px; }
     .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
@@ -154,6 +154,9 @@
       font-style: italic;
     }
 
+      .main-content { overflow-anchor: none; }
+    .module-card { overflow-anchor: none; }
+    .data-table { overflow-anchor: none; }
   </style>
 </head>
 <body>
@@ -203,35 +206,35 @@
         <div class="sidebar-title">ASSUMPTIONS</div>
         <div class="input-row">
           <label>Monthly Revenue ($) <span class="help-icon" data-help="How much money your business collects from customers each month on average."></span></label>
-          <input type="number" id="inp-revenue" value="500000" oninput="compute()">
+          <input type="number" id="inp-revenue" value="500000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>COGS % <span class="help-icon" data-help="Cost of Goods Sold as % of revenue — the direct cost to deliver your product/service."></span></label>
-          <input type="number" id="inp-cogs" value="45" step="1" oninput="compute()">
+          <input type="number" id="inp-cogs" value="45" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>DSO — Days <span class="help-icon" data-help="Days Sales Outstanding: how many days it takes to collect cash after invoicing a customer. Lower = faster cash."></span></label>
-          <input type="number" id="inp-dso" value="45" step="1" oninput="compute()">
+          <input type="number" id="inp-dso" value="45" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>DPO — Days <span class="help-icon" data-help="Days Payable Outstanding: how many days before you pay your suppliers. Higher = you keep cash longer."></span></label>
-          <input type="number" id="inp-dpo" value="30" step="1" oninput="compute()">
+          <input type="number" id="inp-dpo" value="30" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>DIO — Days <span class="help-icon" data-help="Days Inventory Outstanding: how long inventory sits before being sold. Lower = faster cash conversion."></span></label>
-          <input type="number" id="inp-dio" value="20" step="1" oninput="compute()">
+          <input type="number" id="inp-dio" value="20" step="1" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has today to start the 12-month forecast."></span></label>
-          <input type="number" id="inp-cash" value="1200000" oninput="compute()">
+          <input type="number" id="inp-cash" value="1200000" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Monthly Growth % <span class="help-icon" data-help="Expected monthly revenue growth rate. Set to 0 for flat revenue."></span></label>
-          <input type="number" id="inp-growth" value="3" step="0.5" oninput="compute()">
+          <input type="number" id="inp-growth" value="3" step="0.5" oninput="withStableScroll(compute)">
         </div>
         <div class="input-row">
           <label>Monthly OpEx ($) <span class="help-icon" data-help="Operating expenses per month excluding COGS — salaries, rent, software, etc."></span></label>
-          <input type="number" id="inp-opex" value="180000" oninput="compute()">
+          <input type="number" id="inp-opex" value="180000" oninput="withStableScroll(compute)">
         </div>
       </div>
     </aside>
@@ -356,13 +359,16 @@
   const SAMPLE = { revenue: 500000, cogs: 45, dso: 45, dpo: 30, dio: 20, cash: 1200000, growth: 3, opex: 180000 };
 
   function loadSample() {
+    withStableScroll(function() {
     setInputs(SAMPLE);
     document.getElementById('data-badge').textContent = 'Sample Data';
     document.getElementById('data-badge').className = 'data-badge';
     compute();
+    });
   }
 
   function randomizeData() {
+    withStableScroll(function() {
     const r = (a, b, step=1) => Math.round((a + Math.random() * (b - a)) / step) * step;
     setInputs({
       revenue: r(200000, 2000000, 50000),
@@ -377,13 +383,16 @@
     document.getElementById('data-badge').textContent = 'Randomized Data';
     document.getElementById('data-badge').className = 'data-badge random';
     compute();
+    });
   }
 
   function resetDefaults() {
+    withStableScroll(function() {
     setInputs(SAMPLE);
     document.getElementById('data-badge').textContent = 'Sample Data';
     document.getElementById('data-badge').className = 'data-badge';
     compute();
+    });
   }
 
   function compute() {
