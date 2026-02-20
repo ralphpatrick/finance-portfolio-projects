@@ -161,7 +161,67 @@
       .main-content { overflow-anchor: none; }
     .module-card { overflow-anchor: none; }
     .data-table { overflow-anchor: none; }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -193,6 +253,20 @@
       </div>
     </div>
   </section>
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">🏷️</div><div><div class="data-needed-name">Asset Quote / Cost Estimate</div><div class="data-needed-desc">Purchase price or project cost → the capex amount being evaluated</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🏦</div><div><div class="data-needed-name">Loan / Lease Term Sheet</div><div class="data-needed-desc">Interest rate, term, residual value → financing option inputs</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📊</div><div><div class="data-needed-name">Depreciation Policy</div><div class="data-needed-desc">Useful life &amp; method (straight-line etc.) → depreciation schedule</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">💵</div><div><div class="data-needed-name">Cash Flow Forecast</div><div class="data-needed-desc">Available cash &amp; burn rate → assesses cash purchase feasibility</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📈</div><div><div class="data-needed-name">Discount Rate / WACC</div><div class="data-needed-desc">Cost of capital for the business → NPV &amp; IRR comparison</div></div></div>
+      </div>
+    </div>
+  </div>
 
   <div class="module-layout">
     <aside class="sidebar">
@@ -328,11 +402,11 @@
   </div>
 
   <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
+    <nav class="next-module-bar" aria-label="Next recommended module">
     <div>
       <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">KPI Tree & Driver Sensitivity</div>
-      <div class="next-module-why">Asset decision made — now rank all the levers that move your overall runway.</div>
+      <div class="next-module-title">KPI Tree &amp; Driver Sensitivity</div>
+      <div class="next-module-why">Asset decision is made — now rank which levers across the whole business move profit most.</div>
     </div>
     <div class="next-module-actions">
       <a class="btn btn-solid" href="kpi-tree-sensitivity.html">Open KPI Tree →</a>

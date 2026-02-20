@@ -375,6 +375,10 @@
       cursor: pointer;
     }
   </style>
+  <style>
+    /* Safety net: .reveal visible even without external style.css loaded */
+    .reveal { opacity: 1 !important; transform: none !important; }
+  </style>
 </head>
 
 <body>
@@ -464,36 +468,78 @@
     </section>
 
     <!-- ── 2) Start Here ───────────────────────────────────────── -->
-    <section class="section section-muted" id="start-here">
+        <section class="section section-muted" id="start-here">
       <div class="container">
         <div class="section-head reveal">
           <h2>Start here <span style="font-size:14px;font-weight:500;color:var(--muted);">(recommended path)</span></h2>
           <p class="section-subhead">
-            New here? These three models give you the fastest, clearest picture of how a business is actually performing.
+            Follow this sequence for the complete CFO / FP&amp;A picture — from planning the model to ranking every lever that moves profit.
           </p>
         </div>
 
-        <div class="start-here-grid">
+        <div class="start-here-grid" style="grid-template-columns: repeat(3, 1fr);">
 
           <div class="start-step reveal">
             <div class="start-step-num">1</div>
-            <p class="start-step-title">Unit Economics</p>
-            <p class="start-step-why">Can we actually afford to grow? This tells you if spending more on customers makes you richer or just faster at losing money.</p>
-            <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
+            <p class="start-step-title">Core FP&amp;A Simulator</p>
+            <p class="start-step-why">Start here. Build the financial plan, set scenarios, and stress-test your base case across industries before looking at anything else.</p>
+            <a class="btn btn-solid" href="core-fp&a.html">Open Core FP&amp;A →</a>
           </div>
 
           <div class="start-step reveal">
             <div class="start-step-num">2</div>
-            <p class="start-step-title">Working Capital FP&amp;A</p>
-            <p class="start-step-why">Why does cash keep disappearing even when sales look fine? This maps where money gets stuck — in unpaid invoices, slow payments, or inventory sitting idle.</p>
-            <a class="btn btn-solid" href="working-capital.html">Open Working Capital →</a>
+            <p class="start-step-title">Commercial / Sales Finance</p>
+            <p class="start-step-why">Go beyond top-line revenue. See the true margin impact by channel, the real cost of discounts, and where promotions are actually hurting P&amp;L.</p>
+            <a class="btn btn-solid" href="commercial-sales.html">Open Commercial Sales →</a>
           </div>
 
           <div class="start-step reveal">
             <div class="start-step-num">3</div>
+            <p class="start-step-title">Revenue Bridge &amp; Cohort Retention</p>
+            <p class="start-step-why">Explain why revenue changed month over month — and whether growth is healthy or quietly leaking through churn and contraction.</p>
+            <a class="btn btn-solid" href="revenue-bridge.html">Open Revenue Bridge →</a>
+          </div>
+
+          <div class="start-step reveal">
+            <div class="start-step-num">4</div>
+            <p class="start-step-title">Unit Economics</p>
+            <p class="start-step-why">Can you actually afford to grow? This tells you if acquiring more customers makes the business richer — or just faster at losing money.</p>
+            <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
+          </div>
+
+          <div class="start-step reveal">
+            <div class="start-step-num">5</div>
+            <p class="start-step-title">Working Capital FP&amp;A</p>
+            <p class="start-step-why">Why does cash keep disappearing even when sales look fine? Maps where money gets stuck — in slow collections, late payments, or idle inventory.</p>
+            <a class="btn btn-solid" href="working-capital.html">Open Working Capital →</a>
+          </div>
+
+          <div class="start-step reveal">
+            <div class="start-step-num">6</div>
             <p class="start-step-title">Operations Spend Analytics</p>
-            <p class="start-step-why">Stop leakage and control spend before it becomes a problem. See exactly which vendors, categories, or months are costing more than they should.</p>
-            <a class="btn btn-solid" href="operations-spend.html">Open Ops Spend →</a>
+            <p class="start-step-why">Stop leakage before it becomes a problem. See which vendors, rate cards, or accruals are costing more than the budget allows.</p>
+            <a class="btn btn-solid" href="operations-spend.html">Open Ops Finance →</a>
+          </div>
+
+          <div class="start-step reveal">
+            <div class="start-step-num">7</div>
+            <p class="start-step-title">Indirect Cost &amp; Headcount CoE</p>
+            <p class="start-step-why">Model the biggest internal cost: your people. Fully loaded salaries, ramp curves, capacity gaps, and the cash impact of every hire.</p>
+            <a class="btn btn-solid" href="indirect-cost-headcount.html">Open Headcount →</a>
+          </div>
+
+          <div class="start-step reveal">
+            <div class="start-step-num">8</div>
+            <p class="start-step-title">Capex &amp; Financing Decisions</p>
+            <p class="start-step-why">Buy cash, finance with a loan, or lease — and see exactly what each option does to your cash balance, P&amp;L, and runway over time.</p>
+            <a class="btn btn-solid" href="capex-financing.html">Open Capex &amp; Financing →</a>
+          </div>
+
+          <div class="start-step reveal" style="border-color:rgba(15,118,110,0.25);background:rgba(15,118,110,0.03);">
+            <div class="start-step-num" style="background:rgba(15,118,110,0.15);border-color:rgba(15,118,110,0.35);">9</div>
+            <p class="start-step-title">KPI Tree &amp; Driver Sensitivity</p>
+            <p class="start-step-why">The final lens. Rank every lever across the business by its impact on profit and runway — then loop back to the plan with the right priorities.</p>
+            <a class="btn btn-solid" href="kpi-tree-sensitivity.html">Open KPI Tree →</a>
           </div>
 
         </div>
@@ -739,262 +785,8 @@
 
         </div><!-- end problem-grid -->
 
-        <!-- Credibility strip -->
-        <div class="cred-strip reveal">
-          <span class="cred-strip-label">Built with</span>
-          <span class="cred-item"><span class="cred-dot"></span>Driver-based modeling</span>
-          <span class="cred-item"><span class="cred-dot"></span>Scenario logic (Base / Upside / Downside)</span>
-          <span class="cred-item"><span class="cred-dot"></span>Decision-first outputs</span>
-          <span class="cred-item"><span class="cred-dot"></span>No frameworks — runs anywhere</span>
-        </div>
-
-      </div>
     </section>
 
-    <!-- ── 4) Core Portfolio Projects ─────────────────────────── -->
-    <section class="section section-muted" id="projects">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2>Core Portfolio Projects</h2>
-          <p class="section-subhead">
-            Product-grade FP&amp;A artifacts—built to be used, not just presented.
-          </p>
-        </div>
-
-        <div class="project-grid">
-          <!-- Project 1 -->
-          <article id="card-core-fpa" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Core FP&amp;A foundation</div>
-                <h3 class="project-title">Unified FP&amp;A Core Model</h3>
-              </div>
-              <span class="pill">Flagship</span>
-            </div>
-            <p class="project-pitch">The backbone of corporate FP&amp;A decision-making.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Numbers are scattered—no one plan the whole team agrees on.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: are we on track—or do we need to cut, slow, or push harder?</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="core-fp&a.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 2 -->
-          <article id="card-commercial-sales" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Commercial decision support</div>
-                <h3 class="project-title">Commercial / Sales Finance Model</h3>
-              </div>
-              <span class="pill">Revenue</span>
-            </div>
-            <p class="project-pitch">Evaluating revenue decisions beyond top-line growth.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">You don't know which deals, promos, or channels actually make money.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: run the promo, raise prices, or drop the losing channel.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="commercial-sales.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 3 -->
-          <article id="card-unit-economics" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Growth &amp; scalability</div>
-                <h3 class="project-title">SaaS / Fintech Unit Economics</h3>
-              </div>
-              <span class="pill">Unit economics</span>
-            </div>
-            <p class="project-pitch">Understanding growth, profitability, and scalability.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Fast growth looks great—until you realize it's not paying for itself.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: keep spending to grow, or pull back until the math works.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="unit-economics.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 4 -->
-          <article id="card-indirect-cost" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Cost visibility</div>
-                <h3 class="project-title">Indirect Cost &amp; Headcount CoE</h3>
-              </div>
-              <span class="pill">Cost control</span>
-            </div>
-            <p class="project-pitch">Making overhead costs transparent and controllable.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Your team is growing—but no one knows if you can afford the next hire.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: approve the hire, freeze headcount, or restructure the team now.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="indirect-cost-headcount.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 5 -->
-          <article id="card-operations-spend" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Operational spend</div>
-                <h3 class="project-title">Operations Finance &amp; Spend Analytics</h3>
-              </div>
-              <span class="pill">Ops</span>
-            </div>
-            <p class="project-pitch">Controlling spend in complex, operational environments.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Spending keeps rising but no one can explain exactly where it's going.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: cut the waste, renegotiate vendors, or freeze discretionary spend.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="operations-spend.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 6 -->
-          <article id="card-working-capital" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Cash flow · Balance sheet</div>
-                <h3 class="project-title">Working Capital FP&amp;A</h3>
-              </div>
-              <span class="pill">Cash</span>
-            </div>
-            <p class="project-pitch">How collections, payments, and inventory timing eat—or free—your cash.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Revenue looks fine, but cash keeps disappearing and no one knows why.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: tighten collections, extend payables, or fix inventory before scaling.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="working-capital.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 7 -->
-          <article id="card-revenue-bridge" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Revenue · Cohorts · Retention</div>
-                <h3 class="project-title">Revenue Bridge &amp; Cohort Retention</h3>
-              </div>
-              <span class="pill">Retention</span>
-            </div>
-            <p class="project-pitch">Explaining why revenue changed—and whether growth is real or just leaking.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Revenue grew, but churn is quietly eating the foundation nobody's watching.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: fix retention first, or scale acquisition while the base is leaking.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="revenue-bridge.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 8 -->
-          <article id="card-capex-financing" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">Capex · Depreciation · Financing</div>
-                <h3 class="project-title">Capex &amp; Financing Decisions</h3>
-              </div>
-              <span class="pill">Capex</span>
-            </div>
-            <p class="project-pitch">Buy cash, take a loan, or lease—and what each does to your cash and P&amp;L.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">You need a major asset, but you're not sure if buying it outright kills your runway.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: pay cash, finance with a loan, or lease—with NPV and payback to back it.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="capex-financing.html">View Model</a>
-            </div>
-          </article>
-
-          <!-- Project 9 -->
-          <article id="card-kpi-tree" class="project-card reveal">
-            <div class="project-top">
-              <div>
-                <div class="project-label">KPI Tree · Sensitivity · Drivers</div>
-                <h3 class="project-title">KPI Tree &amp; Driver Sensitivity</h3>
-              </div>
-              <span class="pill">Drivers</span>
-            </div>
-            <p class="project-pitch">Rank the levers that move EBITDA and runway—and focus on the ones that actually matter.</p>
-            <div class="project-meta">
-              <div class="meta-block">
-                <div class="meta-title">Business problem</div>
-                <div class="meta-text">Everyone has a theory on what to fix, but no one has ranked which levers matter most.</div>
-              </div>
-              <div class="meta-block">
-                <div class="meta-title">Executive outcome</div>
-                <div class="meta-text">Decide: cut OpEx, raise price, or grow volume—based on actual driver impact.</div>
-              </div>
-            </div>
-            <div class="project-actions">
-              <a class="btn btn-solid" href="kpi-tree-sensitivity.html">View Model</a>
-            </div>
-          </article>
-
-        </div><!-- end project-grid -->
-
-        <div class="note reveal">
-          <span class="note-dot" aria-hidden="true"></span>
-          Models under construction 🚧🏗️.
-        </div>
-      </div>
-    </section>
 
     <!-- ── 5) System View ──────────────────────────────────────── -->
     <section class="section" id="system">
@@ -1129,7 +921,7 @@
             <span class="contact-card-value">LinkedIn / Resume</span>
             <span class="contact-card-arrow">↗</span>
           </a>
-          <a class="contact-card" href="mailto:ralphpatrickdivina@gmail.com">
+          <a class="contact-card" href="/cdn-cgi/l/email-protection#d5a7b4b9a5bda5b4a1a7bcb6beb1bca3bcbbb495b2b8b4bcb9fbb6bab8">
             <span class="contact-card-label">Direct</span>
             <span class="contact-card-value">Email</span>
             <span class="contact-card-arrow">↗</span>
@@ -1177,6 +969,3 @@
   </main>
 
   <a class="to-top" href="#top" aria-label="Back to top">↑</a>
-  <script src="main.js"></script>
-</body>
-</html>

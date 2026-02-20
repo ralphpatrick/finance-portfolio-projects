@@ -754,7 +754,67 @@
       flex-wrap: wrap;
       flex-shrink: 0;
     }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
   <!-- Skip link for accessibility -->
@@ -822,7 +882,23 @@
     </div>
   </section>
 
-  <!-- MAIN CONTENT -->
+
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">📊</div><div><div class="data-needed-name">P&L / Income Statement</div><div class="data-needed-desc">Revenue, COGS, gross margin &amp; OpEx → core model inputs</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🏦</div><div><div class="data-needed-name">Balance Sheet Snapshot</div><div class="data-needed-desc">Assets, liabilities &amp; equity → working capital &amp; solvency context</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">💵</div><div><div class="data-needed-name">Cash Flow Statement</div><div class="data-needed-desc">Operating, investing &amp; financing flows → runway &amp; liquidity</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📅</div><div><div class="data-needed-name">Budget / Annual Plan</div><div class="data-needed-desc">Approved targets by cost centre → variance &amp; scenario base</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📈</div><div><div class="data-needed-name">Historical Actuals (2–3 yrs)</div><div class="data-needed-desc">Past performance by month → trend &amp; seasonality calibration</div></div></div>
+      </div>
+    </div>
+  </div>
+
+<!-- MAIN CONTENT -->
   <main id="main" class="main-content">
     <div class="container">
       <div class="layout-grid">
@@ -896,14 +972,14 @@
     </div>
   
   <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
+    <nav class="next-module-bar" aria-label="Next recommended module">
     <div>
       <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">Unit Economics</div>
-      <div class="next-module-why">Plan is set — now validate whether each customer acquisition is actually worth it.</div>
+      <div class="next-module-title">Commercial / Sales Finance</div>
+      <div class="next-module-why">Plan is built — now see how revenue decisions hold up at the channel and margin level.</div>
     </div>
     <div class="next-module-actions">
-      <a class="btn btn-solid" href="unit-economics.html">Open Unit Economics →</a>
+      <a class="btn btn-solid" href="commercial-sales.html">Open Commercial Sales →</a>
       <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
     </div>
   </nav>

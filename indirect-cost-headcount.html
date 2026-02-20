@@ -906,7 +906,67 @@
       border-top: 1px solid rgba(12,23,45,0.10); padding-top: 10px;
     }
     .decision-box-next span { color: #1b4d7a; }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
   <!-- Header -->
@@ -948,6 +1008,21 @@
       </div>
     </div>
   </div>
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">👤</div><div><div class="data-needed-name">Headcount Register</div><div class="data-needed-desc">All employees with role, level, dept &amp; hire date → base cost foundation</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">💰</div><div><div class="data-needed-name">Compensation &amp; Benefits</div><div class="data-needed-desc">Salary, bonus, benefits &amp; payroll taxes → fully loaded cost build</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📅</div><div><div class="data-needed-name">Hiring Plan / Req List</div><div class="data-needed-desc">Approved open roles &amp; target start dates → forward cost projection</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">⚡</div><div><div class="data-needed-name">Productivity / Ramp Data</div><div class="data-needed-desc">Output or revenue per head by tenure → capacity &amp; ramp modeling</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">🏦</div><div><div class="data-needed-name">Cash &amp; Runway Snapshot</div><div class="data-needed-desc">Current cash balance &amp; burn → links hiring decisions to runway</div></div></div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Main Module Layout -->
   <div class="module-layout">
@@ -1270,14 +1345,14 @@
 
     
   <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
+    <nav class="next-module-bar" aria-label="Next recommended module">
     <div>
       <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">Capex & Financing Decisions</div>
-      <div class="next-module-why">Headcount costs are clear — now model the next big asset or equipment decision.</div>
+      <div class="next-module-title">Capex &amp; Financing Decisions</div>
+      <div class="next-module-why">Headcount costs are sized — now model the next big asset or equipment decision.</div>
     </div>
     <div class="next-module-actions">
-      <a class="btn btn-solid" href="capex-financing.html">Open Capex & Financing →</a>
+      <a class="btn btn-solid" href="capex-financing.html">Open Capex &amp; Financing →</a>
       <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
     </div>
   </nav>

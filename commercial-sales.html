@@ -460,7 +460,67 @@
       .main-content { overflow-anchor: none; }
     .module-card { overflow-anchor: none; }
     .data-table { overflow-anchor: none; }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
 
@@ -500,6 +560,20 @@
         </div>
       </div>
     </section>
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">📊</div><div><div class="data-needed-name">Channel P&L Report</div><div class="data-needed-desc">Revenue &amp; cost broken out by sales channel → drives margin analysis</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🏷️</div><div><div class="data-needed-name">Pricing &amp; Rate Cards</div><div class="data-needed-desc">List prices, discount tiers &amp; promotional rates → price/volume/mix</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📋</div><div><div class="data-needed-name">Promotion Log</div><div class="data-needed-desc">Past and current promo details &amp; spend → measures ROI pre/post</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">💰</div><div><div class="data-needed-name">Accrual Schedule</div><div class="data-needed-desc">Trade spend accruals &amp; settlements → keeps P&L from being misstated</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📄</div><div><div class="data-needed-name">Sales Order Data</div><div class="data-needed-desc">Volume sold per SKU/channel by period → quantity &amp; mix drivers</div></div></div>
+      </div>
+    </div>
+  </div>
 
     <!-- Main Layout with Sidebar -->
     <div class="module-layout">
@@ -740,11 +814,11 @@
 
   
   <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
+    <nav class="next-module-bar" aria-label="Next recommended module">
     <div>
       <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">Revenue Bridge & Cohort Retention</div>
-      <div class="next-module-why">You know channel profit — now see if retention is keeping that revenue.</div>
+      <div class="next-module-title">Revenue Bridge &amp; Cohort Retention</div>
+      <div class="next-module-why">You know channel profit — now see if that revenue is actually being retained over time.</div>
     </div>
     <div class="next-module-actions">
       <a class="btn btn-solid" href="revenue-bridge.html">Open Revenue Bridge →</a>

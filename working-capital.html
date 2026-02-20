@@ -225,7 +225,67 @@
     }
     .kpi-tip-icon:hover + .kpi-tooltip,
     .kpi-tip-icon:focus + .kpi-tooltip { display: block; }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -258,57 +318,24 @@
             <span class="chip">AR / AP / Inventory</span>
           </div>
         </div>
-
-        <!-- DATA SOURCES PANEL -->
-        <div class="data-sources-card" style="width:100%; flex-shrink:0;">
-          <div class="data-sources-title">📂 &nbsp;Data needed for this module</div>
-          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px;">
-
-            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
-              <div style="background:#eff6ff; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">🏦</div>
-              <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">Bank Statement</div>
-                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Cash inflows &amp; outflows → net cash &amp; runway</div>
-              </div>
-            </div>
-
-            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
-              <div style="background:#f0fdf9; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📄</div>
-              <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">AR Register</div>
-                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Customer payment aging → drives DSO</div>
-              </div>
-            </div>
-
-            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
-              <div style="background:#fef3c7; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📋</div>
-              <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">AP Register</div>
-                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Supplier payment ledger → drives DPO</div>
-              </div>
-            </div>
-
-            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
-              <div style="background:#f5f3ff; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📦</div>
-              <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">Inventory Report</div>
-                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Stock turnover → days held (DIO)</div>
-              </div>
-            </div>
-
-            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
-              <div style="background:#fdf2f8; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📊</div>
-              <div>
-                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">P&amp;L Statement</div>
-                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Revenue, COGS &amp; OpEx → all projections</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
       </div>
     </div>
   </section>
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">🏦</div><div><div class="data-needed-name">Bank Statement</div><div class="data-needed-desc">Cash inflows &amp; outflows → net cash &amp; runway</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">📄</div><div><div class="data-needed-name">AR Register</div><div class="data-needed-desc">Customer payment aging → drives DSO</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📋</div><div><div class="data-needed-name">AP Register</div><div class="data-needed-desc">Supplier payment ledger → drives DPO</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📦</div><div><div class="data-needed-name">Inventory Report</div><div class="data-needed-desc">Stock turnover → days held (DIO)</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📊</div><div><div class="data-needed-name">P&L Statement</div><div class="data-needed-desc">Revenue, COGS &amp; OpEx → all projections</div></div></div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="module-layout">
     <!-- SIDEBAR -->
@@ -820,5 +847,77 @@
   }
 
 </script>
+
+<!-- STICKY NEXT RECOMMENDED FOOTER -->
+<style>
+  .next-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;
+    background: white; border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 24px rgba(11,18,32,0.08);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    transform: translateY(100%);
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .next-bar.is-visible {
+    transform: translateY(0);
+  }
+  .next-bar-left {}
+  .next-bar-eyebrow {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.09em; color: var(--muted); margin-bottom: 2px;
+  }
+  .next-bar-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .next-bar-sub { font-size: 12px; color: var(--muted); }
+  .next-bar-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .next-bar-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 700;
+    text-decoration: none; border: 1px solid var(--text); background: var(--text); color: white;
+    transition: opacity 140ms ease;
+  }
+  .next-bar-cta:hover { opacity: 0.85; }
+  .next-bar-ghost {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    text-decoration: none; border: 1px solid var(--border); background: white; color: var(--text);
+    transition: border-color 140ms, box-shadow 140ms;
+  }
+  .next-bar-ghost:hover { border-color: rgba(12,23,45,0.2); box-shadow: 0 4px 12px rgba(11,18,32,0.07); }
+  /* Push page content up only when footer is visible */
+  body.footer-visible { padding-bottom: 72px; }
+  @media (max-width: 600px) {
+    .next-bar { flex-direction: column; align-items: flex-start; padding: 14px 20px; }
+    .next-bar-actions { width: 100%; justify-content: flex-end; }
+  }
+</style>
+
+<footer class="next-bar" role="contentinfo">
+  <div class="next-bar-left">
+    <div class="next-bar-eyebrow">Next Recommended</div>
+    <div class="next-bar-title">Operations Finance &amp; Spend Analytics</div>
+    <div class="next-bar-sub">Cash cycle is mapped — now control where operational spend is actually going.</div>
+  </div>
+  <div class="next-bar-actions">
+    <a href="operations-spend.html" class="next-bar-cta">Open Ops Finance →</a>
+    <a href="index.html" class="next-bar-ghost">&larr; Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+  // Show next-bar only when scrolled within 300px of the bottom
+  (function () {
+    const bar = document.querySelector('.next-bar');
+    if (!bar) return;
+    function onScroll() {
+      const scrolled = window.scrollY + window.innerHeight;
+      const total = document.documentElement.scrollHeight;
+      bar.classList.toggle('is-visible', scrolled >= total - 300);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
+
 </body>
 </html>

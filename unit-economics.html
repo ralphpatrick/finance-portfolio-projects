@@ -946,7 +946,67 @@
       border-top: 1px solid rgba(12,23,45,0.10); padding-top: 10px;
     }
     .decision-box-next span { color: #1b4d7a; }
-  </style>
+  
+    /* ── Data-needed strip ── */
+    .data-needed-section {
+      padding: 0 0 0 0;
+      border-bottom: 1px solid var(--border, #e5e8ef);
+    }
+    .data-needed-wrap {
+      max-width: var(--max-w, 1200px);
+      margin: 0 auto;
+      padding: 20px 32px 24px;
+    }
+    .data-needed-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--muted, #6b7280);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-needed-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 8px;
+    }
+    .data-needed-item {
+      padding: 10px 12px;
+      border: 1px solid var(--border, #e5e8ef);
+      border-radius: 9px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: #fafbfc;
+    }
+    .data-needed-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 13px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .data-needed-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text, #0b1220);
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+    .data-needed-desc {
+      font-size: 10px;
+      color: var(--muted, #6b7280);
+      line-height: 1.5;
+    }
+
+</style>
 </head>
 <body>
 
@@ -986,6 +1046,20 @@
         </div>
       </div>
     </section>
+
+  <!-- DATA NEEDED STRIP -->
+  <div class="data-needed-section">
+    <div class="data-needed-wrap">
+      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
+      <div class="data-needed-grid">
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">💸</div><div><div class="data-needed-name">CAC by Channel</div><div class="data-needed-desc">Marketing &amp; sales spend per channel vs. new customers won → CAC</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">📅</div><div><div class="data-needed-name">Cohort Retention Data</div><div class="data-needed-desc">Monthly revenue retained per cohort → LTV curve shape</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">🧾</div><div><div class="data-needed-name">COGS Breakdown</div><div class="data-needed-desc">Direct costs to serve one customer → contribution margin per unit</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📊</div><div><div class="data-needed-name">P&L / Income Statement</div><div class="data-needed-desc">Revenue, gross margin &amp; OpEx → payback &amp; profitability context</div></div></div>
+          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📈</div><div><div class="data-needed-name">Growth &amp; Churn Metrics</div><div class="data-needed-desc">Monthly new, churned &amp; expanded customers → run-rate forecast</div></div></div>
+      </div>
+    </div>
+  </div>
 
     <!-- Main Layout with Sidebar -->
     <div class="module-layout">
@@ -1440,11 +1514,11 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
 
   
   <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
+    <nav class="next-module-bar" aria-label="Next recommended module">
     <div>
       <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">Working Capital FP&A</div>
-      <div class="next-module-why">You know your unit economics — now see where the cash actually goes.</div>
+      <div class="next-module-title">Working Capital FP&amp;A</div>
+      <div class="next-module-why">Unit economics look good — now see how collections, payables and inventory affect your cash.</div>
     </div>
     <div class="next-module-actions">
       <a class="btn btn-solid" href="working-capital.html">Open Working Capital →</a>
