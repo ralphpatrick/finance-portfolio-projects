@@ -37,8 +37,12 @@
       return;
     }
 
-    // Module open (internal .html pages)
-    if (href.endsWith(".html") && !href.startsWith("http")) {
+    // Module open (internal .html pages) — supports relative OR absolute internal links
+    const isHtml = href.endsWith(".html");
+    const isInternalAbsolute = href.startsWith("http") && href.includes(SITE_HOST);
+    const isInternalRelative = !href.startsWith("http");
+
+    if (isHtml && (isInternalRelative || isInternalAbsolute)) {
       gtag("event", "open_module", { link_url: href, link_text: text });
       return;
     }
@@ -125,6 +129,7 @@
     });
   })();
 })();
+
 /* =========================================
    FP&A Portfolio — JS
    Minimal: mobile nav + reveal animations + back-to-top + footer year
