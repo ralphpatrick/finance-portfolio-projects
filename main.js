@@ -1,8 +1,9 @@
-// GA4 tracking + recruiter action events + module engagement time
+// GA4 tracking + recruiter action events + module engagement time (30/60/120 intent)
 (function () {
   const MEASUREMENT_ID = "G-G86TZJHY3K";
+  const SITE_HOST = "ralphpatrick.github.io";
 
-  // Only skip if GA is already initialized
+  // Only skip if GA is already initialized AND gtag exists
   if (window.__ga4_loaded && typeof window.gtag === "function") return;
   window.__ga4_loaded = true;
 
@@ -20,25 +21,30 @@
   gtag("js", new Date());
   gtag("config", MEASUREMENT_ID);
 
-  // Track clicks (modules + outbound recruiter actions)
+  // =========================================
+  // Click tracking (modules + recruiter actions)
+  // =========================================
   document.addEventListener("click", (e) => {
     const a = e.target && e.target.closest ? e.target.closest("a") : null;
     if (!a || typeof window.gtag !== "function") return;
 
-    const href = a.getAttribute("href") || "";
+    const href = (a.getAttribute("href") || "").trim();
     const text = (a.textContent || "").trim().slice(0, 80);
 
+    // Email click
     if (href.startsWith("mailto:") || href.includes("/cdn-cgi/l/email-protection")) {
       gtag("event", "click_email", { link_url: href, link_text: text });
       return;
     }
 
-    if (href.endsWith(".html")) {
+    // Module open (internal .html pages)
+    if (href.endsWith(".html") && !href.startsWith("http")) {
       gtag("event", "open_module", { link_url: href, link_text: text });
       return;
     }
 
-    const isExternal = href.startsWith("http") && !href.includes("ralphpatrick.github.io");
+    // Outbound clicks
+    const isExternal = href.startsWith("http") && !href.includes(SITE_HOST);
     if (isExternal) {
       const isLinkedIn = href.includes("linkedin.com");
       const isGitHub = href.includes("github.com");
@@ -50,32 +56,73 @@
     }
   });
 
-  // Track time on module (fires at 30s, 60s, 120s while tab is active)
-  (function trackTimeOnModule() {
-    const path = location.pathname || "";
-    const isModule = path.endsWith(".html") && !path.endsWith("index.html");
+  // =========================================
+  // Module engagement time (TRUE engaged seconds)
+  // Fires intent events at 30s / 60s / 120s
+  // ONLY counts while tab is visible
+  // =========================================
+  (function trackModuleIntent() {
+    const file = (location.pathname || "").split("/").pop() || "";
+    const isModule = file.endsWith(".html") && file !== "index.html";
     if (!isModule || typeof window.gtag !== "function") return;
 
-    const moduleName = path.split("/").pop();
-    const marks = [30, 60, 120];
+    const moduleName = file; // e.g., working-capital.html
+    const marks = [
+      { sec: 30, event: "module_intent_low" },
+      { sec: 60, event: "module_intent_med" },
+      { sec: 120, event: "module_intent_high" }
+    ];
+
+    let engagedSeconds = 0;
     const fired = new Set();
+    let timerId = null;
 
-    function fire(seconds) {
+    function tick() {
       if (document.visibilityState !== "visible") return;
-      if (fired.has(seconds)) return;
-      fired.add(seconds);
 
-      window.gtag("event", "module_engaged", {
-        module: moduleName,
-        seconds_engaged: seconds
-      });
+      engagedSeconds += 1;
 
-      if (seconds >= 120) window.gtag("event", "module_intent_high", { module: moduleName });
-      else if (seconds >= 60) window.gtag("event", "module_intent_med", { module: moduleName });
-      else if (seconds >= 30) window.gtag("event", "module_intent_low", { module: moduleName });
+      for (const m of marks) {
+        if (engagedSeconds >= m.sec && !fired.has(m.sec)) {
+          fired.add(m.sec);
+
+          // Generic "engaged" event (lets you graph engagement marks)
+          gtag("event", "module_engaged", {
+            module: moduleName,
+            seconds_engaged: m.sec
+          });
+
+          // Tiered intent event (cleaner for key event)
+          gtag("event", m.event, {
+            module: moduleName,
+            seconds_engaged: m.sec
+          });
+        }
+      }
+
+      // Stop after highest intent fires
+      if (fired.has(120)) stop();
     }
 
-    marks.forEach((sec) => setTimeout(() => fire(sec), sec * 1000));
+    function start() {
+      if (timerId) return;
+      timerId = setInterval(tick, 1000);
+    }
+
+    function stop() {
+      if (!timerId) return;
+      clearInterval(timerId);
+      timerId = null;
+    }
+
+    // Start immediately if visible
+    if (document.visibilityState === "visible") start();
+
+    // Pause/resume on tab visibility changes
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") start();
+      else stop();
+    });
   })();
 })();
 /* =========================================
