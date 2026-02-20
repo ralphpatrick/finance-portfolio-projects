@@ -1,21 +1,56 @@
-// GA4 tracking (loaded once for all pages that include main.js)
+// GA4 tracking + recruiter action events (loaded once for all pages that include main.js)
 (function () {
   const MEASUREMENT_ID = "G-G86TZJHY3K";
 
   if (window.__ga4_loaded) return;
   window.__ga4_loaded = true;
 
+  // Load gtag.js
   const s = document.createElement("script");
   s.async = true;
   s.src = "https://www.googletagmanager.com/gtag/js?id=" + MEASUREMENT_ID;
   document.head.appendChild(s);
 
+  // Init gtag
   window.dataLayer = window.dataLayer || [];
   function gtag(){ window.dataLayer.push(arguments); }
   window.gtag = window.gtag || gtag;
 
   gtag("js", new Date());
   gtag("config", MEASUREMENT_ID);
+
+  // Track clicks (modules + outbound recruiter actions)
+  document.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest ? e.target.closest("a") : null;
+    if (!a || !window.gtag) return;
+
+    const href = a.getAttribute("href") || "";
+    const text = (a.textContent || "").trim().slice(0, 80);
+
+    // Email click (mailto or Cloudflare email protection)
+    if (href.startsWith("mailto:") || href.includes("/cdn-cgi/l/email-protection")) {
+      gtag("event", "click_email", { link_url: href, link_text: text });
+      return;
+    }
+
+    // Module open (internal .html pages)
+    if (href.endsWith(".html")) {
+      gtag("event", "open_module", { link_url: href, link_text: text });
+      return;
+    }
+
+    // Outbound clicks (LinkedIn, GitHub, other)
+    const isExternal = href.startsWith("http") && !href.includes("ralphpatrick.github.io");
+    if (isExternal) {
+      const isLinkedIn = href.includes("linkedin.com");
+      const isGitHub = href.includes("github.com");
+
+      gtag("event", isLinkedIn ? "click_linkedin" : isGitHub ? "click_github" : "outbound_click", {
+        link_url: href,
+        link_text: text
+      });
+    }
+  });
 })();
 /* =========================================
    FP&A Portfolio — JS
