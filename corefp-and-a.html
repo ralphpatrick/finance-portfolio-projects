@@ -755,6 +755,235 @@
       flex-shrink: 0;
     }
   
+    /* ── Print / CFO Pack ── */
+    @media print {
+      .site-header, .module-actions, .tab-section, .sidebar, .data-needed-section,
+      .next-module-bar, .notification, #varianceUploadSection, .btn-no-print,
+      #topDriversCard { display: none !important; }
+      .layout-grid { grid-template-columns: 1fr !important; }
+      .chart-grid > *:not(:first-child) { display: none !important; }
+      body { background: white; color: #000; }
+      .kpi-grid { grid-template-columns: repeat(4,1fr) !important; }
+      .main-content { padding: 0 !important; }
+      .card, .kpi-card, .commentary { box-shadow: none !important; border: 1px solid #ccc !important; }
+      #varianceModeContent { display: none !important; }
+      #printTitle { display: block !important; font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+    }
+    #printTitle { display: none; }
+
+    /* ── Mode Toggle ── */
+    .mode-toggle {
+      display: flex; gap: 4px; align-items: center;
+      background: var(--bg-muted); border: 1px solid var(--border);
+      border-radius: 999px; padding: 4px; margin-bottom: 16px;
+    }
+    .mode-toggle .tab { border-radius: 999px; padding: 7px 18px; font-size: 13px; background: transparent; border: none; }
+    .mode-toggle .tab.active { background: var(--accent); color: white; border: none; }
+
+    /* ── Error Banner ── */
+    .error-banner {
+      background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px;
+      padding: 12px 16px; margin-bottom: 16px; color: #dc2626; font-size: 14px; font-weight: 600;
+    }
+
+    /* ── Variance Table ── */
+    .variance-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+    .variance-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .variance-table th { background: var(--bg-muted); padding: 10px 14px; text-align: left;
+      font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--muted); border-bottom: 1px solid var(--border); }
+    .variance-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .variance-table tbody tr:last-child td { border-bottom: none; }
+    .variance-table tbody tr:hover { background: var(--bg-muted); }
+    .var-pos, .fav { color: #059669; font-weight: 700; }
+    .var-neg, .unfav { color: #dc2626; font-weight: 700; }
+    .var-neutral { color: var(--muted); }
+    .row-total td { font-weight: 700; background: var(--bg-muted); }
+    .narrative-item { margin-bottom: 16px; }
+    .narrative-item-label { font-size: 14px; font-weight: 650; color: var(--text); margin-bottom: 6px; }
+    .narrative-item-actions { font-size: 13px; color: var(--muted); white-space: pre-line; line-height: 1.6; }
+
+    /* ── Narrative Card ── */
+    .narrative-card {
+      background: linear-gradient(135deg, var(--accent-soft), rgba(27,77,122,0.05));
+      border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px;
+    }
+    .narrative-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+    .narrative-card ul { margin: 0; padding-left: 18px; }
+    .narrative-card li { font-size: 13px; line-height: 1.7; color: var(--muted); }
+    .narrative-card strong { color: var(--text); }
+
+    /* ── Top Drivers Card ── */
+    #topDriversCard { background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    .driver-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
+    .driver-bar-bg { flex: 1; height: 8px; background: var(--bg-muted); border-radius: 4px; overflow: hidden; }
+    .driver-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width 300ms; }
+    .driver-label { width: 140px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+    .driver-impact { width: 80px; text-align: right; font-weight: 700; font-family: var(--font-mono);
+      font-size: 12px; flex-shrink: 0; }
+
+    /* ── Scenario Save/Load ── */
+    .scenario-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--border); }
+    #scenarioModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 300; align-items: center; justify-content: center; }
+    #scenarioModal.open { display: flex; }
+    .modal-box { background: white; border-radius: var(--radius); padding: 28px;
+      width: min(440px, 90vw); box-shadow: var(--shadow); }
+    .modal-box h3 { margin-bottom: 16px; font-size: 18px; }
+    .modal-list { max-height: 240px; overflow-y: auto; margin-bottom: 16px; }
+    .modal-item { display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+    .modal-item:hover { background: var(--bg-muted); }
+    .modal-item-name { font-weight: 600; font-size: 14px; }
+    .modal-item-meta { font-size: 12px; color: var(--muted); }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+    /* ── Collapsible sidebar sections ── */
+    .sb-group {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: white;
+    }
+    .sb-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      transition: background 120ms ease;
+      gap: 8px;
+    }
+    .sb-group-header:hover { background: var(--bg-muted); }
+    .sb-group-header .sb-chevron {
+      font-size: 10px; color: var(--muted); transition: transform 200ms ease; flex-shrink: 0;
+    }
+    .sb-group-header.open .sb-chevron { transform: rotate(180deg); }
+    .sb-group-header .sb-badge {
+      font-size: 10px; font-weight: 600;
+      padding: 2px 8px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent);
+      flex-shrink: 0; margin-left: auto;
+    }
+    .sb-group-body {
+      display: none; padding: 0 12px 12px 12px;
+      border-top: 1px solid var(--border);
+    }
+    .sb-group-body.open { display: block; }
+    .sb-tabs { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; }
+    .sb-tab {
+      padding: 9px 12px; border-radius: 10px;
+      border: 1px solid var(--border); background: white;
+      font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;
+      transition: all 120ms ease; display: flex; align-items: center; gap: 8px;
+    }
+    .sb-tab:hover { background: var(--bg-muted); border-color: rgba(12,23,45,0.16); }
+    .sb-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-tab .sb-tab-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: currentColor; opacity: 0.6; flex-shrink: 0;
+    }
+    .sb-action-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 9px 12px;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: white; font-size: 13px; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      transition: all 120ms ease; text-align: left;
+    }
+    .sb-action-btn:hover { background: var(--bg-muted); border-color: rgba(12,23,45,0.16); }
+    .sb-action-btn.sb-action-primary {
+      background: var(--text); color: white; border-color: var(--text);
+    }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 4px 12px rgba(11,18,32,0.18); }
+    .sb-action-btn.sb-action-accent {
+      background: var(--accent); color: white; border-color: var(--accent);
+    }
+    .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
+    .sb-mode-pills { display: flex; gap: 6px; padding-top: 10px; flex-wrap: wrap; }
+    .sb-mode-pill {
+      flex: 1; min-width: 70px; padding: 8px 6px; border-radius: 10px;
+      border: 1px solid var(--border); background: white;
+      font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
+      transition: all 120ms ease;
+    }
+    .sb-mode-pill:hover { background: var(--bg-muted); }
+    .sb-mode-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* ── Decision / So What? Box ── */
+    .decision-box {
+      border: 1.5px solid var(--accent);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(15,118,110,0.08), 0 8px 18px rgba(11,18,32,0.06);
+      transition: border-color 200ms ease, background 200ms ease;
+    }
+    .decision-box--run    { border-color: #0f766e; background: #f0fdf9; box-shadow: 0 0 0 4px rgba(15,118,110,0.10), 0 8px 18px rgba(11,18,32,0.06); }
+    .decision-box--caution{ border-color: #d97706; background: #fffbeb; box-shadow: 0 0 0 4px rgba(217,119,6,0.10), 0 8px 18px rgba(11,18,32,0.06); }
+    .decision-box--hold   { border-color: #dc2626; background: #fef2f2; box-shadow: 0 0 0 4px rgba(220,38,38,0.10), 0 8px 18px rgba(11,18,32,0.06); }
+    .decision-box-eyebrow {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+      color: #0f766e; margin-bottom: 8px;
+    }
+    .decision-box--caution .decision-box-eyebrow { color: #d97706; }
+    .decision-box--hold   .decision-box-eyebrow { color: #dc2626; }
+    .decision-box-verdict {
+      font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .verdict-action { color: #0f766e; }
+    .decision-box--caution .verdict-action { color: #d97706; }
+    .decision-box--hold   .verdict-action { color: #dc2626; }
+    .decision-box-bullets {
+      list-style: none; margin: 0 0 12px 0; padding: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .decision-box-bullets li {
+      font-size: 13px; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.45;
+    }
+    .decision-box-bullets li::before {
+      content: '›'; color: #0f766e; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .decision-box--caution .decision-box-bullets li::before { color: #d97706; }
+    .decision-box--hold   .decision-box-bullets li::before { color: #dc2626; }
+    .decision-box-guardrails {
+      border-top: 1px solid rgba(12,23,45,0.10);
+      padding-top: 12px; margin-top: 4px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .guardrail-flag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px;
+    }
+    .guardrail-flag--ok   { background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: #0f766e; }
+    .guardrail-flag--warn { background: rgba(217,119,6,0.10);  border: 1px solid rgba(217,119,6,0.25);  color: #d97706; }
+    .guardrail-flag--risk { background: rgba(220,38,38,0.10);  border: 1px solid rgba(220,38,38,0.20);  color: #dc2626; }
+
+    /* ── Sensitivity item styles ── */
+    .sensitivity-outcome-btn {
+      padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 11px; font-weight: 600; cursor: pointer;
+    }
+    .sensitivity-outcome-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .sensitivity-item { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12px; }
+    .sensitivity-rank { width: 20px; color: var(--muted); font-weight: 700; flex-shrink: 0; }
+    .sensitivity-label { width: 100px; font-weight: 600; color: var(--text); flex-shrink: 0; font-size: 11px; }
+    .sensitivity-bar-wrap { flex: 1; height: 6px; background: var(--bg-muted); border-radius: 3px; overflow: hidden; }
+    .sensitivity-bar { height: 100%; border-radius: 3px; }
+    .sensitivity-value { width: 60px; text-align: right; font-weight: 700; font-family: var(--font-mono); font-size: 11px; flex-shrink: 0; }
+
     /* ── Data-needed strip ── */
     .data-needed-section {
       padding: 0 0 0 0;
@@ -834,50 +1063,13 @@
     </div>
   </header>
 
-  <!-- MODULE SECTION -->
+  <!-- MODULE SECTION — clean title only, controls live in sidebar -->
   <section class="module-section">
     <div class="container">
       <div class="module-header">
-        <div class="module-eyebrow">
-          ⭐ Industry-Adaptive Model
-        </div>
+        <div class="module-eyebrow">⭐ Industry-Adaptive Model</div>
         <h1 class="module-title" id="moduleTitle">SaaS Financial Model</h1>
         <p class="module-subtitle">Real-time financial simulation and scenario planning with dynamic driver modeling</p>
-        
-        <div class="module-actions">
-          <span class="module-eyebrow" id="dataModeIndicator">
-            📊 Sample Data
-          </span>
-          <button class="btn btn-ghost btn-sm" onclick="useSampleData()">Use Sample</button>
-          <button class="btn btn-ghost btn-sm" onclick="generateRandomData()">Generate Random</button>
-          <button class="btn btn-accent btn-sm" onclick="downloadTemplate()">Download Template</button>
-          <div class="file-upload">
-            <input type="file" id="fileUpload" accept=".csv" onchange="handleFileUpload(event)">
-            <button class="btn btn-solid btn-sm" onclick="document.getElementById('fileUpload').click()">Upload Data</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Industry Selector -->
-      <div class="tab-section">
-        <span class="tab-label">Industry</span>
-        <div class="tab-group" id="industryTabs">
-          <button class="tab active" data-industry="saas" onclick="switchIndustry('saas')">SaaS</button>
-          <button class="tab" data-industry="media" onclick="switchIndustry('media')">Media & Platforms</button>
-          <button class="tab" data-industry="manufacturing" onclick="switchIndustry('manufacturing')">Manufacturing</button>
-          <button class="tab" data-industry="lending" onclick="switchIndustry('lending')">Lending</button>
-          <button class="tab" data-industry="realestate" onclick="switchIndustry('realestate')">Real Estate</button>
-        </div>
-      </div>
-
-      <!-- Scenario Selector -->
-      <div class="tab-section">
-        <span class="tab-label">Scenario</span>
-        <div class="tab-group" id="scenarioTabs">
-          <button class="tab active" data-scenario="base" onclick="switchScenario('base')">Base Case</button>
-          <button class="tab" data-scenario="upside" onclick="switchScenario('upside')">Upside</button>
-          <button class="tab" data-scenario="downside" onclick="switchScenario('downside')">Downside</button>
-        </div>
       </div>
     </div>
   </section>
@@ -902,18 +1094,153 @@
   <main id="main" class="main-content">
     <div class="container">
       <div class="layout-grid">
-        <!-- SIDEBAR: DRIVERS & CONSTRAINTS -->
+        <!-- SIDEBAR: collapsible control groups -->
         <aside class="sidebar">
-          <div class="sidebar-section">
-            <div class="sidebar-title">Drivers & Constraints</div>
-            <div id="controlsContainer">
-              <!-- Controls will be injected here -->
+
+          <!-- ① DATA MODE — always visible as status -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px;">
+            <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);">Data</span>
+            <span id="dataModeIndicator" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);">📊 Sample</span>
+          </div>
+
+          <!-- ② MODE (Simulator / Variance) -->
+          <div class="sb-group">
+            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+              <span>Mode</span>
+              <span id="sbModeLabel" class="sb-badge">Simulator</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body open">
+              <div class="sb-mode-pills">
+                <button class="sb-mode-pill active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
+                <button class="sb-mode-pill" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
+              </div>
+              <button class="sb-action-btn" onclick="window.print()" style="margin-top:10px;">🖨 Export CFO Pack</button>
             </div>
           </div>
+
+          <!-- ③ INDUSTRY -->
+          <div class="sb-group">
+            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+              <span>Industry</span>
+              <span id="sbIndustryLabel" class="sb-badge">SaaS</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body open" id="industryTabs">
+              <div class="sb-tabs">
+                <button class="sb-tab active" data-industry="saas" onclick="switchIndustry('saas')"><span class="sb-tab-dot"></span>SaaS</button>
+                <button class="sb-tab" data-industry="media" onclick="switchIndustry('media')"><span class="sb-tab-dot"></span>Media &amp; Platforms</button>
+                <button class="sb-tab" data-industry="manufacturing" onclick="switchIndustry('manufacturing')"><span class="sb-tab-dot"></span>Manufacturing</button>
+                <button class="sb-tab" data-industry="lending" onclick="switchIndustry('lending')"><span class="sb-tab-dot"></span>Lending</button>
+                <button class="sb-tab" data-industry="realestate" onclick="switchIndustry('realestate')"><span class="sb-tab-dot"></span>Real Estate</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ④ SCENARIO -->
+          <div class="sb-group">
+            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+              <span>Scenario</span>
+              <span id="sbScenarioLabel" class="sb-badge">Base Case</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body open" id="scenarioTabs">
+              <div class="sb-tabs">
+                <button class="sb-tab active" data-scenario="base" onclick="switchScenario('base')"><span class="sb-tab-dot"></span>Base Case</button>
+                <button class="sb-tab" data-scenario="upside" onclick="switchScenario('upside')"><span class="sb-tab-dot"></span>Upside</button>
+                <button class="sb-tab" data-scenario="downside" onclick="switchScenario('downside')"><span class="sb-tab-dot"></span>Downside</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑤ DRIVERS & CONSTRAINTS (collapsed by default on mobile, open on desktop) -->
+          <div class="sb-group">
+            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+              <span>Drivers</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body open" style="padding-top:10px;">
+              <div id="controlsContainer"></div>
+              <div class="scenario-actions" id="scenarioActions" style="padding-top:8px;border-top:1px solid var(--border);margin-top:4px;">
+                <button class="btn btn-ghost btn-sm" onclick="saveScenario()">💾 Save</button>
+                <button class="btn btn-ghost btn-sm" onclick="openLoadModal()">📂 Load</button>
+                <button class="btn btn-ghost btn-sm" onclick="copyShareLink()">🔗 Share</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑥ DATA ACTIONS (collapsed by default) -->
+          <div class="sb-group">
+            <div class="sb-group-header" onclick="toggleSbGroup(this)">
+              <span>Data &amp; Upload</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body" style="padding-top:10px;">
+              <button class="sb-action-btn" onclick="useSampleData()">📊 Use Sample Data</button>
+              <button class="sb-action-btn sb-action-primary" onclick="generateRandomData()">🎲 Generate Random</button>
+              <button class="sb-action-btn sb-action-accent" onclick="downloadTemplate()">⬇ Download Template</button>
+              <div style="position:relative;margin-top:6px;">
+                <input type="file" id="fileUpload" accept=".csv" onchange="handleFileUpload(event)" class="sb-file-hidden">
+                <button class="sb-action-btn" onclick="document.getElementById('fileUpload').click()">📁 Upload CSV Data</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑦ TOP DRIVERS SENSITIVITY -->
+          <div id="topDriversCard" class="sb-group">
+            <div class="sb-group-header" onclick="toggleSbGroup(this)">
+              <span>Top Drivers</span>
+              <span class="sb-chevron">▼</span>
+            </div>
+            <div class="sb-group-body" style="padding-top:10px;">
+              <div id="sensitivityOutcomeSelector" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;"></div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Impact of +10% on each driver</div>
+              <div id="sensitivityList"></div>
+              <div id="topDriversList" style="display:none;"></div>
+            </div>
+          </div>
+
         </aside>
 
         <!-- MAIN CONTENT AREA -->
         <div>
+          <!-- Variance Mode Content -->
+          <div id="varianceModeContent" style="display:none;">
+            <div id="varianceUploadSection" class="card" style="margin-bottom:20px;">
+              <div class="card-title">📊 Actual vs Budget vs Forecast</div>
+              <div id="varianceErrorBanner" class="error-banner" style="display:none;"></div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Upload a CSV with monthly actuals, budget, and forecast data to analyze variances.</p>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+                <button class="btn btn-accent btn-sm" onclick="downloadVarianceTemplate()">⬇ Download Template</button>
+                <div class="file-upload">
+                  <input type="file" id="varianceFileUpload" accept=".csv" onchange="handleVarianceUpload(event)">
+                  <button class="btn btn-solid btn-sm" onclick="document.getElementById('varianceFileUpload').click()">Upload Variance CSV</button>
+                </div>
+              </div>
+              <div id="varianceMonthSelector" style="display:none;margin-bottom:16px;">
+                <label style="font-size:13px;font-weight:600;margin-right:8px;">Month:</label>
+                <select id="varianceMonthSelect" onchange="renderVarianceTable()" style="border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;"></select>
+              </div>
+            </div>
+            <div id="varianceTableContainer" style="display:none;">
+              <div class="card" style="margin-bottom:20px;">
+                <div class="card-title" id="varianceTableTitle">Variance Analysis</div>
+                <div class="variance-table-wrap">
+                  <table class="variance-table" id="varianceTable"></table>
+                </div>
+              </div>
+              <div class="narrative-card">
+                <div id="varianceNarrative"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Print title (hidden on screen, shown in print) -->
+          <div id="printTitle" style="display:none;font-size:22px;font-weight:700;margin-bottom:16px;"></div>
+
+          <!-- ✦ DECISION BOX — "So What?" -->
+          <div id="decisionBox" class="decision-box decision-box--run" style="display:none;"></div>
+
           <!-- KPIs -->
           <div class="kpi-grid" id="kpiGrid">
             <!-- KPIs will be injected here -->
@@ -983,6 +1310,17 @@
       <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
     </div>
   </nav>
+
+<!-- Scenario Load Modal -->
+<div id="scenarioModal" role="dialog" aria-modal="true" aria-label="Load Scenario">
+  <div class="modal-box">
+    <h3>📂 Saved Scenarios</h3>
+    <div class="modal-list" id="savedScenarioList"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeLoadModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 </main>
 
@@ -1146,9 +1484,18 @@
     function switchIndustry(industry) {
       currentIndustry = industry;
       
+      // Update sb-tab active state (new sidebar)
+      document.querySelectorAll('#industryTabs .sb-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.industry === industry);
+      });
+      // Legacy tab support
       document.querySelectorAll('#industryTabs .tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.industry === industry);
       });
+
+      // Update sidebar badge
+      const lbl = document.getElementById('sbIndustryLabel');
+      if (lbl) lbl.textContent = INDUSTRIES[industry].name;
       
       document.getElementById('moduleTitle').textContent = INDUSTRIES[industry].title;
       
@@ -1166,13 +1513,25 @@
     function switchScenario(scenario) {
       currentScenario = scenario;
       
+      // Update sb-tab active state
+      document.querySelectorAll('#scenarioTabs .sb-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.scenario === scenario);
+      });
       document.querySelectorAll('#scenarioTabs .tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.scenario === scenario);
       });
+
+      // Update sidebar badge
+      const lbl = document.getElementById('sbScenarioLabel');
+      if (lbl) {
+        const names = { base: 'Base Case', upside: 'Upside', downside: 'Downside' };
+        lbl.textContent = names[scenario] || scenario;
+      }
       
       renderKPIs();
       updateCharts();
       renderCommentary();
+      renderDecisionBox();
     }
 
     // ============================================
@@ -1311,8 +1670,8 @@
           
         case 'manufacturing':
           data.units = [];
-          data.revenue = [];
-          data.grossProfit = [];
+          data.revenueTrend = [];
+          data.grossProfitTrend = [];
           data.grossMarginTrend = [];
           data.cashFlow = [];
           
@@ -1323,19 +1682,21 @@
             const laborCost = revenue * (driverValues.laborCost / 100);
             const cogs = materialCost + laborCost;
             const grossProfit = revenue - cogs;
-            const grossMargin = (grossProfit / revenue) * 100;
+            const grossMargin = revenue > 0 ? (grossProfit / revenue) * 100 : 0;
             const opex = 300000;
             const cashFlow = grossProfit - opex;
             
             data.units.push(units);
-            data.revenue.push(revenue);
-            data.grossProfit.push(grossProfit);
+            data.revenueTrend.push(revenue);
+            data.grossProfitTrend.push(grossProfit);
             data.grossMarginTrend.push(grossMargin);
             data.cashFlow.push(cashFlow);
           }
           
+          data.revenue = data.revenueTrend[months - 1];
+          data.grossProfit = data.grossProfitTrend[months - 1];
           data.grossMargin = data.grossMarginTrend[months - 1];
-          data.unitEconomics = data.grossProfit[months - 1] / data.units[months - 1];
+          data.unitEconomics = data.units[months - 1] > 0 ? data.grossProfitTrend[months - 1] / data.units[months - 1] : 0;
           break;
           
         case 'lending':
@@ -1402,6 +1763,11 @@
       renderKPIs();
       renderCharts();
       renderCommentary();
+      renderSensitivity();
+      renderDecisionBox();
+      // Update print title
+      const pt = document.getElementById('printTitle');
+      if (pt) pt.textContent = `${INDUSTRIES[currentIndustry].title} — ${currentScenario.charAt(0).toUpperCase() + currentScenario.slice(1)} Scenario`;
     }
 
     function renderControls() {
@@ -1655,7 +2021,7 @@
           
         case 'manufacturing':
           return `
-            <p><strong>Production:</strong> Manufacturing ${formatValue(data.units[months - 1], 'number')} units per month generating <span class="commentary-highlight">${formatValue(data.revenue[months - 1], 'currency')}</span> in revenue. Utilization rate at ${driverValues.utilizationRate}% provides ${driverValues.utilizationRate < 85 ? 'capacity for volume growth' : 'optimal efficiency'}.</p>
+            <p><strong>Production:</strong> Manufacturing ${formatValue(data.units[months - 1], 'number')} units per month generating <span class="commentary-highlight">${formatValue(data.revenue, 'currency')}</span> in revenue. Utilization rate at ${driverValues.utilizationRate}% provides ${driverValues.utilizationRate < 85 ? 'capacity for volume growth' : 'optimal efficiency'}.</p>
             <p><strong>Margin Performance:</strong> Gross margin of <span class="commentary-highlight">${data.grossMargin.toFixed(1)}%</span> driven by material efficiency and labor optimization. Unit contribution of ${formatValue(data.unitEconomics, 'currency')} ${data.grossMargin > 40 ? 'supports profitable scaling' : 'requires cost optimization'}.</p>
             <p><strong>Cash Generation:</strong> Operating cash flow of <span class="commentary-highlight">${formatValue(data.cashFlow[months - 1], 'currency')}</span> per month. ${data.cashFlow[months - 1] > 0 ? 'Positive cash generation funds growth initiatives.' : 'Focus on margin improvement to achieve cash flow positivity.'}</p>
           `;
@@ -1743,14 +2109,13 @@
     
     function updateDataModeIndicator() {
       const indicator = document.getElementById('dataModeIndicator');
-      
+      if (!indicator) return;
       const labels = {
-        sample: '📊 Sample Data',
-        random: '🎲 Random Data',
-        uploaded: '📁 User Data'
+        sample: '📊 Sample',
+        random: '🎲 Random',
+        uploaded: '📁 Uploaded'
       };
-      
-      indicator.textContent = labels[currentDataMode];
+      indicator.textContent = labels[currentDataMode] || labels.sample;
     }
 
     function useSampleData() {
@@ -1944,10 +2309,802 @@
     }
 
     // ============================================
+    // MODE SWITCHING (Simulator / Variance)
+    // ============================================
+
+    let currentMode = 'simulator';
+
+    function switchMode(mode) {
+      currentMode = mode;
+      // Update sidebar mode pills
+      document.getElementById('modeSimulator').classList.toggle('active', mode === 'simulator');
+      document.getElementById('modeVariance').classList.toggle('active', mode === 'variance');
+      // Update sidebar badge
+      const modeLbl = document.getElementById('sbModeLabel');
+      if (modeLbl) modeLbl.textContent = mode === 'simulator' ? 'Simulator' : 'Variance';
+
+      const varianceContent = document.getElementById('varianceModeContent');
+      const kpiGrid = document.getElementById('kpiGrid');
+      const commentary = document.getElementById('commentarySection');
+      const chartGrid = document.querySelector('.chart-grid');
+      const chart3Card = chartGrid && chartGrid.nextElementSibling;
+      const topDriversCard = document.getElementById('topDriversCard');
+      const scenarioActions = document.querySelector('.scenario-actions');
+      const decisionBox = document.getElementById('decisionBox');
+
+      if (mode === 'simulator') {
+        varianceContent.style.display = 'none';
+        if (kpiGrid) kpiGrid.style.display = '';
+        if (commentary) commentary.style.display = '';
+        if (chartGrid) chartGrid.style.display = '';
+        if (chart3Card && chart3Card.classList.contains('card')) chart3Card.style.display = '';
+        if (topDriversCard) topDriversCard.style.display = '';
+        if (scenarioActions) scenarioActions.style.display = '';
+        if (decisionBox) decisionBox.style.display = '';
+      } else {
+        varianceContent.style.display = '';
+        if (kpiGrid) kpiGrid.style.display = 'none';
+        if (commentary) commentary.style.display = 'none';
+        if (chartGrid) chartGrid.style.display = 'none';
+        if (chart3Card && chart3Card.classList.contains('card')) chart3Card.style.display = 'none';
+        if (topDriversCard) topDriversCard.style.display = 'none';
+        if (scenarioActions) scenarioActions.style.display = 'none';
+        if (decisionBox) decisionBox.style.display = 'none';
+        if (varianceData) renderVarianceTable();
+      }
+    }
+
+    // ============================================
+    // VARIANCE MODE
+    // ============================================
+
+    const VARIANCE_REQUIRED_COLS = [
+      'Month',
+      'Actual_Revenue','Budget_Revenue','Forecast_Revenue',
+      'Actual_COGS','Budget_COGS','Forecast_COGS',
+      'Actual_Opex','Budget_Opex','Forecast_Opex'
+    ];
+
+    let varianceData = null;
+
+    function showError(message) {
+      const banner = document.getElementById('varianceErrorBanner');
+      banner.style.display = 'block';
+      banner.innerHTML = `<strong>Error:</strong> ${message}`;
+    }
+    function clearError() {
+      const banner = document.getElementById('varianceErrorBanner');
+      banner.style.display = 'none';
+      banner.innerHTML = '';
+    }
+
+    function validateVarianceCsv(headers) {
+      const missing = VARIANCE_REQUIRED_COLS.filter(c => !headers.includes(c));
+      return missing;
+    }
+
+    function downloadVarianceTemplate() {
+      let csv = VARIANCE_REQUIRED_COLS.join(',') + '\n';
+      csv += 'Jan 2025,500000,480000,490000,150000,145000,148000,200000,195000,198000\n';
+      csv += 'Feb 2025,520000,495000,510000,156000,149000,153000,202000,196000,199000\n';
+      csv += 'Mar 2025,540000,510000,530000,162000,153000,159000,205000,197000,200000\n';
+      csv += '\n# Notes:\n# Actual_* = what actually happened\n# Budget_* = approved plan\n# Forecast_* = latest re-forecast\n';
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'variance-template.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showNotification('Variance template downloaded', 'success');
+    }
+
+    function handleVarianceUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        Papa.parse(e.target.result, {
+          header: true,
+          dynamicTyping: true,
+          skipEmptyLines: true,
+          comments: '#',
+          complete: function(results) {
+            clearError();
+            if (!results.data || results.data.length === 0) {
+              showError('No valid data rows found in file.');
+              return;
+            }
+            const missing = validateVarianceCsv(results.meta.fields || []);
+            if (missing.length > 0) {
+              showError(`Missing required columns: <strong>${missing.join(', ')}</strong>`);
+              return;
+            }
+            varianceData = results.data;
+            // Populate month dropdown
+            const monthSelect = document.getElementById('varianceMonthSelect');
+            const months = [...new Set(results.data.map(r => r.Month).filter(Boolean))];
+            if (months.length === 0) {
+              showError('Could not parse Month column. Ensure format like "Jan 2025".');
+              return;
+            }
+            monthSelect.innerHTML = months.map(m => `<option value="${m}">${m}</option>`).join('');
+            monthSelect.value = months[months.length - 1];
+            document.getElementById('varianceMonthSelector').style.display = '';
+            document.getElementById('varianceTableContainer').style.display = '';
+            renderVarianceTable();
+            showNotification('Variance data loaded successfully', 'success');
+          },
+          error: function(err) {
+            showError('Parse error: ' + err.message);
+          }
+        });
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function renderVarianceTable() {
+      if (!varianceData) return;
+      const selectedMonth = document.getElementById('varianceMonthSelect').value;
+      const rows = varianceData.filter(r => r.Month === selectedMonth);
+      if (rows.length === 0) {
+        showError('No data found for selected month.');
+        return;
+      }
+      clearError();
+
+      // Aggregate rows for the month (sum in case of multiple rows per month)
+      const agg = { Actual_Revenue:0, Budget_Revenue:0, Forecast_Revenue:0,
+                    Actual_COGS:0, Budget_COGS:0, Forecast_COGS:0,
+                    Actual_Opex:0, Budget_Opex:0, Forecast_Opex:0 };
+      rows.forEach(r => {
+        Object.keys(agg).forEach(k => { agg[k] += (r[k] || 0); });
+      });
+
+      // Compute derived lines
+      const A_Rev = agg.Actual_Revenue, B_Rev = agg.Budget_Revenue, F_Rev = agg.Forecast_Revenue;
+      const A_COGS = agg.Actual_COGS, B_COGS = agg.Budget_COGS, F_COGS = agg.Forecast_COGS;
+      const A_Opex = agg.Actual_Opex, B_Opex = agg.Budget_Opex, F_Opex = agg.Forecast_Opex;
+      const A_GP = A_Rev - A_COGS, B_GP = B_Rev - B_COGS, F_GP = F_Rev - F_COGS;
+      const A_EBITDA = A_GP - A_Opex, B_EBITDA = B_GP - B_Opex, F_EBITDA = F_GP - F_Opex;
+
+      function varRow(label, actual, budget, forecast, isTotal) {
+        const avbAmt = actual - budget;
+        const avbPct = budget !== 0 ? ((actual - budget) / Math.abs(budget)) * 100 : 0;
+        const avfAmt = actual - forecast;
+        const avfPct = forecast !== 0 ? ((actual - forecast) / Math.abs(forecast)) * 100 : 0;
+        // For COGS/Opex, negative variance (actual < budget) is favorable
+        const isExpense = label.includes('COGS') || label.includes('Opex');
+        const avbFav = isExpense ? avbAmt <= 0 : avbAmt >= 0;
+        const avfFav = isExpense ? avfAmt <= 0 : avfAmt >= 0;
+        const rowClass = isTotal ? ' class="row-total"' : '';
+        return `<tr${rowClass}>
+          <td>${label}</td>
+          <td>${formatValue(actual, 'short')}</td>
+          <td>${formatValue(budget, 'short')}</td>
+          <td>${formatValue(forecast, 'short')}</td>
+          <td class="${avbFav ? 'fav' : 'unfav'}">${avbFav ? '▲' : '▼'} ${formatValue(Math.abs(avbAmt), 'short')}</td>
+          <td class="${avbFav ? 'fav' : 'unfav'}">${avbFav ? '+' : ''}${avbPct.toFixed(1)}%</td>
+          <td class="${avfFav ? 'fav' : 'unfav'}">${avfFav ? '▲' : '▼'} ${formatValue(Math.abs(avfAmt), 'short')}</td>
+          <td class="${avfFav ? 'fav' : 'unfav'}">${avfFav ? '+' : ''}${avfPct.toFixed(1)}%</td>
+        </tr>`;
+      }
+
+      const tableHTML = `
+        <thead>
+          <tr>
+            <th>Line Item</th>
+            <th>Actual</th>
+            <th>Budget</th>
+            <th>Forecast</th>
+            <th>A vs B ($)</th>
+            <th>A vs B (%)</th>
+            <th>A vs F ($)</th>
+            <th>A vs F (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${varRow('Revenue', A_Rev, B_Rev, F_Rev, false)}
+          ${varRow('COGS', A_COGS, B_COGS, F_COGS, false)}
+          ${varRow('Gross Profit', A_GP, B_GP, F_GP, true)}
+          ${varRow('Opex', A_Opex, B_Opex, F_Opex, false)}
+          ${varRow('EBITDA', A_EBITDA, B_EBITDA, F_EBITDA, true)}
+        </tbody>
+      `;
+      document.getElementById('varianceTable').innerHTML = tableHTML;
+      document.getElementById('varianceTableTitle').textContent = `Variance Analysis — ${selectedMonth}`;
+      renderVarianceNarrative(A_Rev, B_Rev, A_COGS, B_COGS, A_Opex, B_Opex, A_EBITDA, B_EBITDA);
+    }
+
+    function renderVarianceNarrative(A_Rev, B_Rev, A_COGS, B_COGS, A_Opex, B_Opex, A_EBITDA, B_EBITDA) {
+      const ebitdaVar = A_EBITDA - B_EBITDA;
+      const revenueVar = A_Rev - B_Rev;
+      const cogsVar = -(A_COGS - B_COGS); // negative COGS variance is favorable
+      const opexVar = -(A_Opex - B_Opex);
+
+      const contributors = [
+        { name: 'Revenue', impact: revenueVar, pct: B_Rev !== 0 ? (revenueVar / Math.abs(B_Rev)) * 100 : 0 },
+        { name: 'COGS Efficiency', impact: cogsVar, pct: B_COGS !== 0 ? (cogsVar / Math.abs(B_COGS)) * 100 : 0 },
+        { name: 'Opex Control', impact: opexVar, pct: B_Opex !== 0 ? (opexVar / Math.abs(B_Opex)) * 100 : 0 }
+      ].sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact)).slice(0, 3);
+
+      function action(name, impact) {
+        if (name === 'Revenue') {
+          return impact >= 0
+            ? '• Identify top-performing channels or products and allocate more budget to scale them.\n• Recognize and reward the sales/marketing teams responsible.'
+            : '• Conduct pipeline review and identify deal slippage root causes.\n• Adjust pricing or promotional activity to close the gap next month.';
+        } else if (name === 'COGS Efficiency') {
+          return impact >= 0
+            ? '• Document the efficiency gains (vendor negotiations, yield improvements) for replication.\n• Consider revising cost targets upward to reflect improved run rate.'
+            : '• Review vendor contracts and material waste; escalate to procurement.\n• Assess whether volume shortfalls inflated unit COGS via fixed cost absorption.';
+        } else {
+          return impact >= 0
+            ? '• Confirm savings are structural (not timing) before releasing to forecast.\n• Review deferred spend to ensure it doesn\'t create a backlog.'
+            : '• Identify the cost centre(s) driving overspend and request explanations.\n• Tighten approval thresholds for discretionary spend for the remainder of the quarter.';
+        }
+      }
+
+      const narrativeHTML = `
+        <h3>💡 What Moved & Why — EBITDA ${ebitdaVar >= 0 ? '▲' : '▼'} ${formatValue(Math.abs(ebitdaVar), 'short')} vs Budget</h3>
+        ${contributors.map((c, i) => `
+          <div class="narrative-item">
+            <div class="narrative-item-label">${i + 1}. ${c.name}: <span style="color:${c.impact >= 0 ? '#059669' : '#dc2626'}">${c.impact >= 0 ? '+' : ''}${formatValue(c.impact, 'short')} (${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}%)</span></div>
+            <div class="narrative-item-actions">${action(c.name, c.impact)}</div>
+          </div>
+        `).join('')}
+      `;
+      document.getElementById('varianceNarrative').innerHTML = narrativeHTML;
+    }
+
+    // ============================================
+    // SENSITIVITY MINI-VIEW (Tornado-lite)
+    // ============================================
+
+    let sensitivityOutcome = 'ebitda';
+
+    function computeEbitdaProxy(scenario) {
+      // Return a single EBITDA-like scalar from scenario data
+      const data = scenario;
+      const months = 12;
+      switch (currentIndustry) {
+        case 'saas': {
+          const mrr = data.mrrTrend ? data.mrrTrend[months - 1] : 0;
+          const customers = data.customersTrend ? data.customersTrend[months - 1] : 1;
+          const cogs = mrr * (1 - driverValues.grossMargin / 100);
+          const opex = 200000;
+          return mrr - cogs - opex;
+        }
+        case 'media': {
+          const rev = data.revenue ? data.revenue[months - 1] : 0;
+          const contentCost = rev * 0.4;
+          const opex = 500000;
+          return rev - contentCost - opex;
+        }
+        case 'manufacturing': {
+          return data.cashFlow ? data.cashFlow[months - 1] : 0;
+        }
+        case 'lending': {
+          return data.netIncome ? data.netIncome[months - 1] : 0;
+        }
+        case 'realestate': {
+          return data.fcf ? data.fcf[months - 1] : 0;
+        }
+        default: return 0;
+      }
+    }
+
+    function computeRevenueProxy(scenario) {
+      const months = 12;
+      switch (currentIndustry) {
+        case 'saas': return scenario.mrrTrend ? scenario.mrrTrend[months - 1] * 12 : 0;
+        case 'media': return scenario.revenue ? scenario.revenue[months - 1] : 0;
+        case 'manufacturing': return scenario.revenueTrend ? scenario.revenueTrend[months - 1] : 0;
+        case 'lending': return scenario.portfolio ? scenario.portfolio[months - 1] * (driverValues.avgRate / 100 / 12) : 0;
+        case 'realestate': return scenario.rent ? scenario.rent[months - 1] : 0;
+        default: return 0;
+      }
+    }
+
+    function computeCashProxy(scenario) {
+      const months = 12;
+      switch (currentIndustry) {
+        case 'saas': return scenario.cash ? scenario.cash[months - 1] : 0;
+        default: return computeEbitdaProxy(scenario);
+      }
+    }
+
+    function getOutcomeValue(scenario) {
+      if (sensitivityOutcome === 'revenue') return computeRevenueProxy(scenario);
+      if (sensitivityOutcome === 'cash') return computeCashProxy(scenario);
+      return computeEbitdaProxy(scenario);
+    }
+
+    function renderSensitivity() {
+      const industry = INDUSTRIES[currentIndustry];
+      
+      // Render outcome selector
+      const outcomes = [
+        { id: 'ebitda', label: 'EBITDA' },
+        { id: 'revenue', label: 'Revenue' },
+        { id: 'cash', label: 'Cash/Runway' }
+      ];
+      document.getElementById('sensitivityOutcomeSelector').innerHTML = outcomes.map(o => `
+        <button class="sensitivity-outcome-btn ${sensitivityOutcome === o.id ? 'active' : ''}" onclick="setSensitivityOutcome('${o.id}')">${o.label}</button>
+      `).join('');
+
+      // Baseline
+      const baseScenario = modelData.scenarios['base'];
+      const baseValue = getOutcomeValue(baseScenario);
+
+      // For each driver, compute impact of +10% (or +1 step for % drivers)
+      const impacts = industry.drivers.map(driver => {
+        const savedValue = driverValues[driver.id];
+        const bump = driver.format === 'percent' ? driver.step : savedValue * 0.1;
+        const newValue = Math.min(driver.max, savedValue + Math.max(bump, driver.step));
+        
+        // Clone driverValues, change this driver
+        const savedDriverValues = { ...driverValues };
+        driverValues[driver.id] = newValue;
+        
+        // Recompute base scenario
+        const testScenario = generateScenarioData('base', 12);
+        const testValue = getOutcomeValue(testScenario);
+        
+        // Restore
+        driverValues = { ...savedDriverValues };
+        
+        return {
+          label: driver.label,
+          impact: testValue - baseValue,
+          absImpact: Math.abs(testValue - baseValue)
+        };
+      });
+
+      impacts.sort((a, b) => b.absImpact - a.absImpact);
+      const top5 = impacts.slice(0, 5);
+      const maxImpact = top5[0]?.absImpact || 1;
+
+      document.getElementById('sensitivityList').innerHTML = top5.map((item, i) => `
+        <div class="sensitivity-item">
+          <span class="sensitivity-rank">#${i + 1}</span>
+          <span class="sensitivity-label">${item.label}</span>
+          <div class="sensitivity-bar-wrap">
+            <div class="sensitivity-bar" style="width:${(item.absImpact / maxImpact * 100).toFixed(0)}%;background:${item.impact >= 0 ? '#059669' : '#dc2626'}"></div>
+          </div>
+          <span class="sensitivity-value" style="color:${item.impact >= 0 ? '#059669' : '#dc2626'}">${item.impact >= 0 ? '+' : ''}${formatValue(item.impact, 'short')}</span>
+        </div>
+      `).join('');
+    }
+
+    function setSensitivityOutcome(outcome) {
+      sensitivityOutcome = outcome;
+      renderSensitivity();
+    }
+
+    // ============================================
+    // SAVE / LOAD / SHARE SCENARIO
+    // ============================================
+
+    function encodeState() {
+      const state = { industry: currentIndustry, scenario: currentScenario, drivers: { ...driverValues } };
+      return btoa(JSON.stringify(state));
+    }
+
+    function decodeState(encoded) {
+      try {
+        return JSON.parse(atob(encoded));
+      } catch(e) { return null; }
+    }
+
+    function saveScenario() {
+      const name = prompt('Name this scenario (optional):', `${INDUSTRIES[currentIndustry].name} — ${new Date().toLocaleDateString()}`) || `Scenario ${Date.now()}`;
+      const key = 'fpa_scenario_' + Date.now();
+      const entry = { name, timestamp: Date.now(), encoded: encodeState() };
+      try {
+        localStorage.setItem(key, JSON.stringify(entry));
+        showNotification(`Scenario "${name}" saved`, 'success');
+      } catch(e) {
+        showNotification('Could not save: localStorage unavailable', 'error');
+      }
+    }
+
+    function openLoadScenario() {
+      const modal = document.getElementById('scenarioModal');
+      modal.classList.add('open');
+      const list = document.getElementById('savedScenariosList') || document.getElementById('savedScenarioList');
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('fpa_scenario_'));
+      if (keys.length === 0) {
+        list.innerHTML = '<p style="color:var(--muted);font-size:14px;">No saved scenarios yet.</p>';
+        return;
+      }
+      list.innerHTML = keys.map(k => {
+        try {
+          const entry = JSON.parse(localStorage.getItem(k));
+          const date = new Date(entry.timestamp).toLocaleString();
+          return `<div class="modal-item">
+            <div onclick="loadScenarioByKey('${k}')" style="flex:1;cursor:pointer;">
+              <div class="modal-item-name">${entry.name}</div>
+              <div class="modal-item-meta">${date}</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="deleteScenarioByKey('${k}')">✕</button>
+          </div>`;
+        } catch(e) { return ''; }
+      }).join('');
+    }
+    function openLoadModal() { openLoadScenario(); }
+
+    function closeLoadScenario() {
+      const modal = document.getElementById('scenarioModal');
+      modal.classList.remove('open');
+    }
+    function closeLoadModal() { closeLoadScenario(); }
+
+    function loadScenarioByKey(key) {
+      try {
+        const entry = JSON.parse(localStorage.getItem(key));
+        const state = decodeState(entry.encoded);
+        if (!state) { showNotification('Could not restore scenario', 'error'); return; }
+        currentIndustry = state.industry;
+        currentScenario = state.scenario;
+        driverValues = state.drivers;
+
+        document.querySelectorAll('#industryTabs .sb-tab, #industryTabs .tab').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.industry === currentIndustry);
+        });
+        document.querySelectorAll('#scenarioTabs .sb-tab, #scenarioTabs .tab').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.scenario === currentScenario);
+        });
+        document.getElementById('moduleTitle').textContent = INDUSTRIES[currentIndustry].title;
+        const lbl1 = document.getElementById('sbIndustryLabel');
+        if (lbl1) lbl1.textContent = INDUSTRIES[currentIndustry].name;
+        const lbl2 = document.getElementById('sbScenarioLabel');
+        if (lbl2) { const names = {base:'Base Case',upside:'Upside',downside:'Downside'}; lbl2.textContent = names[currentScenario] || currentScenario; }
+
+        generateSampleData();
+        renderAll();
+        renderSensitivity();
+        closeLoadScenario();
+        showNotification(`Scenario "${entry.name}" loaded`, 'success');
+      } catch(e) {
+        showNotification('Failed to load scenario', 'error');
+      }
+    }
+
+    function deleteScenarioByKey(key) {
+      localStorage.removeItem(key);
+      openLoadScenario(); // refresh list
+    }
+
+    function copyShareLink() {
+      const hash = '#state=' + encodeState();
+      const url = window.location.href.split('#')[0] + hash;
+      try {
+        navigator.clipboard.writeText(url).then(() => showNotification('Share link copied to clipboard', 'success'));
+      } catch(e) {
+        prompt('Copy this link:', url);
+      }
+    }
+
+    function restoreFromHash() {
+      const hash = window.location.hash;
+      if (!hash || !hash.startsWith('#state=')) return;
+      const encoded = hash.slice(7);
+      const state = decodeState(encoded);
+      if (!state) return;
+      currentIndustry = state.industry || 'saas';
+      currentScenario = state.scenario || 'base';
+      driverValues = state.drivers || {};
+
+      document.querySelectorAll('#industryTabs .sb-tab, #industryTabs .tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.industry === currentIndustry);
+      });
+      document.querySelectorAll('#scenarioTabs .sb-tab, #scenarioTabs .tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.scenario === currentScenario);
+      });
+      document.getElementById('moduleTitle').textContent = INDUSTRIES[currentIndustry].title;
+      const lbl1 = document.getElementById('sbIndustryLabel');
+      if (lbl1) lbl1.textContent = INDUSTRIES[currentIndustry].name;
+      const lbl2 = document.getElementById('sbScenarioLabel');
+      if (lbl2) {
+        const names = { base: 'Base Case', upside: 'Upside', downside: 'Downside' };
+        lbl2.textContent = names[currentScenario] || currentScenario;
+      }
+    }
+
+    // ============================================
+    // COLLAPSIBLE SIDEBAR GROUPS
+    // ============================================
+
+    function toggleSbGroup(headerEl) {
+      headerEl.classList.toggle('open');
+      const body = headerEl.nextElementSibling;
+      if (body) body.classList.toggle('open');
+    }
+
+    // ============================================
+    // DECISION BOX — "So What?"
+    // ============================================
+
+    function computeGuardrails(data) {
+      const flags = [];
+      const months = (modelData.months || []).length || 12;
+      const idx = months - 1;
+
+      if (currentIndustry === 'saas') {
+        const ltv = data.ltv || 0;
+        const nrr = data.nrr || 0;
+        const cashMonths = data.cash && data.cash[idx] > 0 ? data.cash[idx] / 200000 : 0;
+        flags.push(ltv >= 3
+          ? { label: `LTV/CAC ${ltv.toFixed(1)}x — healthy`, cls: 'guardrail-flag--ok' }
+          : ltv >= 2
+          ? { label: `LTV/CAC ${ltv.toFixed(1)}x — watch`, cls: 'guardrail-flag--warn' }
+          : { label: `LTV/CAC ${ltv.toFixed(1)}x — below 2× threshold ⚠`, cls: 'guardrail-flag--risk' });
+        flags.push(nrr >= 110
+          ? { label: `NRR ${nrr.toFixed(0)}% — expansion`, cls: 'guardrail-flag--ok' }
+          : nrr >= 100
+          ? { label: `NRR ${nrr.toFixed(0)}% — stable`, cls: 'guardrail-flag--warn' }
+          : { label: `NRR ${nrr.toFixed(0)}% — contraction risk ⚠`, cls: 'guardrail-flag--risk' });
+        flags.push(cashMonths > 12
+          ? { label: `Runway ${cashMonths.toFixed(0)} mo — safe`, cls: 'guardrail-flag--ok' }
+          : cashMonths > 6
+          ? { label: `Runway ${cashMonths.toFixed(0)} mo — monitor`, cls: 'guardrail-flag--warn' }
+          : { label: `Runway ${cashMonths.toFixed(0)} mo — critical ⚠`, cls: 'guardrail-flag--risk' });
+      } else if (currentIndustry === 'manufacturing') {
+        const gm = data.grossMargin || 0;
+        const baseGm = modelData.scenarios['base'] ? modelData.scenarios['base'].grossMargin || 0 : gm;
+        // KEY GUARDRAIL: promo GP% below baseline
+        if (currentScenario !== 'base' && gm < baseGm) {
+          flags.push({ label: `Gross margin ${gm.toFixed(1)}% < Base ${baseGm.toFixed(1)}% — promo GP below baseline ⚠`, cls: 'guardrail-flag--risk' });
+        } else {
+          flags.push({ label: `Gross margin ${gm.toFixed(1)}% — ${gm >= 40 ? 'healthy' : 'thin'}`, cls: gm >= 40 ? 'guardrail-flag--ok' : 'guardrail-flag--warn' });
+        }
+        const ue = data.unitEconomics || 0;
+        flags.push(ue > 0
+          ? { label: `Unit contribution $${ue.toFixed(0)} — positive`, cls: 'guardrail-flag--ok' }
+          : { label: `Unit contribution $${ue.toFixed(0)} — negative ⚠`, cls: 'guardrail-flag--risk' });
+      } else if (currentIndustry === 'media') {
+        const em = data.ebitdaMargin || 0;
+        flags.push(em > 20
+          ? { label: `EBITDA margin ${em.toFixed(1)}% — strong`, cls: 'guardrail-flag--ok' }
+          : em > 0
+          ? { label: `EBITDA margin ${em.toFixed(1)}% — marginal`, cls: 'guardrail-flag--warn' }
+          : { label: `EBITDA margin ${em.toFixed(1)}% — loss-making ⚠`, cls: 'guardrail-flag--risk' });
+      } else if (currentIndustry === 'lending') {
+        const lr = data.lossRate || 0;
+        flags.push(lr < 1
+          ? { label: `Net loss rate ${lr.toFixed(2)}% — controlled`, cls: 'guardrail-flag--ok' }
+          : lr < 3
+          ? { label: `Net loss rate ${lr.toFixed(2)}% — elevated`, cls: 'guardrail-flag--warn' }
+          : { label: `Net loss rate ${lr.toFixed(2)}% — impairment risk ⚠`, cls: 'guardrail-flag--risk' });
+        const nim = data.netInterestMargin || 0;
+        flags.push(nim > 40
+          ? { label: `NIM ${nim.toFixed(0)}% — healthy spread`, cls: 'guardrail-flag--ok' }
+          : { label: `NIM ${nim.toFixed(0)}% — compressed`, cls: 'guardrail-flag--warn' });
+      } else if (currentIndustry === 'realestate') {
+        const noi = data.noiMargin || 0;
+        const baseNoi = modelData.scenarios['base'] ? modelData.scenarios['base'].noiMargin || 0 : noi;
+        if (currentScenario !== 'base' && noi < baseNoi) {
+          flags.push({ label: `NOI margin ${noi.toFixed(1)}% < Base ${baseNoi.toFixed(1)}% ⚠`, cls: 'guardrail-flag--risk' });
+        } else {
+          flags.push({ label: `NOI margin ${noi.toFixed(1)}% — ${noi >= 65 ? 'above market' : 'watch costs'}`, cls: noi >= 65 ? 'guardrail-flag--ok' : 'guardrail-flag--warn' });
+        }
+      }
+      return flags;
+    }
+
+    function renderDecisionBox() {
+      const box = document.getElementById('decisionBox');
+      if (!box || currentMode === 'variance') return;
+      box.style.display = '';
+
+      const data = modelData.scenarios && modelData.scenarios[currentScenario];
+      if (!data) { box.style.display = 'none'; return; }
+
+      const months = (modelData.months || []).length || 12;
+      const idx = months - 1;
+      const guardrails = computeGuardrails(data);
+      const hasRisk = guardrails.some(f => f.cls === 'guardrail-flag--risk');
+      const hasWarn = guardrails.some(f => f.cls === 'guardrail-flag--warn');
+
+      let verdict, bullets, boxClass, eyebrow, nextStep;
+
+      if (currentIndustry === 'saas') {
+        const ltv = data.ltv || 0;
+        const runway = data.cash && data.cash[idx] > 0 ? data.cash[idx] / 200000 : 0;
+        const mrrGrowth = data.mrrTrend ? ((data.mrrTrend[idx] - data.mrrTrend[0]) / data.mrrTrend[0]) * 100 : 0;
+        if (hasRisk) {
+          boxClass = 'decision-box--hold'; eyebrow = 'DECISION';
+          verdict = `Don't scale spend — <span class="verdict-action">fix unit economics first</span>`;
+          bullets = [
+            `LTV/CAC of ${ltv.toFixed(1)}× is below the 3× threshold; each new customer acquired at current CAC destroys value.`,
+            runway < 6 ? `Runway of ${runway.toFixed(0)} months is critically short — stop discretionary growth spend immediately.` : `Focus on churn reduction before increasing new customer acquisition spend.`,
+            `Run → only after LTV/CAC exceeds 2.5× and NRR stabilizes above 100%.`
+          ];
+          nextStep = `Prioritize churn reduction & gross margin improvement before next growth push.`;
+        } else if (hasWarn) {
+          boxClass = 'decision-box--caution'; eyebrow = 'DECISION';
+          verdict = `Run cautiously — <span class="verdict-action">monitor NRR & runway weekly</span>`;
+          bullets = [
+            `MRR grew ${mrrGrowth.toFixed(0)}% with LTV/CAC at ${ltv.toFixed(1)}× — viable but not yet exceptional.`,
+            `Prioritize channels with CAC payback under 12 months; cut or pause others.`,
+            `Set a hard floor: if NRR dips below 100%, pause acquisition spend that week.`
+          ];
+          nextStep = `Tighten cohort analysis — identify which segments have best NRR and double down.`;
+        } else {
+          boxClass = 'decision-box--run'; eyebrow = 'DECISION';
+          verdict = `Run the growth plan — <span class="verdict-action">unit economics support acceleration</span>`;
+          bullets = [
+            `LTV/CAC of ${ltv.toFixed(1)}× clears the 3× bar; growth investment will compound positively.`,
+            `NRR above 110% means existing customers are funding net-new acquisition — efficient engine.`,
+            `With ${runway.toFixed(0)} months of runway, there is headroom to invest ahead of the ARR curve.`
+          ];
+          nextStep = `Allocate growth budget toward highest-NRR cohort channels; review quarterly.`;
+        }
+
+      } else if (currentIndustry === 'manufacturing') {
+        const gm = data.grossMargin || 0;
+        const baseGm = modelData.scenarios['base'] ? modelData.scenarios['base'].grossMargin || 0 : gm;
+        const gmDrop = baseGm - gm;
+        const ue = data.unitEconomics || 0;
+
+        if (currentScenario !== 'base' && gmDrop > 5) {
+          boxClass = 'decision-box--hold'; eyebrow = 'DECISION';
+          verdict = `Don't run this promo — <span class="verdict-action">gross margin falls ${gmDrop.toFixed(1)}pp below base</span>`;
+          bullets = [
+            `Promo/downside scenario cuts gross margin from ${baseGm.toFixed(1)}% to ${gm.toFixed(1)}% — a ${gmDrop.toFixed(1)}pp erosion that exceeds acceptable discount tolerance.`,
+            `Unit contribution drops to ${formatValue(ue, 'currency')}; at this level fixed cost absorption becomes a risk at any volume dip.`,
+            `Only run if volume uplift is at least ${Math.ceil(gmDrop / gm * 100)}%+ — model the break-even volume before committing.`
+          ];
+          nextStep = `Recalibrate discount pool or channel mix to protect a minimum ${baseGm.toFixed(0)}% gross margin floor.`;
+        } else if (hasWarn || gm < 35) {
+          boxClass = 'decision-box--caution'; eyebrow = 'DECISION';
+          verdict = `Run with guardrails — <span class="verdict-action">set a minimum GP% floor before launch</span>`;
+          bullets = [
+            `Gross margin of ${gm.toFixed(1)}% is thin; any further COGS inflation or discount pressure will compress to breakeven.`,
+            `Promo GP% is ${currentScenario !== 'base' ? (gmDrop > 0 ? `${gmDrop.toFixed(1)}pp below baseline — ensure volume compensates` : 'in line with base case') : 'the baseline — model downside promo scenario before committing'}.`,
+            `Cap maximum discount at ${Math.max(0, gm - 30).toFixed(0)}pp to maintain a 30% gross margin floor.`
+          ];
+          nextStep = `Push discount pool decision to SKU-level P&L — blended margin can hide individual product losses.`;
+        } else {
+          boxClass = 'decision-box--run'; eyebrow = 'DECISION';
+          verdict = `Run the promo — <span class="verdict-action">margin supports the discount pool</span>`;
+          bullets = [
+            `Gross margin of ${gm.toFixed(1)}% provides ${(gm - 30).toFixed(1)}pp of discount headroom above a 30% floor.`,
+            `Unit contribution of ${formatValue(ue, 'currency')} remains positive even after modeled discounting.`,
+            `Push digital/direct channels first — lower distribution cost preserves more of the margin benefit.`
+          ];
+          nextStep = `Lock in the discount pool at ≤${Math.max(0, gm - 30).toFixed(0)}pp; track sell-through weekly to catch early margin slippage.`;
+        }
+
+      } else if (currentIndustry === 'media') {
+        const em = data.ebitdaMargin || 0;
+        const arpu = data.arpu || 0;
+        if (em < 0) {
+          boxClass = 'decision-box--hold'; eyebrow = 'DECISION';
+          verdict = `Don't push volume yet — <span class="verdict-action">achieve EBITDA breakeven first</span>`;
+          bullets = [
+            `EBITDA margin of ${em.toFixed(1)}% means every incremental user adds revenue but also negative margin — scale accelerates losses.`,
+            `ARPU of ${formatValue(arpu, 'currency')} is insufficient to cover content + OpEx at this fill rate; either raise CPM floor or cut content cost.`,
+            `Model the CPM and fill rate required to hit breakeven, then set those as launch criteria for the next push.`
+          ];
+          nextStep = `Negotiate a CPM floor with top 3 demand partners before the next user growth campaign.`;
+        } else if (em < 15) {
+          boxClass = 'decision-box--caution'; eyebrow = 'DECISION';
+          verdict = `Run cautiously — <span class="verdict-action">push high-CPM inventory, not volume</span>`;
+          bullets = [
+            `EBITDA margin of ${em.toFixed(1)}% is positive but fragile; one content cost spike or fill rate dip erases it.`,
+            `Prioritize premium ad formats and direct-sold inventory to lift effective CPM before buying traffic.`,
+            `Set a kill switch: if fill rate drops below 70%, pause paid acquisition until monetization stabilizes.`
+          ];
+          nextStep = `Test programmatic floor price increase in top 2 markets — model CPM elasticity on 30-day data.`;
+        } else {
+          boxClass = 'decision-box--run'; eyebrow = 'DECISION';
+          verdict = `Run the growth campaign — <span class="verdict-action">monetization supports user acquisition</span>`;
+          bullets = [
+            `EBITDA margin of ${em.toFixed(1)}% provides operating leverage; incremental users are additive to the bottom line.`,
+            `ARPU of ${formatValue(arpu, 'currency')} clears content cost at scale — push the channel with best DAU retention.`,
+            `Reinvest 40–50% of EBITDA into user acquisition to compound the audience flywheel.`
+          ];
+          nextStep = `Allocate growth budget to cohorts with highest D30 retention; pull back on high-churn acquisition channels.`;
+        }
+
+      } else if (currentIndustry === 'lending') {
+        const lr = data.lossRate || 0;
+        const nim = data.netInterestMargin || 0;
+        const roe = data.roe || 0;
+        if (lr >= 3 || roe < 0) {
+          boxClass = 'decision-box--hold'; eyebrow = 'DECISION';
+          verdict = `Pause originations — <span class="verdict-action">tighten underwriting before scaling</span>`;
+          bullets = [
+            `Net loss rate of ${lr.toFixed(2)}% and ROE of ${roe.toFixed(0)}% signal the portfolio is destroying value at current credit standards.`,
+            `Do not grow origination volume until vintage analysis confirms the loss curve is stabilizing.`,
+            `Activate recovery collections on DPD 60+ accounts — prioritize recovery before adding new risk.`
+          ];
+          nextStep = `Cut approval rates by 20–30% and re-underwrite using last 6 months of vintage performance.`;
+        } else if (lr >= 1.5 || nim < 30) {
+          boxClass = 'decision-box--caution'; eyebrow = 'DECISION';
+          verdict = `Grow selectively — <span class="verdict-action">tighten credit box on riskier segments</span>`;
+          bullets = [
+            `NIM of ${nim.toFixed(0)}% and loss rate of ${lr.toFixed(2)}% are manageable but leaves limited buffer for macro deterioration.`,
+            `Focus origination on the top 2 credit tiers by DSCR/score; pull back on borderline approvals.`,
+            `Set a monthly loss rate ceiling of 2%; if breached, auto-tighten approval criteria for the following month.`
+          ];
+          nextStep = `Segment vintage P&L by credit band — identify which cohorts are profitable and allocate capital accordingly.`;
+        } else {
+          boxClass = 'decision-box--run'; eyebrow = 'DECISION';
+          verdict = `Scale originations — <span class="verdict-action">credit economics are attractive</span>`;
+          bullets = [
+            `NIM of ${nim.toFixed(0)}% with net loss rate of ${lr.toFixed(2)}% yields ROE of ${roe.toFixed(0)}% — well above hurdle rate.`,
+            `Increase origination volume in highest-NIM segments while maintaining underwriting discipline.`,
+            `Expand funding facilities to support growth — current capital efficiency ratio supports leverage increase.`
+          ];
+          nextStep = `Raise warehouse line by 20–30% to fund next origination tranche; hedge rate exposure if fixed-rate book > 60%.`;
+        }
+
+      } else if (currentIndustry === 'realestate') {
+        const noi = data.noiMargin || 0;
+        const cap = data.capRate || 0;
+        const fcf = data.fcf && data.fcf[idx];
+        if (fcf !== undefined && fcf < 0) {
+          boxClass = 'decision-box--hold'; eyebrow = 'DECISION';
+          verdict = `Hold — <span class="verdict-action">negative FCF after debt service</span>`;
+          bullets = [
+            `Free cash flow of ${formatValue(fcf, 'currency')}/mo after debt service is negative — the asset is consuming equity capital.`,
+            `Either refinance at a lower debt service cost, increase occupancy to above 90%, or divest and redeploy.`,
+            `Cap rate of ${cap.toFixed(2)}% vs implied hurdle rate — current valuation may exceed intrinsic value.`
+          ];
+          nextStep = `Model three scenarios: (1) lease-up timeline, (2) refinance terms, (3) exit cap rate — present to investment committee within 30 days.`;
+        } else if (noi < 60 || cap < 5) {
+          boxClass = 'decision-box--caution'; eyebrow = 'DECISION';
+          verdict = `Hold and optimise — <span class="verdict-action">NOI margin needs improvement before expansion</span>`;
+          bullets = [
+            `NOI margin of ${noi.toFixed(1)}% is below the 65% benchmark — operating efficiency is dragging net return.`,
+            `Renegotiate maintenance and management contracts; target 300bps of OpEx reduction over 12 months.`,
+            `Do not acquire additional assets at this cap rate (${cap.toFixed(2)}%) until existing portfolio FCF is stable.`
+          ];
+          nextStep = `Commission an independent OpEx audit; benchmark against comparable assets in the same sub-market.`;
+        } else {
+          boxClass = 'decision-box--run'; eyebrow = 'DECISION';
+          verdict = `Deploy capital — <span class="verdict-action">asset economics support acquisition or development</span>`;
+          bullets = [
+            `NOI margin of ${noi.toFixed(1)}% and cap rate of ${cap.toFixed(2)}% indicate strong operating performance with positive FCF.`,
+            `Pursue value-add acquisitions in the same sub-market to leverage management platform at scale.`,
+            `Consider refinancing at current LTV to pull equity for next acquisition without dilution.`
+          ];
+          nextStep = `Run a pipeline analysis of off-market assets within 500m; prioritise sub-5% cap rate acquisitions with 90%+ occupancy.`;
+        }
+      }
+
+      if (!verdict) { box.style.display = 'none'; return; }
+
+      box.className = `decision-box ${boxClass}`;
+      box.innerHTML = `
+        <div class="decision-box-eyebrow">${eyebrow}</div>
+        <div class="decision-box-verdict">${verdict}</div>
+        <ul class="decision-box-bullets">
+          ${bullets.map(b => `<li>${b}</li>`).join('')}
+        </ul>
+        <div class="decision-box-guardrails">
+          ${guardrails.map(f => `<span class="guardrail-flag ${f.cls}">${f.label}</span>`).join('')}
+        </div>
+        <div class="decision-box-next" style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(12,23,45,0.10);font-size:12px;font-weight:600;color:var(--muted);">
+          Next action: <span style="color:var(--accent-2);">${nextStep}</span>
+        </div>
+      `;
+    }
+
+    // ============================================
     // INITIALIZE ON LOAD
     // ============================================
     
-    window.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('DOMContentLoaded', function() {
+      restoreFromHash();
+      init();
+      renderSensitivity();
+    });
   </script>
 </body>
 </html>
