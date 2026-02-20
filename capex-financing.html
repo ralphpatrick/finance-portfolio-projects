@@ -592,6 +592,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtK(ctx.parsed.y) } } },
         scales: { y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } } }
       }
@@ -612,7 +613,7 @@
         }]
       },
       options: {
-        responsive: true, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtK(ctx.parsed.y) + '/mo' } } },
+        responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => fmtK(ctx.parsed.y) + '/mo' } } },
         scales: { y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } }, x: { grid: { display: false } } }
       }
     });

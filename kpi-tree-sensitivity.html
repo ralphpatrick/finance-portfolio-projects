@@ -580,7 +580,7 @@
         ]
       },
       options: {
-        indexAxis: 'y', responsive: true,
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + (ctx.parsed.x > 0 ? '+' : '') + ctx.parsed.x.toFixed(1) + ' mo' } } },
         scales: { x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => (v>0?'+':'')+v+'mo' } }, y: { grid: { display: false } } }
       }

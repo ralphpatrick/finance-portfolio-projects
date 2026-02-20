@@ -805,6 +805,7 @@
       options: {
         indexAxis: 'y',
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + ' days' } } },
         scales: { x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => v + 'd' } }, y: { grid: { display: false } } }
       }
@@ -827,6 +828,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.round(ctx.parsed.y).toLocaleString() } } },
         scales: {
           y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(v) } },
