@@ -489,6 +489,41 @@
         </div>
       </div>
 
+      <!-- 13-WEEK CASH FLOW CHART -->
+      <div class="module-section">
+        <div class="section-header-with-help">
+          <h2 class="module-section-title">13-Week Cash Flow View</h2>
+          <span class="help-icon" data-help="Short-term weekly cash plan: cash in (collections) vs. cash out (payroll, vendors, overhead). Spot shortfalls before they become a crisis."></span>
+        </div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-13week" height="180"></canvas></div>
+
+          <!-- 13-Week Explainer Box -->
+          <div id="week13-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <!-- Live callout -->
+            <div id="week13-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">13-Week Ending Cash Position</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="week13-live-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="week13-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Weekly Net</div>
+                <div id="week13-net-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="week13-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This is a <strong>short-term cash plan</strong>. It shows weekly cash in (collections) and cash out (payroll, vendors, overhead) so you can spot cash shortfalls early. If the line trends toward zero, you need to pull levers now — speed up collections, delay non-critical payments, or reduce spend — before it becomes a crisis.
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- CASH BALANCE CHART -->
       <div class="module-section">
         <div class="section-header-with-help">
@@ -497,6 +532,29 @@
         </div>
         <div class="module-card">
           <div class="chart-wrap"><canvas id="chart-cash" height="160"></canvas></div>
+
+          <!-- 12-Month Explainer Box -->
+          <div id="cash12-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="cash12-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">12-Month Ending Cash Balance</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="cash12-live-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="cash12-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Trend</div>
+                <div id="cash12-trend-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="cash12-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This chart projects your <strong>ending cash balance</strong> each month over 12 months based on revenue growth, COGS, operating expenses, and working capital timing (DSO, DPO, DIO). A rising line means the business is generating more cash than it spends — a declining line is a warning to act before cash runs out.
+            </div>
+          </div>
         </div>
       </div>
 
@@ -535,7 +593,7 @@
 <a class="to-top" href="#main" aria-label="Back to top">↑</a>
 <script src="main.js"></script>
 <script>
-  let chartCCC = null, chartCash = null;
+  let chartCCC = null, chartCash = null, chart13Week = null;
 
   const fmt = (n) => '$' + Math.round(n).toLocaleString();
   const fmtK = (n) => { const abs = Math.abs(n); const sign = n < 0 ? '-' : ''; if (abs >= 1000000) return sign + '$' + (abs/1000000).toFixed(1) + 'M'; if (abs >= 1000) return sign + '$' + (abs/1000).toFixed(0) + 'K'; return sign + '$' + Math.round(abs); };
@@ -836,6 +894,122 @@
         }
       }
     });
+
+    // ── 13-Week Cash Flow Chart ──────────────────────────
+    // Derive weekly cash in/out from monthly assumptions
+    const weeklyRevenue = revenue / 4.33;
+    const weeklyOpex = opex / 4.33;
+    const weeklyCogsAmt = weeklyRevenue * cogs;
+    const weeklyNetCF = weeklyRevenue - weeklyCogsAmt - weeklyOpex;
+    const weekLabels = Array.from({length:13}, (_,i) => 'W'+(i+1));
+    const weekCashIn = weekLabels.map((_,i) => Math.round(weeklyRevenue * (1 + growth/4 * i)));
+    const weekCashOut = weekLabels.map((_,i) => Math.round((weeklyCogsAmt + weeklyOpex) * (1 + growth/4 * i * 0.3)));
+    let wCash = inp.cash;
+    const weekBalance = weekLabels.map((_,i) => {
+      wCash += weekCashIn[i] - weekCashOut[i];
+      return Math.max(wCash, 0);
+    });
+
+    const week13ctx = document.getElementById('chart-13week').getContext('2d');
+    if (chart13Week) chart13Week.destroy();
+    const w13Positive = weekBalance[12] > inp.cash;
+    chart13Week = new Chart(week13ctx, {
+      type: 'bar',
+      data: {
+        labels: weekLabels,
+        datasets: [
+          {
+            label: 'Cash In',
+            data: weekCashIn,
+            backgroundColor: 'rgba(15,118,110,0.65)',
+            borderRadius: 5,
+            order: 2,
+          },
+          {
+            label: 'Cash Out',
+            data: weekCashOut.map(v => -v),
+            backgroundColor: 'rgba(239,68,68,0.55)',
+            borderRadius: 5,
+            order: 2,
+          },
+          {
+            label: 'Cash Balance',
+            data: weekBalance,
+            type: 'line',
+            borderColor: w13Positive ? 'rgba(15,118,110,1)' : 'rgba(239,68,68,1)',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            tension: 0.4,
+            order: 1,
+            yAxisID: 'y',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { font: { size: 12 }, boxWidth: 14 } },
+          tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + Math.abs(Math.round(ctx.parsed.y)).toLocaleString() } }
+        },
+        scales: {
+          y: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { callback: v => fmtK(Math.abs(v)) } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 13-Week explainer
+    const week13End = weekBalance[12];
+    const week13Pos = week13End > inp.cash;
+    const week13Low = weekBalance.some(b => b < inp.cash * 0.15);
+    const avgWeeklyNet = weekCashIn.reduce((a,v,i) => a + v - weekCashOut[i], 0) / 13;
+    document.getElementById('week13-explainer').style.display = '';
+    document.getElementById('week13-live-value').textContent = fmtK(week13End);
+    const w13BadgeColor = week13Low ? '#dc2626' : (week13Pos ? '#0f766e' : '#d97706');
+    const w13BadgeBg = week13Low ? 'rgba(220,38,38,0.10)' : (week13Pos ? 'rgba(15,118,110,0.10)' : 'rgba(217,119,6,0.10)');
+    const w13BadgeText = week13Low ? '⚠ Cash Risk' : (week13Pos ? '✓ Building' : '↓ Declining');
+    const w13BadgeEl = document.getElementById('week13-live-badge');
+    w13BadgeEl.textContent = w13BadgeText;
+    w13BadgeEl.style.cssText = `background:${w13BadgeBg}; color:${w13BadgeColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('week13-net-label').innerHTML = `${fmtK(avgWeeklyNet)}<span style="color:var(--muted);font-weight:400;font-size:11px;"> avg / week</span>`;
+    const week13VerdictEl = document.getElementById('week13-verdict-block');
+    if (week13Low) {
+      week13VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      week13VerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Cash shortfall risk detected.</strong> One or more weeks dip critically close to zero — the business is vulnerable to a missed payment or unexpected expense. Act now: accelerate collections, defer discretionary spend, and review payroll timing.`;
+    } else if (!week13Pos) {
+      week13VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      week13VerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Cash is declining week over week.</strong> Cash out exceeds cash in on a net basis — ending at ${fmtK(week13End)} vs. starting at ${fmtK(inp.cash)}. Watch closely and identify which weeks are the most cash-intensive to plan ahead.`;
+    } else {
+      week13VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      week13VerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Cash is building week over week.</strong> Collections are outpacing outflows — ending 13-week cash is ${fmtK(week13End)}, up from ${fmtK(inp.cash)}. The business has a positive short-term cash position.`;
+    }
+
+    // ── 12-Month Cash Balance explainer ─────────────────
+    const cash12End = months[11].cash;
+    const cash12Pos = cash12End > months[0].cash - months[0].netCF;
+    document.getElementById('cash12-explainer').style.display = '';
+    document.getElementById('cash12-live-value').textContent = fmtK(cash12End);
+    const c12Color = cash12Pos ? '#0f766e' : '#dc2626';
+    const c12Bg = cash12Pos ? 'rgba(15,118,110,0.10)' : 'rgba(220,38,38,0.10)';
+    const c12Badge = document.getElementById('cash12-live-badge');
+    c12Badge.textContent = cash12Pos ? '✓ Positive Trend' : '↓ Declining';
+    c12Badge.style.cssText = `background:${c12Bg}; color:${c12Color}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    const startCash = months[0].cash - months[0].netCF;
+    const changePct = startCash > 0 ? ((cash12End - startCash) / startCash * 100).toFixed(1) : '—';
+    document.getElementById('cash12-trend-label').innerHTML = `${cash12Pos ? '▲' : '▼'} ${Math.abs(changePct)}% over 12 mo`;
+    const c12VerdictEl = document.getElementById('cash12-verdict-block');
+    if (cash12Pos && avgNetCF > 0) {
+      c12VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      c12VerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Positive — cash is growing.</strong> The business ends the year at ${fmtK(cash12End)}, gaining ${fmtK(cash12End - startCash)} (+${changePct}%) from the starting balance. Average monthly net cash flow is ${fmtK(avgNetCF)} — the business is self-funding its growth.`;
+    } else if (!cash12Pos || avgNetCF < 0) {
+      c12VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      c12VerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Negative — cash is declining.</strong> The business ends the year at ${fmtK(cash12End)}, down ${fmtK(startCash - cash12End)} from the start. Average monthly net cash flow is ${fmtK(avgNetCF)} — this trajectory is unsustainable without intervention. Tighten collections (DSO), extend payables (DPO), and review OpEx.`;
+    } else {
+      c12VerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      c12VerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Mixed — watch closely.</strong> Cash ends at ${fmtK(cash12End)}, a change of ${changePct}% over 12 months. The trend warrants monitoring — small changes in revenue growth or DSO could flip this negative.`;
+    }
 
     // Detail Table
     const tbody = document.getElementById('detail-tbody');
