@@ -265,25 +265,29 @@
     .sidebar {
       position: sticky;
       top: 84px;
-      display: grid;
-      gap: 12px;
-    }
-
-    .sidebar-section {
+      padding: 16px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
       box-shadow: var(--shadow-soft);
     }
 
+    .sidebar-section {
+      margin-bottom: 18px;
+    }
+    .sidebar-section:last-child { margin-bottom: 0; }
+
     .sidebar-title {
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
     /* Controls */
@@ -698,7 +702,6 @@
         position: relative;
         top: 0;
       }
-
       .chart-grid {
         grid-template-columns: 1fr;
       }
@@ -757,17 +760,44 @@
   
     /* ── Print / CFO Pack ── */
     @media print {
+      /* Hide everything not needed */
       .site-header, .module-actions, .tab-section, .sidebar, .data-needed-section,
       .next-module-bar, .notification, #varianceUploadSection, .btn-no-print,
-      #topDriversCard { display: none !important; }
-      .layout-grid { grid-template-columns: 1fr !important; }
-      .chart-grid > *:not(:first-child) { display: none !important; }
-      body { background: white; color: #000; }
-      .kpi-grid { grid-template-columns: repeat(4,1fr) !important; }
+      .module-section, .data-preview,
+      .scenario-actions, #varianceModeContent { display: none !important; }
+
+      /* Full-width single-column layout */
+      body { background: white; color: #000; margin: 0; font-size: 11px; }
       .main-content { padding: 0 !important; }
-      .card, .kpi-card, .commentary { box-shadow: none !important; border: 1px solid #ccc !important; }
-      #varianceModeContent { display: none !important; }
-      #printTitle { display: block !important; font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+      .container { width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+      .layout-grid { display: block !important; }
+
+      /* Print title */
+      #printTitle { display: block !important; font-size: 20px; font-weight: 700; margin: 16px 0 12px; }
+
+      /* KPIs in a single row */
+      .kpi-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; margin-bottom: 16px !important; }
+      .kpi-card { padding: 12px !important; break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+      .kpi-value { font-size: 20px !important; }
+
+      /* Decision box */
+      .decision-box { break-inside: avoid; margin-bottom: 16px !important; box-shadow: none !important; border: 1.5px solid currentColor !important; }
+
+      /* Charts: full width, one per page section, fixed height */
+      .chart-grid { display: block !important; margin-bottom: 0 !important; }
+      .chart-grid .card { margin-bottom: 16px !important; break-inside: avoid; page-break-inside: avoid; }
+      .card { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; margin-bottom: 16px !important; }
+      .chart-container { height: 240px !important; padding: 8px 0 !important; }
+      canvas { max-height: 240px !important; }
+
+      /* Chart explainers */
+      [id$="-explainer"] { display: none !important; }
+
+      /* Top drivers card in main */
+      #mainTopDriversCard { break-inside: avoid; }
+
+      /* Commentary */
+      .commentary { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; margin-bottom: 0 !important; }
     }
     #printTitle { display: none; }
 
@@ -814,8 +844,7 @@
     .narrative-card strong { color: var(--text); }
 
     /* ── Top Drivers Card ── */
-    #topDriversCard { background: white; border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); }
+    /* ── Top Drivers Card is now in main content (see #mainTopDriversCard) ── */
     .driver-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
     .driver-bar-bg { flex: 1; height: 8px; background: var(--bg-muted); border-radius: 4px; overflow: hidden; }
     .driver-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width 300ms; }
@@ -840,34 +869,36 @@
     .modal-item-meta { font-size: 12px; color: var(--muted); }
     .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
 
-    /* ── Collapsible sidebar sections ── */
+    /* ── Sidebar accordion groups ── */
     .sb-group {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      margin-bottom: 8px;
-      overflow: hidden;
-      background: white;
+      border-bottom: 1px solid var(--border);
     }
+    .sb-group:last-child { border-bottom: none; }
     .sb-group-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 11px 14px;
       cursor: pointer;
       user-select: none;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       color: var(--muted);
-      transition: background 120ms ease;
       gap: 8px;
+      padding: 12px 0;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
     }
-    .sb-group-header:hover { background: var(--bg-muted); }
+    .sb-group-header:hover { color: var(--text); }
+    .sb-group-header.open { color: var(--text); }
     .sb-group-header .sb-chevron {
       font-size: 10px; color: var(--muted); transition: transform 200ms ease; flex-shrink: 0;
     }
-    .sb-group-header.open .sb-chevron { transform: rotate(180deg); }
+    .sb-group-header.open .sb-chevron { transform: rotate(180deg); color: var(--text); }
     .sb-group-header .sb-badge {
       font-size: 10px; font-weight: 600;
       padding: 2px 8px; border-radius: 999px;
@@ -875,49 +906,68 @@
       flex-shrink: 0; margin-left: auto;
     }
     .sb-group-body {
-      display: none; padding: 0 12px 12px 12px;
-      border-top: 1px solid var(--border);
+      display: none;
+      padding-bottom: 14px;
     }
     .sb-group-body.open { display: block; }
-    .sb-tabs { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; }
-    .sb-tab {
-      padding: 9px 12px; border-radius: 10px;
-      border: 1px solid var(--border); background: white;
-      font-size: 13px; font-weight: 600; cursor: pointer; text-align: left;
-      transition: all 120ms ease; display: flex; align-items: center; gap: 8px;
+
+    /* Static non-collapsible section (Data Mode) */
+    .sb-static {
+      padding: 12px 0 14px;
+      border-bottom: 1px solid var(--border);
     }
-    .sb-tab:hover { background: var(--bg-muted); border-color: rgba(12,23,45,0.16); }
-    .sb-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sb-tab:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .sb-tab.active { background: var(--text); color: white; border-color: var(--text); }
     .sb-tab .sb-tab-dot {
       width: 7px; height: 7px; border-radius: 50%;
       background: currentColor; opacity: 0.6; flex-shrink: 0;
     }
     .sb-action-btn {
       display: flex; align-items: center; gap: 8px;
-      width: 100%; padding: 9px 12px;
-      border-radius: 10px; border: 1px solid var(--border);
-      background: white; font-size: 13px; font-weight: 600;
+      width: 100%; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 12px; font-weight: 600;
       cursor: pointer; margin-top: 6px;
-      transition: all 120ms ease; text-align: left;
+      transition: all 140ms ease; text-align: left;
+      white-space: nowrap;
     }
-    .sb-action-btn:hover { background: var(--bg-muted); border-color: rgba(12,23,45,0.16); }
+    .sb-action-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-action-btn:active { transform: translateY(1px); }
     .sb-action-btn.sb-action-primary {
       background: var(--text); color: white; border-color: var(--text);
     }
-    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 4px 12px rgba(11,18,32,0.18); }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
     .sb-action-btn.sb-action-accent {
       background: var(--accent); color: white; border-color: var(--accent);
     }
     .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
-    .sb-mode-pills { display: flex; gap: 6px; padding-top: 10px; flex-wrap: wrap; }
+    .sb-mode-pills { display: flex; gap: 6px; flex-wrap: wrap; }
     .sb-mode-pill {
-      flex: 1; min-width: 70px; padding: 8px 6px; border-radius: 10px;
+      flex: 1; min-width: 70px; padding: 7px 6px; border-radius: 999px;
       border: 1px solid var(--border); background: white;
       font-size: 12px; font-weight: 600; cursor: pointer; text-align: center;
-      transition: all 120ms ease;
+      transition: all 140ms ease;
     }
-    .sb-mode-pill:hover { background: var(--bg-muted); }
-    .sb-mode-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-mode-pill:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-mode-pill.active { background: var(--text); color: white; border-color: var(--text); }
 
     /* ── Decision / So What? Box ── */
     .decision-box {
@@ -970,6 +1020,29 @@
     .guardrail-flag--ok   { background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: #0f766e; }
     .guardrail-flag--warn { background: rgba(217,119,6,0.10);  border: 1px solid rgba(217,119,6,0.25);  color: #d97706; }
     .guardrail-flag--risk { background: rgba(220,38,38,0.10);  border: 1px solid rgba(220,38,38,0.20);  color: #dc2626; }
+
+    /* ── Top Drivers (main content) ── */
+    #mainTopDriversCard {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 20px;
+    }
+    .top-drivers-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .top-drivers-outcome-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
 
     /* ── Sensitivity item styles ── */
     .sensitivity-outcome-btn {
@@ -1094,39 +1167,30 @@
   <main id="main" class="main-content">
     <div class="container">
       <div class="layout-grid">
-        <!-- SIDEBAR: collapsible control groups -->
+        <!-- SIDEBAR: unified card, collapsible accordion -->
         <aside class="sidebar">
 
-          <!-- ① DATA MODE — always visible as status -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px;">
-            <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);">Data</span>
-            <span id="dataModeIndicator" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);">📊 Sample</span>
+          <!-- ① DATA MODE (static, always visible) -->
+          <div class="sb-static">
+            <div class="sidebar-title" style="margin-bottom:10px;">
+              <span>Data Mode</span>
+              <span id="dataModeIndicator" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);">📊 Sample</span>
+            </div>
+            <div class="sb-mode-pills">
+              <button class="sb-mode-pill active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
+              <button class="sb-mode-pill" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
+            </div>
+            <button class="sb-action-btn" onclick="window.print()" style="margin-top:8px;">🖨 Export CFO Pack</button>
           </div>
 
-          <!-- ② MODE (Simulator / Variance) -->
+          <!-- ② INDUSTRY (collapsed by default) -->
           <div class="sb-group">
-            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
-              <span>Mode</span>
-              <span id="sbModeLabel" class="sb-badge">Simulator</span>
-              <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body open">
-              <div class="sb-mode-pills">
-                <button class="sb-mode-pill active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
-                <button class="sb-mode-pill" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
-              </div>
-              <button class="sb-action-btn" onclick="window.print()" style="margin-top:10px;">🖨 Export CFO Pack</button>
-            </div>
-          </div>
-
-          <!-- ③ INDUSTRY -->
-          <div class="sb-group">
-            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+            <button class="sb-group-header" onclick="accordionOpen(this)">
               <span>Industry</span>
               <span id="sbIndustryLabel" class="sb-badge">SaaS</span>
               <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body open" id="industryTabs">
+            </button>
+            <div class="sb-group-body" id="industryTabs">
               <div class="sb-tabs">
                 <button class="sb-tab active" data-industry="saas" onclick="switchIndustry('saas')"><span class="sb-tab-dot"></span>SaaS</button>
                 <button class="sb-tab" data-industry="media" onclick="switchIndustry('media')"><span class="sb-tab-dot"></span>Media &amp; Platforms</button>
@@ -1137,14 +1201,14 @@
             </div>
           </div>
 
-          <!-- ④ SCENARIO -->
+          <!-- ③ SCENARIO (collapsed by default) -->
           <div class="sb-group">
-            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+            <button class="sb-group-header" onclick="accordionOpen(this)">
               <span>Scenario</span>
               <span id="sbScenarioLabel" class="sb-badge">Base Case</span>
               <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body open" id="scenarioTabs">
+            </button>
+            <div class="sb-group-body" id="scenarioTabs">
               <div class="sb-tabs">
                 <button class="sb-tab active" data-scenario="base" onclick="switchScenario('base')"><span class="sb-tab-dot"></span>Base Case</button>
                 <button class="sb-tab" data-scenario="upside" onclick="switchScenario('upside')"><span class="sb-tab-dot"></span>Upside</button>
@@ -1153,15 +1217,15 @@
             </div>
           </div>
 
-          <!-- ⑤ DRIVERS & CONSTRAINTS (collapsed by default on mobile, open on desktop) -->
+          <!-- ④ DRIVERS (collapsed by default) -->
           <div class="sb-group">
-            <div class="sb-group-header open" onclick="toggleSbGroup(this)">
+            <button class="sb-group-header" onclick="accordionOpen(this)">
               <span>Drivers</span>
               <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body open" style="padding-top:10px;">
+            </button>
+            <div class="sb-group-body">
               <div id="controlsContainer"></div>
-              <div class="scenario-actions" id="scenarioActions" style="padding-top:8px;border-top:1px solid var(--border);margin-top:4px;">
+              <div class="scenario-actions" id="scenarioActions" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px;flex-wrap:wrap;">
                 <button class="btn btn-ghost btn-sm" onclick="saveScenario()">💾 Save</button>
                 <button class="btn btn-ghost btn-sm" onclick="openLoadModal()">📂 Load</button>
                 <button class="btn btn-ghost btn-sm" onclick="copyShareLink()">🔗 Share</button>
@@ -1169,13 +1233,13 @@
             </div>
           </div>
 
-          <!-- ⑥ DATA ACTIONS (collapsed by default) -->
+          <!-- ⑤ DATA ACTIONS (collapsed by default) -->
           <div class="sb-group">
-            <div class="sb-group-header" onclick="toggleSbGroup(this)">
+            <button class="sb-group-header" onclick="accordionOpen(this)">
               <span>Data &amp; Upload</span>
               <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body" style="padding-top:10px;">
+            </button>
+            <div class="sb-group-body">
               <button class="sb-action-btn" onclick="useSampleData()">📊 Use Sample Data</button>
               <button class="sb-action-btn sb-action-primary" onclick="generateRandomData()">🎲 Generate Random</button>
               <button class="sb-action-btn sb-action-accent" onclick="downloadTemplate()">⬇ Download Template</button>
@@ -1183,20 +1247,6 @@
                 <input type="file" id="fileUpload" accept=".csv" onchange="handleFileUpload(event)" class="sb-file-hidden">
                 <button class="sb-action-btn" onclick="document.getElementById('fileUpload').click()">📁 Upload CSV Data</button>
               </div>
-            </div>
-          </div>
-
-          <!-- ⑦ TOP DRIVERS SENSITIVITY -->
-          <div id="topDriversCard" class="sb-group">
-            <div class="sb-group-header" onclick="toggleSbGroup(this)">
-              <span>Top Drivers</span>
-              <span class="sb-chevron">▼</span>
-            </div>
-            <div class="sb-group-body" style="padding-top:10px;">
-              <div id="sensitivityOutcomeSelector" style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;"></div>
-              <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Impact of +10% on each driver</div>
-              <div id="sensitivityList"></div>
-              <div id="topDriversList" style="display:none;"></div>
             </div>
           </div>
 
@@ -1312,6 +1362,19 @@
               <div id="chart3-verdict" style="padding:10px 14px; border-radius:8px; font-size:12px; line-height:1.6; margin-bottom:8px;"></div>
               <div id="chart3-desc" style="font-size:11px; color:#5d6b7a; line-height:1.7;"></div>
             </div>
+          </div>
+
+          <!-- ✦ TOP DRIVERS SENSITIVITY (main content) -->
+          <div id="mainTopDriversCard" style="margin-bottom:20px;">
+            <div class="top-drivers-header">
+              <div>
+                <div class="card-title" style="margin-bottom:4px;">📊 Top Drivers Sensitivity</div>
+                <div style="font-size:12px;color:var(--muted);">Impact of a +10% change on each driver</div>
+              </div>
+              <div class="top-drivers-outcome-pills" id="sensitivityOutcomeSelector"></div>
+            </div>
+            <div id="sensitivityList"></div>
+            <div id="topDriversList" style="display:none;"></div>
           </div>
 
           <!-- Commentary -->
@@ -2560,7 +2623,7 @@
       const commentary = document.getElementById('commentarySection');
       const chartGrid = document.querySelector('.chart-grid');
       const chart3Card = chartGrid && chartGrid.nextElementSibling;
-      const topDriversCard = document.getElementById('topDriversCard');
+      const topDriversCard = document.getElementById('mainTopDriversCard');
       const scenarioActions = document.querySelector('.scenario-actions');
       const decisionBox = document.getElementById('decisionBox');
 
@@ -3050,11 +3113,21 @@
     // COLLAPSIBLE SIDEBAR GROUPS
     // ============================================
 
-    function toggleSbGroup(headerEl) {
+    function accordionOpen(headerEl) {
+      const sidebar = headerEl.closest('.sidebar');
+      const allHeaders = sidebar.querySelectorAll('.sb-group-header');
+      allHeaders.forEach(h => {
+        if (h === headerEl) return;
+        h.classList.remove('open');
+        const body = h.nextElementSibling;
+        if (body) body.classList.remove('open');
+      });
       headerEl.classList.toggle('open');
       const body = headerEl.nextElementSibling;
       if (body) body.classList.toggle('open');
     }
+
+    function toggleSbGroup(headerEl) { accordionOpen(headerEl); }
 
     // ============================================
     // DECISION BOX — "So What?"
