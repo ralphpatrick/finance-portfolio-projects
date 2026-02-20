@@ -52,7 +52,7 @@
     }
   });
 
-  // Track time on module (fires once at 30s, 60s, 120s while tab is active)
+  // Track time on module (fires at 30s, 60s, 120s while tab is active)
   (function trackTimeOnModule() {
     const path = location.pathname || "";
     const isModule = path.endsWith(".html") && !path.endsWith("index.html");
@@ -67,15 +67,24 @@
       if (fired.has(seconds)) return;
       fired.add(seconds);
 
-      gtag("event", "module_engaged", {
+      // Always record the raw engagement mark
+      window.gtag("event", "module_engaged", {
         module: moduleName,
         seconds_engaged: seconds
       });
+
+      // Intent tiers
+      if (seconds >= 120) {
+        window.gtag("event", "module_intent_high", { module: moduleName });
+      } else if (seconds >= 60) {
+        window.gtag("event", "module_intent_med", { module: moduleName });
+      } else if (seconds >= 30) {
+        window.gtag("event", "module_intent_low", { module: moduleName });
+      }
     }
 
     marks.forEach((sec) => setTimeout(() => fire(sec), sec * 1000));
   })();
-})();
 /* =========================================
    FP&A Portfolio — JS
    Minimal: mobile nav + reveal animations + back-to-top + footer year
