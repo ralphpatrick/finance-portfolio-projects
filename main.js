@@ -1,3 +1,22 @@
+// GA4 tracking (loaded once for all pages that include main.js)
+(function () {
+  const MEASUREMENT_ID = "G-G86TZJHY3K";
+
+  if (window.__ga4_loaded) return;
+  window.__ga4_loaded = true;
+
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + MEASUREMENT_ID;
+  document.head.appendChild(s);
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+  window.gtag = window.gtag || gtag;
+
+  gtag("js", new Date());
+  gtag("config", MEASUREMENT_ID);
+})();
 /* =========================================
    FP&A Portfolio — JS
    Minimal: mobile nav + reveal animations + back-to-top + footer year
