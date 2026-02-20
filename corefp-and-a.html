@@ -270,7 +270,16 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
     }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
 
     .sidebar-section {
       margin-bottom: 18px;
@@ -701,6 +710,8 @@
       .sidebar {
         position: relative;
         top: 0;
+        max-height: none;
+        overflow-y: visible;
       }
       .chart-grid {
         grid-template-columns: 1fr;
@@ -1116,7 +1127,65 @@
       line-height: 1.5;
     }
 
-</style>
+
+    /* ── Tooltip engine: body-level fixed div, never clipped by overflow ── */
+    /* Kill ALL CSS ::after tooltip rules — they clip inside overflow containers */
+    .help-icon::after,
+    .help-icon:hover::after,
+    .help-icon[data-help]::after,
+    [data-tt]::after,
+    [data-tt]:hover::after,
+    .term-helper::after,
+    .term-helper:hover::after {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* #tt-root — single fixed tooltip bubble appended to <body> by JS */
+    #tt-root {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+      padding: 9px 13px;
+      background: rgba(11,18,32,0.95);
+      color: #f0f4f8;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.55;
+      border-radius: 9px;
+      white-space: normal;
+      width: 260px;
+      max-width: calc(100vw - 24px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+      text-align: left;
+      opacity: 0;
+      transition: opacity 120ms ease;
+    }
+    #tt-root.tt-visible { opacity: 1; }
+
+    /* .help-icon visual — keep the badge, remove position:relative (no longer needed) */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+      flex-shrink: 0;
+      position: static;   /* was relative — not needed with body-level tooltip */
+    }
+    .help-icon::before { content: '?'; line-height: 1; }
+
+  </style>
 </head>
 <body>
   <!-- Skip link for accessibility -->
@@ -3411,6 +3480,71 @@
       renderSensitivity();
     });
   </script>
-<script src="main.js"></script>
+<script src="main.js">
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 260;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap < 8) {
+          // Flip below if not enough room above
+          top = rect.bottom + gap;
+          transform = 'translateY(0)';
+        } else {
+          top = rect.top - gap;
+          transform = 'translateY(-100%)';
+        }
+        ttEl.style.left = left + 'px';
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+      }
+
+      // Event delegation — works on dynamically injected elements too
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text) show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      // Hide on scroll so tooltip doesn't chase the page
+      window.addEventListener('scroll', function() {
+        ttEl.classList.remove('tt-visible');
+      }, { passive: true });
+    }
+
+</script>
 </body>
 </html>

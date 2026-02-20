@@ -85,29 +85,6 @@
     }
     
     /* Sticky sidebar */
-    .sidebar {
-      position: sticky;
-      top: 80px;
-      padding: 20px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-    }
-    .sidebar-section {
-      margin-bottom: 24px;
-    }
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-    }
-    .sidebar-title {
-      font-size: 13px;
-      font-weight: 650;
-      color: var(--text);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
     .data-badge {
       font-size: 12px;
       padding: 6px 12px;
@@ -118,11 +95,6 @@
       font-weight: 600;
       display: inline-block;
       margin-bottom: 12px;
-    }
-    .sidebar-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
     }
     
     /* Main content area */
@@ -367,14 +339,6 @@
       .module-layout {
         grid-template-columns: 1fr;
       }
-      .sidebar {
-        position: relative;
-        top: 0;
-      }
-      .sidebar-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
     }
 
     /* ---- Decision Box ---- */
@@ -523,7 +487,264 @@
       line-height: 1.5;
     }
 
-</style>
+
+    /* ═══════════════════════════════════
+       SIDEBAR — Accordion (shared across all modules)
+    ═══════════════════════════════════ */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static top section (data mode badge + always-visible controls) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Accordion group */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron {
+      transform: rotate(180deg);
+      color: var(--text);
+    }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft, rgba(15,118,110,0.10));
+      color: var(--accent, #0f766e);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent, #0f766e); color: white; border-color: var(--accent, #0f766e); }
+
+    /* Scenario tabs inside accordion */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+
+    /* Input rows inside accordion */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted, #5d6b7a);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent, #0f766e);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Responsive: on mobile sidebar goes full width, no sticky, no scroll */
+    @media (max-width: 860px) {
+      .sidebar {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
+
+  
+    /* ── Tooltip engine: body-level fixed div, never clipped by overflow ── */
+    /* Kill ALL CSS ::after tooltip rules — they clip inside overflow containers */
+    .help-icon::after,
+    .help-icon:hover::after,
+    .help-icon[data-help]::after,
+    [data-tt]::after,
+    [data-tt]:hover::after,
+    .term-helper::after,
+    .term-helper:hover::after {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* #tt-root — single fixed tooltip bubble appended to <body> by JS */
+    #tt-root {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+      padding: 9px 13px;
+      background: rgba(11,18,32,0.95);
+      color: #f0f4f8;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.55;
+      border-radius: 9px;
+      white-space: normal;
+      width: 260px;
+      max-width: calc(100vw - 24px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+      text-align: left;
+      opacity: 0;
+      transition: opacity 120ms ease;
+    }
+    #tt-root.tt-visible { opacity: 1; }
+
+    /* .help-icon visual — keep the badge, remove position:relative (no longer needed) */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+      flex-shrink: 0;
+      position: static;   /* was relative — not needed with body-level tooltip */
+    }
+    .help-icon::before { content: '?'; line-height: 1; }
+
+  </style>
 </head>
 <body>
 
@@ -583,21 +804,30 @@
       
       <!-- Sticky Sidebar -->
       <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="sidebar-title">Data Mode</div>
-          <div class="data-badge" id="dataModeBadge">Sample Data</div>
+
+      <!-- Data Mode — always visible -->
+      <div class="sb-static">
+        <div class="sb-static-title">
+          <span>Data Mode</span>
+          <span id="dataModeBadge" class="data-badge">Sample Data</span>
         </div>
-        
-        <div class="sidebar-section">
-          <div class="sidebar-title">Actions</div>
-          <div class="sidebar-buttons">
-            <button onclick="loadLosingPromo()" class="btn-small btn-full" style="border-color:rgba(220,38,38,0.35);color:#b91c1c;">🔴 Sample — Promo Loses Money</button>
-            <button onclick="loadWinningPromo()" class="btn-small btn-primary btn-full" style="background:#0f766e;border-color:#0f766e;">✅ Sample — Promo Makes Money</button>
-            <button onclick="randomizeSampleData()" class="btn-small btn-full">🎲 Generate Random</button>
-            <button onclick="downloadAllTemplates()" class="btn-small btn-full">Download Templates</button>
-          </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Actions</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
+          <button onclick="loadLosingPromo()" class="sb-acc-btn" style="border-color:rgba(220,38,38,0.35);color:#b91c1c;">🔴 Sample — Promo Loses Money</button>
+          <button onclick="loadWinningPromo()" class="sb-acc-btn primary" style="background:#0f766e;border-color:#0f766e;">✅ Sample — Promo Makes Money</button>
+          <button onclick="randomizeSampleData()" class="sb-acc-btn">🎲 Generate Random</button>
+          <button onclick="downloadAllTemplates()" class="sb-acc-btn">Download Templates</button>
         </div>
-      </aside>
+      </div>
+
+    </aside>
 
       <!-- Main Content -->
       <div class="main-content">
@@ -1833,7 +2063,88 @@
       initializeSampleData();
       renderAll();
     });
-  </script>
+  
+    /* ── Sidebar accordion: one section open at a time ── */
+    function sidebarAccordion(headerEl) {
+      var sidebar = headerEl.closest('.sidebar');
+      var allHeaders = sidebar.querySelectorAll('.sb-acc-header');
+      allHeaders.forEach(function(h) {
+        if (h === headerEl) return;
+        h.classList.remove('open');
+        var b = h.nextElementSibling;
+        if (b && b.classList.contains('sb-acc-body')) b.classList.remove('open');
+      });
+      headerEl.classList.toggle('open');
+      var body = headerEl.nextElementSibling;
+      if (body && body.classList.contains('sb-acc-body')) body.classList.toggle('open');
+    }
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 260;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap < 8) {
+          // Flip below if not enough room above
+          top = rect.bottom + gap;
+          transform = 'translateY(0)';
+        } else {
+          top = rect.top - gap;
+          transform = 'translateY(-100%)';
+        }
+        ttEl.style.left = left + 'px';
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+      }
+
+      // Event delegation — works on dynamically injected elements too
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text) show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      // Hide on scroll so tooltip doesn't chase the page
+      window.addEventListener('scroll', function() {
+        ttEl.classList.remove('tt-visible');
+      }, { passive: true });
+    }
+
+</script>
 
 </body>
 </html>

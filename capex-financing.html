@@ -15,12 +15,6 @@
     .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
     .module-layout { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
-    .sidebar { position: sticky; top: 80px; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-soft); max-height: calc(100vh - 120px); overflow-y: auto; }
-    .sidebar-section { margin-bottom: 20px; }
-    .sidebar-section:last-child { margin-bottom: 0; }
-    .sidebar-title { font-size: 13px; font-weight: 650; color: var(--text); margin-bottom: 12px; letter-spacing: 0.03em; }
-    .sidebar-sub { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.04em; margin: 10px 0 8px; border-top: 1px solid var(--border); padding-top: 10px; }
-    .sidebar-buttons { display: flex; flex-direction: column; gap: 8px; }
     .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
     .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
     .btn-small:active { transform: translateY(1px); }
@@ -61,16 +55,14 @@
     .data-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
     .data-table tr:last-child td { border-bottom: none; }
     .data-table tr:hover { background: rgba(246,248,251,0.5); }
-    .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-size: 11px; font-weight: 700; cursor: help; position: relative; flex-shrink: 0; }
-    .help-icon::before { content: '?'; }
-    .help-icon:hover::after { content: attr(data-help); position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; padding: 10px 14px; background: var(--text); color: white; font-size: 12px; line-height: 1.5; border-radius: 10px; white-space: normal; width: 280px; z-index: 1000; box-shadow: var(--shadow); font-weight: 400; text-align: left; }
     .section-header-with-help { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
     .data-badge { font-size: 12px; padding: 6px 12px; border-radius: 999px; background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20); color: var(--accent); font-weight: 600; display: inline-block; margin-bottom: 10px; }
     .data-badge.random { background: #fef3c7; border: 1px solid #fbbf24; color: #92400e; }
     .option-tabs { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 20px; }
     .option-tab { padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 140ms; }
     .option-tab.best { border-color: var(--accent); background: rgba(15,118,110,0.08); color: var(--accent); }
-    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; max-height: none; } .board-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; }
+ .board-grid { grid-template-columns: 1fr; } }
   
     /* ---- Decision Box (matches commercial-sales.html) ---- */
     .decision-box {
@@ -221,7 +213,264 @@
       line-height: 1.5;
     }
 
-</style>
+
+    /* ═══════════════════════════════════
+       SIDEBAR — Accordion (shared across all modules)
+    ═══════════════════════════════════ */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static top section (data mode badge + always-visible controls) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Accordion group */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron {
+      transform: rotate(180deg);
+      color: var(--text);
+    }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft, rgba(15,118,110,0.10));
+      color: var(--accent, #0f766e);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent, #0f766e); color: white; border-color: var(--accent, #0f766e); }
+
+    /* Scenario tabs inside accordion */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+
+    /* Input rows inside accordion */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted, #5d6b7a);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent, #0f766e);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Responsive: on mobile sidebar goes full width, no sticky, no scroll */
+    @media (max-width: 860px) {
+      .sidebar {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
+
+  
+    /* ── Tooltip engine: body-level fixed div, never clipped by overflow ── */
+    /* Kill ALL CSS ::after tooltip rules — they clip inside overflow containers */
+    .help-icon::after,
+    .help-icon:hover::after,
+    .help-icon[data-help]::after,
+    [data-tt]::after,
+    [data-tt]:hover::after,
+    .term-helper::after,
+    .term-helper:hover::after {
+      content: none !important;
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    /* #tt-root — single fixed tooltip bubble appended to <body> by JS */
+    #tt-root {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+      padding: 9px 13px;
+      background: rgba(11,18,32,0.95);
+      color: #f0f4f8;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.55;
+      border-radius: 9px;
+      white-space: normal;
+      width: 260px;
+      max-width: calc(100vw - 24px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+      text-align: left;
+      opacity: 0;
+      transition: opacity 120ms ease;
+    }
+    #tt-root.tt-visible { opacity: 1; }
+
+    /* .help-icon visual — keep the badge, remove position:relative (no longer needed) */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: help;
+      flex-shrink: 0;
+      position: static;   /* was relative — not needed with body-level tooltip */
+    }
+    .help-icon::before { content: '?'; line-height: 1; }
+
+  </style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -270,60 +519,88 @@
 
   <div class="module-layout">
     <aside class="sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">DATA CONTROLS</div>
-        <span class="data-badge" id="data-badge">No data loaded</span>
-        <div class="sidebar-buttons">
-          <button class="btn-small btn-primary" onclick="loadSample()">Use Sample Data</button>
-          <button class="btn-small" onclick="randomizeData()">Randomize Data</button>
-          <button class="btn-small" onclick="resetDefaults()">Reset to Defaults</button>
+
+      <!-- Data Controls — always visible -->
+      <div class="sb-static">
+        <div class="sb-static-title">
+          <span>Data Controls</span>
+          <span class="data-badge" id="data-badge">No data loaded</span>
+        </div>
+        <button class="sb-acc-btn primary" onclick="loadSample()" style="margin-top:0;">Use Sample Data</button>
+        <button class="sb-acc-btn" onclick="randomizeData()" style="margin-top:6px;">Randomize Data</button>
+        <button class="sb-acc-btn" onclick="resetDefaults()" style="margin-top:6px;">Reset to Defaults</button>
+      </div>
+
+      <!-- Asset Details -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Asset Details</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body" style="padding-top:6px;">
+          <div class="sb-acc-input-row">
+            <label>Asset Cost ($) <span class="help-icon" data-help="The total purchase price of the asset — e.g., a machine, vehicle, or equipment."></span></label>
+            <input type="number" id="inp-cost" value="250000" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Useful Life (years) <span class="help-icon" data-help="How many years the asset will be used before it's replaced or worn out."></span></label>
+            <input type="number" id="inp-life" value="5" step="1" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Salvage Value ($) <span class="help-icon" data-help="What the asset is worth at the end of its useful life — what you can sell it for."></span></label>
+            <input type="number" id="inp-salvage" value="25000" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has before making this financing decision."></span></label>
+            <input type="number" id="inp-startcash" value="600000" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Discount Rate (%) <span class="help-icon" data-help="Your cost of capital — used to discount future cash flows to today's value (NPV)."></span></label>
+            <input type="number" id="inp-discount" value="10" step="0.5" oninput="withStableScroll(compute)">
+          </div>
         </div>
       </div>
-      <div class="sidebar-section">
-        <div class="sidebar-title">ASSET DETAILS</div>
-        <div class="input-row">
-          <label>Asset Cost ($) <span class="help-icon" data-help="The total purchase price of the asset — e.g., a machine, vehicle, or equipment."></span></label>
-          <input type="number" id="inp-cost" value="250000" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Useful Life (years) <span class="help-icon" data-help="How many years the asset will be used before it's replaced or worn out."></span></label>
-          <input type="number" id="inp-life" value="5" step="1" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Salvage Value ($) <span class="help-icon" data-help="What the asset is worth at the end of its useful life — what you can sell it for."></span></label>
-          <input type="number" id="inp-salvage" value="25000" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Starting Cash ($) <span class="help-icon" data-help="How much cash the business has before making this financing decision."></span></label>
-          <input type="number" id="inp-startcash" value="600000" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Discount Rate (%) <span class="help-icon" data-help="Your cost of capital — used to discount future cash flows to today's value (NPV)."></span></label>
-          <input type="number" id="inp-discount" value="10" step="0.5" oninput="withStableScroll(compute)">
-        </div>
-        <div class="sidebar-sub">OPTION B — LOAN</div>
-        <div class="input-row">
-          <label>Interest Rate (%) <span class="help-icon" data-help="Annual interest rate on the loan. The bank's fee for lending you money."></span></label>
-          <input type="number" id="inp-rate" value="8" step="0.5" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Loan Term (months) <span class="help-icon" data-help="How many months to repay the loan. Longer = smaller payments but more total interest."></span></label>
-          <input type="number" id="inp-term" value="48" step="6" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Down Payment ($) <span class="help-icon" data-help="How much you pay upfront when taking the loan. Reduces the amount financed."></span></label>
-          <input type="number" id="inp-down" value="50000" oninput="withStableScroll(compute)">
-        </div>
-        <div class="sidebar-sub">OPTION C — LEASE</div>
-        <div class="input-row">
-          <label>Monthly Lease ($) <span class="help-icon" data-help="Fixed monthly payment to use the asset without owning it. Like renting."></span></label>
-          <input type="number" id="inp-lease" value="5200" oninput="withStableScroll(compute)">
-        </div>
-        <div class="input-row">
-          <label>Lease Term (months) <span class="help-icon" data-help="How long the lease agreement lasts. After this, return or renew."></span></label>
-          <input type="number" id="inp-leaseTerm" value="60" step="6" oninput="withStableScroll(compute)">
+
+      <!-- Loan Options -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Option B — Loan</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body" style="padding-top:6px;">
+          <div class="sb-acc-input-row">
+            <label>Interest Rate (%) <span class="help-icon" data-help="Annual interest rate on the loan. The bank's fee for lending you money."></span></label>
+            <input type="number" id="inp-rate" value="8" step="0.5" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Loan Term (months) <span class="help-icon" data-help="How many months to repay the loan. Longer = smaller payments but more total interest."></span></label>
+            <input type="number" id="inp-term" value="48" step="6" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Down Payment ($) <span class="help-icon" data-help="How much you pay upfront when taking the loan. Reduces the amount financed."></span></label>
+            <input type="number" id="inp-down" value="50000" oninput="withStableScroll(compute)">
+          </div>
         </div>
       </div>
+
+      <!-- Lease Options -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Option C — Lease</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body" style="padding-top:6px;">
+          <div class="sb-acc-input-row">
+            <label>Monthly Lease ($) <span class="help-icon" data-help="Fixed monthly payment to use the asset without owning it. Like renting."></span></label>
+            <input type="number" id="inp-lease" value="5200" oninput="withStableScroll(compute)">
+          </div>
+          <div class="sb-acc-input-row">
+            <label>Lease Term (months) <span class="help-icon" data-help="How long the lease agreement lasts. After this, return or renew."></span></label>
+            <input type="number" id="inp-leaseTerm" value="60" step="6" oninput="withStableScroll(compute)">
+          </div>
+        </div>
+      </div>
+
     </aside>
 
     <div class="main-content">
@@ -726,6 +1003,87 @@
     document.getElementById('decisionBullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
     document.getElementById('decisionNext').innerHTML = 'Top driver: <span>' + next + '</span>';
   }
+
+
+    /* ── Sidebar accordion: one section open at a time ── */
+    function sidebarAccordion(headerEl) {
+      var sidebar = headerEl.closest('.sidebar');
+      var allHeaders = sidebar.querySelectorAll('.sb-acc-header');
+      allHeaders.forEach(function(h) {
+        if (h === headerEl) return;
+        h.classList.remove('open');
+        var b = h.nextElementSibling;
+        if (b && b.classList.contains('sb-acc-body')) b.classList.remove('open');
+      });
+      headerEl.classList.toggle('open');
+      var body = headerEl.nextElementSibling;
+      if (body && body.classList.contains('sb-acc-body')) body.classList.toggle('open');
+    }
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 260;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap < 8) {
+          // Flip below if not enough room above
+          top = rect.bottom + gap;
+          transform = 'translateY(0)';
+        } else {
+          top = rect.top - gap;
+          transform = 'translateY(-100%)';
+        }
+        ttEl.style.left = left + 'px';
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+      }
+
+      // Event delegation — works on dynamically injected elements too
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text) show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      // Hide on scroll so tooltip doesn't chase the page
+      window.addEventListener('scroll', function() {
+        ttEl.classList.remove('tt-visible');
+      }, { passive: true });
+    }
 
 </script>
 </body>

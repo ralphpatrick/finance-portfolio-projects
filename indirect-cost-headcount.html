@@ -69,29 +69,6 @@
     }
 
     /* ── Sticky sidebar ── */
-    .sidebar {
-      position: sticky;
-      top: 80px;
-      padding: 16px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-    }
-    .sidebar-section { margin-bottom: 18px; }
-    .sidebar-section:last-child { margin-bottom: 0; }
-    .sidebar-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
     .data-badge {
       font-size: 11px;
       padding: 3px 9px;
@@ -109,41 +86,8 @@
       border: 1px solid #fbbf24;
       color: #92400e;
     }
-    .sidebar-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
 
     /* ── Scenario tabs in sidebar ── */
-    .scenario-tabs {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .scenario-tab {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: white;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      transition: all 140ms ease;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .scenario-tab:hover {
-      border-color: rgba(12,23,45,0.18);
-      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
-    }
-    .scenario-tab.active {
-      background: var(--text);
-      color: white;
-      border-color: var(--text);
-    }
 
     /* ── Main content area ── */
     .main-content { min-width: 0; }
@@ -599,7 +543,6 @@
     /* ── Responsive ── */
     @media (max-width: 980px) {
       .module-layout { grid-template-columns: 1fr; padding: 16px; }
-      .sidebar { position: relative; top: 0; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .tradeoff-grid { grid-template-columns: 1fr; }
       .board-decision-card { grid-template-columns: 1fr; }
@@ -966,7 +909,206 @@
       line-height: 1.5;
     }
 
-</style>
+
+    /* ═══════════════════════════════════
+       SIDEBAR — Accordion (shared across all modules)
+    ═══════════════════════════════════ */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static top section (data mode badge + always-visible controls) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Accordion group */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron {
+      transform: rotate(180deg);
+      color: var(--text);
+    }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft, rgba(15,118,110,0.10));
+      color: var(--accent, #0f766e);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.06);
+    }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent, #0f766e); color: white; border-color: var(--accent, #0f766e); }
+
+    /* Scenario tabs inside accordion */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text, #0b1220); color: white; border-color: var(--text, #0b1220); }
+
+    /* Input rows inside accordion */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted, #5d6b7a);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent, #0f766e);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Responsive: on mobile sidebar goes full width, no sticky, no scroll */
+    @media (max-width: 860px) {
+      .sidebar {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -1029,58 +1171,57 @@
     <!-- Sidebar -->
     <aside class="sidebar">
 
-      <!-- Scenarios — shown first per request -->
-      <div class="sidebar-section js-hideable" id="sidebarScenario">
-        <div class="sidebar-title">Scenario</div>
-        <div class="scenario-tabs">
-          <button class="scenario-tab active" data-scenario="base" onclick="onScenarioChange('base')">
+      <!-- Scenario — always visible at top -->
+      <div class="sb-static">
+        <div class="sb-static-title">Scenario</div>
+        <div class="sb-acc-tabs" id="scenarioTabsEl">
+          <button class="sb-acc-tab active" data-scenario="base" onclick="onScenarioChange('base')">
             <span>Base Case</span>
             <span class="help-icon" data-help="Standard performance assumptions with balanced growth and costs."></span>
           </button>
-          <button class="scenario-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
+          <button class="sb-acc-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
             <span>Upside</span>
             <span class="help-icon" data-help="Optimistic: +15% capacity, higher utilization, lower attrition."></span>
           </button>
-          <button class="scenario-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
+          <button class="sb-acc-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
             <span>Downside</span>
             <span class="help-icon" data-help="Conservative: -15% capacity, lower utilization, higher attrition."></span>
           </button>
         </div>
       </div>
 
-      <!-- Starting Cash Balance -->
-      <div class="sidebar-section js-hideable" id="sidebarCash">
-        <div class="sidebar-title">
-          Starting Cash
+      <!-- Starting Cash -->
+      <div class="sb-acc-group" id="sidebarCash">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Starting Cash</span>
           <span class="tt-icon" data-tt="Total cash in the bank today. The model uses this to calculate how many months you can operate before running out of money.">?</span>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
           <input
             type="number"
             id="cashBalanceInput"
             value="2400000"
             step="100000"
-            style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: var(--font-sans); width: 100%;"
+            style="padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; font-family: var(--font-sans); width: 100%; margin-bottom:6px;"
             onchange="updateCashBalance()"
           />
-          <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">
-            Cash in bank. Used to calculate runway.
-          </div>
+          <div style="font-size: 11px; color: var(--muted); line-height: 1.4;">Cash in bank. Used to calculate runway.</div>
         </div>
       </div>
 
-    <!-- Actions (with Data Mode badge merged into header) -->
-      <div class="sidebar-section js-hideable" id="sidebarActions">
-        <div class="sidebar-title">
+      <!-- Actions -->
+      <div class="sb-acc-group" id="sidebarActions">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
           <span>Actions</span>
-          <div id="dataModeBadge" class="data-badge">Sample Data</div>
-        </div>
-        <div class="sidebar-buttons">
-          <button class="btn-small btn-full" onclick="onUseSample()">Use Sample</button>
-          <button class="btn-small btn-full" onclick="onRandomizeAll()">Randomize All</button>
-          <button class="btn-small btn-full" onclick="downloadTemplates()">Download Templates</button>
-          <!-- Export dropdown -->
-          <div class="export-wrap">
+          <span id="dataModeBadge" class="sb-acc-badge">Sample Data</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
+          <button class="sb-acc-btn" onclick="onUseSample()">Use Sample</button>
+          <button class="sb-acc-btn" onclick="onRandomizeAll()">Randomize All</button>
+          <button class="sb-acc-btn" onclick="downloadTemplates()">Download Templates</button>
+          <div class="export-wrap" style="margin-top:6px;">
             <button class="export-btn" id="exportBtn" onclick="toggleExport(event)">
               <span>Export ▾</span>
             </button>
@@ -1094,111 +1235,70 @@
       </div>
       <div id="exportToast" class="export-toast"></div>
 
-      <!-- Assumptions (auditable) — collapsible, always last -->
-      <div class="sidebar-section" id="sidebarAssumptions">
-        <!-- Clickable header trigger -->
-        <button class="assump-trigger" onclick="toggleAssumptions()" aria-expanded="false" id="assumpTrigger">
-          <span class="assump-trigger-label">
-            Assumptions
-            <span class="tt-icon" data-tt="All model thresholds live here. Change any value and every KPI, chart, and decision updates instantly. Fully auditable for board review.">?</span>
-          </span>
-          <span class="assump-chevron" id="assumpChevron">▼</span>
+      <!-- Assumptions -->
+      <div class="sb-acc-group" id="sidebarAssumptions">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)" id="assumpTrigger" aria-expanded="false">
+          <span>Assumptions</span>
+          <span class="tt-icon" data-tt="All model thresholds live here. Change any value and every KPI, chart, and decision updates instantly. Fully auditable for board review.">?</span>
+          <span class="sb-acc-chevron" id="assumpChevron">▼</span>
         </button>
-
-        <!-- Collapsible body -->
-        <div class="assump-body" id="assumpBody">
+        <div class="sb-acc-body" id="assumpBody">
           <div class="assumptions-card">
-
-            <!-- Utilization thresholds -->
             <div class="assump-divider">Utilization Thresholds</div>
             <div class="assump-row">
-              <label class="assump-label" for="aUtilYellow">
-                <span data-tt="The utilization % at which the team enters 'caution' territory. Below this = potential overcapacity. Default 70%.">Yellow start (%)</span>
-              </label>
+              <label class="assump-label" for="aUtilYellow"><span data-tt="The utilization % at which the team enters 'caution' territory. Below this = potential overcapacity. Default 70%.">Yellow start (%)</span></label>
               <input class="assump-input" id="aUtilYellow" type="number" value="70" min="1" max="100" step="1" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aUtilRed">
-                <span data-tt="The utilization % at which the team is over-capacity. Above this = must hire. Default 85%.">Red start (%)</span>
-              </label>
+              <label class="assump-label" for="aUtilRed"><span data-tt="The utilization % at which the team is over-capacity. Above this = must hire. Default 85%.">Red start (%)</span></label>
               <input class="assump-input" id="aUtilRed" type="number" value="85" min="1" max="100" step="1" onchange="onAssumpChange()">
             </div>
-
-            <!-- Runway guardrails -->
             <div class="assump-divider">Runway Guardrails (months)</div>
             <div class="assump-row">
-              <label class="assump-label" for="aRunwayCritical">
-                <span data-tt="Runway below this triggers CUT BURN. Cash emergency zone. Default 6 months.">Critical (&lt;)</span>
-              </label>
+              <label class="assump-label" for="aRunwayCritical"><span data-tt="Runway below this triggers CUT BURN. Cash emergency zone. Default 6 months.">Critical (&lt;)</span></label>
               <input class="assump-input" id="aRunwayCritical" type="number" value="6" min="1" max="60" step="1" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aRunwayCaution">
-                <span data-tt="Runway below this triggers RAISE (if util is high). Caution zone. Default 12 months.">Caution (&lt;)</span>
-              </label>
+              <label class="assump-label" for="aRunwayCaution"><span data-tt="Runway below this triggers RAISE (if util is high). Caution zone. Default 12 months.">Caution (&lt;)</span></label>
               <input class="assump-input" id="aRunwayCaution" type="number" value="12" min="1" max="60" step="1" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aRunwaySafeHire">
-                <span data-tt="Minimum runway needed before aggressive strategy fires a hire. Default 12 months.">Safe to Hire (Agg)</span>
-              </label>
+              <label class="assump-label" for="aRunwaySafeHire"><span data-tt="Minimum runway needed before aggressive strategy fires a hire. Default 12 months.">Safe to Hire (Agg)</span></label>
               <input class="assump-input" id="aRunwaySafeHire" type="number" value="12" min="1" max="60" step="1" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aRunwaySafeCon">
-                <span data-tt="Minimum runway needed before conservative strategy fires a hire. Higher bar. Default 15 months.">Safe to Hire (Con)</span>
-              </label>
+              <label class="assump-label" for="aRunwaySafeCon"><span data-tt="Minimum runway needed before conservative strategy fires a hire. Higher bar. Default 15 months.">Safe to Hire (Con)</span></label>
               <input class="assump-input" id="aRunwaySafeCon" type="number" value="15" min="1" max="60" step="1" onchange="onAssumpChange()">
             </div>
-
-            <!-- Ramp duration -->
             <div class="assump-divider">Hire Parameters</div>
             <div class="assump-row">
-              <label class="assump-label" for="aRampMonths">
-                <span data-tt="How many months until a new hire reaches full productivity. Ramp curve: 25%→60%→100%. Longer ramp = delayed capacity relief. Default 3.">Ramp duration (mo)</span>
-              </label>
+              <label class="assump-label" for="aRampMonths"><span data-tt="How many months until a new hire reaches full productivity. Ramp curve: 25%→60%→100%. Default 3.">Ramp duration (mo)</span></label>
               <input class="assump-input" id="aRampMonths" type="number" value="3" min="1" max="12" step="1" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aOneTimeCost">
-                <span data-tt="Recruiting + onboarding cost per new hire. Hits cash in the month hired. Drives one-time cost spike in the hiring plan. Default $16,000.">One-time cost/hire ($)</span>
-              </label>
+              <label class="assump-label" for="aOneTimeCost"><span data-tt="Recruiting + onboarding cost per new hire. Default $16,000.">One-time cost/hire ($)</span></label>
               <input class="assump-input" id="aOneTimeCost" type="number" value="16000" min="0" max="200000" step="500" style="width:72px;" onchange="onAssumpChange()">
             </div>
-
-            <!-- Comp inflation -->
             <div class="assump-divider">CFO Control Knob</div>
             <div class="assump-row">
-              <label class="assump-label" for="aCompInflation">
-                <span data-tt="Annual salary inflation % applied to payroll costs. Models merit increases and market comp drift. Applied monthly (÷12) to salary, benefits, taxes, bonus. Default 6%.">Comp inflation (%/yr)</span>
-              </label>
+              <label class="assump-label" for="aCompInflation"><span data-tt="Annual salary inflation % applied to payroll costs. Default 6%.">Comp inflation (%/yr)</span></label>
               <input class="assump-input" id="aCompInflation" type="number" value="6" min="0" max="50" step="0.5" onchange="onAssumpChange()">
             </div>
-
-            <!-- Scenario multipliers -->
             <div class="assump-divider">Scenario Multipliers</div>
             <div class="assump-row">
-              <label class="assump-label" for="aScenarUpside">
-                <span data-tt="Capacity multiplier for the Upside scenario. >1 = more capacity and headcount. Default 1.15 (+15%).">Upside multiplier</span>
-              </label>
+              <label class="assump-label" for="aScenarUpside"><span data-tt="Capacity multiplier for the Upside scenario. Default 1.15 (+15%).">Upside multiplier</span></label>
               <input class="assump-input" id="aScenarUpside" type="number" value="1.15" min="0.5" max="3" step="0.05" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aScenarDownside">
-                <span data-tt="Capacity multiplier for the Downside scenario. <1 = lower capacity and headcount. Default 0.85 (-15%).">Downside multiplier</span>
-              </label>
+              <label class="assump-label" for="aScenarDownside"><span data-tt="Capacity multiplier for the Downside scenario. Default 0.85 (-15%).">Downside multiplier</span></label>
               <input class="assump-input" id="aScenarDownside" type="number" value="0.85" min="0.1" max="1" step="0.05" onchange="onAssumpChange()">
             </div>
             <div class="assump-row">
-              <label class="assump-label" for="aScenarUtilShift">
-                <span data-tt="Utilization demand shift applied in Upside (+) and Downside (-) scenarios. Default ±10 percentage points.">Upside util shift (%pt)</span>
-              </label>
+              <label class="assump-label" for="aScenarUtilShift"><span data-tt="Utilization demand shift in Upside (+) and Downside (-) scenarios. Default ±10pp.">Upside util shift (%pt)</span></label>
               <input class="assump-input" id="aScenarUtilShift" type="number" value="10" min="0" max="30" step="1" onchange="onAssumpChange()">
             </div>
-
-            <!-- Reset to defaults -->
-            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border);">
-              <button class="btn-small btn-full" onclick="resetAssumptions()" style="font-size:11px; color: var(--muted);">↺ Reset to defaults</button>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+              <button class="sb-acc-btn" onclick="resetAssumptions()" style="font-size:11px;color:var(--muted);">↺ Reset to defaults</button>
             </div>
           </div>
         </div>
@@ -1226,9 +1326,6 @@
           </div>
         </div>
 
-        <!-- Board Decision Card (detailed breakdown) -->
-        <div id="boardDecisionCard" class="board-decision-card"></div>
-
         <div id="summaryKPIs" class="kpi-grid"></div>
       </section>
 
@@ -1248,7 +1345,28 @@
             <canvas id="headcountChart" class="chart-canvas"></canvas>
             <div id="headcountTooltip" class="chart-tooltip"></div>
           </div>
-        </div>
+          <!-- Headcount So-What Box -->
+          <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px;">
+            <div id="hc-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Largest Function</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="hc-top-fn" style="font-size:26px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="hc-top-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:rgba(15,118,110,0.12); color:#0f766e; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Total Headcount (Dec)</div>
+                <div id="hc-total" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="hc-verdict" style="padding:12px 16px; border-radius:10px; border-left:3px solid #0f766e; font-size:13px; line-height:1.6; margin-bottom:10px; background:rgba(15,118,110,0.04);"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              Each bar shows headcount <strong>stacked by function</strong> over 12 months. A steep upward slope = aggressive hiring. A flat line = stable headcount — watch whether demand keeps rising despite no new hires, because utilization will climb with it.
+            </div>
+          </div>
+        </div><!-- /headcount card -->
 
         <div class="module-card">
           <div class="card-title" style="margin-bottom: 16px;">
@@ -1259,7 +1377,28 @@
             <canvas id="opexChart" class="chart-canvas"></canvas>
             <div id="opexTooltip" class="chart-tooltip"></div>
           </div>
-        </div>
+          <!-- Opex So-What Box -->
+          <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px;">
+            <div id="opex-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Highest-Cost Function</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="opex-top-fn" style="font-size:26px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="opex-top-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:rgba(15,118,110,0.12); color:#0f766e; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Total Monthly Opex (Dec)</div>
+                <div id="opex-total" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="opex-verdict" style="padding:12px 16px; border-radius:10px; border-left:3px solid #0f766e; font-size:13px; line-height:1.6; margin-bottom:10px; background:rgba(15,118,110,0.04);"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              Each bar is <strong>fully loaded monthly cost</strong> stacked by function — salary, benefits, payroll tax, bonus, and one-time hiring costs. Month spikes = new hires (equipment + recruiting + onboarding hit in one shot). A growing total bar means your cost base is expanding — verify revenue growth is keeping pace.
+            </div>
+          </div>
+        </div><!-- /opex card -->
       </section>
 
       <!-- ══ FULLY LOADED COSTS ══ -->
@@ -1287,7 +1426,28 @@
             <canvas id="utilizationChart" class="chart-canvas"></canvas>
             <div id="utilizationTooltip" class="chart-tooltip"></div>
           </div>
-        </div>
+          <!-- Utilization So-What Box -->
+          <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px;">
+            <div id="util-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Highest Utilization</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="util-top-fn" style="font-size:26px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="util-top-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Avg Utilization (Dec)</div>
+                <div id="util-avg" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="util-verdict" style="padding:12px 16px; border-radius:10px; border-left:3px solid #0f766e; font-size:13px; line-height:1.6; margin-bottom:10px; background:rgba(15,118,110,0.04);"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              Each line tracks <strong>utilization % over 12 months</strong> per function (Demand ÷ Capacity). The dashed red line is the overload threshold — above this, a hire is justified. The orange line is the caution zone. Lines trending upward mean demand is outgrowing capacity and the hiring window is narrowing.
+            </div>
+          </div>
+        </div><!-- /utilization card -->
 
         <div class="module-card">
           <div class="card-title" style="margin-bottom: 16px;">Current Capacity Status</div>
@@ -2100,8 +2260,10 @@
 
     function onScenarioChange(newScenario) {
       scenario = newScenario;
-      document.querySelectorAll('.scenario-tab').forEach(t => t.classList.remove('active'));
-      document.querySelector(`[data-scenario="${newScenario}"]`).classList.add('active');
+      // Fix: tabs use .sb-acc-tab not .scenario-tab
+      document.querySelectorAll('.sb-acc-tab[data-scenario]').forEach(t => t.classList.remove('active'));
+      const activeTab = document.querySelector(`.sb-acc-tab[data-scenario="${newScenario}"]`);
+      if (activeTab) activeTab.classList.add('active');
       activeDataset = applyScenario(baseDataset, scenario);
       renderAll();
     }
@@ -2269,7 +2431,9 @@
         `;
       }
 
-      document.getElementById('boardDecisionCard').innerHTML = `
+      // boardDecisionCard element removed (duplicate of decision-box above) — skip render
+      const _bdc = document.getElementById('boardDecisionCard');
+      if (_bdc) { _bdc.innerHTML = `
         <div class="bd-verdict-col">
           <div class="bd-label">Board Decision</div>
           <div class="bd-decision ${dec.cssClass}" data-tt="${(GLOSSARY[dec.decision] || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">${dec.decision}</div>
@@ -2303,7 +2467,7 @@
           <div class="bd-bullets" style="margin-top:10px;">${bulletsHtml}</div>
           ${raisePlanHtml}
         </div>
-      `;
+      `; }// end if(_bdc)
     }
 
     function renderHeadcountChart() {
@@ -3083,9 +3247,121 @@ Notes:
       renderRunwayChart();
       renderStrategyComparison();
       renderHiringPlanTable();
+      renderChartExplainers();
       setupChartInteractions();
       updateTooltips();
       syncCashBalanceInput();
+    }
+
+    // ========== CHART EXPLAINER BOXES ("So What" panels) ==========
+    function renderChartExplainers() {
+      if (!activeDataset) return;
+      const data = activeDataset;
+      const last = data.months[data.months.length - 1];
+      const first = data.months[0];
+
+      // ── Headcount ──────────────────────────────────────────
+      const hcByFn = last.functions.map(f => ({ name: f.name, hc: f.headcount }));
+      const hcTop  = hcByFn.reduce((a,b) => b.hc > a.hc ? b : a);
+      const hcTotal = hcByFn.reduce((s,f) => s + f.hc, 0);
+      const hcFirst = first.functions.reduce((s,f) => s + f.headcount, 0);
+      const hcGrowthPct = hcFirst > 0 ? Math.round((hcTotal - hcFirst) / hcFirst * 100) : 0;
+      const hcTopPct = Math.round(hcTop.hc / hcTotal * 100);
+
+      const el = id => document.getElementById(id);
+
+      if (el('hc-top-fn'))    el('hc-top-fn').textContent   = hcTop.name;
+      if (el('hc-top-badge')) el('hc-top-badge').textContent = `${hcTop.hc} people · ${hcTopPct}% of org`;
+      if (el('hc-total'))     el('hc-total').textContent     = `${hcTotal} total (+${hcGrowthPct}% vs Jan)`;
+
+      if (el('hc-callout')) {
+        const borderColor = hcGrowthPct > 25 ? 'rgba(217,119,6,0.25)' : 'rgba(15,118,110,0.2)';
+        const bgColor = hcGrowthPct > 25 ? 'rgba(217,119,6,0.05)' : 'rgba(15,118,110,0.06)';
+        el('hc-callout').style.borderColor = borderColor;
+        el('hc-callout').style.background  = bgColor;
+      }
+      if (el('hc-verdict')) {
+        const engFn = last.functions.find(f => f.name === 'Engineering');
+        const engPct = engFn ? Math.round(engFn.headcount / hcTotal * 100) : 0;
+        el('hc-verdict').innerHTML = hcGrowthPct > 20
+          ? `✓ <strong>Headcount grew ${hcGrowthPct}% over 12 months</strong> — ${hcTop.name} is your largest function at ${hcTop.hc} people (${hcTopPct}% of org). ${engPct > 40 ? `Engineering at ${engPct}% signals a product-led team — confirm sales coverage can keep pace with pipeline.` : 'Distribution is balanced across functions.'}`
+          : `— <strong>Measured ${hcGrowthPct}% headcount growth</strong> — hiring has been disciplined and lean. ${hcTop.name} is the largest function (${hcTop.hc} people). If demand is climbing faster than headcount, utilization will begin compressing delivery capacity.`;
+        el('hc-verdict').style.borderLeftColor = hcGrowthPct > 25 ? '#d97706' : '#0f766e';
+        el('hc-verdict').style.background = hcGrowthPct > 25 ? 'rgba(217,119,6,0.04)' : 'rgba(15,118,110,0.04)';
+      }
+
+      // ── Opex ───────────────────────────────────────────────
+      const opexByFn = last.functions.map(f => {
+        const c = f.costs;
+        return { name: f.name, cost: c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding };
+      });
+      const opexTop   = opexByFn.reduce((a,b) => b.cost > a.cost ? b : a);
+      const opexTotal = opexByFn.reduce((s,f) => s + f.cost, 0);
+      const opexFirst = first.functions.reduce((s,f) => {
+        const c = f.costs;
+        return s + c.salary + c.benefits + c.taxes + c.bonus + c.equipment + c.recruiting + c.onboarding;
+      }, 0);
+      const opexGrowthPct = opexFirst > 0 ? Math.round((opexTotal - opexFirst) / opexFirst * 100) : 0;
+      const opexTopPct = Math.round(opexTop.cost / opexTotal * 100);
+
+      if (el('opex-top-fn'))    el('opex-top-fn').textContent    = opexTop.name;
+      if (el('opex-top-badge')) el('opex-top-badge').textContent  = `${formatCurrency(opexTop.cost, 0)}/mo · ${opexTopPct}%`;
+      if (el('opex-total'))     el('opex-total').textContent      = `${formatCurrency(opexTotal, 0)}/mo`;
+
+      if (el('opex-callout')) {
+        const borderColor = opexGrowthPct > 30 ? 'rgba(217,119,6,0.25)' : 'rgba(15,118,110,0.2)';
+        const bgColor     = opexGrowthPct > 30 ? 'rgba(217,119,6,0.05)' : 'rgba(15,118,110,0.06)';
+        el('opex-callout').style.borderColor = borderColor;
+        el('opex-callout').style.background  = bgColor;
+      }
+      if (el('opex-verdict')) {
+        el('opex-verdict').innerHTML = `✓ <strong>${opexTop.name} drives ${opexTopPct}% of total Opex</strong> at ${formatCurrency(opexTop.cost, 0)}/mo. Total fully loaded cost base grew ${opexGrowthPct}% over the period. ${opexGrowthPct > 25 ? `This pace requires revenue to grow at least as fast — otherwise gross margins compress. Review whether one-time hiring costs are inflating any single month.` : `Cost discipline is solid. One-time hiring spikes are visible but contained within the recurring trend.`}`;
+        el('opex-verdict').style.borderLeftColor = opexGrowthPct > 30 ? '#d97706' : '#0f766e';
+        el('opex-verdict').style.background = opexGrowthPct > 30 ? 'rgba(217,119,6,0.04)' : 'rgba(15,118,110,0.04)';
+      }
+
+      // ── Utilization ────────────────────────────────────────
+      const utilByFn = last.functions.map(f => ({
+        name: f.name,
+        util: safeNum((f.capacity.demand / safeNum(f.capacity.capacity, 1)) * 100)
+      }));
+      const utilTop    = utilByFn.reduce((a,b) => b.util > a.util ? b : a);
+      const utilAvg    = utilByFn.reduce((s,f) => s + f.util, 0) / utilByFn.length;
+      const overloaded = utilByFn.filter(f => f.util >= ASSUMP.utilRed);
+      const uRed       = ASSUMP.utilRed;
+      const uYellow    = ASSUMP.utilYellow;
+
+      const utilColor = utilTop.util >= uRed ? '#dc2626' : utilTop.util >= uYellow ? '#d97706' : '#059669';
+      if (el('util-top-fn'))    el('util-top-fn').textContent    = utilTop.name;
+      if (el('util-top-badge')) {
+        el('util-top-badge').textContent     = `${fmtSafe(utilTop.util)}% utilization`;
+        el('util-top-badge').style.background = utilTop.util >= uRed ? 'rgba(220,38,38,0.10)' : 'rgba(217,119,6,0.10)';
+        el('util-top-badge').style.color      = utilColor;
+      }
+      if (el('util-avg'))  el('util-avg').textContent = `${fmtSafe(utilAvg)}% across all functions`;
+      if (el('util-callout')) {
+        const borderColor = overloaded.length > 0 ? 'rgba(220,38,38,0.25)' : utilAvg >= uYellow ? 'rgba(217,119,6,0.25)' : 'rgba(15,118,110,0.2)';
+        const bgColor     = overloaded.length > 0 ? 'rgba(220,38,38,0.05)' : utilAvg >= uYellow ? 'rgba(217,119,6,0.05)' : 'rgba(15,118,110,0.06)';
+        el('util-callout').style.borderColor = borderColor;
+        el('util-callout').style.background  = bgColor;
+      }
+      if (el('util-verdict')) {
+        let msg, borderCol, bgCol;
+        if (overloaded.length > 0) {
+          const names = overloaded.map(f => f.name).join(' & ');
+          msg       = `🔴 <strong>${names} ${overloaded.length === 1 ? 'is' : 'are'} above the ${uRed}% overload threshold.</strong> These teams are at or beyond sustainable capacity — delivery quality and morale risk rising. A hire is justified now if runway supports it (see Hiring Justification below).`;
+          borderCol = '#dc2626'; bgCol = 'rgba(220,38,38,0.04)';
+        } else if (utilAvg >= uYellow) {
+          msg       = `🟡 <strong>Average utilization at ${fmtSafe(utilAvg)}% — healthy but watch the trend.</strong> No function is overloaded yet, but upward trajectory suggests a hiring decision within 1–2 quarters. Monitor month-over-month demand growth and headcount plan alignment.`;
+          borderCol = '#d97706'; bgCol = 'rgba(217,119,6,0.04)';
+        } else {
+          msg       = `✓ <strong>All functions below ${uRed}% — capacity is healthy.</strong> Average utilization is ${fmtSafe(utilAvg)}%. No immediate hiring pressure. Consider whether any function is significantly underutilized (&lt;${uYellow}%) and whether roles can be redeployed before hiring.`;
+          borderCol = '#0f766e'; bgCol = 'rgba(15,118,110,0.04)';
+        }
+        el('util-verdict').innerHTML = msg;
+        el('util-verdict').style.borderLeftColor = borderCol;
+        el('util-verdict').style.background      = bgCol;
+      }
     }
 
     // ========== TOOLTIP ENGINE (body-level, no clipping, no flicker) ==========
@@ -3171,6 +3447,22 @@ Notes:
       renderUtilizationChart();
       renderRunwayChart();
     });
-  </script>
+  
+    /* ── Sidebar accordion: one section open at a time ── */
+    function sidebarAccordion(headerEl) {
+      var sidebar = headerEl.closest('.sidebar');
+      var allHeaders = sidebar.querySelectorAll('.sb-acc-header');
+      allHeaders.forEach(function(h) {
+        if (h === headerEl) return;
+        h.classList.remove('open');
+        var b = h.nextElementSibling;
+        if (b && b.classList.contains('sb-acc-body')) b.classList.remove('open');
+      });
+      headerEl.classList.toggle('open');
+      var body = headerEl.nextElementSibling;
+      if (body && body.classList.contains('sb-acc-body')) body.classList.toggle('open');
+    }
+
+</script>
 </body>
 </html>
