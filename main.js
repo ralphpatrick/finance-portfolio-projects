@@ -1,4 +1,4 @@
-// GA4 tracking + recruiter action events (loaded once for all pages that include main.js)
+// GA4 tracking + recruiter action events + module engagement time
 (function () {
   const MEASUREMENT_ID = "G-G86TZJHY3K";
 
@@ -51,6 +51,30 @@
       });
     }
   });
+
+  // Track time on module (fires once at 30s, 60s, 120s while tab is active)
+  (function trackTimeOnModule() {
+    const path = location.pathname || "";
+    const isModule = path.endsWith(".html") && !path.endsWith("index.html");
+    if (!isModule || !window.gtag) return;
+
+    const moduleName = path.split("/").pop(); // e.g., working-capital.html
+    const marks = [30, 60, 120];
+    const fired = new Set();
+
+    function fire(seconds) {
+      if (document.visibilityState !== "visible") return;
+      if (fired.has(seconds)) return;
+      fired.add(seconds);
+
+      gtag("event", "module_engaged", {
+        module: moduleName,
+        seconds_engaged: seconds
+      });
+    }
+
+    marks.forEach((sec) => setTimeout(() => fire(sec), sec * 1000));
+  })();
 })();
 /* =========================================
    FP&A Portfolio — JS
