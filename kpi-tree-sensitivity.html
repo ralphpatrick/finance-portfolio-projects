@@ -940,8 +940,8 @@
     tornadoVerdictEl.innerHTML = `<strong style="color:#0f766e;">#1 lever: ${topDriver.name}.</strong> A 5% improvement extends runway by <strong>${topGain}</strong> — the widest bar in the chart. The biggest downside risk is <strong>${worstDriver.name}</strong>: a 5% deterioration costs ${worstDriver.downRunway <= -999 ? 'infinite' : Math.abs(worstDriver.downRunway).toFixed(1) + ' months'} of runway. Prioritize protecting ${worstDriver.name} while investing in ${topDriver.name} improvement. The 2nd and 3rd ranked levers are ${top3[1] ? top3[1].name : '—'} and ${top3[2] ? top3[2].name : '—'}.`;
   }
 
-  loadSample();
-
+  // Enable global tooltip bubble (prevents tooltip clipping in sidebar)
+  initTooltips();
   loadSample();
 
   function setDecisionBox(state, verdict, verdictAction, bullets, next) {

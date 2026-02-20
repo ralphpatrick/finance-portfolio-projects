@@ -3428,6 +3428,9 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
     // ========== INIT ==========
     
     window.addEventListener('DOMContentLoaded', () => {
+      // Tooltips are handled by the body-level tooltip engine to avoid
+      // clipping inside sidebar/overflow containers.
+      initTooltips();
       initializeSampleData();
       loadScenarioInputs();
       renderAll();

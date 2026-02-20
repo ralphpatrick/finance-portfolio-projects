@@ -398,3 +398,152 @@ window.withStableScroll = function withStableScroll(fn) {
   window.addEventListener('scroll', updateNav, { passive: true });
   updateNav();
 })();
+
+
+// =========================================
+// TOOLTIP ENGINE (shared)
+// Usage: add data-tt="Your tooltip text" to any element (e.g., .help-icon)
+// Then call initTooltips() once per page (safe to call multiple times).
+// =========================================
+(function () {
+  if (window.initTooltips) return;
+
+  function ensureRoot() {
+    var el = document.getElementById("tt-root");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "tt-root";
+      el.setAttribute("role", "tooltip");
+      el.setAttribute("aria-hidden", "true");
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  window.initTooltips = function initTooltips() {
+    var ttEl = ensureRoot();
+    var hideTimer = null;
+    var activeEl = null;
+    var rafId = null;
+
+    function position(targetEl) {
+      if (!targetEl) return;
+      var r = targetEl.getBoundingClientRect();
+      // default: centered above the target
+      var top = r.top + window.scrollY - 10;
+      var left = r.left + window.scrollX + r.width / 2;
+
+      ttEl.style.left = left + "px";
+      ttEl.style.top = top + "px";
+    }
+
+    function show(text, targetEl) {
+      clearTimeout(hideTimer);
+      activeEl = targetEl;
+
+      ttEl.textContent = text || "";
+      ttEl.classList.add("tt-visible");
+      ttEl.setAttribute("aria-hidden", "false");
+      position(targetEl);
+    }
+
+    function hide() {
+      hideTimer = setTimeout(function () {
+        activeEl = null;
+        ttEl.classList.remove("tt-visible");
+        ttEl.setAttribute("aria-hidden", "true");
+      }, 80);
+    }
+
+    function getText(el) {
+      return (
+        (el && (el.getAttribute("data-tt") || el.getAttribute("aria-label") || "")) ||
+        ""
+      );
+    }
+
+    // Delegate hover/focus to elements with data-tt
+    document.addEventListener(
+      "mouseover",
+      function (e) {
+        var t = e.target && e.target.closest && e.target.closest("[data-tt]");
+        if (!t) return;
+        show(getText(t), t);
+      },
+      true
+    );
+
+    document.addEventListener(
+      "mouseout",
+      function (e) {
+        var t = e.target && e.target.closest && e.target.closest("[data-tt]");
+        if (!t) return;
+        hide();
+      },
+      true
+    );
+
+    document.addEventListener(
+      "focusin",
+      function (e) {
+        var t = e.target && e.target.closest && e.target.closest("[data-tt]");
+        if (!t) return;
+        show(getText(t), t);
+      },
+      true
+    );
+
+    document.addEventListener(
+      "focusout",
+      function (e) {
+        var t = e.target && e.target.closest && e.target.closest("[data-tt]");
+        if (!t) return;
+        hide();
+      },
+      true
+    );
+
+    // Reposition on scroll/resize (throttled)
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!activeEl || !ttEl.classList.contains("tt-visible")) return;
+        if (rafId) return;
+        rafId = requestAnimationFrame(function () {
+          rafId = null;
+          position(activeEl);
+        });
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      function () {
+        if (!activeEl || !ttEl.classList.contains("tt-visible")) return;
+        position(activeEl);
+      },
+      { passive: true }
+    );
+
+    // Tap/click support: tap toggles tooltip; tapping elsewhere hides
+    document.addEventListener("click", function (e) {
+      var t = e.target && e.target.closest && e.target.closest("[data-tt]");
+      if (!t) {
+        // click outside
+        activeEl = null;
+        ttEl.classList.remove("tt-visible");
+        ttEl.setAttribute("aria-hidden", "true");
+        return;
+      }
+      // click on a tooltip-enabled element
+      if (activeEl === t && ttEl.classList.contains("tt-visible")) {
+        activeEl = null;
+        ttEl.classList.remove("tt-visible");
+        ttEl.setAttribute("aria-hidden", "true");
+      } else {
+        show(getText(t), t);
+      }
+    });
+  };
+})();

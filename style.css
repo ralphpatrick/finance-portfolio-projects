@@ -656,6 +656,36 @@ img { max-width: 100%; display: block; }
   margin-bottom: 20px;
 }
 
+/* ------------------------------------------------------------------
+   Global tooltip bubble (used by the JS tooltip engine in modules)
+   Some modules disable the legacy .help-icon:hover::after tooltip to
+   avoid clipping inside sidebars/overflow containers. Those pages rely
+   on this #tt-root bubble + initTooltips() in their module script.
+------------------------------------------------------------------- */
+
+#tt-root {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  padding: 9px 13px;
+  background: rgba(11, 18, 32, 0.96);
+  color: #f6f8fb;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.55;
+  border-radius: 9px;
+  white-space: normal;
+  width: 270px;
+  max-width: calc(100vw - 24px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  text-align: left;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  font-family: var(--font-sans);
+}
+
+#tt-root.tt-visible { opacity: 1; }
+
 .module-section-title {
   margin: 0;
   line-height: 1.2;
