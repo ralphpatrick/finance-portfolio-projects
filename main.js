@@ -2,19 +2,20 @@
 (function () {
   const MEASUREMENT_ID = "G-G86TZJHY3K";
 
-  if (window.__ga4_loaded) return;
+  // Only skip if GA is already initialized
+  if (window.__ga4_loaded && typeof window.gtag === "function") return;
   window.__ga4_loaded = true;
 
-  // Load gtag.js
+  // Always create dataLayer + gtag function (even if gtag.js is blocked)
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ window.dataLayer.push(arguments); }
+  window.gtag = window.gtag || gtag;
+
+  // Load gtag.js (non-blocking)
   const s = document.createElement("script");
   s.async = true;
   s.src = "https://www.googletagmanager.com/gtag/js?id=" + MEASUREMENT_ID;
   document.head.appendChild(s);
-
-  // Init gtag
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ window.dataLayer.push(arguments); }
-  window.gtag = window.gtag || gtag;
 
   gtag("js", new Date());
   gtag("config", MEASUREMENT_ID);
@@ -22,24 +23,21 @@
   // Track clicks (modules + outbound recruiter actions)
   document.addEventListener("click", (e) => {
     const a = e.target && e.target.closest ? e.target.closest("a") : null;
-    if (!a || !window.gtag) return;
+    if (!a || typeof window.gtag !== "function") return;
 
     const href = a.getAttribute("href") || "";
     const text = (a.textContent || "").trim().slice(0, 80);
 
-    // Email click (mailto or Cloudflare email protection)
     if (href.startsWith("mailto:") || href.includes("/cdn-cgi/l/email-protection")) {
       gtag("event", "click_email", { link_url: href, link_text: text });
       return;
     }
 
-    // Module open (internal .html pages)
     if (href.endsWith(".html")) {
       gtag("event", "open_module", { link_url: href, link_text: text });
       return;
     }
 
-    // Outbound clicks (LinkedIn, GitHub, other)
     const isExternal = href.startsWith("http") && !href.includes("ralphpatrick.github.io");
     if (isExternal) {
       const isLinkedIn = href.includes("linkedin.com");
@@ -56,9 +54,9 @@
   (function trackTimeOnModule() {
     const path = location.pathname || "";
     const isModule = path.endsWith(".html") && !path.endsWith("index.html");
-    if (!isModule || !window.gtag) return;
+    if (!isModule || typeof window.gtag !== "function") return;
 
-    const moduleName = path.split("/").pop(); // e.g., working-capital.html
+    const moduleName = path.split("/").pop();
     const marks = [30, 60, 120];
     const fired = new Set();
 
@@ -67,24 +65,19 @@
       if (fired.has(seconds)) return;
       fired.add(seconds);
 
-      // Always record the raw engagement mark
       window.gtag("event", "module_engaged", {
         module: moduleName,
         seconds_engaged: seconds
       });
 
-      // Intent tiers
-      if (seconds >= 120) {
-        window.gtag("event", "module_intent_high", { module: moduleName });
-      } else if (seconds >= 60) {
-        window.gtag("event", "module_intent_med", { module: moduleName });
-      } else if (seconds >= 30) {
-        window.gtag("event", "module_intent_low", { module: moduleName });
-      }
+      if (seconds >= 120) window.gtag("event", "module_intent_high", { module: moduleName });
+      else if (seconds >= 60) window.gtag("event", "module_intent_med", { module: moduleName });
+      else if (seconds >= 30) window.gtag("event", "module_intent_low", { module: moduleName });
     }
 
     marks.forEach((sec) => setTimeout(() => fire(sec), sec * 1000));
   })();
+})();
 /* =========================================
    FP&A Portfolio — JS
    Minimal: mobile nav + reveal animations + back-to-top + footer year
