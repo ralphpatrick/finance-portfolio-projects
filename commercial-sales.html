@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
+    /* Prevent horizontal overflow */
+    html, body { overflow-x: clip; }
+
     /* Module-specific styles */
     .module-hero {
       padding: 48px 0 32px 0;
@@ -535,7 +538,7 @@
           FP&A Portfolio
         </a>
         <div class="nav-cta">
-          <a href="index.html#card-commercial-sales"" class="btn btn-ghost">← Back to Portfolio</a>
+          <a href="index.html#card-commercial-sales" class="btn btn-ghost">← Back to Portfolio</a>
         </div>
       </nav>
     </div>
@@ -653,9 +656,9 @@
               <!-- KPIs populated by JS -->
             </div>
 
-            <table class="data-table" id="promoTable">
+            <div style="overflow-x:auto;"><table class="data-table" id="promoTable">
               <!-- Table populated by JS -->
-            </table>
+            </table></div>
           </div>
         </section>
 
@@ -689,9 +692,9 @@
               <canvas id="channelChart" class="chart-canvas"></canvas>
             </div>
 
-            <table class="data-table" id="channelTable">
+            <div style="overflow-x:auto;"><table class="data-table" id="channelTable">
               <!-- Table populated by JS -->
-            </table>
+            </table></div>
           </div>
         </section>
 
@@ -778,9 +781,9 @@
               </div>
             </div>
 
-            <table class="data-table" id="accrualTable">
+            <div style="overflow-x:auto;"><table class="data-table" id="accrualTable">
               <!-- Table populated by JS -->
-            </table>
+            </table></div>
           </div>
         </section>
 
