@@ -353,7 +353,30 @@
           <h2 class="module-section-title">Revenue Bridge (Month 1 → Month 12)</h2>
           <span class="help-icon" data-help="Waterfall chart showing how revenue moves from start to end: new customers added, upsell expansion, and churn removed."></span>
         </div>
-        <div class="module-card"><div class="chart-wrap"><canvas id="chart-bridge" height="180"></canvas></div></div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-bridge" height="180"></canvas></div>
+          <!-- Bridge Explainer -->
+          <div id="bridge-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="bridge-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">12-Month Net Revenue Change</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="bridge-net-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="bridge-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Revenue Growth</div>
+                <div id="bridge-growth-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="bridge-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This waterfall shows how revenue moves from <strong>Month 1 to Month 12</strong>. Each bar represents a driver: new customer revenue added, expansion from upsells, and churn removed. A wider green gap vs. red churn bar means the growth engine is outpacing losses.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Revenue Trend -->
@@ -362,7 +385,30 @@
           <h2 class="module-section-title">12-Month Revenue Trend</h2>
           <span class="help-icon" data-help="Total monthly recurring revenue broken into new, expansion, and churned revenue components."></span>
         </div>
-        <div class="module-card"><div class="chart-wrap"><canvas id="chart-trend" height="180"></canvas></div></div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-trend" height="180"></canvas></div>
+          <!-- Trend Explainer -->
+          <div id="trend-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="trend-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Month 12 Ending Revenue</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="trend-end-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="trend-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Churn vs. Growth</div>
+                <div id="trend-balance-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="trend-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              Each month's bar is split by revenue source: <strong>base revenue</strong> carried forward, <strong>new customers</strong> added, <strong>expansion</strong> from upsells, and <strong>churn lost</strong> (red, below zero). If churn bars are large relative to new+expansion, the growth engine is leaking — focus on retention before scaling acquisition.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Cohort Table -->
@@ -373,6 +419,27 @@
         </div>
         <div class="module-card" style="overflow-x:auto;">
           <table class="data-table" id="cohort-table"></table>
+          <!-- Cohort Explainer -->
+          <div id="cohort-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="cohort-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">12-Month Cohort Retention</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="cohort-ret-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="cohort-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Annual Churn</div>
+                <div id="cohort-churn-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="cohort-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              Each row is a cohort of customers who started in the same month. The columns show what percentage are still active at Month 0, 1, 2, 3, 5, 8, and 11. <strong>Green = strong retention (80%+)</strong>, amber = moderate, red = high churn risk. Diagonal patterns (each cohort dropping fast) signal a product or onboarding problem that compounds over time.
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -572,6 +639,79 @@
     }
     tableHtml += '</tbody>';
     document.getElementById('cohort-table').innerHTML = tableHtml;
+
+    // ── Revenue Bridge Explainer ────────────────────────────
+    const netChange = months[11].endRev - months[0].startRev;
+    const revGrowthPct = (netChange / months[0].startRev * 100).toFixed(1);
+    const bridgePos = netChange >= 0;
+    document.getElementById('bridge-explainer').style.display = '';
+    document.getElementById('bridge-net-value').textContent = fmtK(netChange);
+    const bridgeColor = bridgePos ? '#0f766e' : '#dc2626';
+    const bridgeBg = bridgePos ? 'rgba(15,118,110,0.10)' : 'rgba(220,38,38,0.10)';
+    const bridgeBadge = document.getElementById('bridge-live-badge');
+    bridgeBadge.textContent = bridgePos ? '✓ Net Positive' : '⚠ Net Negative';
+    bridgeBadge.style.cssText = `background:${bridgeBg}; color:${bridgeColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('bridge-growth-label').innerHTML = `${bridgePos ? '▲' : '▼'} ${Math.abs(revGrowthPct)}% over 12 mo`;
+    const bridgeVerdictEl = document.getElementById('bridge-verdict-block');
+    if (bridgePos && nrr >= 100) {
+      bridgeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      bridgeVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Strong growth — retention is fueling the engine.</strong> Revenue grew by ${fmtK(netChange)} (+${revGrowthPct}%) over 12 months. New customer adds (${fmtK(totalNew)}) and expansion (${fmtK(totalExp)}) comfortably outpace churn (${fmtK(totalChurn)} lost). NRR of ${pct(nrr)} means existing revenue compounds without new sales.`;
+    } else if (bridgePos) {
+      bridgeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      bridgeVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Growing, but acquisition-dependent.</strong> Revenue grew ${fmtK(netChange)} (+${revGrowthPct}%) — however NRR of ${pct(nrr)} is below 100%, meaning new customer adds are required just to maintain growth. Churn removed ${fmtK(totalChurn)} — reducing this is the fastest path to durable growth.`;
+    } else {
+      bridgeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      bridgeVerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Revenue is shrinking — churn exceeds new growth.</strong> The business lost ${fmtK(Math.abs(netChange))} in revenue over 12 months. Churn (${fmtK(totalChurn)}) is outpacing new + expansion revenue (${fmtK(totalNew + totalExp)}). Fix retention before investing further in acquisition.`;
+    }
+
+    // ── 12-Month Trend Explainer ─────────────────────────────
+    const totalChurnAbs = months.reduce((a,m) => a + m.churnRev, 0);
+    const totalGrowth = months.reduce((a,m) => a + m.newRev + m.expRev, 0);
+    const trendPos = months[11].endRev >= months[0].startRev;
+    document.getElementById('trend-explainer').style.display = '';
+    document.getElementById('trend-end-value').textContent = fmtK(months[11].endRev);
+    const trendColor = trendPos ? '#0f766e' : '#dc2626';
+    const trendBg = trendPos ? 'rgba(15,118,110,0.10)' : 'rgba(220,38,38,0.10)';
+    const trendBadge = document.getElementById('trend-live-badge');
+    trendBadge.textContent = trendPos ? '✓ Growing' : '⚠ Declining';
+    trendBadge.style.cssText = `background:${trendBg}; color:${trendColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('trend-balance-label').innerHTML = `${fmtK(totalGrowth)} gained · ${fmtK(totalChurnAbs)} lost`;
+    const trendVerdictEl = document.getElementById('trend-verdict-block');
+    if (trendPos && nrr >= 100) {
+      trendVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      trendVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Revenue is growing sustainably.</strong> The business ended Month 12 at ${fmtK(months[11].endRev)}, up from ${fmtK(months[0].startRev)}. New + expansion revenue (${fmtK(totalGrowth)}) meaningfully exceeds churn losses (${fmtK(totalChurnAbs)}). This trajectory supports compounding growth.`;
+    } else if (trendPos) {
+      trendVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      trendVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Growing but retention is fragile.</strong> Revenue reached ${fmtK(months[11].endRev)} by Month 12, but NRR of ${pct(nrr)} means this requires ongoing acquisition to sustain. The churn drag (${fmtK(totalChurnAbs)} lost) could negate growth if new adds slow down.`;
+    } else {
+      trendVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      trendVerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Revenue is declining month over month.</strong> The business is losing more to churn (${fmtK(totalChurnAbs)}) than it gains from new + expansion (${fmtK(totalGrowth)}). Without intervention, this trajectory accelerates revenue loss.`;
+    }
+
+    // ── Cohort Retention Explainer ────────────────────────────
+    const ret12 = Math.round(Math.pow(1 - churn, 11) * 100);
+    const annualChurnRate = Math.round(Math.min(1 - Math.pow(1 - churn, 12), 1) * 100);
+    const cohortPos = ret12 >= 70;
+    const cohortWarn = ret12 >= 50 && ret12 < 70;
+    document.getElementById('cohort-explainer').style.display = '';
+    document.getElementById('cohort-ret-value').textContent = ret12 + '%';
+    const cohortColor = cohortPos ? '#0f766e' : (cohortWarn ? '#d97706' : '#dc2626');
+    const cohortBg = cohortPos ? 'rgba(15,118,110,0.10)' : (cohortWarn ? 'rgba(217,119,6,0.10)' : 'rgba(220,38,38,0.10)');
+    const cohortBadge = document.getElementById('cohort-live-badge');
+    cohortBadge.textContent = cohortPos ? '✓ Healthy' : (cohortWarn ? '⚡ At Risk' : '⚠ High Churn');
+    cohortBadge.style.cssText = `background:${cohortBg}; color:${cohortColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('cohort-churn-label').innerHTML = `~${annualChurnRate}% customers lost / yr`;
+    const cohortVerdictEl = document.getElementById('cohort-verdict-block');
+    if (cohortPos) {
+      cohortVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      cohortVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Cohort retention is strong.</strong> At the current churn rate of ${pct(churn*100)}/mo, ${ret12}% of a cohort remains active after 11 months — above the 70% healthy threshold. Annual churn of ~${annualChurnRate}% means the business retains most of its customer base year-over-year. This supports stable NRR compounding.`;
+    } else if (cohortWarn) {
+      cohortVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      cohortVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Cohort retention is deteriorating.</strong> Only ${ret12}% of a cohort survives 11 months at ${pct(churn*100)}/mo churn — this is a warning zone. Annual churn of ~${annualChurnRate}% means roughly half your base turns over each year, forcing expensive replacement. Prioritise onboarding, engagement, and early churn detection.`;
+    } else {
+      cohortVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      cohortVerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Critical churn — cohorts collapse quickly.</strong> With ${pct(churn*100)}/mo churn, only ${ret12}% of any cohort survives 11 months. Annual churn of ~${annualChurnRate}% means the business must acquire nearly a full replacement of its customer base every year just to stay flat. This is unsustainable — fix retention before scaling.`;
+    }
   }
 
   loadSample();

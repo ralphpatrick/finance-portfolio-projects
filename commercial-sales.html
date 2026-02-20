@@ -591,8 +591,9 @@
         <div class="sidebar-section">
           <div class="sidebar-title">Actions</div>
           <div class="sidebar-buttons">
-            <button onclick="useSampleData()" class="btn-small btn-full">Use Sample</button>
-            <button onclick="randomizeSampleData()" class="btn-small btn-primary btn-full">🎲 Generate Random</button>
+            <button onclick="loadLosingPromo()" class="btn-small btn-full" style="border-color:rgba(220,38,38,0.35);color:#b91c1c;">🔴 Sample — Promo Loses Money</button>
+            <button onclick="loadWinningPromo()" class="btn-small btn-primary btn-full" style="background:#0f766e;border-color:#0f766e;">✅ Sample — Promo Makes Money</button>
+            <button onclick="randomizeSampleData()" class="btn-small btn-full">🎲 Generate Random</button>
             <button onclick="downloadAllTemplates()" class="btn-small btn-full">Download Templates</button>
           </div>
         </div>
@@ -746,6 +747,56 @@
               <div class="chart-title">Waterfall Bridge</div>
               <canvas id="pvmChart" class="chart-canvas"></canvas>
             </div>
+
+            <!-- ── PVM Explainer Box ── -->
+            <div id="pvmExplainer" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+
+              <!-- Live callout strip -->
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px;padding:14px 18px;border-radius:12px;background:rgba(15,118,110,0.05);border:1.5px solid rgba(15,118,110,0.16);">
+                <div>
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px;">Total Revenue Variance</div>
+                  <div style="display:flex;align-items:baseline;gap:10px;">
+                    <span id="pvmTotalValue" style="font-size:34px;font-weight:800;letter-spacing:-0.03em;color:var(--text);">—</span>
+                    <span id="pvmTotalPct" style="font-size:14px;font-weight:700;color:var(--muted);"></span>
+                    <span id="pvmTotalBadge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;"></span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:16px;flex-wrap:wrap;padding-top:4px;">
+                  <div style="text-align:center;">
+                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:4px;">💰 Price</div>
+                    <div id="pvmPricePill" style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;"></div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:4px;">📦 Volume</div>
+                    <div id="pvmVolumePill" style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;"></div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:4px;">🔀 Mix</div>
+                    <div id="pvmMixPill" style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section label -->
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text);margin-bottom:10px;">📖 What you're looking at</div>
+
+              <!-- Dynamic verdict block -->
+              <div id="pvmVerdictBlock" style="padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.65;margin-bottom:14px;"></div>
+
+              <!-- Biggest lever highlight -->
+              <div id="pvmLeverBlock" style="padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:16px;background:rgba(27,77,122,0.05);border:1px solid rgba(27,77,122,0.12);color:var(--text);"></div>
+
+              <!-- Static framework explanation -->
+              <div style="font-size:12px;color:var(--muted);line-height:1.75;border-top:1px solid var(--border);padding-top:14px;">
+                <strong style="color:var(--text);">How to read this bridge:</strong>
+                Every dollar of revenue variance has exactly one of three root causes — and the waterfall stacks them to show how you got from Prior to Current.
+                <strong>Price</strong> captures what changed because you charged more or less per unit.
+                <strong>Volume</strong> captures what changed because you sold more or fewer units overall.
+                <strong>Mix</strong> captures what changed because the blend of what you sold shifted toward higher- or lower-priced products.
+                If Volume is green but Mix is red, you're selling more units of the wrong thing — a classic sign to rebalance the portfolio or revisit SKU strategy.
+              </div>
+            </div>
+            <!-- ── end PVM Explainer ── -->
           </div>
         </section>
 
@@ -901,35 +952,74 @@
     }
     
     // ========== SAMPLE DATA GENERATION ==========
-    
+
     function useSampleData() {
       withStableScroll(function() {
-      dataMode = 'sample';
-      document.getElementById('dataModeBadge').textContent = 'Sample Data';
-      initializeSampleData();
-      renderAll();
+        dataMode = 'sample';
+        document.getElementById('dataModeBadge').textContent = 'Sample Data';
+        initializeSampleData();
+        renderAll();
       });
     }
-    
-    function initializeSampleData() {
-      // Promo data
-      promoData = {
-        baseline_revenue: 50000,
-        promo_revenue: 85000,
-        baseline_gp: 42,
-        promo_gp: 28,
-        promo_cost: 12000
-      };
-      
-      document.getElementById('baselineRev').value = promoData.baseline_revenue;
-      document.getElementById('promoRev').value = promoData.promo_revenue;
-      document.getElementById('baselineGP').value = promoData.baseline_gp;
-      document.getElementById('promoGP').value = promoData.promo_gp;
-      document.getElementById('promoCost').value = promoData.promo_cost;
-      
-      // Channel data
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const channels = ['Direct', 'Online', 'Retail', 'Partner', 'Enterprise'];
+
+    // ── PRESET: Promo that clearly LOSES money ──
+    // The margin hit (-14pp) + high cost ($14k) means net profit is deeply negative.
+    function loadLosingPromo() {
+      withStableScroll(function() {
+        dataMode = 'sample';
+        document.getElementById('dataModeBadge').textContent = '🔴 Promo Loses Money';
+        document.getElementById('baselineRev').value  = 50000;
+        document.getElementById('promoRev').value     = 85000;
+        document.getElementById('baselineGP').value   = 42;
+        document.getElementById('promoGP').value      = 22;   // -20pp — wipes the GP lift
+        document.getElementById('promoCost').value    = 14000; // heavy spend on top
+        _setDefaultPVM();
+        _buildChannelData();
+        populateChannelFilters();
+        renderAll();
+      });
+    }
+
+    // ── PRESET: Promo that clearly MAKES money ──
+    // GP% only dips 3pp (holds well), promo cost is lean, volume doubles → strong net profit.
+    function loadWinningPromo() {
+      withStableScroll(function() {
+        dataMode = 'sample';
+        document.getElementById('dataModeBadge').textContent = '✅ Promo Makes Money';
+        document.getElementById('baselineRev').value  = 55000;
+        document.getElementById('promoRev').value     = 115000; // 2× uplift
+        document.getElementById('baselineGP').value   = 44;
+        document.getElementById('promoGP').value      = 41;    // only -3pp — holds
+        document.getElementById('promoCost').value    = 5500;  // lean spend
+        // PVM: all three drivers are positive tailwinds
+        document.getElementById('priorRev').value     = 120000;
+        document.getElementById('currentRev').value   = 168000;
+        document.getElementById('priceEffect').value  = 7.5;
+        document.getElementById('volumeEffect').value = 18.2;
+        document.getElementById('mixEffect').value    = 4.3;
+        document.getElementById('discountPool').value = 48000;
+        document.getElementById('startMonth').value   = 1;
+        document.getElementById('endMonth').value     = 12;
+        _buildChannelData();
+        populateChannelFilters();
+        renderAll();
+      });
+    }
+
+    function _setDefaultPVM() {
+      document.getElementById('priorRev').value     = 120000;
+      document.getElementById('currentRev').value   = 138000;
+      document.getElementById('priceEffect').value  = 5.2;
+      document.getElementById('volumeEffect').value = 8.5;
+      document.getElementById('mixEffect').value    = 1.3;
+      document.getElementById('discountPool').value = 48000;
+      document.getElementById('startMonth').value   = 1;
+      document.getElementById('endMonth').value     = 12;
+    }
+
+    function _buildChannelData() {
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const channels = ['Direct','Online','Retail','Partner','Enterprise'];
       channelData = [];
       months.forEach(month => {
         channels.forEach(channel => {
@@ -937,8 +1027,7 @@
           const cogs = revenue * randFloat(0.35, 0.55);
           const opex = randInt(2000, 6000);
           channelData.push({
-            month,
-            channel,
+            month, channel,
             revenue: revenue.toFixed(2),
             cogs: cogs.toFixed(2),
             opex: opex.toFixed(2),
@@ -947,95 +1036,85 @@
           });
         });
       });
-      
-      // PVM data
-      pvmData = {
-        prior_revenue: 120000,
-        current_revenue: 138000,
-        price_effect: 5.2,
-        volume_effect: 8.5,
-        mix_effect: 1.3
-      };
-      
-      document.getElementById('priorRev').value = pvmData.prior_revenue;
-      document.getElementById('currentRev').value = pvmData.current_revenue;
-      document.getElementById('priceEffect').value = pvmData.price_effect;
-      document.getElementById('volumeEffect').value = pvmData.volume_effect;
-      document.getElementById('mixEffect').value = pvmData.mix_effect;
-      
-      // Accrual schedule
-      document.getElementById('discountPool').value = 48000;
-      document.getElementById('startMonth').value = 1;
-      document.getElementById('endMonth').value = 12;
+    }
+    
+    function initializeSampleData() {
+      // Default promo = losing scenario (same numbers as original sample)
+      promoData = { baseline_revenue: 50000, promo_revenue: 85000, baseline_gp: 42, promo_gp: 28, promo_cost: 12000 };
+      document.getElementById('baselineRev').value = promoData.baseline_revenue;
+      document.getElementById('promoRev').value    = promoData.promo_revenue;
+      document.getElementById('baselineGP').value  = promoData.baseline_gp;
+      document.getElementById('promoGP').value     = promoData.promo_gp;
+      document.getElementById('promoCost').value   = promoData.promo_cost;
+      _buildChannelData();
+      _setDefaultPVM();
     }
     
     function randomizeSampleData() {
       withStableScroll(function() {
-      dataMode = 'sample';
-      document.getElementById('dataModeBadge').textContent = 'Randomized Data';
-      
-      // Random promo data
-      const baseRev = randInt(30000, 80000);
-      const promoRev = baseRev * randFloat(1.3, 1.8);
-      promoData = {
-        baseline_revenue: baseRev,
-        promo_revenue: Math.round(promoRev),
-        baseline_gp: randFloat(35, 50),
-        promo_gp: randFloat(20, 35),
-        promo_cost: randInt(8000, 18000)
-      };
-      
-      document.getElementById('baselineRev').value = promoData.baseline_revenue;
-      document.getElementById('promoRev').value = promoData.promo_revenue;
-      document.getElementById('baselineGP').value = promoData.baseline_gp.toFixed(1);
-      document.getElementById('promoGP').value = promoData.promo_gp.toFixed(1);
-      document.getElementById('promoCost').value = promoData.promo_cost;
-      
-      // Random channel data
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const numChannels = randInt(3, 5);
-      const channelNames = ['Direct', 'Online', 'Retail', 'Partner', 'Enterprise'].slice(0, numChannels);
-      channelData = [];
-      months.forEach(month => {
-        channelNames.forEach(channel => {
-          const revenue = randInt(5000, 35000);
-          const cogs = revenue * randFloat(0.30, 0.60);
-          const opex = randInt(1500, 8000);
-          channelData.push({
-            month,
-            channel,
-            revenue: revenue.toFixed(2),
-            cogs: cogs.toFixed(2),
-            opex: opex.toFixed(2),
-            gp: ((revenue - cogs) / revenue * 100).toFixed(1),
-            contribution: (revenue - cogs - opex).toFixed(2)
+        dataMode = 'sample';
+
+        // ~50% chance of a genuinely profitable promo so users see both outcomes
+        const makeWinner = Math.random() > 0.5;
+
+        let baseRev, promoRev, baseGP, promoGP, promoCost;
+        if (makeWinner) {
+          baseRev   = randInt(40000, 100000);
+          promoRev  = Math.round(baseRev * randFloat(1.7, 2.3));  // big volume lift
+          baseGP    = randFloat(38, 52);
+          promoGP   = baseGP - randFloat(0, 4);                   // GP% holds
+          promoCost = randInt(3000, 8000);                         // lean spend
+          document.getElementById('dataModeBadge').textContent = '🎲 Random — Promo Makes Money';
+        } else {
+          baseRev   = randInt(30000, 80000);
+          promoRev  = Math.round(baseRev * randFloat(1.3, 1.7));
+          baseGP    = randFloat(35, 50);
+          promoGP   = Math.max(8, baseGP - randFloat(12, 22));    // GP% craters
+          promoCost = randInt(10000, 22000);                       // heavy spend
+          document.getElementById('dataModeBadge').textContent = '🎲 Random — Promo Loses Money';
+        }
+
+        document.getElementById('baselineRev').value = baseRev;
+        document.getElementById('promoRev').value    = promoRev;
+        document.getElementById('baselineGP').value  = baseGP.toFixed(1);
+        document.getElementById('promoGP').value     = promoGP.toFixed(1);
+        document.getElementById('promoCost').value   = promoCost;
+
+        // Random channel data
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const numChannels = randInt(3, 5);
+        const channelNames = ['Direct','Online','Retail','Partner','Enterprise'].slice(0, numChannels);
+        channelData = [];
+        months.forEach(month => {
+          channelNames.forEach(channel => {
+            const revenue = randInt(5000, 35000);
+            const cogs = revenue * randFloat(0.30, 0.60);
+            const opex = randInt(1500, 8000);
+            channelData.push({
+              month, channel,
+              revenue: revenue.toFixed(2),
+              cogs: cogs.toFixed(2),
+              opex: opex.toFixed(2),
+              gp: ((revenue - cogs) / revenue * 100).toFixed(1),
+              contribution: (revenue - cogs - opex).toFixed(2)
+            });
           });
         });
-      });
-      
-      // Random PVM data
-      const priorRev = randInt(80000, 180000);
-      const variance = randFloat(0.05, 0.25);
-      pvmData = {
-        prior_revenue: priorRev,
-        current_revenue: Math.round(priorRev * (1 + variance)),
-        price_effect: randFloat(2, 8),
-        volume_effect: randFloat(3, 15),
-        mix_effect: randFloat(-2, 5)
-      };
-      
-      document.getElementById('priorRev').value = pvmData.prior_revenue;
-      document.getElementById('currentRev').value = pvmData.current_revenue;
-      document.getElementById('priceEffect').value = pvmData.price_effect.toFixed(1);
-      document.getElementById('volumeEffect').value = pvmData.volume_effect.toFixed(1);
-      document.getElementById('mixEffect').value = pvmData.mix_effect.toFixed(1);
-      
-      // Random accrual
-      document.getElementById('discountPool').value = randInt(20000, 80000);
-      document.getElementById('startMonth').value = randInt(1, 3);
-      document.getElementById('endMonth').value = randInt(10, 12);
-      
-      renderAll();
+
+        // Random PVM — allow negative price or mix to show headwinds
+        const priorRev = randInt(80000, 180000);
+        const variance = randFloat(0.05, 0.30);
+        document.getElementById('priorRev').value     = priorRev;
+        document.getElementById('currentRev').value   = Math.round(priorRev * (1 + variance));
+        document.getElementById('priceEffect').value  = randFloat(-4, 10).toFixed(1);
+        document.getElementById('volumeEffect').value = randFloat(2, 18).toFixed(1);
+        document.getElementById('mixEffect').value    = randFloat(-6, 8).toFixed(1);
+        document.getElementById('discountPool').value = randInt(20000, 80000);
+        document.getElementById('startMonth').value   = randInt(1, 3);
+        document.getElementById('endMonth').value     = randInt(10, 12);
+
+        populateChannelFilters();
+        renderAll();
       });
     }
     
@@ -1271,6 +1350,98 @@
       `;
       
       renderPVMChart(priorRev, priceDollar, volumeDollar, mixDollar, currentRev);
+      renderPVMExplainer(priorRev, currentRev, priceEffect, volumeEffect, mixEffect, priceDollar, volumeDollar, mixDollar);
+    }
+
+    function renderPVMExplainer(priorRev, currentRev, priceEff, volEff, mixEff, priceDollar, volumeDollar, mixDollar) {
+      const box = document.getElementById('pvmExplainer');
+      if (!priorRev) { box.style.display = 'none'; return; }
+      box.style.display = '';
+
+      const totalVariance = currentRev - priorRev;
+      const totalPct = priorRev > 0 ? (totalVariance / priorRev * 100) : 0;
+      const isGrowth = totalVariance >= 0;
+
+      // Color helpers
+      const posC = '#0f766e', posBg = 'rgba(15,118,110,0.10)';
+      const negC = '#dc2626', negBg = 'rgba(220,38,38,0.10)';
+      const warnC = '#b45309', warnBg = 'rgba(180,83,9,0.10)';
+      const pillStyle = (val) => `background:${val >= 0 ? posBg : negBg};color:${val >= 0 ? posC : negC};`;
+      const fmt = (v) => (v >= 0 ? '+' : '') + '$' + Math.abs(Math.round(v)).toLocaleString();
+      const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+
+      // Total badge
+      document.getElementById('pvmTotalValue').textContent = (totalVariance >= 0 ? '+' : '') + '$' + Math.abs(Math.round(totalVariance)).toLocaleString();
+      document.getElementById('pvmTotalPct').textContent = fmtPct(totalPct);
+      const badge = document.getElementById('pvmTotalBadge');
+      badge.textContent = isGrowth ? '▲ Growth' : '▼ Decline';
+      badge.style.cssText = `font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:${isGrowth ? posBg : negBg};color:${isGrowth ? posC : negC};`;
+
+      // Effect pills
+      const setPill = (id, val) => {
+        const el = document.getElementById(id);
+        el.textContent = fmt(val);
+        el.style.cssText = pillStyle(val);
+      };
+      setPill('pvmPricePill', priceDollar);
+      setPill('pvmVolumePill', volumeDollar);
+      setPill('pvmMixPill', mixDollar);
+
+      // Identify biggest driver and any headwinds
+      const drivers = [
+        { name: 'Price', dollar: priceDollar, pct: priceEff },
+        { name: 'Volume', dollar: volumeDollar, pct: volEff },
+        { name: 'Mix', dollar: mixDollar, pct: mixEff }
+      ];
+      const sorted = [...drivers].sort((a,b) => Math.abs(b.dollar) - Math.abs(a.dollar));
+      const biggest = sorted[0];
+      const headwinds = drivers.filter(d => d.dollar < 0);
+      const tailwinds = drivers.filter(d => d.dollar > 0);
+      const allPositive = headwinds.length === 0;
+      const allNegative = tailwinds.length === 0;
+
+      // Verdict block
+      let verdictStyle, verdictHTML;
+      if (isGrowth && allPositive) {
+        verdictStyle = `background:#f0fdf9;border-left:3px solid ${posC};`;
+        verdictHTML = `<strong style="color:${posC};">✓ Broad-based growth — all three drivers are tailwinds.</strong><br>
+          Revenue grew <strong>${fmtPct(totalPct)}</strong> vs prior period.
+          Price contributed <strong>${fmt(priceDollar)}</strong>, Volume contributed <strong>${fmt(volumeDollar)}</strong>, and Mix contributed <strong>${fmt(mixDollar)}</strong>.
+          This is the healthiest PVM profile — you're charging more, selling more, and shifting toward higher-value products simultaneously.`;
+      } else if (isGrowth && headwinds.length > 0) {
+        verdictStyle = `background:#fffbeb;border-left:3px solid ${warnC};`;
+        const drag = headwinds.map(d => `${d.name} (${fmt(d.dollar)})`).join(', ');
+        verdictHTML = `<strong style="color:${warnC};">⚡ Growth with a hidden headwind — ${drag} is dragging against the tailwinds.</strong><br>
+          Revenue grew <strong>${fmtPct(totalPct)}</strong> overall, but it would have been higher without the drag.
+          The biggest tailwind is <strong>${biggest.name}</strong> at <strong>${fmt(biggest.dollar)}</strong>.
+          Watch the headwind closely — if it widens, the growth story weakens.`;
+      } else if (!isGrowth && allNegative) {
+        verdictStyle = `background:#fef2f2;border-left:3px solid ${negC};`;
+        verdictHTML = `<strong style="color:${negC};">⚠ Revenue declined across all three dimensions.</strong><br>
+          Revenue fell <strong>${fmtPct(totalPct)}</strong> vs prior period — Price, Volume, and Mix are all headwinds.
+          This is a broad-based deterioration requiring a full commercial review: pricing power, sales capacity, and SKU portfolio all need attention.`;
+      } else {
+        verdictStyle = `background:#fef2f2;border-left:3px solid ${negC};`;
+        verdictHTML = `<strong style="color:${negC};">⚠ Revenue declined ${fmtPct(totalPct)} vs prior period.</strong><br>
+          ${tailwinds.length > 0 ? `Some drivers helped (${tailwinds.map(d => d.name + ' ' + fmt(d.dollar)).join(', ')}), but they weren't enough to offset the headwinds.` : ''}
+          Focus on the largest drag: <strong>${biggest.name}</strong> at <strong>${fmt(biggest.dollar)}</strong>.`;
+      }
+      const vb = document.getElementById('pvmVerdictBlock');
+      vb.style.cssText = `padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.65;margin-bottom:14px;${verdictStyle}`;
+      vb.innerHTML = verdictHTML;
+
+      // Lever block
+      const lb = document.getElementById('pvmLeverBlock');
+      if (headwinds.length > 0) {
+        const worst = headwinds.sort((a,b) => a.dollar - b.dollar)[0];
+        lb.innerHTML = `<strong>🎯 Key action:</strong> The <strong>${worst.name}</strong> effect is dragging revenue by <strong>${fmt(worst.dollar)}</strong>.
+          ${worst.name === 'Mix' ? 'Consider rebalancing the product portfolio toward higher-revenue SKUs.' :
+            worst.name === 'Price' ? 'Review discount depth, price erosion, or competitive pricing pressure.' :
+            'Investigate volume decline by channel, region, or customer segment.'}`;
+      } else {
+        lb.innerHTML = `<strong>🎯 Biggest growth lever:</strong> <strong>${biggest.name}</strong> drove <strong>${fmt(biggest.dollar)}</strong> of the total uplift.
+          To sustain momentum, protect this driver while strengthening the smaller contributors.`;
+      }
     }
     
     function renderPVMChart(prior, price, volume, mix, current) {

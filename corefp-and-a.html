@@ -1273,12 +1273,28 @@
               <div class="chart-container">
                 <canvas id="chart1"></canvas>
               </div>
+              <div id="chart1-explainer" style="margin-top:16px; border-top:1px solid rgba(12,23,45,0.08); padding-top:14px; display:none;">
+                <div id="chart1-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:10px 14px; border-radius:10px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.15);">
+                  <div><div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5d6b7a; margin-bottom:2px;" id="chart1-callout-label">Metric</div><span id="chart1-callout-value" style="font-size:22px; font-weight:800; color:#0b1220;">—</span> <span id="chart1-badge" style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;"></span></div>
+                  <div style="text-align:right; font-size:11px; color:#5d6b7a;" id="chart1-callout-sub"></div>
+                </div>
+                <div id="chart1-verdict" style="padding:10px 14px; border-radius:8px; font-size:12px; line-height:1.6; margin-bottom:8px;"></div>
+                <div id="chart1-desc" style="font-size:11px; color:#5d6b7a; line-height:1.7;"></div>
+              </div>
             </div>
 
             <div class="card">
               <div class="card-title" id="chart2Title">Profitability</div>
               <div class="chart-container">
                 <canvas id="chart2"></canvas>
+              </div>
+              <div id="chart2-explainer" style="margin-top:16px; border-top:1px solid rgba(12,23,45,0.08); padding-top:14px; display:none;">
+                <div id="chart2-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:10px 14px; border-radius:10px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.15);">
+                  <div><div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5d6b7a; margin-bottom:2px;" id="chart2-callout-label">Metric</div><span id="chart2-callout-value" style="font-size:22px; font-weight:800; color:#0b1220;">—</span> <span id="chart2-badge" style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;"></span></div>
+                  <div style="text-align:right; font-size:11px; color:#5d6b7a;" id="chart2-callout-sub"></div>
+                </div>
+                <div id="chart2-verdict" style="padding:10px 14px; border-radius:8px; font-size:12px; line-height:1.6; margin-bottom:8px;"></div>
+                <div id="chart2-desc" style="font-size:11px; color:#5d6b7a; line-height:1.7;"></div>
               </div>
             </div>
           </div>
@@ -1287,6 +1303,14 @@
             <div class="card-title" id="chart3Title">Cash Flow Forecast</div>
             <div class="chart-container">
               <canvas id="chart3"></canvas>
+            </div>
+            <div id="chart3-explainer" style="margin-top:16px; border-top:1px solid rgba(12,23,45,0.08); padding-top:14px; display:none;">
+              <div id="chart3-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px; padding:10px 14px; border-radius:10px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.15);">
+                <div><div style="font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5d6b7a; margin-bottom:2px;" id="chart3-callout-label">Metric</div><span id="chart3-callout-value" style="font-size:22px; font-weight:800; color:#0b1220;">—</span> <span id="chart3-badge" style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;"></span></div>
+                <div style="text-align:right; font-size:11px; color:#5d6b7a;" id="chart3-callout-sub"></div>
+              </div>
+              <div id="chart3-verdict" style="padding:10px 14px; border-radius:8px; font-size:12px; line-height:1.6; margin-bottom:8px;"></div>
+              <div id="chart3-desc" style="font-size:11px; color:#5d6b7a; line-height:1.7;"></div>
             </div>
           </div>
 
@@ -1765,6 +1789,7 @@
       renderCommentary();
       renderSensitivity();
       renderDecisionBox();
+      renderChartExplainers();
       // Update print title
       const pt = document.getElementById('printTitle');
       if (pt) pt.textContent = `${INDUSTRIES[currentIndustry].title} — ${currentScenario.charAt(0).toUpperCase() + currentScenario.slice(1)} Scenario`;
@@ -1803,6 +1828,212 @@
           </div>
         `;
       }).join('');
+    }
+
+    // ============================================
+    // CHART EXPLAINER BOXES
+    // ============================================
+
+    function setExplainer(id, calloutLabel, calloutValue, calloutSub, badgeText, badgeColor, badgeBg, verdictStyle, verdictHtml, descHtml) {
+      const el = document.getElementById(id + '-explainer');
+      if (!el) return;
+      el.style.display = '';
+      document.getElementById(id + '-callout-label').textContent = calloutLabel;
+      document.getElementById(id + '-callout-value').textContent = calloutValue;
+      document.getElementById(id + '-callout-sub').innerHTML = calloutSub;
+      const badge = document.getElementById(id + '-badge');
+      badge.textContent = badgeText;
+      badge.style.cssText = `background:${badgeBg}; color:${badgeColor}; font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;`;
+      document.getElementById(id + '-verdict').style.cssText = verdictStyle;
+      document.getElementById(id + '-verdict').innerHTML = verdictHtml;
+      document.getElementById(id + '-desc').innerHTML = descHtml;
+    }
+
+    function renderChartExplainers() {
+      const data = modelData.scenarios[currentScenario];
+      if (!data) return;
+      const months = modelData.months.length;
+      const fv = (v, f) => formatValue(v, f);
+      const pos = '#0f766e', warn = '#d97706', neg = '#dc2626';
+      const posBg = 'rgba(15,118,110,0.10)', warnBg = 'rgba(217,119,6,0.10)', negBg = 'rgba(220,38,38,0.10)';
+      const greenStyle = 'padding:10px 14px; border-radius:8px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:12px; line-height:1.6;';
+      const warnStyle = 'padding:10px 14px; border-radius:8px; background:#fffbeb; border-left:3px solid #d97706; font-size:12px; line-height:1.6;';
+      const redStyle  = 'padding:10px 14px; border-radius:8px; background:#fef2f2; border-left:3px solid #dc2626; font-size:12px; line-height:1.6;';
+      const scen = currentScenario.charAt(0).toUpperCase() + currentScenario.slice(1);
+
+      if (currentIndustry === 'saas') {
+        // Chart 1: MRR Trend
+        const mrr0 = data.mrrTrend ? data.mrrTrend[0] : 0;
+        const mrrEnd = data.mrrTrend ? data.mrrTrend[months-1] : 0;
+        const mrrGrowth = mrr0 > 0 ? ((mrrEnd - mrr0) / mrr0 * 100) : 0;
+        const mrrPos = mrrGrowth >= 0;
+        setExplainer('chart1', 'MRR at Month 12', fv(mrrEnd, 'currency'), `${mrrPos ? '▲' : '▼'} ${Math.abs(mrrGrowth).toFixed(1)}% from Month 1`,
+          mrrPos ? '✓ Growing' : '⚠ Declining', mrrPos ? pos : neg, mrrPos ? posBg : negBg,
+          mrrPos ? greenStyle : redStyle,
+          mrrPos ? `<strong style="color:${pos};">✓ MRR is growing.</strong> Monthly Recurring Revenue reached ${fv(mrrEnd, 'currency')} by Month 12 — up ${Math.abs(mrrGrowth).toFixed(1)}% from ${fv(mrr0, 'currency')}. The ${scen} scenario shows a healthy expansion trajectory.`
+                 : `<strong style="color:${neg};">⚠ MRR is declining.</strong> Monthly Recurring Revenue fell to ${fv(mrrEnd, 'currency')} by Month 12, down ${Math.abs(mrrGrowth).toFixed(1)}% from ${fv(mrr0, 'currency')}. Churn is outpacing new and expansion revenue.`,
+          'This chart shows <strong>Monthly Recurring Revenue (MRR)</strong> across Base, Upside, and Downside scenarios. The active scenario (filled area) is your current view. The gap between Upside and Downside lines shows your planning range uncertainty.');
+
+        // Chart 2: NRR
+        const nrr = data.nrr || 0;
+        const nrrPos = nrr >= 100;
+        const nrrWarn = nrr >= 90 && nrr < 100;
+        setExplainer('chart2', 'Net Revenue Retention', nrr.toFixed(1) + '%', nrr >= 110 ? 'World-class (>110%)' : nrr >= 100 ? 'Healthy (100%+)' : nrr >= 90 ? 'Leaking (<100%)' : 'Acquisition-dependent',
+          nrrPos ? '✓ Retaining' : (nrrWarn ? '⚡ At Risk' : '⚠ Shrinking'), nrrPos ? pos : (nrrWarn ? warn : neg), nrrPos ? posBg : (nrrWarn ? warnBg : negBg),
+          nrrPos ? greenStyle : (nrrWarn ? warnStyle : redStyle),
+          nrrPos ? `<strong style="color:${pos};">✓ NRR above 100% — the existing base is self-growing.</strong> At ${nrr.toFixed(1)}%, expansion revenue exceeds churn. Every $1 of ARR today compounds without new sales.`
+                 : (nrrWarn ? `<strong style="color:${warn};">⚡ NRR below 100% — growth is acquisition-dependent.</strong> At ${nrr.toFixed(1)}%, churn is partially offsetting expansion. You need consistent new logo adds to grow ARR.`
+                            : `<strong style="color:${neg};">⚠ NRR critically low — base revenue is shrinking.</strong> At ${nrr.toFixed(1)}%, churn is overwhelming expansion. The existing customer base is contracting and requires urgent retention action.`),
+          '<strong>Net Revenue Retention (NRR)</strong> measures whether existing customers are growing or shrinking in revenue — including expansions, contractions, and churn. Above 100% means you grow revenue without new sales. Below 100% means you are leaking value from your existing base.');
+
+        // Chart 3: Cash Runway
+        const cashEnd = data.cash ? data.cash[months-1] : 0;
+        const runway = cashEnd / 200000;
+        const cashPos = runway > 12;
+        const cashWarn = runway > 6 && runway <= 12;
+        setExplainer('chart3', 'Ending Cash Balance', fv(cashEnd, 'currency'), `~${runway.toFixed(1)} months runway`,
+          cashPos ? '✓ Healthy' : (cashWarn ? '⚡ Monitor' : '⚠ Critical'), cashPos ? pos : (cashWarn ? warn : neg), cashPos ? posBg : (cashWarn ? warnBg : negBg),
+          cashPos ? greenStyle : (cashWarn ? warnStyle : redStyle),
+          cashPos ? `<strong style="color:${pos};">✓ Strong cash position.</strong> Ending cash of ${fv(cashEnd, 'currency')} provides ~${runway.toFixed(1)} months of runway — well above the 12-month safe zone. The business has headroom to invest in growth.`
+                 : (cashWarn ? `<strong style="color:${warn};">⚡ Cash position needs monitoring.</strong> Ending cash of ${fv(cashEnd, 'currency')} covers ~${runway.toFixed(1)} months. Stay within 6-12 months is manageable but watch burn rate closely.`
+                             : `<strong style="color:${neg};">⚠ Cash runway is critical.</strong> At ${fv(cashEnd, 'currency')}, the business has only ~${runway.toFixed(1)} months left. Immediate action needed: cut burn, accelerate collections, or secure funding.`),
+          'This chart shows the <strong>cash balance trajectory</strong> across all three scenarios. The gap between Upside and Downside shows your cash risk range. If the Downside line approaches zero, the business faces a funding crisis in that scenario — plan accordingly.');
+
+      } else if (currentIndustry === 'media') {
+        // Chart 1: User Growth
+        const u0 = data.users ? data.users[0] : 0;
+        const uEnd = data.users ? data.users[months-1] : 0;
+        const uGrowth = u0 > 0 ? ((uEnd - u0) / u0 * 100) : 0;
+        const uPos = uGrowth >= 10;
+        setExplainer('chart1', 'Monthly Active Users (M12)', fv(uEnd, 'number'), `${uPos ? '▲' : '▼'} ${Math.abs(uGrowth).toFixed(1)}% growth`,
+          uPos ? '✓ Scaling' : '⚡ Slow Growth', uPos ? pos : warn, uPos ? posBg : warnBg,
+          uPos ? greenStyle : warnStyle,
+          uPos ? `<strong style="color:${pos};">✓ User base is scaling.</strong> The platform reached ${fv(uEnd, 'number')} MAU by Month 12, up ${uGrowth.toFixed(1)}% from ${fv(u0, 'number')}. Strong audience growth creates advertising leverage.`
+               : `<strong style="color:${warn};">⚡ User growth is below 10% over the period.</strong> From ${fv(u0, 'number')} to ${fv(uEnd, 'number')} MAU — moderate growth. Advertising revenue at scale requires consistent user acquisition.`,
+          'This chart tracks <strong>Monthly Active Users</strong> across scenarios. Higher user counts drive ad impressions and revenue — but only if fill rate and CPM are maintained. Watch the Downside case to understand growth floor risk.');
+
+        // Chart 2: ARPU
+        const arpu = data.arpu || 0;
+        const arpuPos = arpu > 5;
+        setExplainer('chart2', 'ARPU (Revenue per User)', fv(arpu, 'currency'), arpuPos ? 'Above $5 benchmark' : 'Below $5 benchmark',
+          arpuPos ? '✓ Strong' : '⚡ Below Target', arpuPos ? pos : warn, arpuPos ? posBg : warnBg,
+          arpuPos ? greenStyle : warnStyle,
+          arpuPos ? `<strong style="color:${pos};">✓ ARPU is strong at ${fv(arpu, 'currency')}.</strong> Revenue per user exceeds the $5 benchmark, indicating effective monetization. Maintain CPM floors and fill rate to protect this.`
+                  : `<strong style="color:${warn};">⚡ ARPU of ${fv(arpu, 'currency')} is below the $5 benchmark.</strong> Monetization is underperforming. Consider raising CPM floors, improving fill rates, or layering subscription revenue.`,
+          '<strong>ARPU (Average Revenue per User)</strong> combines advertising CPM, fill rate, and engagement into a single revenue efficiency metric. It declines when fill rates drop or CPM floors erode — both early warning signs of monetization pressure.');
+
+        // Chart 3: EBITDA Margin
+        const em = data.ebitdaMargin || 0;
+        const emPos = em >= 15;
+        const emWarn = em >= 0 && em < 15;
+        setExplainer('chart3', 'EBITDA Margin', em.toFixed(1) + '%', em >= 20 ? 'Strong (>20%)' : em >= 0 ? 'Positive' : 'Negative',
+          emPos ? '✓ Profitable' : (emWarn ? '⚡ Thin Margin' : '⚠ Loss-making'), emPos ? pos : (emWarn ? warn : neg), emPos ? posBg : (emWarn ? warnBg : negBg),
+          emPos ? greenStyle : (emWarn ? warnStyle : redStyle),
+          emPos ? `<strong style="color:${pos};">✓ EBITDA margin is healthy at ${em.toFixed(1)}%.</strong> The platform generates operating leverage. Incremental users add revenue without proportional cost — reinvest into audience acquisition.`
+                : (emWarn ? `<strong style="color:${warn};">⚡ Positive but fragile at ${em.toFixed(1)}%.</strong> One content cost spike or fill rate drop could erase profitability. Prioritise premium ad formats before scaling user acquisition.`
+                          : `<strong style="color:${neg};">⚠ EBITDA is negative at ${em.toFixed(1)}%.</strong> Scaling users accelerates losses. Achieve breakeven on content cost first — model the CPM floor required before the next growth push.`),
+          'This chart shows <strong>EBITDA Margin</strong> trend across scenarios. Negative EBITDA means scale makes losses worse, not better. Achieving breakeven is the key prerequisite before investing in user growth campaigns.');
+
+      } else if (currentIndustry === 'manufacturing') {
+        // Chart 1: Production Volume
+        const u0 = data.units ? data.units[0] : 0;
+        const uEnd = data.units ? data.units[months-1] : 0;
+        const uGrowth = u0 > 0 ? ((uEnd - u0) / u0 * 100) : 0;
+        setExplainer('chart1', 'Units Produced (M12)', fv(uEnd, 'number'), `${uGrowth >= 0 ? '▲' : '▼'} ${Math.abs(uGrowth).toFixed(1)}% change`,
+          uGrowth >= 5 ? '✓ Scaling' : '⚡ Flat', uGrowth >= 5 ? pos : warn, uGrowth >= 5 ? posBg : warnBg,
+          uGrowth >= 5 ? greenStyle : warnStyle,
+          `Production volume ${uGrowth >= 0 ? 'grew' : 'declined'} from ${fv(u0, 'number')} to ${fv(uEnd, 'number')} units over the period (${Math.abs(uGrowth).toFixed(1)}%). ${uGrowth >= 5 ? 'Growing volume spreads fixed overhead across more units — improving unit contribution.' : 'Flat or declining volume concentrates overhead costs — watch for margin compression.'}`,
+          'This chart shows <strong>monthly production volume</strong> across scenarios. Higher volume improves fixed cost absorption and unit margin — but only if pricing holds. The Downside scenario shows your volume floor risk.');
+
+        // Chart 2: Gross Margin
+        const gm = data.grossMargin || 0;
+        const gmPos = gm >= 40;
+        const gmWarn = gm >= 30 && gm < 40;
+        setExplainer('chart2', 'Gross Margin', gm.toFixed(1) + '%', gmPos ? 'Above 40% threshold' : gmWarn ? 'Watch zone (30-40%)' : 'Below 30% — critical',
+          gmPos ? '✓ Healthy' : (gmWarn ? '⚡ At Risk' : '⚠ Critical'), gmPos ? pos : (gmWarn ? warn : neg), gmPos ? posBg : (gmWarn ? warnBg : negBg),
+          gmPos ? greenStyle : (gmWarn ? warnStyle : redStyle),
+          gmPos ? `<strong style="color:${pos};">✓ Gross margin of ${gm.toFixed(1)}% is healthy.</strong> Each unit sold retains sufficient margin after COGS to cover overhead and generate profit. Maintain material efficiency and resist pricing pressure.`
+                : (gmWarn ? `<strong style="color:${warn};">⚡ Gross margin of ${gm.toFixed(1)}% is in the warning zone.</strong> Below 40%, there's limited room for COGS inflation or pricing discounts before the operation becomes unprofitable. Tighten material procurement and review standard costs.`
+                          : `<strong style="color:${neg};">⚠ Gross margin below 30% — the operation is structurally challenged.</strong> COGS is consuming too much of revenue. Immediate action: re-quote key material inputs, reduce waste, or raise prices.`),
+          'This chart tracks <strong>Gross Margin %</strong> — the percentage of revenue retained after all direct production costs. It compresses when material costs rise, yields fall, or discounts increase. Monitor monthly against your standard cost baseline.');
+
+        // Chart 3: Operating Cash Flow
+        const cf = data.cashFlow ? data.cashFlow[months-1] : 0;
+        const cfPos = cf >= 0;
+        setExplainer('chart3', 'Operating Cash Flow (M12)', fv(cf, 'currency'), cfPos ? 'Cash generative' : 'Cash consuming',
+          cfPos ? '✓ Positive' : '⚠ Negative', cfPos ? pos : neg, cfPos ? posBg : negBg,
+          cfPos ? greenStyle : redStyle,
+          cfPos ? `<strong style="color:${pos};">✓ Operating cash flow is positive at ${fv(cf, 'currency')}/mo.</strong> The manufacturing operation is self-funding. Positive OCF provides capital for capex, debt service, or growth investment without external funding.`
+               : `<strong style="color:${neg};">⚠ Operating cash flow is negative at ${fv(cf, 'currency')}/mo.</strong> The operation is consuming cash. This is unsustainable without external financing — prioritise margin improvement and volume growth to reach cash flow breakeven.`,
+          'This chart shows <strong>Operating Cash Flow</strong> — the cash generated (or consumed) by manufacturing operations each month. It differs from profit due to timing of receivables, payables, and inventory. Positive and growing OCF is the primary sign of operational health.');
+
+      } else if (currentIndustry === 'lending') {
+        // Chart 1: Portfolio
+        const p0 = data.portfolio ? data.portfolio[0] : 0;
+        const pEnd = data.portfolio ? data.portfolio[months-1] : 0;
+        const pGrowth = p0 > 0 ? ((pEnd - p0) / p0 * 100) : 0;
+        setExplainer('chart1', 'Portfolio Size (M12)', fv(pEnd, 'currency'), `${pGrowth >= 0 ? '▲' : '▼'} ${Math.abs(pGrowth).toFixed(1)}% growth`,
+          pGrowth >= 10 ? '✓ Growing' : '⚡ Slow', pGrowth >= 10 ? pos : warn, pGrowth >= 10 ? posBg : warnBg,
+          pGrowth >= 10 ? greenStyle : warnStyle,
+          `The outstanding loan portfolio ${pGrowth >= 0 ? 'grew' : 'declined'} from ${fv(p0, 'currency')} to ${fv(pEnd, 'currency')} over the period. ${pGrowth >= 10 ? 'Strong portfolio growth drives interest income — maintain credit standards to avoid vintage deterioration.' : 'Moderate growth suggests origination constraints or elevated payoffs. Review pricing and underwriting criteria.'}`,
+          'This chart shows the <strong>total outstanding loan portfolio</strong> across scenarios. Portfolio size directly drives interest income — but growth must be balanced with credit quality. Watch that the Downside case does not show portfolio contraction due to defaults.');
+
+        // Chart 2: Credit Performance (Defaults)
+        const lr = data.lossRate || 0;
+        const lrGood = lr < 1.5;
+        const lrWarn = lr >= 1.5 && lr < 3;
+        setExplainer('chart2', 'Net Loss Rate', lr.toFixed(2) + '%', lrGood ? 'Below 1.5% — controlled' : lrWarn ? 'Watch zone (1.5-3%)' : 'Above 3% — critical',
+          lrGood ? '✓ Controlled' : (lrWarn ? '⚡ Elevated' : '⚠ Critical'), lrGood ? pos : (lrWarn ? warn : neg), lrGood ? posBg : (lrWarn ? warnBg : negBg),
+          lrGood ? greenStyle : (lrWarn ? warnStyle : redStyle),
+          lrGood ? `<strong style="color:${pos};">✓ Loss rate of ${lr.toFixed(2)}% is well-controlled.</strong> Credit performance supports profitable origination volume. Maintain underwriting discipline and monitor DPD 30+ trends as a leading indicator.`
+                 : (lrWarn ? `<strong style="color:${warn};">⚡ Loss rate of ${lr.toFixed(2)}% is elevated.</strong> Above 1.5%, losses begin to erode NIM and ROE. Tighten credit criteria on marginal segments and increase collection intensity on DPD 30-60 accounts.`
+                           : `<strong style="color:${neg};">⚠ Loss rate of ${lr.toFixed(2)}% is critical.</strong> At 3%+, the portfolio is destroying equity value. Pause origination growth and activate full collections recovery protocol before adding new risk.`),
+          'This chart tracks <strong>net credit loss rates</strong> — defaults minus recoveries as a percentage of the portfolio. It is the primary credit health indicator. Rising losses compress NIM and ROE, and above 3% typically signal a need for underwriting tightening.');
+
+        // Chart 3: Net Income
+        const ni = data.netIncome ? data.netIncome[months-1] : 0;
+        const niPos = ni >= 0;
+        setExplainer('chart3', 'Net Income (M12)', fv(ni, 'currency'), niPos ? 'Profitable' : 'Loss-making',
+          niPos ? '✓ Profitable' : '⚠ Loss', niPos ? pos : neg, niPos ? posBg : negBg,
+          niPos ? greenStyle : redStyle,
+          niPos ? `<strong style="color:${pos};">✓ The portfolio generates net income of ${fv(ni, 'currency')}/mo.</strong> Interest income exceeds funding costs, provision, and OpEx. This is the profitability milestone that justifies scale and equity deployment.`
+                : `<strong style="color:${neg};">⚠ The portfolio is generating a net loss of ${fv(Math.abs(ni), 'currency')}/mo.</strong> Funding costs, provisions, or OpEx exceed interest income. Do not scale originations in this scenario — prioritise reaching net income breakeven first.`,
+          'This chart shows <strong>net income</strong> — the bottom line after interest income, funding costs, credit provisions, and operating expenses. It is the final measure of whether the lending model is economically viable at current scale and credit standards.');
+
+      } else if (currentIndustry === 'realestate') {
+        // Chart 1: Rental Revenue
+        const r0 = data.rent ? data.rent[0] : 0;
+        const rEnd = data.rent ? data.rent[months-1] : 0;
+        const rGrowth = r0 > 0 ? ((rEnd - r0) / r0 * 100) : 0;
+        setExplainer('chart1', 'Rental Revenue (M12)', fv(rEnd, 'currency'), `${rGrowth >= 0 ? '▲' : '▼'} ${Math.abs(rGrowth).toFixed(1)}% change`,
+          rGrowth >= 5 ? '✓ Growing' : '⚡ Flat/Declining', rGrowth >= 5 ? pos : warn, rGrowth >= 5 ? posBg : warnBg,
+          rGrowth >= 5 ? greenStyle : warnStyle,
+          `Rental revenue ${rGrowth >= 0 ? 'grew' : 'declined'} from ${fv(r0, 'currency')} to ${fv(rEnd, 'currency')}/mo over the period. ${rGrowth >= 5 ? 'Growing rental income indicates strong occupancy and/or rental rate increases — a positive signal for asset value.' : 'Flat or declining revenue suggests occupancy pressure or rent concessions. Investigate leasing pipeline and market rent trends.'}`,
+          'This chart tracks <strong>total monthly rental revenue</strong> across scenarios. Revenue is driven by occupancy rate × effective rent. The Downside scenario shows your revenue floor under occupancy stress — critical for debt service coverage modelling.');
+
+        // Chart 2: NOI
+        const noi = data.noi || 0;
+        const noim = data.noiMargin || 0;
+        const noiPos = noim >= 65;
+        const noiWarn = noim >= 50 && noim < 65;
+        setExplainer('chart2', 'NOI Margin', noim.toFixed(1) + '%', noiPos ? 'Above 65% benchmark' : noiWarn ? 'Below 65% benchmark' : 'Below 50% — weak',
+          noiPos ? '✓ Efficient' : (noiWarn ? '⚡ Below Target' : '⚠ Underperforming'), noiPos ? pos : (noiWarn ? warn : neg), noiPos ? posBg : (noiWarn ? warnBg : negBg),
+          noiPos ? greenStyle : (noiWarn ? warnStyle : redStyle),
+          noiPos ? `<strong style="color:${pos};">✓ NOI margin of ${noim.toFixed(1)}% exceeds the 65% benchmark.</strong> The asset is operating efficiently. NOI of ${fv(noi, 'currency')}/mo supports strong debt service coverage and cap rate valuation.`
+                 : (noiWarn ? `<strong style="color:${warn};">⚡ NOI margin of ${noim.toFixed(1)}% is below the 65% benchmark.</strong> Operating costs are elevated relative to revenue. Review maintenance, management fees, and insurance costs against comparable properties.`
+                            : `<strong style="color:${neg};">⚠ NOI margin below 50% — the asset is underperforming.</strong> More than half of rent collected is being consumed by operating costs. Commission an independent OpEx audit and benchmark against comparable assets.`),
+          '<strong>Net Operating Income (NOI) Margin</strong> = NOI ÷ Revenue. Industry benchmark is 65%+. Below this, the asset either has excessive OpEx or insufficient rent income. NOI directly determines asset value via cap rate — a 1pp NOI improvement has a direct positive effect on asset valuation.');
+
+        // Chart 3: FCF
+        const fcf = data.fcf ? data.fcf[months-1] : 0;
+        const fcfPos = fcf >= 0;
+        setExplainer('chart3', 'Free Cash Flow (M12)', fv(fcf, 'currency'), fcfPos ? 'After debt service' : 'Negative after debt',
+          fcfPos ? '✓ Cash Positive' : '⚠ Cash Negative', fcfPos ? pos : neg, fcfPos ? posBg : negBg,
+          fcfPos ? greenStyle : redStyle,
+          fcfPos ? `<strong style="color:${pos};">✓ Free cash flow is positive at ${fv(fcf, 'currency')}/mo after debt service.</strong> The asset is self-funding. Positive FCF supports distributions, capital reserves, and the ability to pursue additional acquisitions.`
+                 : `<strong style="color:${neg};">⚠ Free cash flow is negative at ${fv(Math.abs(fcf), 'currency')}/mo after debt service.</strong> The asset is consuming equity capital. Options: refinance at lower debt cost, increase occupancy, raise rents, or consider divestiture.`,
+          'This chart shows <strong>Free Cash Flow</strong> after debt service (principal + interest). Unlike NOI, FCF is what owners actually receive after paying lenders. Consistently negative FCF depletes equity reserves and signals a structural mismatch between asset income and capital structure.');
+      }
     }
 
     function renderKPIs() {
@@ -2063,6 +2294,7 @@
       renderKPIs();
       updateChartsData();
       renderCommentary();
+      renderChartExplainers();
     }
 
     function updateChartsData() {

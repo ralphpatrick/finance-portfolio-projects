@@ -373,7 +373,30 @@
           <h2 class="module-section-title">Cash Balance Impact Over Time</h2>
           <span class="help-icon" data-help="How each financing option affects your cash balance month by month over the full comparison period."></span>
         </div>
-        <div class="module-card"><div class="chart-wrap"><canvas id="chart-cash" height="180"></canvas></div></div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-cash" height="180"></canvas></div>
+          <!-- Cash Impact Explainer -->
+          <div id="cashimpact-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="cashimpact-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Recommended Option</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="cashimpact-rec-value" style="font-size:26px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="cashimpact-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Cash Headroom</div>
+                <div id="cashimpact-headroom-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="cashimpact-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This chart shows how your starting cash balance changes over time under each option. <strong>Pay Cash</strong> (blue) drops immediately but has no ongoing cost. <strong>Loan</strong> (green) uses a down payment then bleeds monthly. <strong>Lease</strong> (orange) preserves the most cash upfront but costs most over time. The recommended option is the lowest NPV-cost path given your current cash position.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Monthly Payment Comparison -->
@@ -382,7 +405,30 @@
           <h2 class="module-section-title">Monthly Cash Outflow Comparison</h2>
           <span class="help-icon" data-help="Compares the monthly cash you spend under each option. Cash option has no ongoing payments after purchase."></span>
         </div>
-        <div class="module-card"><div class="chart-wrap"><canvas id="chart-payments" height="120"></canvas></div></div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-payments" height="120"></canvas></div>
+          <!-- Monthly Outflow Explainer -->
+          <div id="outflow-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="outflow-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Loan vs. Lease Monthly Difference</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="outflow-diff-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="outflow-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Cheapest Monthly</div>
+                <div id="outflow-cheapest-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="outflow-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This bar shows the <strong>recurring monthly cash outflow</strong> for each option during the payment period. Pay Cash shows $0/mo (the cost is all upfront). A lower bar means less monthly cash pressure — important for businesses with tight operating cash flow. Compare this against your average monthly net cash flow to assess affordability.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Depreciation Schedule -->
@@ -622,6 +668,49 @@
     document.getElementById('depr-tbody').innerHTML = deprRows.map(r =>
       `<tr><td>Year ${r.year}</td><td>${fmt(r.open)}</td><td>${fmt(r.depr)}</td><td>${fmt(r.close)}</td></tr>`
     ).join('');
+
+    // ── Cash Balance Impact Explainer ─────────────────────────
+    document.getElementById('cashimpact-explainer').style.display = '';
+    const cashReserve = startcash < cost ? 0 : startcash - cost;
+    const capexColor = startcash < cost ? '#dc2626' : (startcash < cost * 1.2 ? '#d97706' : '#0f766e');
+    const capexBg = startcash < cost ? 'rgba(220,38,38,0.10)' : (startcash < cost * 1.2 ? 'rgba(217,119,6,0.10)' : 'rgba(15,118,110,0.10)');
+    document.getElementById('cashimpact-rec-value').textContent = rec;
+    const cashimpactBadge = document.getElementById('cashimpact-live-badge');
+    cashimpactBadge.textContent = startcash < cost ? '⚠ Cash Insufficient' : (startcash < cost * 1.2 ? '⚡ Tight' : '✓ Cash Ample');
+    cashimpactBadge.style.cssText = `background:${capexBg}; color:${capexColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('cashimpact-headroom-label').innerHTML = startcash < cost
+      ? `${fmtK(cost - startcash)} short for cash purchase`
+      : `${fmtK(cashReserve)} left after cash purchase`;
+    const cashimpactVerdictEl = document.getElementById('cashimpact-verdict-block');
+    if (startcash < cost) {
+      cashimpactVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      cashimpactVerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Cash purchase is not viable.</strong> Starting cash (${fmtK(startcash)}) is insufficient for the full purchase price (${fmtK(cost)}). The chart shows the Loan and Lease lines start from a healthy position while the Cash line would go negative. <strong>${rec}</strong> is the recommended path — it requires only ${fmtK(down)} upfront and ${fmtK(monthlyPayment)}/mo.`;
+    } else if (startcash < cost * 1.2) {
+      cashimpactVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      cashimpactVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Cash purchase is tight.</strong> You can afford the asset outright (${fmtK(cost)}), but it leaves only ${fmtK(cashReserve)} in reserve — a thin buffer for unexpected costs. The chart shows how each option affects your balance over ${months} months. <strong>${rec}</strong> minimizes NPV cost while preserving operating flexibility.`;
+    } else {
+      cashimpactVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      cashimpactVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Strong cash position — multiple options viable.</strong> Starting cash of ${fmtK(startcash)} provides ${fmtK(cashReserve)} in reserve even after an outright purchase. The chart shows that each option keeps your balance positive throughout the comparison period. <strong>${rec}</strong> is recommended based on lowest NPV cost (${fmtK(minNPV)}).`;
+    }
+
+    // ── Monthly Outflow Explainer ─────────────────────────────
+    document.getElementById('outflow-explainer').style.display = '';
+    const diff = Math.abs(monthlyPayment - lease);
+    const cheaperMonthly = monthlyPayment <= lease ? 'Loan' : 'Lease';
+    const diffColor = monthlyPayment <= lease ? '#0f766e' : '#d97706';
+    document.getElementById('outflow-diff-value').textContent = fmtK(diff) + '/mo';
+    const outflowBadge = document.getElementById('outflow-live-badge');
+    outflowBadge.textContent = monthlyPayment <= lease ? '✓ Loan cheaper/mo' : '⚡ Lease cheaper/mo';
+    outflowBadge.style.cssText = `background:rgba(15,118,110,0.10); color:${diffColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('outflow-cheapest-label').innerHTML = `${cheaperMonthly}: ${fmtK(cheaperMonthly === 'Loan' ? monthlyPayment : lease)}/mo`;
+    const outflowVerdictEl = document.getElementById('outflow-verdict-block');
+    if (monthlyPayment < lease) {
+      outflowVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      outflowVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ Loan is cheaper month-over-month.</strong> The loan payment of ${fmtK(monthlyPayment)}/mo is ${fmtK(diff)}/mo less than the lease (${fmtK(lease)}/mo) — and at the end of the loan term you own the asset outright. Over ${term} months that's ${fmtK(diff * term)} saved in payments vs. leasing, plus you retain the ${fmtK(salvage)} salvage value.`;
+    } else {
+      outflowVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      outflowVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Lease is cheaper month-over-month but costs more over time.</strong> At ${fmtK(lease)}/mo, the lease costs ${fmtK(diff)}/mo less than the loan (${fmtK(monthlyPayment)}/mo) — easing near-term cash pressure. However, lease total (${fmtK(lease * leaseTerm)}) over ${leaseTerm} months exceeds the loan total (${fmtK(totalLoanCost)}) with no asset ownership at the end.`;
+    }
   }
 
   loadSample();

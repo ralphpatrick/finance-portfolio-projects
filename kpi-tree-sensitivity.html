@@ -372,6 +372,27 @@
         </div>
         <div class="module-card">
           <div id="kpi-tree"></div>
+          <!-- KPI Tree Explainer -->
+          <div id="kpitree-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="kpitree-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Cash Runway</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="kpitree-runway-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="kpitree-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Gross Margin</div>
+                <div id="kpitree-gm-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="kpitree-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              The KPI tree decomposes <strong>Runway</strong> (the root) into its component drivers. Read top-to-bottom: Runway = EBITDA ÷ Burn → Gross Profit − OpEx → Revenue − COGS → Price × Volume. Each node shows where value is created or destroyed. <span style="color:#0f766e; font-weight:600;">Green nodes</span> are positive contributors; <span style="color:#ef4444; font-weight:600;">red nodes</span> are drags.
+            </div>
+          </div>
         </div>
       </div>
 
@@ -381,7 +402,30 @@
           <h2 class="module-section-title">Driver Sensitivity — Runway Impact (±5%)</h2>
           <span class="help-icon" data-help="Tornado chart: shows how much runway changes when each driver moves +5% or −5%. Wider bar = bigger impact = higher priority."></span>
         </div>
-        <div class="module-card"><div class="chart-wrap"><canvas id="chart-tornado" height="180"></canvas></div></div>
+        <div class="module-card">
+          <div class="chart-wrap"><canvas id="chart-tornado" height="180"></canvas></div>
+          <!-- Tornado Explainer -->
+          <div id="tornado-explainer" style="margin-top:20px; border-top:1px solid var(--border); padding-top:18px; display:none;">
+            <div id="tornado-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Top Lever — +5% Runway Gain</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="tornado-top-value" style="font-size:26px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span id="tornado-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">#1 Downside Risk</div>
+                <div id="tornado-risk-label" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; letter-spacing:0.02em;">📖 WHAT YOU'RE LOOKING AT</div>
+            <div id="tornado-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6; margin-bottom:10px;"></div>
+            <div style="font-size:12px; color:var(--muted); line-height:1.7;">
+              This is a <strong>tornado (sensitivity) chart</strong> — the widest bar is the highest-leverage driver. Green bars show runway gains when a driver improves by 5%; red bars show runway lost when a driver worsens by 5%. Drivers at the top of the chart are where to focus first — small changes there move the needle most. Drivers near the bottom are lower priority.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Sensitivity Table -->
@@ -597,7 +641,46 @@
       <td class="${d.downEBITDA >= 0 ? 'sens-pos' : 'sens-neg'}">${d.downEBITDA >= 0 ? '+' : ''}${fmtK(d.downEBITDA)}</td>
       <td class="${d.downRunway >= 0 ? 'sens-pos' : 'sens-neg'}">${d.downRunway <= -999 ? '-∞' : (d.downRunway >= 0 ? '+' : '') + d.downRunway.toFixed(1) + 'mo'}</td>
     </tr>`).join('');
+
+    // ── KPI Tree Explainer ──────────────────────────────────
+    document.getElementById('kpitree-explainer').style.display = '';
+    const kpiRunwayDisplay = base.runway >= 99 ? '∞ mo' : base.runway.toFixed(1) + ' mo';
+    document.getElementById('kpitree-runway-value').textContent = kpiRunwayDisplay;
+    const kpiColor = (base.runway < 6 && base.runway > 0) ? '#dc2626' : (base.gm < 0.4 ? '#d97706' : '#0f766e');
+    const kpiBg = (base.runway < 6 && base.runway > 0) ? 'rgba(220,38,38,0.10)' : (base.gm < 0.4 ? 'rgba(217,119,6,0.10)' : 'rgba(15,118,110,0.10)');
+    const kpiTreeBadge = document.getElementById('kpitree-live-badge');
+    kpiTreeBadge.textContent = (base.runway < 6 && base.runway > 0) ? '⚠ Critical' : (base.gm < 0.4 ? '⚡ Thin Margin' : '✓ Healthy');
+    kpiTreeBadge.style.cssText = `background:${kpiBg}; color:${kpiColor}; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;`;
+    document.getElementById('kpitree-gm-label').innerHTML = `${pct(base.gm*100)} gross margin`;
+    const kpiTreeVerdictEl = document.getElementById('kpitree-verdict-block');
+    if (base.runway < 6 && base.runway > 0) {
+      kpiTreeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fef2f2; border-left:3px solid #dc2626; font-size:13px; line-height:1.6;';
+      kpiTreeVerdictEl.innerHTML = `<strong style="color:#dc2626;">⚠ Runway is critical — ${base.runway.toFixed(1)} months left.</strong> The tree shows EBITDA of ${fmtK(base.ebitda)}/mo is negative, burning ${fmtK(base.burn)}/mo of cash. Revenue (${fmtK(base.revenue)}/mo) covers COGS but not OpEx. The fastest fix: cut OpEx or raise price — the top driver is <strong>${top3[0].name}</strong>.`;
+    } else if (base.gm < 0.4) {
+      kpiTreeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#fffbeb; border-left:3px solid #d97706; font-size:13px; line-height:1.6;';
+      kpiTreeVerdictEl.innerHTML = `<strong style="color:#d97706;">⚡ Gross margin is thin — ${pct(base.gm*100)} is below the 40% threshold.</strong> The tree shows COGS (${fmtK(base.cogsAmt)}/mo) is consuming too much of revenue (${fmtK(base.revenue)}/mo), leaving limited gross profit (${fmtK(base.gp)}/mo) to cover OpEx. Raise price or reduce COGS before scaling volume.`;
+    } else {
+      kpiTreeVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+      kpiTreeVerdictEl.innerHTML = `<strong style="color:#0f766e;">✓ The business is structurally healthy.</strong> Gross margin of ${pct(base.gm*100)} generates ${fmtK(base.gp)}/mo in gross profit. After OpEx of ${fmtK(inp.opex)}/mo, EBITDA is ${fmtK(base.ebitda)}/mo — ${base.ebitda > 0 ? 'positive and cash-generative' : 'slightly negative'}. Runway is ${kpiRunwayDisplay}. Now focus on the top growth lever: <strong>${top3[0].name}</strong>.`;
+    }
+
+    // ── Tornado Explainer ────────────────────────────────────
+    document.getElementById('tornado-explainer').style.display = '';
+    const topDriver = top3[0];
+    const worstDriver = sensList.reduce((a, b) => Math.abs(b.downRunway) > Math.abs(a.downRunway) ? b : a);
+    const topGain = topDriver.upRunway >= 999 ? 'cash flow positive' : '+' + topDriver.upRunway.toFixed(1) + ' mo';
+    document.getElementById('tornado-top-value').textContent = `${topDriver.name}: ${topGain}`;
+    const tornadoState = topDriver.upRunway >= 999 ? 'positive' : (topDriver.upRunway >= 2 ? 'warning' : 'neutral');
+    const tornadoBadge = document.getElementById('tornado-live-badge');
+    tornadoBadge.textContent = '✓ Highest Lever';
+    tornadoBadge.style.cssText = 'background:rgba(15,118,110,0.10); color:#0f766e; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;';
+    document.getElementById('tornado-risk-label').innerHTML = `${worstDriver.name}: ${worstDriver.downRunway <= -999 ? '-∞' : worstDriver.downRunway.toFixed(1) + ' mo'} if −5%`;
+    const tornadoVerdictEl = document.getElementById('tornado-verdict-block');
+    tornadoVerdictEl.style.cssText = 'padding:12px 16px; border-radius:10px; background:#f0fdf9; border-left:3px solid #0f766e; font-size:13px; line-height:1.6;';
+    tornadoVerdictEl.innerHTML = `<strong style="color:#0f766e;">#1 lever: ${topDriver.name}.</strong> A 5% improvement extends runway by <strong>${topGain}</strong> — the widest bar in the chart. The biggest downside risk is <strong>${worstDriver.name}</strong>: a 5% deterioration costs ${worstDriver.downRunway <= -999 ? 'infinite' : Math.abs(worstDriver.downRunway).toFixed(1) + ' months'} of runway. Prioritize protecting ${worstDriver.name} while investing in ${topDriver.name} improvement. The 2nd and 3rd ranked levers are ${top3[1] ? top3[1].name : '—'} and ${top3[2] ? top3[2].name : '—'}.`;
   }
+
+  loadSample();
 
   loadSample();
 
