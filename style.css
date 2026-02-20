@@ -1062,10 +1062,10 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 14px;
-  padding: 18px 24px;
+  padding: 24px 32px;
   background: var(--bg-muted);
   border-top: 1px solid var(--border);
-  margin-top: 48px;
+  margin-top: 64px;
 }
 .next-module-label {
   font-size: 12px;
