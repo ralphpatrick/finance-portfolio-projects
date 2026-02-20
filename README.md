@@ -5,7 +5,7 @@ A production-ready **FP&A portfolio** built as interactive, executive-friendly m
 
 This repo showcases how I think and build as a finance operator: **drivers → models → KPIs → scenarios → decision outputs**.
 
-🔗 **Live site:** [View on GitHub Pages](https://ralphpatrick.github.io)
+🔗 **Live site:** [View on GitHub Pages](https://ralphpatrick.github.io/finance-portfolio-projects/)
 🔗 **LinkedIn:** [ralph-patrick-divina](https://www.linkedin.com/in/ralph-patrick-divina-55534614a/)
 
 ---
