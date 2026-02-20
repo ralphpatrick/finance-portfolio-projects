@@ -9,6 +9,32 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     .module-hero { padding: 48px 0 32px 0; border-bottom: 1px solid var(--border); }
+    .module-hero-inner { display: flex; flex-direction: column; gap: 20px; }
+    .module-hero-text { flex: 1; min-width: 0; }
+    .data-sources-card {
+      width: 100%;
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow-soft);
+      padding: 14px 16px;
+    }
+    .data-sources-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .data-source-item {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .data-source-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .data-source-icon {
+      width: 26px; height: 26px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0; margin-top: 1px;
+    }
+    .data-source-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .data-source-desc { font-size: 11px; color: var(--muted); line-height: 1.45; }
+    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; } .sidebar { position: static; } .board-grid { grid-template-columns: 1fr; } .data-sources-card > div { grid-template-columns: 1fr 1fr !important; } }
     .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
     .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
     .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
@@ -157,6 +183,48 @@
       .main-content { overflow-anchor: none; }
     .module-card { overflow-anchor: none; }
     .data-table { overflow-anchor: none; }
+
+    /* KPI box tooltip */
+    .kpi-box { position: relative; cursor: default; }
+    .kpi-box-label { display: flex; align-items: center; gap: 5px; }
+    .kpi-tip-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%;
+      background: rgba(15,118,110,0.10); border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent); font-size: 9px; font-weight: 700;
+      cursor: help; flex-shrink: 0; line-height: 1;
+      transition: background 140ms;
+    }
+    .kpi-tip-icon:hover { background: rgba(15,118,110,0.20); }
+    .kpi-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text, #0b1220);
+      color: white;
+      font-size: 12px;
+      line-height: 1.55;
+      border-radius: 10px;
+      padding: 10px 14px;
+      width: 240px;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      white-space: normal;
+      font-weight: 400;
+      pointer-events: none;
+    }
+    .kpi-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--text, #0b1220);
+    }
+    .kpi-tip-icon:hover + .kpi-tooltip,
+    .kpi-tip-icon:focus + .kpi-tooltip { display: block; }
   </style>
 </head>
 <body>
@@ -178,14 +246,66 @@
 <main id="main">
   <section class="module-hero">
     <div class="container">
-      <div class="module-label">Balance Sheet · Cash Flow · Working Capital</div>
-      <h1 class="module-title">Working Capital <span class="accent">FP&A</span></h1>
-      <p class="module-subtitle">How collections, payments, and inventory timing affect cash and runway.</p>
-      <div class="feature-chips">
-        <span class="chip">Cash Conversion Cycle</span>
-        <span class="chip">12-Month Cash Forecast</span>
-        <span class="chip">Runway Analysis</span>
-        <span class="chip">AR / AP / Inventory</span>
+      <div class="module-hero-inner">
+        <div class="module-hero-text">
+          <div class="module-label">Balance Sheet · Cash Flow · Working Capital</div>
+          <h1 class="module-title">Working Capital <span class="accent">FP&A</span></h1>
+          <p class="module-subtitle">How collections, payments, and inventory timing affect cash and runway.</p>
+          <div class="feature-chips">
+            <span class="chip">Cash Conversion Cycle</span>
+            <span class="chip">12-Month Cash Forecast</span>
+            <span class="chip">Runway Analysis</span>
+            <span class="chip">AR / AP / Inventory</span>
+          </div>
+        </div>
+
+        <!-- DATA SOURCES PANEL -->
+        <div class="data-sources-card" style="width:100%; flex-shrink:0;">
+          <div class="data-sources-title">📂 &nbsp;Data needed for this module</div>
+          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px;">
+
+            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
+              <div style="background:#eff6ff; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">🏦</div>
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">Bank Statement</div>
+                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Cash inflows &amp; outflows → net cash &amp; runway</div>
+              </div>
+            </div>
+
+            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
+              <div style="background:#f0fdf9; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📄</div>
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">AR Register</div>
+                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Customer payment aging → drives DSO</div>
+              </div>
+            </div>
+
+            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
+              <div style="background:#fef3c7; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📋</div>
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">AP Register</div>
+                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Supplier payment ledger → drives DPO</div>
+              </div>
+            </div>
+
+            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
+              <div style="background:#f5f3ff; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📦</div>
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">Inventory Report</div>
+                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Stock turnover → days held (DIO)</div>
+              </div>
+            </div>
+
+            <div style="padding:10px 11px; border:1px solid var(--border); border-radius:9px; display:flex; align-items:flex-start; gap:8px; background:#fafbfc;">
+              <div style="background:#fdf2f8; width:24px; height:24px; font-size:12px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">📊</div>
+              <div>
+                <div style="font-size:11px; font-weight:700; color:var(--text); margin-bottom:3px;">P&amp;L Statement</div>
+                <div style="font-size:10px; color:var(--muted); line-height:1.5;">Revenue, COGS &amp; OpEx → all projections</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -261,12 +381,30 @@
         </div>
 
         <div class="kpi-grid" id="kpi-grid">
-          <div class="kpi-box"><div class="kpi-box-label">Runway</div><div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months remaining</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">CCC</div><div class="kpi-box-value" id="kpi-ccc">—</div><div class="kpi-box-sub">days cycle</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">DSO</div><div class="kpi-box-value" id="kpi-dso">—</div><div class="kpi-box-sub">days to collect</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">DPO</div><div class="kpi-box-value" id="kpi-dpo">—</div><div class="kpi-box-sub">days to pay</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">DIO</div><div class="kpi-box-value" id="kpi-dio">—</div><div class="kpi-box-sub">days in inventory</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">Net Cash / Mo</div><div class="kpi-box-value" id="kpi-cashpm">—</div><div class="kpi-box-sub">avg monthly change</div></div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">Runway <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-runway">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months remaining</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">CCC <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-ccc">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-ccc">—</div><div class="kpi-box-sub">days cycle</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">DSO <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-dso">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-dso">—</div><div class="kpi-box-sub">days to collect</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">DPO <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-dpo">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-dpo">—</div><div class="kpi-box-sub">days to pay</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">DIO <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-dio">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-dio">—</div><div class="kpi-box-sub">days in inventory</div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-box-label">Net Cash / Mo <span class="kpi-tip-icon" tabindex="0">?</span><span class="kpi-tooltip" id="tip-cashpm">Loading…</span></div>
+            <div class="kpi-box-value" id="kpi-cashpm">—</div><div class="kpi-box-sub">avg monthly change</div>
+          </div>
         </div>
 
         <div class="module-card">
@@ -292,6 +430,35 @@
         </div>
         <div class="module-card">
           <div class="chart-wrap"><canvas id="chart-ccc" height="120"></canvas></div>
+
+          <!-- CCC Chart Explainer -->
+          <div id="ccc-explainer" style="margin-top:20px; border-top: 1px solid var(--border); padding-top:18px; display:none;">
+
+            <!-- Live CCC callout -->
+            <div id="ccc-live-callout" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px; padding:12px 16px; border-radius:12px; background:rgba(15,118,110,0.06); border:1.5px solid rgba(15,118,110,0.2);">
+              <div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:2px;">Current Cash Conversion Cycle</div>
+                <div style="display:flex; align-items:baseline; gap:8px;">
+                  <span id="ccc-live-value" style="font-size:32px; font-weight:800; letter-spacing:-0.03em; color:var(--text);">—</span>
+                  <span style="font-size:13px; color:var(--muted);">days</span>
+                  <span id="ccc-live-badge" style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-left:4px;"></span>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;">Formula</div>
+                <div id="ccc-live-formula" style="font-size:13px; color:var(--text); font-weight:600;"></div>
+              </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:12px; letter-spacing:0.02em;">📖 HOW TO READ THIS CHART</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;" id="ccc-bar-explainer">
+              <!-- filled by JS -->
+            </div>
+            <div id="ccc-verdict-block" style="padding:12px 16px; border-radius:10px; font-size:13px; line-height:1.6;">
+              <!-- filled by JS -->
+            </div>
+            <div style="margin-top:12px; font-size:12px; color:var(--muted); line-height:1.6;" id="ccc-formula-note"></div>
+          </div>
         </div>
       </div>
 
@@ -322,20 +489,6 @@
 
     </div>
   </div>
-
-  <!-- ── Next Module ──────────────────────────────────────── -->
-  <nav class="next-module-bar" aria-label="Next recommended module">
-    <div>
-      <div class="next-module-label">Next recommended</div>
-      <div class="next-module-title">Operations Spend Analytics</div>
-      <div class="next-module-why">Cash cycle mapped — now find the spend leaks draining it.</div>
-    </div>
-    <div class="next-module-actions">
-      <a class="btn btn-solid" href="operations-spend.html">Open Ops Spend →</a>
-      <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
-    </div>
-  </nav>
-
 </main>
 
 <a class="to-top" href="#main" aria-label="Back to top">↑</a>
@@ -447,7 +600,110 @@
     document.getElementById('kpi-dio').textContent = dio + 'd';
     document.getElementById('kpi-cashpm').textContent = fmtK(avgNetCF);
 
-    // Decision logic
+    // Update Board View tooltips with dynamic values
+    const runwayLabel = runway >= 99
+      ? 'Runway is infinite — the business is cash-flow positive and not burning cash.'
+      : `Runway is how long your cash will last at the current burn rate. At ${runwayDisplay} months, you have until roughly ${new Date(Date.now() + runway * 30 * 24 * 3600 * 1000).toLocaleDateString('en-US',{month:'short',year:'numeric'})} before cash runs out — assuming nothing changes.`;
+    document.getElementById('tip-runway').textContent = runwayLabel;
+
+    document.getElementById('tip-ccc').textContent =
+      `Cash Conversion Cycle: the total number of days between spending money on operations and actually collecting cash from customers. Your CCC is ${ccc} days — meaning every dollar you spend takes ${ccc} days to come back. Lower is better.`;
+
+    document.getElementById('tip-dso').textContent =
+      `Days Sales Outstanding: after you send an invoice, it takes an average of ${dso} days for customers to pay you. Faster collection = more cash on hand. Industry target is often 30–45 days.`;
+
+    document.getElementById('tip-dpo').textContent =
+      `Days Payable Outstanding: you're taking ${dpo} days to pay your own suppliers. Paying later keeps cash in your bank longer. A higher DPO (without damaging supplier relationships) is generally better for cash flow.`;
+
+    document.getElementById('tip-dio').textContent =
+      `Days Inventory Outstanding: your inventory sits for ${dio} days on average before being sold. Think of it as money sitting on a shelf. Lower means you're converting stock to cash faster.`;
+
+    const cashSign = avgNetCF >= 0 ? 'gaining' : 'burning';
+    document.getElementById('tip-cashpm').textContent =
+      `Net Cash per Month: after all revenue comes in and all expenses go out, you are ${cashSign} an average of ${fmtK(Math.abs(avgNetCF))} per month. ${avgNetCF >= 0 ? 'You are cash-flow positive — the business funds itself.' : 'You are cash-flow negative — the business is consuming its reserves.'}`;
+
+    // --- CCC Chart Explainer ---
+    const explainer = document.getElementById('ccc-explainer');
+    explainer.style.display = '';
+
+    // Live CCC callout
+    document.getElementById('ccc-live-value').textContent = ccc;
+    document.getElementById('ccc-live-formula').innerHTML = `${dso}d &nbsp;+&nbsp; ${dio}d &nbsp;−&nbsp; ${dpo}d &nbsp;= &nbsp;<strong>${ccc}d</strong>`;
+    const liveBadge = document.getElementById('ccc-live-badge');
+    const liveBanner = document.getElementById('ccc-live-callout');
+    const liveVal = document.getElementById('ccc-live-value');
+    if (ccc <= 30) {
+      liveBadge.textContent = '✅ Healthy'; liveBadge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(15,118,110,0.12);color:#0f766e;';
+      liveBanner.style.borderColor = 'rgba(15,118,110,0.25)'; liveBanner.style.background = 'rgba(15,118,110,0.06)';
+      liveVal.style.color = '#0f766e';
+    } else if (ccc <= 60) {
+      liveBadge.textContent = '⚠️ Watch'; liveBadge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#fef3c7;color:#92400e;';
+      liveBanner.style.borderColor = 'rgba(217,119,6,0.3)'; liveBanner.style.background = '#fffbeb';
+      liveVal.style.color = '#d97706';
+    } else {
+      liveBadge.textContent = '🔴 High'; liveBadge.style.cssText = 'font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#fee2e2;color:#dc2626;';
+      liveBanner.style.borderColor = 'rgba(220,38,38,0.3)'; liveBanner.style.background = '#fef2f2';
+      liveVal.style.color = '#dc2626';
+    }
+
+    // Determine health of each bar
+    const dsoHealth = dso <= 30 ? 'good' : dso <= 45 ? 'ok' : 'bad';
+    const dioHealth = dio <= 15 ? 'good' : dio <= 30 ? 'ok' : 'bad';
+    const dpoHealth = dpo >= 45 ? 'good' : dpo >= 30 ? 'ok' : 'bad';
+    const cccHealth = ccc <= 30 ? 'good' : ccc <= 60 ? 'ok' : 'bad';
+
+    const healthColor = { good: '#0f766e', ok: '#d97706', bad: '#dc2626' };
+    const healthBg   = { good: 'rgba(15,118,110,0.08)', ok: '#fffbeb', bad: '#fef2f2' };
+    const healthLabel = { good: '✅ Healthy', ok: '⚠️ Watch', bad: '🔴 Concern' };
+
+    function barCard(title, value, sign, healthKey, explain) {
+      const col = healthColor[healthKey];
+      return `<div style="padding:10px 12px; border:1px solid ${col}33; border-radius:10px; background:${healthBg[healthKey]};">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:700;color:var(--text);">${title}</span>
+          <span style="font-size:11px;font-weight:700;color:${col};">${healthLabel[healthKey]}</span>
+        </div>
+        <div style="font-size:18px;font-weight:800;color:${col};margin-bottom:4px;">${sign}${value}d</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.5;">${explain}</div>
+      </div>`;
+    }
+
+    document.getElementById('ccc-bar-explainer').innerHTML =
+      barCard('DSO — Blue bar (right)', dso, '+', dsoHealth,
+        dsoHealth === 'good' ? `You collect in ${dso} days — fast. Cash arrives quickly.`
+        : dsoHealth === 'ok' ? `${dso} days to collect is acceptable but could be tighter. Aim for 30d.`
+        : `${dso} days is slow. You're waiting over a month for cash that's already earned.`) +
+      barCard('DIO — Teal bar (right)', dio, '+', dioHealth,
+        dioHealth === 'good' ? `Inventory moves fast at ${dio} days — minimal cash locked up in stock.`
+        : dioHealth === 'ok' ? `${dio} days in inventory is moderate. Monitor for slow-moving SKUs.`
+        : `${dio} days means cash is tied up in unsold inventory for too long.`) +
+      barCard('DPO — Red bar (left)', dpo, '−', dpoHealth,
+        dpoHealth === 'good' ? `You hold supplier payments for ${dpo} days — great for cash flow.`
+        : dpoHealth === 'ok' ? `${dpo} days to pay suppliers is decent. Try to negotiate longer terms.`
+        : `Only ${dpo} days before you pay suppliers. You're giving up cash earlier than you need to.`) +
+      barCard('Net CCC — Bottom bar', ccc, '', cccHealth,
+        cccHealth === 'good' ? `${ccc} days total cycle — excellent. Cash moves through your business quickly.`
+        : cccHealth === 'ok' ? `${ccc} days is manageable but leaves room to improve. Target under 30d.`
+        : `${ccc} days is high. It takes over ${ccc} days for every dollar spent to come back as cash.`);
+
+    // Overall verdict block
+    const vBg = healthBg[cccHealth];
+    const vCol = healthColor[cccHealth];
+    const vEmoji = cccHealth === 'good' ? '🟢' : cccHealth === 'ok' ? '🟡' : '🔴';
+    const vTitle = cccHealth === 'good' ? 'This looks healthy' : cccHealth === 'ok' ? 'Manageable — but room to improve' : 'This needs attention';
+    const vBody = cccHealth === 'good'
+      ? `A CCC of ${ccc} days means your business converts spending into collected cash in about ${ccc} days. The right-pointing bars (DSO + DIO) are short, and the left-pointing bar (DPO) is long — exactly what you want to see. Keep collecting fast and paying late.`
+      : cccHealth === 'ok'
+      ? `Your CCC of ${ccc} days means cash is tied up for about ${ccc} days before it returns. The biggest opportunity is likely ${dso > 40 ? 'reducing DSO — customers are taking too long to pay' : dpo < 35 ? 'extending DPO — you could negotiate longer payment terms with suppliers' : 'reducing DIO — inventory is sitting too long before being sold'}.`
+      : `A CCC of ${ccc} days is a red flag. Every sales cycle, your business goes ${ccc} days without seeing the cash it's owed. The bars extending right (DSO + DIO) should be shorter, and the bar extending left (DPO) should be longer. Focus on ${dso > dio ? 'collecting from customers faster (DSO)' : 'moving inventory faster (DIO)'} first.`;
+
+    document.getElementById('ccc-verdict-block').style.cssText = `padding:14px 16px; border-radius:10px; background:${vBg}; border:1px solid ${vCol}33; font-size:13px; line-height:1.65; color:var(--text);`;
+    document.getElementById('ccc-verdict-block').innerHTML =
+      `<div style="font-weight:700;font-size:14px;color:${vCol};margin-bottom:6px;">${vEmoji} ${vTitle}</div>${vBody}`;
+
+    document.getElementById('ccc-formula-note').innerHTML =
+      `<strong>Formula:</strong> CCC = DSO + DIO − DPO &nbsp;→&nbsp; ${dso}d + ${dio}d − ${dpo}d = <strong>${ccc}d</strong>. &nbsp;
+       The bars to the <strong>right</strong> add to your cycle (bad if large). The bar to the <strong>left</strong> subtracts from it (good if large). The goal is a short or negative CCC.`;
     let decision = '', bullets = [], driver = '';
     const runwayNum = runway >= 99 ? 999 : runway;
     if (runwayNum < 3) {
