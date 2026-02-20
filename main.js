@@ -20,9 +20,142 @@
 
   gtag("js", new Date());
   gtag("config", MEASUREMENT_ID);
+  // =========================================
+  // 1) ENTRY MODULE (the “hook”)
+  // Fires once per session, on the first module page they land on
+  // =========================================
+  (function trackEntryModule() {
+    const file = (location.pathname || "").split("/").pop() || "";
+    const isModule = file.endsWith(".html") && file !== "index.html";
+    if (!isModule) return;
+
+    const key = "ga_entry_module";
+    if (!sessionStorage.getItem(key)) {
+      sessionStorage.setItem(key, file);
+      gtag("event", "entry_module", { module: file });
+    }
+  })();
 
   // =========================================
-  // Click tracking (modules + recruiter actions)
+  // 2) ROUTE TAKEN (portfolio flow)
+  // Logs from -> to on every page load (same session)
+  // =========================================
+  (function trackNavFlow() {
+    const to = (location.pathname || "") + (location.search || "");
+    const from = sessionStorage.getItem("ga_prev_path") || "(entry)";
+    gtag("event", "nav_flow", { from, to });
+
+    // Set prev for the NEXT page
+    sessionStorage.setItem("ga_prev_path", to);
+  })();
+
+  // =========================================
+  // 3) SERIOUS INTENT (interactions inside modules)
+  // Tracks when they touch controls (sliders, toggles, selects, inputs, buttons)
+  // Dedupes per control so you don’t spam GA
+  // =========================================
+  (function trackModuleInteractions() {
+    const file = (location.pathname || "").split("/").pop() || "";
+    const isModule = file.endsWith(".html") && file !== "index.html";
+    if (!isModule) return;
+
+    const fired = new Set();
+
+    function controlName(el) {
+      return (
+        el.getAttribute("data-ga") ||
+        el.id ||
+        el.name ||
+        el.getAttribute("aria-label") ||
+        (el.className && String(el.className).split(" ")[0]) ||
+        el.tagName
+      ).slice(0, 80);
+    }
+
+    function fire(el, action) {
+      const name = controlName(el);
+      const key = action + "|" + name;
+      if (fired.has(key)) return;
+      fired.add(key);
+
+      gtag("event", "module_interaction", {
+        module: file,
+        action,            // "input" | "change" | "click"
+        control: name
+      });
+    }
+
+    // Sliders / number / text inputs (fires once per element)
+    document.addEventListener("input", (e) => {
+      const el = e.target;
+      if (!el) return;
+      if (el.matches && el.matches('input[type="range"], input[type="number"], input[type="text"]')) {
+        fire(el, "input");
+      }
+    }, { passive: true });
+
+    // Selects / checkboxes / radios / file upload
+    document.addEventListener("change", (e) => {
+      const el = e.target;
+      if (!el) return;
+      if (el.matches && el.matches("select, input[type='checkbox'], input[type='radio'], input[type='file']")) {
+        fire(el, "change");
+      }
+    }, { passive: true });
+
+    // Buttons (randomize / sample / reset / etc.)
+    document.addEventListener("click", (e) => {
+      const btn = e.target && e.target.closest ? e.target.closest("button") : null;
+      if (!btn) return;
+      fire(btn, "click");
+    }, { passive: true });
+  })();
+
+  // =========================================
+  // 4) SCROLL DEPTH (real engagement)
+  // Fires once at 50% and 90% depth on module pages
+  // =========================================
+  (function trackScrollDepth() {
+    const file = (location.pathname || "").split("/").pop() || "";
+    const isModule = file.endsWith(".html") && file !== "index.html";
+    if (!isModule) return;
+
+    let fired50 = false;
+    let fired90 = false;
+    let ticking = false;
+
+    function percent() {
+      const doc = document.documentElement;
+      const scrollTop = window.scrollY || doc.scrollTop || 0;
+      const height = Math.max(doc.scrollHeight - doc.clientHeight, 1);
+      return (scrollTop / height) * 100;
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const p = percent();
+
+        if (!fired50 && p >= 50) {
+          fired50 = true;
+          gtag("event", "module_scroll_50", { module: file });
+        }
+        if (!fired90 && p >= 90) {
+          fired90 = true;
+          gtag("event", "module_scroll_90", { module: file });
+        }
+
+        ticking = false;
+      });
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
+  // =========================================
+  // 5) Click tracking (modules + recruiter actions)
   // =========================================
   document.addEventListener("click", (e) => {
     const a = e.target && e.target.closest ? e.target.closest("a") : null;
@@ -61,7 +194,7 @@
   });
 
   // =========================================
-  // Module engagement time (TRUE engaged seconds)
+  // 6) Module engagement time (TRUE engaged seconds)
   // Fires intent events at 30s / 60s / 120s
   // ONLY counts while tab is visible
   // =========================================
