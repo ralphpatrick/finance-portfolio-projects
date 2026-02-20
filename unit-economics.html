@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="./style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
+    /* Prevent horizontal overflow */
+    html, body { overflow-x: clip; }
+
     /* Module-specific styles */
     .module-hero {
       padding: 48px 0 32px 0;
@@ -1021,7 +1024,7 @@
           FP&A Portfolio
         </a>
         <div class="nav-cta">
-          <a href="index.html#card-unit-economics"" class="btn btn-ghost">← Back to Portfolio</a>
+          <a href="index.html#card-unit-economics" class="btn btn-ghost">← Back to Portfolio</a>
         </div>
       </nav>
     </div>
@@ -1339,9 +1342,9 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
               </div>
             </div>
 
-            <table class="data-table" id="contributionTable">
+            <div style="overflow-x:auto;"><table class="data-table" id="contributionTable">
               <!-- Table populated by JS -->
-            </table>
+            </table></div>
           </div>
         </section>
 
@@ -1381,9 +1384,9 @@ Why these values? Churn +1pp is a typical retention slip. Gross margin -5pp refl
               </div>
             </div>
 
-            <table class="data-table" id="runrateTable">
+            <div style="overflow-x:auto;"><table class="data-table" id="runrateTable">
               <!-- Table populated by JS -->
-            </table>
+            </table></div>
           </div>
         </section>
 
