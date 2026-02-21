@@ -452,6 +452,13 @@
       color: var(--muted);
     }
 
+    /* Inline term tooltip — underlined label text in KPI cards */
+    .kpi-term {
+      cursor: help;
+      border-bottom: 1px dotted currentColor;
+      text-decoration: none;
+    }
+
     /* Charts */
     .chart-container {
       position: relative;
@@ -1620,87 +1627,104 @@
     </button>
     <aside class="sidebar" id="sidebarPanel">
 
-          <!-- ① DATA MODE (static, always visible) -->
-          <div class="sb-static">
-            <div class="sidebar-title" style="margin-bottom:10px;">
-              <span>Data Mode</span>
-              <span id="dataModeIndicator" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);">📊 Sample</span>
-            </div>
-            <div class="sb-data-mode-row" style="margin-top:6px;">
-              <button class="sb-data-mode-btn active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
-              <button class="sb-data-mode-btn" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
-            </div>
-            <button class="sb-action-btn" onclick="window.print()" style="margin-top:8px;">🖨 Export CFO Pack</button>
-          </div>
+      <!-- ① DATA MODE — always visible, Sample | Random toggle only -->
+      <div class="sb-static">
+        <div class="sb-static-title">
+          <span>DATA MODE</span>
+          <span id="dataModeBadge" class="data-badge">SAMPLE</span>
+        </div>
+        <!-- Sample / Random segmented toggle -->
+        <div style="display:flex;gap:0;height:34px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-muted);flex-wrap:nowrap;margin-bottom:6px;">
+          <button id="btnSampleMode" onclick="useSampleData()" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Sample</button>
+          <button id="btnRandomMode" onclick="generateRandomData()" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">Random</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
+      </div>
 
-          <!-- ② INDUSTRY (collapsed by default) -->
-          <div class="sb-group">
-            <button class="sb-group-header" onclick="accordionOpen(this)">
-              <span>Industry</span>
-              <span id="sbIndustryLabel" class="sb-badge">SaaS</span>
-              <span class="sb-chevron">▼</span>
-            </button>
-            <div class="sb-group-body" id="industryTabs">
-              <div class="sb-tabs">
-                <button class="sb-tab active" data-industry="saas" onclick="switchIndustry('saas')"><span class="sb-tab-dot"></span>SaaS</button>
-                <button class="sb-tab" data-industry="media" onclick="switchIndustry('media')"><span class="sb-tab-dot"></span>Media &amp; Platforms</button>
-                <button class="sb-tab" data-industry="manufacturing" onclick="switchIndustry('manufacturing')"><span class="sb-tab-dot"></span>Manufacturing</button>
-                <button class="sb-tab" data-industry="lending" onclick="switchIndustry('lending')"><span class="sb-tab-dot"></span>Lending</button>
-                <button class="sb-tab" data-industry="realestate" onclick="switchIndustry('realestate')"><span class="sb-tab-dot"></span>Real Estate</button>
-              </div>
-            </div>
+      <!-- ② INDUSTRY -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="accordionOpen(this)">
+          <span>Industry</span>
+          <span id="sbIndustryLabel" class="sb-acc-badge">SaaS</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body" id="industryTabs">
+          <div class="sb-acc-tabs">
+            <button class="sb-acc-tab active" data-industry="saas" onclick="switchIndustry('saas')">SaaS</button>
+            <button class="sb-acc-tab" data-industry="media" onclick="switchIndustry('media')">Media &amp; Platforms</button>
+            <button class="sb-acc-tab" data-industry="manufacturing" onclick="switchIndustry('manufacturing')">Manufacturing</button>
+            <button class="sb-acc-tab" data-industry="lending" onclick="switchIndustry('lending')">Lending</button>
+            <button class="sb-acc-tab" data-industry="realestate" onclick="switchIndustry('realestate')">Real Estate</button>
           </div>
+        </div>
+      </div>
 
-          <!-- ③ SCENARIO (collapsed by default) -->
-          <div class="sb-group">
-            <button class="sb-group-header" onclick="accordionOpen(this)">
-              <span>Scenario</span>
-              <span id="sbScenarioLabel" class="sb-badge">Base Case</span>
-              <span class="sb-chevron">▼</span>
-            </button>
-            <div class="sb-group-body" id="scenarioTabs">
-              <div class="sb-tabs">
-                <button class="sb-tab active" data-scenario="base" onclick="switchScenario('base')"><span class="sb-tab-dot"></span>Base Case</button>
-                <button class="sb-tab" data-scenario="upside" onclick="switchScenario('upside')"><span class="sb-tab-dot"></span>Upside</button>
-                <button class="sb-tab" data-scenario="downside" onclick="switchScenario('downside')"><span class="sb-tab-dot"></span>Downside</button>
-              </div>
+      <!-- ③ SCENARIO — with dynamic help-icon tooltips -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="accordionOpen(this)">
+          <span>Scenario</span>
+          <span id="sbScenarioLabel" class="sb-acc-badge">Base Case</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body" id="scenarioTabs">
+          <div class="sb-acc-tabs">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="sb-acc-tab active" data-scenario="base" onclick="switchScenario('base')" style="flex:1;">Base Case</button>
+              <span class="help-icon" id="baseScenarioHelp" data-tt="Loading..." style="flex-shrink:0;"></span>
             </div>
-          </div>
-
-          <!-- ④ DRIVERS (collapsed by default) -->
-          <div class="sb-group">
-            <button class="sb-group-header" onclick="accordionOpen(this)">
-              <span>Drivers</span>
-              <span class="sb-chevron">▼</span>
-            </button>
-            <div class="sb-group-body">
-              <div id="controlsContainer"></div>
-              <div class="scenario-actions" id="scenarioActions" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px;flex-wrap:wrap;">
-                <button class="btn btn-ghost btn-sm" onclick="saveScenario()">💾 Save</button>
-                <button class="btn btn-ghost btn-sm" onclick="openLoadModal()">📂 Load</button>
-                <button class="btn btn-ghost btn-sm" onclick="copyShareLink()">🔗 Share</button>
-              </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="sb-acc-tab" data-scenario="upside" onclick="switchScenario('upside')" style="flex:1;">Upside</button>
+              <span class="help-icon" id="upsideScenarioHelp" data-tt="Loading..." style="flex-shrink:0;"></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="sb-acc-tab" data-scenario="downside" onclick="switchScenario('downside')" style="flex:1;">Downside</button>
+              <span class="help-icon" id="downsideScenarioHelp" data-tt="Loading..." style="flex-shrink:0;"></span>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- ⑤ DATA ACTIONS (collapsed by default) -->
-          <div class="sb-group">
-            <button class="sb-group-header" onclick="accordionOpen(this)">
-              <span>Data &amp; Upload</span>
-              <span class="sb-chevron">▼</span>
-            </button>
-            <div class="sb-group-body">
-              <button class="sb-action-btn" onclick="useSampleData()">📊 Use Sample Data</button>
-              <button class="sb-action-btn sb-action-primary" onclick="generateRandomData()">🎲 Generate Random</button>
-              <button class="sb-action-btn sb-action-accent" onclick="downloadTemplate()">⬇ Download Template</button>
-              <div style="position:relative;margin-top:6px;">
-                <input type="file" id="fileUpload" accept=".csv" onchange="handleFileUpload(event)" class="sb-file-hidden">
-                <button class="sb-action-btn" onclick="document.getElementById('fileUpload').click()">📁 Upload CSV Data</button>
-              </div>
-            </div>
+      <!-- ④ DRIVERS -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="accordionOpen(this)">
+          <span>Drivers</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
+          <div id="controlsContainer"></div>
+          <div class="scenario-actions" id="scenarioActions" style="padding-top:8px;border-top:1px solid var(--border);margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="saveScenario()">💾 Save</button>
+            <button class="btn btn-ghost btn-sm" onclick="openLoadModal()">📂 Load</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyShareLink()">🔗 Share</button>
           </div>
+        </div>
+      </div>
 
-        </aside>
+      <!-- ⑤ DATA & UPLOAD -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="accordionOpen(this)">
+          <span>Data &amp; Upload</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
+          <!-- View mode: Simulator vs Variance -->
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:6px;">View Mode</div>
+          <div style="display:flex;gap:0;height:32px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg-muted);flex-wrap:nowrap;margin-bottom:10px;">
+            <button id="modeSimulator" onclick="switchMode('simulator')" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">⚙ Simulator</button>
+            <button id="modeVariance" onclick="switchMode('variance')" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">📊 Variance</button>
+          </div>
+          <!-- Upload & export -->
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:6px;">Files</div>
+          <button class="sb-acc-btn" onclick="downloadTemplate()">⬇ Download Template</button>
+          <div style="position:relative;margin-top:6px;">
+            <input type="file" id="fileUpload" accept=".csv" onchange="handleFileUpload(event)" class="sb-file-hidden">
+            <button class="sb-acc-btn" onclick="document.getElementById('fileUpload').click()">📁 Upload CSV Data</button>
+          </div>
+          <button class="sb-acc-btn" onclick="window.print()" style="margin-top:6px;">🖨 Export CFO Pack</button>
+        </div>
+      </div>
+
+    </aside>
 
         <!-- MAIN CONTENT AREA -->
         <div>
@@ -2022,7 +2046,7 @@
       currentIndustry = industry;
       
       // Update sb-tab active state (new sidebar)
-      document.querySelectorAll('#industryTabs .sb-tab').forEach(btn => {
+      document.querySelectorAll('#industryTabs [data-industry]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.industry === industry);
       });
       // Legacy tab support
@@ -2050,11 +2074,8 @@
     function switchScenario(scenario) {
       currentScenario = scenario;
       
-      // Update sb-tab active state
-      document.querySelectorAll('#scenarioTabs .sb-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.scenario === scenario);
-      });
-      document.querySelectorAll('#scenarioTabs .tab').forEach(btn => {
+      // Update all scenario tab active states (both old sb-tab and new sb-acc-tab)
+      document.querySelectorAll('[data-scenario]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.scenario === scenario);
       });
 
@@ -2069,6 +2090,7 @@
       updateCharts();
       renderCommentary();
       renderDecisionBox();
+      updateScenarioTooltips();
     }
 
     // ============================================
@@ -2306,6 +2328,8 @@
       // Update print title
       const pt = document.getElementById('printTitle');
       if (pt) pt.textContent = `${INDUSTRIES[currentIndustry].title} — ${currentScenario.charAt(0).toUpperCase() + currentScenario.slice(1)} Scenario`;
+      // Update scenario tooltips with fresh data
+      updateScenarioTooltips();
     }
 
     function renderControls() {
@@ -2549,17 +2573,121 @@
       }
     }
 
+    // ── KPI tooltip definitions (layman explanation + live dynamic context) ─────
+    const KPI_TOOLTIPS = {
+      // SaaS
+      arr: function(data, base) {
+        const v = data.arr || 0;
+        const ctx = base && base.arr ? ' | ' + (v > base.arr ? '▲ ' : '▼ ') + Math.abs(((v - base.arr)/base.arr)*100).toFixed(0) + '% vs base scenario' : '';
+        return 'ARR (Annual Recurring Revenue) is how much subscription revenue you\'d collect over a full year — your most important SaaS health number. Current: $' + (v/1e6).toFixed(2) + 'M ARR ($' + (v/12/1e3).toFixed(0) + 'K/month).' + ctx;
+      },
+      customers: function(data, base) {
+        const v = Math.round(data.customers || 0);
+        const mrr = data.mrrTrend ? data.mrrTrend[data.mrrTrend.length-1] || 0 : 0;
+        const avgRev = v > 0 ? (mrr / v).toFixed(0) : 0;
+        const ctx = base && base.customers ? ' | ' + (v > base.customers ? '▲ ' : '▼ ') + Math.abs(((v - base.customers)/base.customers)*100).toFixed(0) + '% vs base' : '';
+        return 'Active paying accounts at end of forecast. Each generates ~$' + avgRev + '/mo average revenue. Total: ' + v.toLocaleString() + ' customers projected.' + ctx;
+      },
+      ltv: function(data, base) {
+        const v = data.ltv || 0;
+        const health = v >= 3 ? 'Healthy ✓ (above 3× rule of thumb)' : v >= 2 ? 'Watch ⚡ (2–3× borderline)' : 'Risk ⚠ (below 2× — CAC too high or retention too low)';
+        return 'LTV/CAC compares lifetime customer value to acquisition cost. $3 earned per $1 spent on sales & marketing = 3× ratio. Your ratio: ' + v.toFixed(1) + '×. ' + health + '.';
+      },
+      nrr: function(data, base) {
+        const v = data.nrr || 0;
+        const ctx = v >= 110 ? 'Excellent — expansion covers churn. Revenue grows without new logos.' : v >= 100 ? 'Stable — retaining revenue but not expanding from existing base.' : 'Contraction risk ⚠ — churn is outpacing expansion.';
+        return 'NRR (Net Revenue Retention) = what % of last year\'s revenue you still have from those same customers, including upgrades and churn. Above 100% means existing customers alone grow your revenue. Your NRR: ' + v.toFixed(0) + '%. ' + ctx;
+      },
+      // Media
+      adRevenue: function(data) {
+        const v = data.adRevenue || (data.revenue ? data.revenue[data.revenue.length-1] : 0) || 0;
+        return 'Ad Revenue is total income from advertising (impressions × fill rate × CPM). Primary revenue driver for ad-supported platforms. Run-rate: $' + (v/1e3).toFixed(0) + 'K/month.';
+      },
+      arpu: function(data) {
+        const v = data.arpu || (data.arpuTrend ? data.arpuTrend[data.arpuTrend.length-1] : 0) || 0;
+        return 'ARPU (Average Revenue Per User) = how much each user earns you per month. Growing ARPU is often more capital-efficient than growing user count. Your ARPU: $' + v.toFixed(4) + '/user/month.';
+      },
+      dau: function(data) {
+        const v = data.dau || 0;
+        const fmt = v > 1e6 ? (v/1e6).toFixed(1) + 'M' : (v/1e3).toFixed(0) + 'K';
+        return 'DAU (Daily Active Users) = unique users engaging each day. Advertisers pay for attention, so DAU drives ad inventory and revenue. Projected: ' + fmt + ' daily active users.';
+      },
+      ebitdaMargin: function(data) {
+        const v = data.ebitdaMargin || (data.ebitdaMarginTrend ? data.ebitdaMarginTrend[data.ebitdaMarginTrend.length-1] : 0) || 0;
+        const health = v >= 20 ? 'Strong' : v >= 10 ? 'Developing' : 'Thin — watch content & OpEx costs';
+        return 'EBITDA Margin = profit as % of revenue before interest, taxes, depreciation. Shows operating efficiency. Your margin: ' + v.toFixed(1) + '%. ' + health + ' for media.';
+      },
+      // Manufacturing
+      revenue: function(data) {
+        const v = data.revenue || 0;
+        return 'Total sales revenue (units × sell price). Your top line before any costs. Monthly: $' + (v/1e3).toFixed(0) + 'K. Growing revenue while keeping costs flat is the core manufacturing efficiency goal.';
+      },
+      grossProfit: function(data) {
+        const v = data.grossProfit || 0;
+        const rev = data.revenue || 1;
+        return 'Gross Profit = revenue minus direct production costs (materials + labor). What\'s left before overhead. Your gross profit: $' + (v/1e3).toFixed(0) + 'K (' + (v/rev*100).toFixed(1) + '% margin).';
+      },
+      grossMargin: function(data) {
+        const v = data.grossMargin || 0;
+        const health = v >= 40 ? 'Strong' : v >= 25 ? 'Average' : 'Low — review material or labor costs';
+        return 'Gross Margin % = how much of each sales dollar you keep after production costs. ' + v.toFixed(1) + '% means you keep $' + v.toFixed(0) + ' from every $100 sold. ' + health + ' for manufacturing.';
+      },
+      unitEconomics: function(data) {
+        const v = data.unitEconomics || 0;
+        return 'Unit Contribution = profit per individual unit after variable costs. Positive = each unit covers its own costs and contributes to fixed overhead. Your contribution: $' + v.toFixed(2) + '/unit.';
+      },
+      // Lending
+      portfolioSize: function(data) {
+        const v = data.portfolioSize || 0;
+        return 'Total outstanding loan balance — principal borrowers owe you. Larger portfolio = more interest income but more credit risk. Current portfolio: $' + (v/1e6).toFixed(1) + 'M.';
+      },
+      netInterestMargin: function(data) {
+        const v = data.netInterestMargin || 0;
+        return 'NIM (Net Interest Margin) = spread between what you charge borrowers minus what you pay to fund those loans. The core profitability driver for lenders (like gross margin for products). Your NIM: ' + v.toFixed(2) + '%.';
+      },
+      lossRate: function(data) {
+        const v = data.lossRate || 0;
+        const health = v <= 1 ? 'Low risk ✓' : v <= 3 ? 'Moderate — watch carefully' : 'Elevated ⚠ — credit quality needs attention';
+        return 'Net Loss Rate = % of loans that default and can\'t be recovered. Directly reduces profitability. Your loss rate: ' + v.toFixed(2) + '%. ' + health + '. Most consumer lenders target under 2%.';
+      },
+      roe: function(data) {
+        const v = data.roe || 0;
+        const health = v >= 12 ? 'Strong — above bank average' : v >= 8 ? 'Acceptable' : 'Below cost of equity — rethink strategy';
+        return 'ROE (Return on Equity) = net income as % of shareholder equity. How efficiently you turn invested capital into profit. Your ROE: ' + v.toFixed(1) + '%. ' + health + '.';
+      },
+      // Real Estate
+      rentalIncome: function(data) {
+        const v = data.rentalIncome || 0;
+        return 'Total rent collected from occupied space. Your top-line revenue, driven by occupancy × area × rent/sqm. Monthly: $' + (v/1e3).toFixed(0) + 'K.';
+      },
+      noi: function(data) {
+        const v = data.noi || 0;
+        return 'NOI (Net Operating Income) = rental income minus operating expenses, before debt service. The standard profitability metric in real estate — also used to calculate property value via Cap Rate. Monthly NOI: $' + (v/1e3).toFixed(0) + 'K.';
+      },
+      noiMargin: function(data) {
+        const v = data.noiMargin || 0;
+        const health = v >= 60 ? 'Strong' : v >= 45 ? 'Average' : 'Low — review operating costs';
+        return 'NOI Margin = what % of rental income becomes net operating income. ' + v.toFixed(1) + '% means $' + v.toFixed(0) + ' of every $100 in rent survives after operating costs. ' + health + '.';
+      },
+      capRate: function(data) {
+        const v = data.capRate || 0;
+        const health = v >= 6 ? 'Above average yield' : v >= 4 ? 'Market rate' : 'Low yield — property may be overvalued relative to income';
+        return 'Cap Rate = annual NOI ÷ property value. A quick valuation benchmark — think of it as the property\'s yield. Your Cap Rate: ' + v.toFixed(1) + '%. ' + health + '.';
+      }
+    };
+
     function renderKPIs() {
       const industry = INDUSTRIES[currentIndustry];
       const grid = document.getElementById('kpiGrid');
       const data = modelData.scenarios[currentScenario];
-      
+      const baseData = currentScenario !== 'base' ? modelData.scenarios['base'] : null;
+
       if (!data) return;
-      
+
       grid.innerHTML = industry.kpis.map(kpi => {
         const value = data[kpi.id];
         const formattedValue = formatValue(value, kpi.format);
-        
+
         let change = 0;
         let changeClass = 'neutral';
         if (currentScenario !== 'base') {
@@ -2569,18 +2697,19 @@
             changeClass = change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral';
           }
         }
-        
-        return `
-          <div class="kpi-card">
-            <div class="kpi-label">${kpi.label}</div>
-            <div class="kpi-value">${formattedValue}</div>
-            ${currentScenario !== 'base' ? `
-              <div class="kpi-change ${changeClass}">
-                ${change > 0 ? '↑' : change < 0 ? '↓' : '→'} ${Math.abs(change).toFixed(1)}% vs Base
-              </div>
-            ` : ''}
-          </div>
-        `;
+
+        // Build dynamic tooltip text for this KPI
+        const ttFn = KPI_TOOLTIPS[kpi.id];
+        const ttText = ttFn ? ttFn(data, baseData) : (kpi.label + ': ' + formattedValue);
+        const ttSafe = ttText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+        return '<div class="kpi-card">' +
+          '<div class="kpi-label"><span class="kpi-term" data-tt="' + ttSafe + '">' + kpi.label + '</span></div>' +
+          '<div class="kpi-value">' + formattedValue + '</div>' +
+          (currentScenario !== 'base' ? '<div class="kpi-change ' + changeClass + '">' +
+            (change > 0 ? '↑' : change < 0 ? '↓' : '→') + ' ' + Math.abs(change).toFixed(1) + '% vs Base' +
+          '</div>' : '') +
+          '</div>';
       }).join('');
     }
 
@@ -2853,14 +2982,29 @@
     // ============================================
     
     function updateDataModeIndicator() {
-      const indicator = document.getElementById('dataModeIndicator');
-      if (!indicator) return;
-      const labels = {
-        sample: '📊 Sample',
-        random: '🎲 Random',
-        uploaded: '📁 Uploaded'
-      };
-      indicator.textContent = labels[currentDataMode] || labels.sample;
+      // Update the DATA MODE badge
+      const badge = document.getElementById('dataModeBadge');
+      if (badge) {
+        const labels = { sample: 'SAMPLE', random: 'RANDOM', uploaded: 'UPLOADED' };
+        badge.textContent = labels[currentDataMode] || 'SAMPLE';
+        badge.className = currentDataMode === 'random' ? 'data-badge random' : 'data-badge';
+      }
+      // Update Sample / Random button visual state
+      const btnS = document.getElementById('btnSampleMode');
+      const btnR = document.getElementById('btnRandomMode');
+      if (btnS && btnR) {
+        if (currentDataMode === 'random') {
+          btnS.style.background = 'transparent';
+          btnS.style.color = 'var(--muted)';
+          btnR.style.background = 'var(--text)';
+          btnR.style.color = 'white';
+        } else {
+          btnS.style.background = 'var(--text)';
+          btnS.style.color = 'white';
+          btnR.style.background = 'transparent';
+          btnR.style.color = 'var(--muted)';
+        }
+      }
     }
 
     function useSampleData() {
@@ -3061,12 +3205,18 @@
 
     function switchMode(mode) {
       currentMode = mode;
-      // Update sidebar mode pills
-      document.getElementById('modeSimulator').classList.toggle('active', mode === 'simulator');
-      document.getElementById('modeVariance').classList.toggle('active', mode === 'variance');
-      // Update sidebar badge
-      const modeLbl = document.getElementById('sbModeLabel');
-      if (modeLbl) modeLbl.textContent = mode === 'simulator' ? 'Simulator' : 'Variance';
+      // Update Simulator / Variance segmented buttons
+      const btnSim = document.getElementById('modeSimulator');
+      const btnVar = document.getElementById('modeVariance');
+      if (btnSim && btnVar) {
+        if (mode === 'simulator') {
+          btnSim.style.background = 'var(--text)'; btnSim.style.color = 'white';
+          btnVar.style.background = 'transparent'; btnVar.style.color = 'var(--muted)';
+        } else {
+          btnVar.style.background = 'var(--text)'; btnVar.style.color = 'white';
+          btnSim.style.background = 'transparent'; btnSim.style.color = 'var(--muted)';
+        }
+      }
 
       const varianceContent = document.getElementById('varianceModeContent');
       const kpiGrid = document.getElementById('kpiGrid');
@@ -3496,10 +3646,10 @@
         currentScenario = state.scenario;
         driverValues = state.drivers;
 
-        document.querySelectorAll('#industryTabs .sb-tab, #industryTabs .tab').forEach(btn => {
+        document.querySelectorAll('#industryTabs [data-industry]').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.industry === currentIndustry);
         });
-        document.querySelectorAll('#scenarioTabs .sb-tab, #scenarioTabs .tab').forEach(btn => {
+        document.querySelectorAll('#scenarioTabs [data-scenario]').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.scenario === currentScenario);
         });
         document.getElementById('moduleTitle').textContent = INDUSTRIES[currentIndustry].title;
@@ -3543,10 +3693,10 @@
       currentScenario = state.scenario || 'base';
       driverValues = state.drivers || {};
 
-      document.querySelectorAll('#industryTabs .sb-tab, #industryTabs .tab').forEach(btn => {
+      document.querySelectorAll('#industryTabs [data-industry]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.industry === currentIndustry);
       });
-      document.querySelectorAll('#scenarioTabs .sb-tab, #scenarioTabs .tab').forEach(btn => {
+      document.querySelectorAll('#scenarioTabs [data-scenario]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.scenario === currentScenario);
       });
       document.getElementById('moduleTitle').textContent = INDUSTRIES[currentIndustry].title;
@@ -3565,7 +3715,8 @@
 
     function accordionOpen(headerEl) {
       const sidebar = headerEl.closest('.sidebar');
-      const allHeaders = sidebar.querySelectorAll('.sb-group-header');
+      // Support both old (.sb-group-header) and new (.sb-acc-header) class names
+      const allHeaders = sidebar.querySelectorAll('.sb-group-header, .sb-acc-header');
       allHeaders.forEach(h => {
         if (h === headerEl) return;
         h.classList.remove('open');
@@ -3855,90 +4006,64 @@
     // INITIALIZE ON LOAD
     // ============================================
     
+    // ============================================
+    // SCENARIO TOOLTIP UPDATER
+    // Updates the dynamic help-icon text based on current modelData
+    // ============================================
+    function updateScenarioTooltips() {
+      if (!modelData || !modelData.scenarios) return;
+
+      const industry = INDUSTRIES[currentIndustry] || {};
+      const industryName = industry.title || currentIndustry;
+
+      ['base', 'upside', 'downside'].forEach(function(scenario) {
+        const data = modelData.scenarios[scenario];
+        if (!data) return;
+
+        const helpIcon = document.getElementById(scenario + 'ScenarioHelp');
+        if (!helpIcon) return;
+
+        const mult = scenario === 'upside' ? 1.25 : scenario === 'downside' ? 0.75 : 1.0;
+        const pct = scenario === 'upside' ? '+25%' : scenario === 'downside' ? '−25%' : 'baseline';
+        let tooltip = '';
+
+        if (scenario === 'base') {
+          tooltip = 'Base Case: Central assumptions at baseline drivers. All other scenarios are relative to this. Use as your planning default.';
+          // Enrich with live data if available
+          if (currentIndustry === 'saas' && data.nrr !== undefined) {
+            const runway = data.cash ? Math.round(data.cash[data.cash.length - 1] / 200000) : '—';
+            tooltip = `Base Case: Baseline assumptions. NRR ~${data.nrr ? data.nrr.toFixed(0) : '—'}%, ARR $${data.arr ? (data.arr / 1e6).toFixed(1) : '—'}M at month 12. Use as your planning baseline.`;
+          }
+        } else if (scenario === 'upside') {
+          tooltip = `Upside (${pct}): Optimistic scenario — better retention, higher conversion, stronger margins. Use to plan growth investment if leading indicators hit targets.`;
+          if (currentIndustry === 'saas' && data.arr !== undefined) {
+            const baseArr = modelData.scenarios.base && modelData.scenarios.base.arr ? modelData.scenarios.base.arr : 0;
+            const uplift = baseArr > 0 ? (((data.arr - baseArr) / baseArr) * 100).toFixed(0) : '—';
+            tooltip = `Upside (+25% drivers): ${uplift !== '—' ? `ARR +${uplift}% vs base case.` : ''} Better retention, stronger growth. Use to plan growth investment when metrics are tracking ahead.`;
+          }
+        } else {
+          tooltip = `Downside (${pct}): Conservative scenario — higher churn, slower growth, margin pressure. Use to stress-test funding needs and plan contingencies.`;
+          if (currentIndustry === 'saas' && data.arr !== undefined) {
+            const baseArr = modelData.scenarios.base && modelData.scenarios.base.arr ? modelData.scenarios.base.arr : 0;
+            const drop = baseArr > 0 ? (((baseArr - data.arr) / baseArr) * 100).toFixed(0) : '—';
+            tooltip = `Downside (−25% drivers): ${drop !== '—' ? `ARR −${drop}% vs base case.` : ''} Higher churn, slower growth. Use to stress-test runway and set contingency budgets.`;
+          }
+        }
+
+        helpIcon.setAttribute('data-tt', tooltip);
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', function() {
       restoreFromHash();
       init();
       renderSensitivity();
+      initTooltips();
+      updateScenarioTooltips();
     });
   </script>
-<script src="main.js">
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
-    function initTooltips() {
-      var ttEl = document.getElementById('tt-root');
-      if (!ttEl) {
-        ttEl = document.createElement('div');
-        ttEl.id = 'tt-root';
-        document.body.appendChild(ttEl);
-      }
-
-      var hideTimer = null;
-
-      function show(text, targetEl) {
-        clearTimeout(hideTimer);
-        ttEl.textContent = text;
-        ttEl.classList.add('tt-visible');
-        position(targetEl);
-      }
-
-      function hide() {
-        hideTimer = setTimeout(function() {
-          ttEl.classList.remove('tt-visible');
-        }, 80);
-      }
-
-      function position(el) {
-        var rect = el.getBoundingClientRect();
-        var ttW = 260;
-        var gap = 8;
-        var left = rect.left + rect.width / 2 - ttW / 2;
-        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
-        var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
-        if (rect.top - ttH - gap < 8) {
-          // Flip below if not enough room above
-          top = rect.bottom + gap;
-          transform = 'translateY(0)';
-        } else {
-          top = rect.top - gap;
-          transform = 'translateY(-100%)';
-        }
-        ttEl.style.left = left + 'px';
-        ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-      }
-
-      // Event delegation — works on dynamically injected elements too
-      document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (!el) return;
-        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
-        if (text) show(text, el);
-      });
-
-      document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (el) hide();
-      });
-
-      // Hide on scroll so tooltip doesn't chase the page
-      window.addEventListener('scroll', function() {
-        ttEl.classList.remove('tt-visible');
-      }, { passive: true });
-    }
-
-
-    /* Mobile sidebar toggle */
-    (function() {
-      var btn = document.getElementById('mobileControlsBtn');
-      var sb  = document.querySelector('.sidebar');
-      if (!btn || !sb) return;
-      btn.addEventListener('click', function() {
-        var open = sb.classList.toggle('mobile-open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      });
-    })();
-
-
+<script src="main.js"></script>
+<script>
     /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
     function initTooltips() {
       var ttEl = document.getElementById('tt-root');
