@@ -11,38 +11,6 @@
     /* module-hero, module-label, module-title, module-subtitle, feature-chips, chip — all in style.css */
     .module-hero-inner { display: flex; flex-direction: column; gap: 20px; }
     .module-hero-text { flex: 1; min-width: 0; }
-    .data-sources-card {
-      width: 100%;
-      background: white; border: 1px solid var(--border);
-      border-radius: var(--radius); box-shadow: var(--shadow-soft);
-      padding: 14px 16px;
-    }
-    .data-sources-title {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .data-source-item {
-      display: flex; align-items: flex-start; gap: 9px;
-      padding: 8px 0; border-bottom: 1px solid var(--border);
-    }
-    .data-source-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .data-source-icon {
-      width: 26px; height: 26px; border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; flex-shrink: 0; margin-top: 1px;
-    }
-    .data-source-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-    .data-source-desc { font-size: 11px; color: var(--muted); line-height: 1.45; }
-    @media (max-width: 860px) { .module-layout { grid-template-columns: 1fr; }
- .board-grid { grid-template-columns: 1fr; } .data-sources-card > div { grid-template-columns: 1fr 1fr !important; } }
-    .module-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 12px; }
-    .module-title { font-size: 36px; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 10px; }
-    .module-subtitle { font-size: 16px; color: var(--muted); margin-bottom: 16px; }
-    .feature-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-    .chip { font-size: 12px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: rgba(246,248,251,0.8); color: var(--text); }
-    .module-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; max-width: 1400px; margin: 0 auto; padding: 32px 24px; }
-    .btn-small { padding: 8px 14px; font-size: 13px; border-radius: 999px; font-weight: 600; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 140ms ease; width: 100%; text-align: left; }
     .btn-small:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
     .btn-small:active { transform: translateY(1px); }
     .btn-primary { background: var(--text); color: white; border-color: var(--text); }
@@ -956,17 +924,16 @@
 <main id="main">
   <section class="module-hero">
     <div class="container">
-      <div class="module-label">Balance Sheet · Cash Flow · Working Capital</div>
-      <h1 class="module-title">Working Capital <span class="accent">FP&A</span></h1>
-      <p class="module-subtitle">How collections, payments, and inventory timing affect cash and runway.</p>
+      <div class="module-eyebrow">Cash &bull; Working Capital</div>
+      <h1 class="module-title">Working Capital FP&amp;A</h1>
+      <p class="module-subtitle">Model how collections, payables, and inventory timing change cash and runway.</p>
       <div class="feature-chips">
-        <span class="chip">Cash Conversion Cycle</span>
-        <span class="chip">12-Month Cash Forecast</span>
-        <span class="chip">Runway Analysis</span>
-        <span class="chip">AR / AP / Inventory</span>
+        <span class="chip">Cash Conversion</span>
+        <span class="chip">Forecast</span>
+        <span class="chip">AR/AP/Inventory</span>
+        <span class="chip">Runway</span>
       </div>
     </div>
-  </section>
   </section>
 
   <!-- DATA NEEDED STRIP -->

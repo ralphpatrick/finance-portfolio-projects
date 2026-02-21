@@ -1091,65 +1091,87 @@ img { max-width: 100%; display: block; }
    Keep these here so per-module <style> blocks stay minimal.
 ════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════
+   STANDARDIZED MODULE HERO HEADER
+   Uniform height & layout across ALL module pages.
+   Structure: eyebrow → h1 title → subtitle (2-line clamp) → chips row
+════════════════════════════════════════════════════ */
+
 .module-hero {
-  padding: 48px 0 32px 0;
+  padding: 40px 0 36px 0;
   border-bottom: 1px solid var(--border);
+  /* Fixed height — every module header is exactly the same size.
+     Calculated: 40 top + 26 eyebrow + 50 title + 45 subtitle + 50 chips + 36 bottom = 247 → 250px */
+  height: 250px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Eyebrow — small uppercase label above the title */
+.module-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* Keep .module-label as alias for legacy markup that still uses it */
 .module-label {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
   color: var(--muted);
-  letter-spacing: 0.05em;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
+/* Title */
 .module-title {
   font-size: 36px;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
 }
 
-.module-pill {
-  display: inline-flex;
-  font-size: 12px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(246,248,251,0.8);
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
+/* Subtitle — fixed at exactly 2 lines so it never changes the header height */
 .module-subtitle {
-  font-size: 16px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-.module-problem {
   font-size: 15px;
-  color: var(--text);
-  font-weight: 520;
-  max-width: 68ch;
-  margin-bottom: 12px;
-}
-
-.module-role {
-  font-size: 14px;
   color: var(--muted);
-  margin-bottom: 14px;
+  line-height: 1.5;
+  margin: 0 0 0 0;
+  max-width: 70ch;
+  height: calc(15px * 1.5 * 2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Legacy classes — keep so any existing markup using them doesn't break */
+.module-pill { display: none; }
+.module-problem { display: none; }
+.module-role { display: none; }
+
+/* Feature chips row — single line, horizontal scroll, never wraps */
 .feature-chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin-top: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px; /* prevent clipping scroll indicator */
 }
+.feature-chips::-webkit-scrollbar { display: none; }
 
 .chip {
   font-size: 12px;
@@ -1158,6 +1180,8 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--border);
   background: rgba(246,248,251,0.8);
   color: var(--text);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Shared module layout & sidebar shell ── */
@@ -1560,7 +1584,8 @@ img { max-width: 100%; display: block; }
 }
 @media (max-width: 560px) {
   .module-layout { padding: 12px; }
-  .module-title { font-size: 28px; }
+  .module-title { font-size: 26px; }
+  .module-hero { height: auto; min-height: 230px; }
 }
 
 /* ── Next module banner (inside module pages) ──── */

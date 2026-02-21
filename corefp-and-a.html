@@ -8,6 +8,8 @@
   <title>FP&A Simulator — Industry-Adaptive Financial Planning</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- Shared stylesheet (nav, hero header, data-needed strip, module layout) -->
+  <link rel="stylesheet" href="style.css" />
   <!-- Favicon -->
 <link rel="icon" type="image/png" href="favicon.png">
 
@@ -169,31 +171,6 @@
 
     .module-header {
       margin-bottom: 24px;
-    }
-
-    .module-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .module-title {
-      font-size: 32px;
-      line-height: 1.1;
-      margin-bottom: 8px;
-    }
-
-    .module-subtitle {
-      font-size: 16px;
-      color: var(--muted);
-      max-width: 60ch;
     }
 
     .module-actions {
@@ -484,7 +461,7 @@
 
     .chart-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
       gap: 20px;
       margin-bottom: 20px;
     }
@@ -702,7 +679,7 @@
     }
 
     /* Responsive */
-    @media (max-width: 1024px) {
+    @media (max-width: 860px) {
       .layout-grid {
         grid-template-columns: 1fr;
       }
@@ -725,10 +702,6 @@
     @media (max-width: 640px) {
       .kpi-grid {
         grid-template-columns: 1fr;
-      }
-
-      .module-title {
-        font-size: 28px;
       }
     }
 
@@ -1185,7 +1158,405 @@
     }
     .help-icon::before { content: '?'; line-height: 1; }
 
-  </style>
+  
+    /* ═══════════════════════════════════════════════
+       SHARED SIDEBAR SHELL — standardised across all modules
+       ═══════════════════════════════════════════════ */
+
+    /* Layout */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .main-content { min-width: 0; }
+
+    /* Mobile Controls Toggle Button */
+    .mobile-controls-btn {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 4px;
+      box-shadow: var(--shadow-soft);
+      transition: all 140ms ease;
+    }
+    .mobile-controls-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: var(--shadow);
+    }
+    .mobile-controls-btn .mcb-icon { font-size: 16px; flex-shrink: 0; }
+    .mobile-controls-btn .mcb-label { flex: 1; text-align: left; }
+    .mobile-controls-btn .mcb-chevron {
+      font-size: 11px; color: var(--muted);
+      transition: transform 200ms ease;
+    }
+    .mobile-controls-btn[aria-expanded="true"] .mcb-chevron { transform: rotate(180deg); }
+
+    /* Sidebar shell */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+      width: 280px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static section (Data Mode etc — always visible) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Data Mode segmented control (fixed height, no wrapping) ── */
+    .sb-data-mode-row {
+      display: flex;
+      gap: 0;
+      height: 34px;              /* fixed height — prevents layout shift */
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;         /* never wrap */
+    }
+    .sb-data-mode-btn {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0 4px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+    }
+    .sb-data-mode-btn:last-child { border-right: none; }
+    .sb-data-mode-btn:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-data-mode-btn.active {
+      background: var(--text);
+      color: white;
+    }
+
+    /* Mode pills (2-option) — also fixed height */
+    .sb-mode-pills {
+      display: flex;
+      gap: 0;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;
+    }
+    .sb-mode-pill {
+      flex: 1;
+      height: 100%;
+      padding: 0 6px;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+      text-align: center;
+    }
+    .sb-mode-pill:last-child { border-right: none; }
+    .sb-mode-pill:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-mode-pill.active { background: var(--text); color: white; }
+
+    /* Badge */
+    .data-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .data-badge.random {
+      background: #fef3c7;
+      border-color: #fbbf24;
+      color: #92400e;
+    }
+
+    /* Accordion groups */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+      font-family: inherit;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron { transform: rotate(180deg); color: var(--text); }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* Tabs (scenario selectors etc.) */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text); color: white; border-color: var(--text); }
+
+    /* Input rows */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Action buttons (full-width) */
+    .sb-action-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 12px; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      transition: all 140ms ease; text-align: left;
+      white-space: nowrap; font-family: inherit;
+    }
+    .sb-action-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-action-btn:active { transform: translateY(1px); }
+    .sb-action-btn.sb-action-primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-action-btn.sb-action-accent  { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    /* Sliders */
+    .control-item { margin-bottom: 16px; }
+    .control-item:last-child { margin-bottom: 0; }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .control-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-2);
+      font-family: var(--font-mono, monospace);
+    }
+    .control-input {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px;
+      border-radius: 3px;
+      background: var(--bg-muted);
+      outline: none; cursor: pointer;
+    }
+    .control-input::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+      transition: all 140ms ease;
+    }
+    .control-input::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .control-input::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3); border: none;
+    }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 860px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .mobile-controls-btn { display: flex; }
+      .sidebar {
+        position: static;
+        top: 0;
+        width: 100%;
+        max-height: none;
+        overflow-y: visible;
+        display: none;            /* hidden by default; JS toggles */
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+      .sidebar.mobile-open { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .module-layout { padding: 12px; }
+    }
+
+</style>
 </head>
 <body>
   <!-- Skip link for accessibility -->
@@ -1205,13 +1576,17 @@
     </div>
   </header>
 
-  <!-- MODULE SECTION — clean title only, controls live in sidebar -->
-  <section class="module-section">
+  <!-- MODULE HERO HEADER -->
+  <section class="module-hero">
     <div class="container">
-      <div class="module-header">
-        <div class="module-eyebrow">⭐ Industry-Adaptive Model</div>
-        <h1 class="module-title" id="moduleTitle">SaaS Financial Model</h1>
-        <p class="module-subtitle">Real-time financial simulation and scenario planning with dynamic driver modeling</p>
+      <div class="module-eyebrow">Industry-Adaptive &bull; Core Model</div>
+      <h1 class="module-title" id="moduleTitle">SaaS Financial Model</h1>
+      <p class="module-subtitle">Driver-based P&amp;L, balance sheet, and cash flow simulation for planning and scenario analysis.</p>
+      <div class="feature-chips">
+        <span class="chip">Driver Model</span>
+        <span class="chip">Scenario Planning</span>
+        <span class="chip">Financial Statements</span>
+        <span class="chip">Runway View</span>
       </div>
     </div>
   </section>
@@ -1237,7 +1612,13 @@
     <div class="container">
       <div class="layout-grid">
         <!-- SIDEBAR: unified card, collapsible accordion -->
-        <aside class="sidebar">
+            <!-- Mobile Controls Toggle (hidden on desktop) -->
+    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
+      <span class="mcb-icon">&#9881;</span>
+      <span class="mcb-label">Controls</span>
+      <span class="mcb-chevron">&#9660;</span>
+    </button>
+    <aside class="sidebar" id="sidebarPanel">
 
           <!-- ① DATA MODE (static, always visible) -->
           <div class="sb-static">
@@ -1245,9 +1626,9 @@
               <span>Data Mode</span>
               <span id="dataModeIndicator" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);">📊 Sample</span>
             </div>
-            <div class="sb-mode-pills">
-              <button class="sb-mode-pill active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
-              <button class="sb-mode-pill" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
+            <div class="sb-data-mode-row" style="margin-top:6px;">
+              <button class="sb-data-mode-btn active" id="modeSimulator" onclick="switchMode('simulator')">⚙ Simulator</button>
+              <button class="sb-data-mode-btn" id="modeVariance" onclick="switchMode('variance')">📊 Variance</button>
             </div>
             <button class="sb-action-btn" onclick="window.print()" style="margin-top:8px;">🖨 Export CFO Pack</button>
           </div>
@@ -3544,6 +3925,124 @@
         ttEl.classList.remove('tt-visible');
       }, { passive: true });
     }
+
+
+    /* Mobile sidebar toggle */
+    (function() {
+      var btn = document.getElementById('mobileControlsBtn');
+      var sb  = document.querySelector('.sidebar');
+      if (!btn || !sb) return;
+      btn.addEventListener('click', function() {
+        var open = sb.classList.toggle('mobile-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+      var activeEl = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        activeEl = targetEl;
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 270;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        ttEl.style.width = ttW + 'px';
+        ttEl.style.left = left + 'px';
+        // Measure height after setting content
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap - 8 < 0) {
+          top = rect.bottom + window.scrollY + gap;
+          transform = 'none';
+        } else {
+          top = rect.top + window.scrollY - ttH - gap;
+          transform = 'none';
+        }
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+        ttEl.style.position = 'absolute';
+      }
+
+      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      var killStyle = document.createElement('style');
+      killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
+      document.head.appendChild(killStyle);
+
+      /* Desktop: mouse events (event delegation) */
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text && text !== 'Loading...') show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      /* Mobile: tap to toggle */
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) {
+          // tap anywhere else hides tooltip
+          if (ttEl.classList.contains('tt-visible')) {
+            ttEl.classList.remove('tt-visible');
+            activeEl = null;
+          }
+          return;
+        }
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (!text || text === 'Loading...') return;
+        if (activeEl === el && ttEl.classList.contains('tt-visible')) {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        } else {
+          show(text, el);
+        }
+        e.stopPropagation();
+      });
+
+      /* Reposition on scroll (don't hide, just reposition) */
+      window.addEventListener('scroll', function() {
+        if (activeEl && ttEl.classList.contains('tt-visible')) {
+          position(activeEl);
+        }
+      }, { passive: true });
+
+      /* Hide on resize */
+      window.addEventListener('resize', function() {
+        ttEl.classList.remove('tt-visible');
+        activeEl = null;
+      }, { passive: true });
+    }
+
 
 </script>
 </body>
