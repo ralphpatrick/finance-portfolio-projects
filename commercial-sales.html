@@ -10,68 +10,8 @@
     /* Prevent horizontal overflow */
     html, body { overflow-x: clip; }
 
-    /* Module-specific styles */
-    .module-hero {
-      padding: 48px 0 32px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .module-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-    .module-title {
-      font-size: 36px;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 10px;
-    }
-    .module-pill {
-      display: inline-flex;
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .module-subtitle {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .module-problem {
-      font-size: 15px;
-      color: var(--text);
-      font-weight: 520;
-      max-width: 68ch;
-      margin-bottom: 12px;
-    }
-    .module-role {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .feature-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .chip {
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
-    }
+    /* module-hero, module-label, module-title, module-pill, module-subtitle,
+       module-problem, module-role, feature-chips, chip — all in style.css */
     
     /* Main layout with sidebar */
     .module-layout {
@@ -744,7 +684,406 @@
     }
     .help-icon::before { content: '?'; line-height: 1; }
 
-  </style>
+  
+    /* ═══════════════════════════════════════════════
+       SHARED SIDEBAR SHELL — standardised across all modules
+       ═══════════════════════════════════════════════ */
+
+    /* Layout */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .main-content { min-width: 0; }
+
+    /* Mobile Controls Toggle Button */
+    .mobile-controls-btn {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 4px;
+      box-shadow: var(--shadow-soft);
+      transition: all 140ms ease;
+    }
+    .mobile-controls-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: var(--shadow);
+    }
+    .mobile-controls-btn .mcb-icon { font-size: 16px; flex-shrink: 0; }
+    .mobile-controls-btn .mcb-label { flex: 1; text-align: left; }
+    .mobile-controls-btn .mcb-chevron {
+      font-size: 11px; color: var(--muted);
+      transition: transform 200ms ease;
+    }
+    .mobile-controls-btn[aria-expanded="true"] .mcb-chevron { transform: rotate(180deg); }
+
+    /* Sidebar shell */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+      width: 280px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static section (Data Mode etc — always visible) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Data Mode segmented control (fixed height, no wrapping) ── */
+    .sb-data-mode-row {
+      display: flex;
+      gap: 0;
+      height: 34px;              /* fixed height — prevents layout shift */
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;         /* never wrap */
+    }
+    .sb-data-mode-btn {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0 4px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+    }
+    .sb-data-mode-btn:last-child { border-right: none; }
+    .sb-data-mode-btn:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-data-mode-btn.active {
+      background: var(--text);
+      color: white;
+    }
+
+    /* Mode pills (2-option) — also fixed height */
+    .sb-mode-pills {
+      display: flex;
+      gap: 0;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;
+    }
+    .sb-mode-pill {
+      flex: 1;
+      height: 100%;
+      padding: 0 6px;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+      text-align: center;
+    }
+    .sb-mode-pill:last-child { border-right: none; }
+    .sb-mode-pill:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-mode-pill.active { background: var(--text); color: white; }
+
+    /* Badge */
+    .data-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .data-badge.random {
+      background: #fef3c7;
+      border-color: #fbbf24;
+      color: #92400e;
+    }
+
+    /* Accordion groups */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+      font-family: inherit;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron { transform: rotate(180deg); color: var(--text); }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* Tabs (scenario selectors etc.) */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text); color: white; border-color: var(--text); }
+
+    /* Input rows */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Action buttons (full-width) */
+    .sb-action-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 12px; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      transition: all 140ms ease; text-align: left;
+      white-space: nowrap; font-family: inherit;
+    }
+    .sb-action-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-action-btn:active { transform: translateY(1px); }
+    .sb-action-btn.sb-action-primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-action-btn.sb-action-accent  { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    /* Sliders */
+    .control-item { margin-bottom: 16px; }
+    .control-item:last-child { margin-bottom: 0; }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .control-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-2);
+      font-family: var(--font-mono, monospace);
+    }
+    .control-input {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px;
+      border-radius: 3px;
+      background: var(--bg-muted);
+      outline: none; cursor: pointer;
+    }
+    .control-input::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+      transition: all 140ms ease;
+    }
+    .control-input::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .control-input::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3); border: none;
+    }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 860px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .mobile-controls-btn { display: flex; }
+      .sidebar {
+        position: static;
+        top: 0;
+        width: 100%;
+        max-height: none;
+        overflow-y: visible;
+        display: none;            /* hidden by default; JS toggles */
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+      .sidebar.mobile-open { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .module-layout { padding: 12px; }
+    }
+
+
+</style>
 </head>
 <body>
 
@@ -803,14 +1142,25 @@
     <div class="module-layout">
       
       <!-- Sticky Sidebar -->
-      <aside class="sidebar">
+          <!-- Mobile Controls Toggle (hidden on desktop) -->
+    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
+      <span class="mcb-icon">&#9881;</span>
+      <span class="mcb-label">Controls</span>
+      <span class="mcb-chevron">&#9660;</span>
+    </button>
+    <aside class="sidebar" id="sidebarPanel">
 
-      <!-- Data Mode — always visible -->
+      <!-- DATA MODE — always visible -->
       <div class="sb-static">
         <div class="sb-static-title">
-          <span>Data Mode</span>
-          <span id="dataModeBadge" class="data-badge">Sample Data</span>
+          <span>DATA MODE</span>
+          <span id="dataModeBadge" class="data-badge">SAMPLE</span>
         </div>
+        <div style="display:flex;gap:0;height:34px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-muted);flex-wrap:nowrap;">
+          <button id="btnSampleMode" onclick="loadWinningPromo()" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Sample</button>
+          <button id="btnRandomMode" onclick="randomizeSampleData()" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">Random</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
       </div>
 
       <!-- Actions -->
@@ -820,9 +1170,6 @@
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <button onclick="loadLosingPromo()" class="sb-acc-btn" style="border-color:rgba(220,38,38,0.35);color:#b91c1c;">🔴 Sample — Promo Loses Money</button>
-          <button onclick="loadWinningPromo()" class="sb-acc-btn primary" style="background:#0f766e;border-color:#0f766e;">✅ Sample — Promo Makes Money</button>
-          <button onclick="randomizeSampleData()" class="sb-acc-btn">🎲 Generate Random</button>
           <button onclick="downloadAllTemplates()" class="sb-acc-btn">Download Templates</button>
         </div>
       </div>
@@ -921,6 +1268,17 @@
             <div class="chart-container">
               <div class="chart-title">Revenue by Channel</div>
               <canvas id="channelChart" class="chart-canvas"></canvas>
+            </div>
+
+            <!-- So What: 12-Month Channel Performance -->
+            <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;box-shadow:0 2px 8px rgba(15,118,110,0.06);">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:8px;">💡 So What — 12-Month Channel Performance</div>
+              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>This chart shows which channels are generating the most revenue and which are underperforming relative to their cost and promotion investment — the foundation for trade spend reallocation decisions.</li>
+                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Channels with high revenue but low gross margin are consuming promotion budget without delivering bottom-line return — a common pattern in trade spend that signals price or discount architecture issues.</li>
+                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If one channel dominates revenue:</strong> Assess concentration risk — dependence on a single retailer or platform creates negotiating leverage risk. Model the impact of a 15% volume loss in that channel.</li>
+                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If a channel is declining:</strong> Run a price/volume/mix decomposition before cutting the budget — revenue decline may reflect mix shift, not structural volume loss, requiring different remediation.</li>
+              </ul>
             </div>
 
             <div style="overflow-x:auto;"><table class="data-table" id="channelTable">
@@ -1183,10 +1541,17 @@
     
     // ========== SAMPLE DATA GENERATION ==========
 
+    function _setSampleBtnState() {
+      var s = document.getElementById('btnSampleMode');
+      var r = document.getElementById('btnRandomMode');
+      if (s) { s.style.background = 'var(--text)'; s.style.color = 'white'; }
+      if (r) { r.style.background = 'transparent'; r.style.color = 'var(--muted)'; }
+    }
     function useSampleData() {
       withStableScroll(function() {
         dataMode = 'sample';
-        document.getElementById('dataModeBadge').textContent = 'Sample Data';
+        document.getElementById('dataModeBadge').textContent = 'SAMPLE'; document.getElementById('dataModeBadge').classList.remove('random');
+        _setSampleBtnState();
         initializeSampleData();
         renderAll();
       });
@@ -1197,7 +1562,8 @@
     function loadLosingPromo() {
       withStableScroll(function() {
         dataMode = 'sample';
-        document.getElementById('dataModeBadge').textContent = '🔴 Promo Loses Money';
+        document.getElementById('dataModeBadge').textContent = 'SAMPLE'; document.getElementById('dataModeBadge').classList.remove('random');
+        _setSampleBtnState();
         document.getElementById('baselineRev').value  = 50000;
         document.getElementById('promoRev').value     = 85000;
         document.getElementById('baselineGP').value   = 42;
@@ -1211,16 +1577,17 @@
     }
 
     // ── PRESET: Promo that clearly MAKES money ──
-    // GP% only dips 3pp (holds well), promo cost is lean, volume doubles → strong net profit.
+    // GP% holds (even improves slightly), promo cost is lean, volume doubles → strong net profit.
     function loadWinningPromo() {
       withStableScroll(function() {
         dataMode = 'sample';
-        document.getElementById('dataModeBadge').textContent = '✅ Promo Makes Money';
-        document.getElementById('baselineRev').value  = 55000;
-        document.getElementById('promoRev').value     = 115000; // 2× uplift
-        document.getElementById('baselineGP').value   = 44;
-        document.getElementById('promoGP').value      = 41;    // only -3pp — holds
-        document.getElementById('promoCost').value    = 5500;  // lean spend
+        document.getElementById('dataModeBadge').textContent = 'SAMPLE'; document.getElementById('dataModeBadge').classList.remove('random');
+        _setSampleBtnState();
+        document.getElementById('baselineRev').value  = 50000;
+        document.getElementById('promoRev').value     = 105000; // ~2× uplift
+        document.getElementById('baselineGP').value   = 40;
+        document.getElementById('promoGP').value      = 42;    // +2pp — margin holds and improves
+        document.getElementById('promoCost').value    = 4500;  // lean spend → strong net profit
         // PVM: all three drivers are positive tailwinds
         document.getElementById('priorRev').value     = 120000;
         document.getElementById('currentRev').value   = 168000;
@@ -1282,26 +1649,30 @@
     
     function randomizeSampleData() {
       withStableScroll(function() {
-        dataMode = 'sample';
+        dataMode = 'random';
+        document.getElementById('dataModeBadge').textContent = 'RANDOM';
+        document.getElementById('dataModeBadge').classList.add('random');
+        var s = document.getElementById('btnSampleMode');
+        var r = document.getElementById('btnRandomMode');
+        if (s) { s.style.background = 'transparent'; s.style.color = 'var(--muted)'; }
+        if (r) { r.style.background = 'var(--text)'; r.style.color = 'white'; }
 
-        // ~50% chance of a genuinely profitable promo so users see both outcomes
-        const makeWinner = Math.random() > 0.5;
+        // 60% chance of a profitable promo so users see healthy outcomes more often
+        const makeWinner = Math.random() < 0.6;
 
         let baseRev, promoRev, baseGP, promoGP, promoCost;
         if (makeWinner) {
           baseRev   = randInt(40000, 100000);
-          promoRev  = Math.round(baseRev * randFloat(1.7, 2.3));  // big volume lift
-          baseGP    = randFloat(38, 52);
-          promoGP   = baseGP - randFloat(0, 4);                   // GP% holds
-          promoCost = randInt(3000, 8000);                         // lean spend
-          document.getElementById('dataModeBadge').textContent = '🎲 Random — Promo Makes Money';
+          promoRev  = Math.round(baseRev * randFloat(1.7, 2.5));  // strong volume lift
+          baseGP    = randFloat(38, 55);
+          promoGP   = baseGP - randFloat(0, 5);                   // GP% holds mostly
+          promoCost = randInt(2000, 8000);                         // lean spend
         } else {
           baseRev   = randInt(30000, 80000);
-          promoRev  = Math.round(baseRev * randFloat(1.3, 1.7));
+          promoRev  = Math.round(baseRev * randFloat(1.2, 1.6));
           baseGP    = randFloat(35, 50);
           promoGP   = Math.max(8, baseGP - randFloat(12, 22));    // GP% craters
           promoCost = randInt(10000, 22000);                       // heavy spend
-          document.getElementById('dataModeBadge').textContent = '🎲 Random — Promo Loses Money';
         }
 
         document.getElementById('baselineRev').value = baseRev;
@@ -1885,7 +2256,7 @@
           document.getElementById('promoGP').value = row.promo_gp;
           document.getElementById('promoCost').value = row.promo_cost;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          document.getElementById('dataModeBadge').textContent = 'CSV'; document.getElementById('dataModeBadge').classList.remove('random');
           computePromoROI();
           alert('Promo data uploaded!');
         } catch (err) {
@@ -1909,7 +2280,7 @@
           }
           channelData = data;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          document.getElementById('dataModeBadge').textContent = 'CSV'; document.getElementById('dataModeBadge').classList.remove('random');
           populateChannelFilters();
           renderChannelPL();
           alert('Channel data uploaded!');
@@ -1939,7 +2310,7 @@
           document.getElementById('volumeEffect').value = row.volume_effect;
           document.getElementById('mixEffect').value = row.mix_effect;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          document.getElementById('dataModeBadge').textContent = 'CSV'; document.getElementById('dataModeBadge').classList.remove('random');
           computePVM();
           alert('PVM data uploaded!');
         } catch (err) {
@@ -1966,7 +2337,7 @@
           document.getElementById('startMonth').value = row.start_month;
           document.getElementById('endMonth').value = row.end_month;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          document.getElementById('dataModeBadge').textContent = 'CSV'; document.getElementById('dataModeBadge').classList.remove('random');
           computeAccrual();
           alert('Accrual data uploaded!');
         } catch (err) {
@@ -2143,6 +2514,124 @@
         ttEl.classList.remove('tt-visible');
       }, { passive: true });
     }
+
+
+    /* Mobile sidebar toggle */
+    (function() {
+      var btn = document.getElementById('mobileControlsBtn');
+      var sb  = document.querySelector('.sidebar');
+      if (!btn || !sb) return;
+      btn.addEventListener('click', function() {
+        var open = sb.classList.toggle('mobile-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+      var activeEl = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        activeEl = targetEl;
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 270;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        ttEl.style.width = ttW + 'px';
+        ttEl.style.left = left + 'px';
+        // Measure height after setting content
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap - 8 < 0) {
+          top = rect.bottom + window.scrollY + gap;
+          transform = 'none';
+        } else {
+          top = rect.top + window.scrollY - ttH - gap;
+          transform = 'none';
+        }
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+        ttEl.style.position = 'absolute';
+      }
+
+      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      var killStyle = document.createElement('style');
+      killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
+      document.head.appendChild(killStyle);
+
+      /* Desktop: mouse events (event delegation) */
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text && text !== 'Loading...') show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      /* Mobile: tap to toggle */
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) {
+          // tap anywhere else hides tooltip
+          if (ttEl.classList.contains('tt-visible')) {
+            ttEl.classList.remove('tt-visible');
+            activeEl = null;
+          }
+          return;
+        }
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (!text || text === 'Loading...') return;
+        if (activeEl === el && ttEl.classList.contains('tt-visible')) {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        } else {
+          show(text, el);
+        }
+        e.stopPropagation();
+      });
+
+      /* Reposition on scroll (don't hide, just reposition) */
+      window.addEventListener('scroll', function() {
+        if (activeEl && ttEl.classList.contains('tt-visible')) {
+          position(activeEl);
+        }
+      }, { passive: true });
+
+      /* Hide on resize */
+      window.addEventListener('resize', function() {
+        ttEl.classList.remove('tt-visible');
+        activeEl = null;
+      }, { passive: true });
+    }
+
 
 </script>
 

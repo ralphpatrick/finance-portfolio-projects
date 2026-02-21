@@ -7,55 +7,8 @@
   <link rel="stylesheet" href="./style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
-    /* ── Module-specific styles ── */
-    .module-hero {
-      padding: 48px 0 32px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .module-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-    .module-title {
-      font-size: 36px;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 10px;
-    }
-    .module-pill {
-      display: inline-flex;
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .module-subtitle {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .feature-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .chip {
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
-    }
+    /* module-hero, module-label, module-title, module-pill, module-subtitle,
+       feature-chips, chip — all in style.css */
 
     /* ── Main layout with sidebar ── */
     .module-layout {
@@ -1108,38 +1061,429 @@
       }
     }
 
-  </style>
+  
+    /* ═══════════════════════════════════════════════
+       SHARED SIDEBAR SHELL — standardised across all modules
+       ═══════════════════════════════════════════════ */
+
+    /* Layout */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .main-content { min-width: 0; }
+
+    /* Mobile Controls Toggle Button */
+    .mobile-controls-btn {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 4px;
+      box-shadow: var(--shadow-soft);
+      transition: all 140ms ease;
+    }
+    .mobile-controls-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: var(--shadow);
+    }
+    .mobile-controls-btn .mcb-icon { font-size: 16px; flex-shrink: 0; }
+    .mobile-controls-btn .mcb-label { flex: 1; text-align: left; }
+    .mobile-controls-btn .mcb-chevron {
+      font-size: 11px; color: var(--muted);
+      transition: transform 200ms ease;
+    }
+    .mobile-controls-btn[aria-expanded="true"] .mcb-chevron { transform: rotate(180deg); }
+
+    /* Sidebar shell */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+      width: 280px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static section (Data Mode etc — always visible) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Data Mode segmented control (fixed height, no wrapping) ── */
+    .sb-data-mode-row {
+      display: flex;
+      gap: 0;
+      height: 34px;              /* fixed height — prevents layout shift */
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;         /* never wrap */
+    }
+    .sb-data-mode-btn {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0 4px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+    }
+    .sb-data-mode-btn:last-child { border-right: none; }
+    .sb-data-mode-btn:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-data-mode-btn.active {
+      background: var(--text);
+      color: white;
+    }
+
+    /* Mode pills (2-option) — also fixed height */
+    .sb-mode-pills {
+      display: flex;
+      gap: 0;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;
+    }
+    .sb-mode-pill {
+      flex: 1;
+      height: 100%;
+      padding: 0 6px;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+      text-align: center;
+    }
+    .sb-mode-pill:last-child { border-right: none; }
+    .sb-mode-pill:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-mode-pill.active { background: var(--text); color: white; }
+
+    /* Badge */
+    .data-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .data-badge.random {
+      background: #fef3c7;
+      border-color: #fbbf24;
+      color: #92400e;
+    }
+
+    /* Accordion groups */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+      font-family: inherit;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron { transform: rotate(180deg); color: var(--text); }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* Tabs (scenario selectors etc.) */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text); color: white; border-color: var(--text); }
+
+    /* Input rows */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Action buttons (full-width) */
+    .sb-action-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 12px; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      transition: all 140ms ease; text-align: left;
+      white-space: nowrap; font-family: inherit;
+    }
+    .sb-action-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-action-btn:active { transform: translateY(1px); }
+    .sb-action-btn.sb-action-primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-action-btn.sb-action-accent  { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    /* Sliders */
+    .control-item { margin-bottom: 16px; }
+    .control-item:last-child { margin-bottom: 0; }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .control-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-2);
+      font-family: var(--font-mono, monospace);
+    }
+    .control-input {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px;
+      border-radius: 3px;
+      background: var(--bg-muted);
+      outline: none; cursor: pointer;
+    }
+    .control-input::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+      transition: all 140ms ease;
+    }
+    .control-input::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .control-input::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3); border: none;
+    }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 860px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .mobile-controls-btn { display: flex; }
+      .sidebar {
+        position: static;
+        top: 0;
+        width: 100%;
+        max-height: none;
+        overflow-y: visible;
+        display: none;            /* hidden by default; JS toggles */
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+      .sidebar.mobile-open { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .module-layout { padding: 12px; }
+    }
+
+
+</style>
 </head>
 <body>
   <!-- Header -->
   <header class="site-header">
     <div class="container">
-      <nav class="nav">
+      <nav class="nav" aria-label="Main navigation">
         <a href="index.html" class="brand">
-          <span class="brand-mark"></span>
+          <span class="brand-mark" aria-hidden="true"></span>
           <span>FP&amp;A Portfolio</span>
         </a>
-        <a href="index.html#card-indirect-cost" class="btn btn-ghost" style="font-size:13px; gap:6px;">
-          ← Back to Portfolio
-        </a>
-
+        <div class="nav-cta">
+          <a href="index.html#card-indirect-cost" class="btn btn-ghost">&#8592; Back to Portfolio</a>
+        </div>
       </nav>
     </div>
   </header>
 
   <!-- Module Hero -->
-  <div class="module-hero" style="background: white;">
+  <section class="module-hero">
     <div class="container">
-      <div class="module-label">
-        <span>FP&amp;A Module</span>
-        <span style="color: var(--border);">•</span>
-        <span>Cost Control &amp; Workforce Planning</span>
-      </div>
-      <h1 class="module-title">Indirect Cost &amp; Headcount CoE</h1>
-      <div class="module-pill">Center of Excellence</div>
-      <p class="module-subtitle">
-        Senior-level headcount planning with fully loaded costs, capacity modeling, and hiring vs. runway tradeoffs
-      </p>
+      <div class="module-label">Cost Control &amp; Workforce Planning</div>
+      <h1 class="module-title">Indirect Cost &amp; <span class="accent">Headcount CoE</span></h1>
+      <p class="module-subtitle">Senior-level headcount planning with fully loaded costs, capacity modeling, and hiring vs. runway tradeoffs.</p>
       <div class="feature-chips">
         <span class="chip">Fully Loaded Costs</span>
         <span class="chip">Productivity Ramp</span>
@@ -1149,7 +1493,7 @@
         <span class="chip">Board Decision</span>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- DATA NEEDED STRIP -->
   <div class="data-needed-section">
@@ -1169,24 +1513,49 @@
   <!-- Main Module Layout -->
   <div class="module-layout">
     <!-- Sidebar -->
-    <aside class="sidebar">
+        <!-- Mobile Controls Toggle (hidden on desktop) -->
+    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
+      <span class="mcb-icon">&#9881;</span>
+      <span class="mcb-label">Controls</span>
+      <span class="mcb-chevron">&#9660;</span>
+    </button>
+    <aside class="sidebar" id="sidebarPanel">
 
-      <!-- Scenario — always visible at top -->
+      <!-- DATA MODE — always visible at top -->
       <div class="sb-static">
-        <div class="sb-static-title">Scenario</div>
+        <div class="sb-static-title" style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">
+          <span>DATA MODE</span>
+          <span id="dataModeBadge2" class="data-badge">SAMPLE</span>
+        </div>
+        <div style="display:flex;gap:0;height:34px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-muted);flex-wrap:nowrap;">
+          <button id="btnSampleMode" onclick="onUseSample()" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Sample</button>
+          <button id="btnRandomMode" onclick="onRandomizeAll()" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">Random</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
+      </div>
+
+      <!-- Scenario — collapsible with visible badge -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>Scenario</span>
+          <span id="sbScenarioLabel" class="sb-acc-badge">Base Case</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
         <div class="sb-acc-tabs" id="scenarioTabsEl">
-          <button class="sb-acc-tab active" data-scenario="base" onclick="onScenarioChange('base')">
-            <span>Base Case</span>
-            <span class="help-icon" data-help="Standard performance assumptions with balanced growth and costs."></span>
-          </button>
-          <button class="sb-acc-tab" data-scenario="upside" onclick="onScenarioChange('upside')">
-            <span>Upside</span>
-            <span class="help-icon" data-help="Optimistic: +15% capacity, higher utilization, lower attrition."></span>
-          </button>
-          <button class="sb-acc-tab" data-scenario="downside" onclick="onScenarioChange('downside')">
-            <span>Downside</span>
-            <span class="help-icon" data-help="Conservative: -15% capacity, lower utilization, higher attrition."></span>
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="sb-acc-tab active" data-scenario="base" onclick="onScenarioChange('base')" aria-label="Base Case scenario" style="flex:1;">Base Case</button>
+            <span class="help-icon" aria-label="Base Case definition" data-tt="Base Case = 0% change (baseline assumptions)." style="flex-shrink:0;"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="sb-acc-tab" data-scenario="upside" onclick="onScenarioChange('upside')" aria-label="Upside scenario" style="flex:1;">Upside</button>
+            <span class="help-icon" aria-label="Upside definition" data-tt="Upside = +15% vs Base Case." style="flex-shrink:0;"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="sb-acc-tab" data-scenario="downside" onclick="onScenarioChange('downside')" aria-label="Downside scenario" style="flex:1;">Downside</button>
+            <span class="help-icon" aria-label="Downside definition" data-tt="Downside = -15% vs Base Case." style="flex-shrink:0;"></span>
+          </div>
+        </div>
         </div>
       </div>
 
@@ -1214,12 +1583,9 @@
       <div class="sb-acc-group" id="sidebarActions">
         <button class="sb-acc-header" onclick="sidebarAccordion(this)">
           <span>Actions</span>
-          <span id="dataModeBadge" class="sb-acc-badge">Sample Data</span>
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <button class="sb-acc-btn" onclick="onUseSample()">Use Sample</button>
-          <button class="sb-acc-btn" onclick="onRandomizeAll()">Randomize All</button>
           <button class="sb-acc-btn" onclick="downloadTemplates()">Download Templates</button>
           <div class="export-wrap" style="margin-top:6px;">
             <button class="export-btn" id="exportBtn" onclick="toggleExport(event)">
@@ -1479,6 +1845,17 @@
           <div class="chart-wrapper">
             <canvas id="runwayChart" class="chart-canvas"></canvas>
             <div id="runwayTooltip" class="chart-tooltip"></div>
+          </div>
+
+          <!-- So What: Runway Impact -->
+          <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;box-shadow:0 2px 8px rgba(15,118,110,0.06);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:8px;">💡 So What — Runway Impact</div>
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Every hire shortens runway. This chart shows exactly how many months you trade away under each hiring strategy — making the hire/delay tradeoff explicit and board-ready.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Conservative hiring preserves 3–6 additional months of runway vs aggressive — enough time to close a funding round or reach a revenue milestone that reduces cash dependence.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If runway gap between strategies exceeds 4 months:</strong> Default to conservative hiring plan and flag aggressive scenario as requiring a capital raise or revenue acceleration commitment.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If runway &lt; 12 months on either path:</strong> Pause all non-critical hires, model cash-neutral staffing (backfill only), and present funding options to the board within 30 days.</li>
+            </ul>
           </div>
         </div>
 
@@ -2260,10 +2637,11 @@
 
     function onScenarioChange(newScenario) {
       scenario = newScenario;
-      // Fix: tabs use .sb-acc-tab not .scenario-tab
       document.querySelectorAll('.sb-acc-tab[data-scenario]').forEach(t => t.classList.remove('active'));
       const activeTab = document.querySelector(`.sb-acc-tab[data-scenario="${newScenario}"]`);
       if (activeTab) activeTab.classList.add('active');
+      const lbl = document.getElementById('sbScenarioLabel');
+      if (lbl) { const n = {base:'Base Case',upside:'Upside',downside:'Downside'}; lbl.textContent = n[newScenario] || newScenario; }
       activeDataset = applyScenario(baseDataset, scenario);
       renderAll();
     }
@@ -2277,8 +2655,16 @@
 
     function updateDataModeBadge() {
       const badge = document.getElementById('dataModeBadge');
-      badge.textContent = dataMode === 'sample' ? 'Sample Data' : 'Randomized Data';
-      badge.className = dataMode === 'sample' ? 'data-badge' : 'data-badge random';
+      const badge2 = document.getElementById('dataModeBadge2');
+      const s = document.getElementById('btnSampleMode');
+      const r = document.getElementById('btnRandomMode');
+      const isSample = dataMode === 'sample';
+      const txt = isSample ? 'SAMPLE' : 'RANDOM';
+      const cls = isSample ? 'data-badge' : 'data-badge random';
+      if (badge) { badge.textContent = txt; badge.className = cls; }
+      if (badge2) { badge2.textContent = txt; badge2.className = cls; }
+      if (s) { s.style.background = isSample ? 'var(--text)' : 'transparent'; s.style.color = isSample ? 'white' : 'var(--muted)'; }
+      if (r) { r.style.background = !isSample ? 'var(--text)' : 'transparent'; r.style.color = !isSample ? 'white' : 'var(--muted)'; }
     }
 
     function updateCashBalance() {
@@ -3462,6 +3848,124 @@ Notes:
       var body = headerEl.nextElementSibling;
       if (body && body.classList.contains('sb-acc-body')) body.classList.toggle('open');
     }
+
+
+    /* Mobile sidebar toggle */
+    (function() {
+      var btn = document.getElementById('mobileControlsBtn');
+      var sb  = document.querySelector('.sidebar');
+      if (!btn || !sb) return;
+      btn.addEventListener('click', function() {
+        var open = sb.classList.toggle('mobile-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+      var activeEl = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        activeEl = targetEl;
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 270;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        ttEl.style.width = ttW + 'px';
+        ttEl.style.left = left + 'px';
+        // Measure height after setting content
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap - 8 < 0) {
+          top = rect.bottom + window.scrollY + gap;
+          transform = 'none';
+        } else {
+          top = rect.top + window.scrollY - ttH - gap;
+          transform = 'none';
+        }
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+        ttEl.style.position = 'absolute';
+      }
+
+      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      var killStyle = document.createElement('style');
+      killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
+      document.head.appendChild(killStyle);
+
+      /* Desktop: mouse events (event delegation) */
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text && text !== 'Loading...') show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      /* Mobile: tap to toggle */
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) {
+          // tap anywhere else hides tooltip
+          if (ttEl.classList.contains('tt-visible')) {
+            ttEl.classList.remove('tt-visible');
+            activeEl = null;
+          }
+          return;
+        }
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (!text || text === 'Loading...') return;
+        if (activeEl === el && ttEl.classList.contains('tt-visible')) {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        } else {
+          show(text, el);
+        }
+        e.stopPropagation();
+      });
+
+      /* Reposition on scroll (don't hide, just reposition) */
+      window.addEventListener('scroll', function() {
+        if (activeEl && ttEl.classList.contains('tt-visible')) {
+          position(activeEl);
+        }
+      }, { passive: true });
+
+      /* Hide on resize */
+      window.addEventListener('resize', function() {
+        ttEl.classList.remove('tt-visible');
+        activeEl = null;
+      }, { passive: true });
+    }
+
 
 </script>
 </body>

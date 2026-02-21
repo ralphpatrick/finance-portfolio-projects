@@ -7,60 +7,8 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
-    /* Module-specific styles */
-    .module-hero {
-      padding: 48px 0 32px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .module-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-    }
-    .module-title {
-      font-size: 36px;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 10px;
-    }
-    .module-pill {
-      display: inline-flex;
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(246,248,251,0.8);
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-    .module-subtitle {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .module-problem {
-      font-size: 15px;
-      color: var(--text);
-      font-weight: 520;
-      max-width: 68ch;
-      margin-bottom: 12px;
-    }
-    .module-role {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .feature-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
+    /* module-hero, module-label, module-title, module-pill, module-subtitle,
+       module-problem, module-role, feature-chips — all in style.css */
     
     /* Main layout with sidebar */
     .module-layout {
@@ -73,19 +21,6 @@
       padding: 32px 24px;
     }
     
-    /* Sticky sidebar */
-    .data-badge {
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(15,118,110,0.10);
-      border: 1px solid rgba(15,118,110,0.20);
-      color: var(--accent);
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 12px;
-    }
-    
     /* Main content area */
     .main-content {
       min-width: 0;
@@ -95,8 +30,6 @@
     .module-section {
       padding: 0 0 48px 0;
     }
-    
-    /* Action bar - REMOVED, using sidebar instead */
     
     /* Responsive */
     @media (max-width: 1024px) {
@@ -875,7 +808,406 @@
     }
     .help-icon::before { content: '?'; line-height: 1; }
 
-  </style>
+  
+    /* ═══════════════════════════════════════════════
+       SHARED SIDEBAR SHELL — standardised across all modules
+       ═══════════════════════════════════════════════ */
+
+    /* Layout */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .main-content { min-width: 0; }
+
+    /* Mobile Controls Toggle Button */
+    .mobile-controls-btn {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 4px;
+      box-shadow: var(--shadow-soft);
+      transition: all 140ms ease;
+    }
+    .mobile-controls-btn:hover {
+      border-color: rgba(12,23,45,0.18);
+      box-shadow: var(--shadow);
+    }
+    .mobile-controls-btn .mcb-icon { font-size: 16px; flex-shrink: 0; }
+    .mobile-controls-btn .mcb-label { flex: 1; text-align: left; }
+    .mobile-controls-btn .mcb-chevron {
+      font-size: 11px; color: var(--muted);
+      transition: transform 200ms ease;
+    }
+    .mobile-controls-btn[aria-expanded="true"] .mcb-chevron { transform: rotate(180deg); }
+
+    /* Sidebar shell */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.15) transparent;
+      width: 280px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+
+    /* Static section (Data Mode etc — always visible) */
+    .sb-static {
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .sb-static-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* ── Data Mode segmented control (fixed height, no wrapping) ── */
+    .sb-data-mode-row {
+      display: flex;
+      gap: 0;
+      height: 34px;              /* fixed height — prevents layout shift */
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;         /* never wrap */
+    }
+    .sb-data-mode-btn {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0 4px;
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+    }
+    .sb-data-mode-btn:last-child { border-right: none; }
+    .sb-data-mode-btn:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-data-mode-btn.active {
+      background: var(--text);
+      color: white;
+    }
+
+    /* Mode pills (2-option) — also fixed height */
+    .sb-mode-pills {
+      display: flex;
+      gap: 0;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-muted);
+      flex-wrap: nowrap;
+    }
+    .sb-mode-pill {
+      flex: 1;
+      height: 100%;
+      padding: 0 6px;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 120ms ease, color 120ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: inherit;
+      text-align: center;
+    }
+    .sb-mode-pill:last-child { border-right: none; }
+    .sb-mode-pill:hover { background: rgba(12,23,45,0.04); color: var(--text); }
+    .sb-mode-pill.active { background: var(--text); color: white; }
+
+    /* Badge */
+    .data-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.10);
+      border: 1px solid rgba(15,118,110,0.20);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .data-badge.random {
+      background: #fef3c7;
+      border-color: #fbbf24;
+      color: #92400e;
+    }
+
+    /* Accordion groups */
+    .sb-acc-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .sb-acc-group:last-child { border-bottom: none; }
+
+    .sb-acc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: color 120ms ease;
+      font-family: inherit;
+    }
+    .sb-acc-header:hover { color: var(--text); }
+    .sb-acc-header.open  { color: var(--text); }
+    .sb-acc-chevron {
+      font-size: 10px;
+      color: var(--muted);
+      transition: transform 200ms ease;
+      flex-shrink: 0;
+    }
+    .sb-acc-header.open .sb-acc-chevron { transform: rotate(180deg); color: var(--text); }
+    .sb-acc-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .sb-acc-body {
+      display: none;
+      padding-bottom: 14px;
+    }
+    .sb-acc-body.open { display: block; }
+
+    /* Buttons inside accordion */
+    .sb-acc-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 140ms ease;
+      text-align: left;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .sb-acc-btn:first-child { margin-top: 0; }
+    .sb-acc-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-btn:active { transform: translateY(1px); }
+    .sb-acc-btn.primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-acc-btn.primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-acc-btn.accent  { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* Tabs (scenario selectors etc.) */
+    .sb-acc-tabs { display: flex; flex-direction: column; gap: 6px; }
+    .sb-acc-tab {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 140ms ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+    .sb-acc-tab:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-acc-tab.active { background: var(--text); color: white; border-color: var(--text); }
+
+    /* Input rows */
+    .sb-acc-input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-acc-input-row:last-child { margin-bottom: 0; }
+    .sb-acc-input-row label {
+      font-size: 11px;
+      color: var(--muted);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .sb-acc-input-row input[type="number"] {
+      width: 76px;
+      padding: 5px 7px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      text-align: right;
+      flex-shrink: 0;
+      -moz-appearance: textfield;
+    }
+    .sb-acc-input-row input[type="number"]::-webkit-outer-spin-button,
+    .sb-acc-input-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .sb-acc-input-row input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(15,118,110,0.15);
+    }
+    .sb-acc-sub {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 10px 0 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 9px;
+    }
+
+    /* Action buttons (full-width) */
+    .sb-action-btn {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: white; font-size: 12px; font-weight: 600;
+      cursor: pointer; margin-top: 6px;
+      transition: all 140ms ease; text-align: left;
+      white-space: nowrap; font-family: inherit;
+    }
+    .sb-action-btn:hover { border-color: rgba(12,23,45,0.18); box-shadow: 0 4px 12px rgba(11,18,32,0.06); }
+    .sb-action-btn:active { transform: translateY(1px); }
+    .sb-action-btn.sb-action-primary { background: var(--text); color: white; border-color: var(--text); }
+    .sb-action-btn.sb-action-primary:hover { box-shadow: 0 6px 18px rgba(11,18,32,0.12); }
+    .sb-action-btn.sb-action-accent  { background: var(--accent); color: white; border-color: var(--accent); }
+    .sb-file-hidden { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    /* Sliders */
+    .control-item { margin-bottom: 16px; }
+    .control-item:last-child { margin-bottom: 0; }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .control-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-2);
+      font-family: var(--font-mono, monospace);
+    }
+    .control-input {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 6px;
+      border-radius: 3px;
+      background: var(--bg-muted);
+      outline: none; cursor: pointer;
+    }
+    .control-input::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3);
+      transition: all 140ms ease;
+    }
+    .control-input::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    .control-input::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      box-shadow: 0 2px 8px rgba(15,118,110,0.3); border: none;
+    }
+
+    /* ── Mobile responsive ── */
+    @media (max-width: 860px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .mobile-controls-btn { display: flex; }
+      .sidebar {
+        position: static;
+        top: 0;
+        width: 100%;
+        max-height: none;
+        overflow-y: visible;
+        display: none;            /* hidden by default; JS toggles */
+        border-radius: var(--radius-sm);
+        margin-bottom: 8px;
+      }
+      .sidebar.mobile-open { display: block; }
+    }
+
+    @media (max-width: 560px) {
+      .module-layout { padding: 12px; }
+    }
+
+
+</style>
 </head>
 <body>
 
@@ -890,7 +1222,7 @@
           FP&A Portfolio
         </a>
         <div class="nav-cta">
-          <a href="index.html#card-operations-spend"" class="btn btn-ghost">← Back to Portfolio</a>
+          <a href="index.html#card-operations-spend" class="btn btn-ghost">← Back to Portfolio</a>
         </div>
       </nav>
     </div>
@@ -913,6 +1245,7 @@
           <span class="chip">Forecast vs actual spend</span>
           <span class="chip">Risk & anomaly flags</span>
         </div>
+      </div>
     </section>
 
   <!-- DATA NEEDED STRIP -->
@@ -933,14 +1266,25 @@
     <div class="module-layout">
       
       <!-- Sticky Sidebar -->
-      <aside class="sidebar">
+          <!-- Mobile Controls Toggle (hidden on desktop) -->
+    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
+      <span class="mcb-icon">&#9881;</span>
+      <span class="mcb-label">Controls</span>
+      <span class="mcb-chevron">&#9660;</span>
+    </button>
+    <aside class="sidebar" id="sidebarPanel">
 
       <!-- Data Mode — always visible -->
       <div class="sb-static">
         <div class="sb-static-title">
-          <span>Data Mode</span>
-          <span id="dataModeBadge" class="data-badge">Sample Data</span>
+          <span>DATA MODE</span>
+          <span id="dataModeBadge" class="data-badge">SAMPLE</span>
         </div>
+        <div style="display:flex;gap:0;height:34px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-muted);flex-wrap:nowrap;">
+          <button id="btnSampleMode" onclick="useSampleData()" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Sample</button>
+          <button id="btnRandomMode" onclick="randomizeSampleData()" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">Random</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
       </div>
 
       <!-- Actions -->
@@ -959,26 +1303,29 @@
       <!-- Upload Data -->
       <div class="sb-acc-group">
         <button class="sb-acc-header" onclick="sidebarAccordion(this)">
-          <span>Upload Data</span>
+          <span>Data &amp; Upload</span>
+          <span id="sbUploadLabel" class="sb-acc-badge">CSV</span>
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <div class="file-input-wrapper">
-            <button class="sb-acc-btn">Rate Cards</button>
-            <input type="file" id="rateCardsUpload" accept=".csv" onchange="handleRateCardsUpload(event)">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:8px;line-height:1.5;">Upload your own CSV files. Each replaces the corresponding sample dataset.</div>
+          <div style="position:relative;margin-top:4px;">
+            <input type="file" id="rateCardsUpload" accept=".csv" onchange="handleRateCardsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
+            <button class="sb-acc-btn" style="width:100%;">📋 Rate Cards CSV</button>
           </div>
-          <div class="file-input-wrapper">
-            <button class="sb-acc-btn">Transactions</button>
-            <input type="file" id="transactionsUpload" accept=".csv" onchange="handleTransactionsUpload(event)">
+          <div style="position:relative;margin-top:4px;">
+            <input type="file" id="transactionsUpload" accept=".csv" onchange="handleTransactionsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
+            <button class="sb-acc-btn" style="width:100%;">💳 Transactions CSV</button>
           </div>
-          <div class="file-input-wrapper">
-            <button class="sb-acc-btn">Accruals</button>
-            <input type="file" id="accrualsUpload" accept=".csv" onchange="handleAccrualsUpload(event)">
+          <div style="position:relative;margin-top:4px;">
+            <input type="file" id="accrualsUpload" accept=".csv" onchange="handleAccrualsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
+            <button class="sb-acc-btn" style="width:100%;">📅 Accruals CSV</button>
           </div>
-          <div class="file-input-wrapper">
-            <button class="sb-acc-btn">Forecast</button>
-            <input type="file" id="forecastUpload" accept=".csv" onchange="handleForecastUpload(event)">
+          <div style="position:relative;margin-top:4px;">
+            <input type="file" id="forecastUpload" accept=".csv" onchange="handleForecastUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
+            <button class="sb-acc-btn" style="width:100%;">📈 Forecast CSV</button>
           </div>
+          <button onclick="downloadAllTemplates()" class="sb-acc-btn" style="margin-top:8px;">⬇ Download Templates</button>
         </div>
       </div>
 
@@ -1035,6 +1382,17 @@
             </div>
           </div>
 
+          <!-- So What: Rate Leakage -->
+          <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(220,38,38,0.25);border-radius:14px;background:#fef9f9;box-shadow:0 2px 8px rgba(220,38,38,0.06);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#dc2626;margin-bottom:8px;">💡 So What — Rate Leakage Analysis</div>
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span>Rate leakage is the gap between what you contracted to pay and what vendors actually charged — direct P&amp;L impact that bypasses budget.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span>Top leaking vendors should be prioritised for immediate contract review and rate re-negotiation; even a 50% reduction in leakage on the top 3 vendors typically saves 2–4% of total vendor spend.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If leakage is rising:</strong> Escalate to procurement — add PO matching controls and require invoice approval against contract rates before payment.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If leakage is flat/low:</strong> Rate discipline is working — document controls for audit and focus on contract renewal terms instead.</li>
+            </ul>
+          </div>
+
           <table class="data-table" id="rateTable">
             <!-- Table populated by JS -->
           </table>
@@ -1063,6 +1421,17 @@
             <div class="chart-wrapper">
               <canvas id="accrualChart" class="chart-canvas"></canvas>
             </div>
+          </div>
+
+          <!-- So What: Accrual Schedule -->
+          <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;box-shadow:0 2px 8px rgba(15,118,110,0.06);">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:8px;">💡 So What — Accrual Schedule</div>
+            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Accruals are expenses recognised in the P&amp;L before a vendor invoice arrives. A growing accrual balance means real cost is accumulating that may not yet be reflected in cash or AP — understating true run-rate spend.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>The gap between accrued and invoiced is the primary source of month-end P&amp;L surprises. Wide or growing gaps indicate weak purchase-order discipline or delayed vendor invoicing cycles.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If accruals are significantly above invoiced:</strong> Tighten PO-to-invoice matching, chase vendors for timely billing, and review whether accruals are based on contracts or guesses.</li>
+              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If accruals are below invoiced:</strong> Under-accrual risk — the P&amp;L will take a surprise hit when invoices arrive. Increase accrual estimates using invoice run-rate data.</li>
+            </ul>
           </div>
 
           <table class="data-table" id="accrualTable">
@@ -1272,7 +1641,7 @@
     function useSampleData() {
       withStableScroll(function() {
       dataMode = 'sample';
-      document.getElementById('dataModeBadge').textContent = 'Sample Data';
+      updateDataModeBadge('sample');
       initializeSampleData();
       renderAll();
       });
@@ -1395,7 +1764,9 @@
       };
       const cfg = modeConfig[outcomeMode];
 
-      document.getElementById('dataModeBadge').textContent = 'Randomized — ' + cfg.label;
+      updateDataModeBadge('random');
+      const badge = document.getElementById('dataModeBadge');
+      if (badge) badge.textContent = 'RANDOM';
 
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const categories = ['Logistics', 'Facilities', 'Support', 'Contractors', 'IT Ops', 'Marketing Ops'].slice(0, randInt(4, 6));
@@ -2353,6 +2724,40 @@
       setTimeout(() => downloadForecastTemplate(), 900);
     }
     
+    function showNotification(message, type) {
+      type = type || 'info';
+      const existing = document.querySelector('.ops-notification');
+      if (existing) existing.remove();
+      const n = document.createElement('div');
+      n.className = 'ops-notification';
+      n.style.cssText = 'position:fixed;top:80px;right:32px;background:white;border:1px solid rgba(12,23,45,0.10);border-radius:14px;padding:14px 20px;box-shadow:0 10px 30px rgba(11,18,32,0.10);z-index:200;display:flex;align-items:center;gap:10px;min-width:300px;animation:slideIn 300ms ease;';
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+      const color = type === 'success' ? '#059669' : type === 'error' ? '#dc2626' : '#0f766e';
+      n.innerHTML = `<div style="width:22px;height:22px;border-radius:50%;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;">${icon}</div><div style="font-size:14px;font-weight:500;">${message}</div>`;
+      document.body.appendChild(n);
+      setTimeout(() => { if (n.parentNode) n.remove(); }, 4000);
+    }
+
+    function updateDataModeBadge(mode) {
+      const badge = document.getElementById('dataModeBadge');
+      const s = document.getElementById('btnSampleMode');
+      const r = document.getElementById('btnRandomMode');
+      if (!badge) return;
+      if (mode === 'sample') {
+        badge.textContent = 'SAMPLE'; badge.classList.remove('random');
+        if (s) { s.style.background = 'var(--text)'; s.style.color = 'white'; }
+        if (r) { r.style.background = 'transparent'; r.style.color = 'var(--muted)'; }
+      } else if (mode === 'random') {
+        badge.textContent = 'RANDOM'; badge.classList.add('random');
+        if (s) { s.style.background = 'transparent'; s.style.color = 'var(--muted)'; }
+        if (r) { r.style.background = 'var(--text)'; r.style.color = 'white'; }
+      } else {
+        badge.textContent = 'CSV'; badge.classList.remove('random');
+        if (s) { s.style.background = 'transparent'; s.style.color = 'var(--muted)'; }
+        if (r) { r.style.background = 'transparent'; r.style.color = 'var(--muted)'; }
+      }
+    }
+
     // ========== CSV UPLOADS ==========
     
     function handleRateCardsUpload(event) {
@@ -2364,19 +2769,20 @@
           const { headers, data } = parseCSV(e.target.result);
           const required = ['vendor_id', 'vendor_name', 'service', 'unit', 'contract_rate', 'currency', 'effective_start', 'effective_end', 'category'];
           if (!validateHeaders(headers, required)) {
-            alert('Invalid CSV. Required: ' + required.join(', '));
+            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
             return;
           }
           rateCards = data;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          updateDataModeBadge('csv');
           renderAll();
-          alert('Rate cards uploaded!');
+          showNotification('✓ Rate cards loaded (' + data.length + ' rows)', 'success');
         } catch (err) {
-          alert('Error: ' + err.message);
+          showNotification('Error: ' + err.message, 'error');
         }
       };
       reader.readAsText(file);
+      event.target.value = '';
     }
     
     function handleTransactionsUpload(event) {
@@ -2388,19 +2794,20 @@
           const { headers, data } = parseCSV(e.target.result);
           const required = ['date', 'vendor_id', 'service', 'units', 'unit_rate', 'amount', 'cost_center', 'category', 'invoice_id', 'po_id'];
           if (!validateHeaders(headers, required)) {
-            alert('Invalid CSV. Required: ' + required.join(', '));
+            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
             return;
           }
           transactions = data;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          updateDataModeBadge('csv');
           renderAll();
-          alert('Transactions uploaded!');
+          showNotification('✓ Transactions loaded (' + data.length + ' rows)', 'success');
         } catch (err) {
-          alert('Error: ' + err.message);
+          showNotification('Error: ' + err.message, 'error');
         }
       };
       reader.readAsText(file);
+      event.target.value = '';
     }
     
     function handleAccrualsUpload(event) {
@@ -2412,19 +2819,20 @@
           const { headers, data } = parseCSV(e.target.result);
           const required = ['month', 'vendor_id', 'service', 'incurred_amount', 'invoiced_amount', 'accrual_amount', 'status', 'notes'];
           if (!validateHeaders(headers, required)) {
-            alert('Invalid CSV. Required: ' + required.join(', '));
+            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
             return;
           }
           accruals = data;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          updateDataModeBadge('csv');
           renderAll();
-          alert('Accruals uploaded!');
+          showNotification('✓ Accruals loaded (' + data.length + ' rows)', 'success');
         } catch (err) {
-          alert('Error: ' + err.message);
+          showNotification('Error: ' + err.message, 'error');
         }
       };
       reader.readAsText(file);
+      event.target.value = '';
     }
     
     function handleForecastUpload(event) {
@@ -2436,19 +2844,20 @@
           const { headers, data } = parseCSV(e.target.result);
           const required = ['month', 'cost_center', 'category', 'forecast_amount', 'budget_amount'];
           if (!validateHeaders(headers, required)) {
-            alert('Invalid CSV. Required: ' + required.join(', '));
+            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
             return;
           }
           forecastBudget = data;
           dataMode = 'uploaded';
-          document.getElementById('dataModeBadge').textContent = 'Uploaded Data';
+          updateDataModeBadge('csv');
           renderAll();
-          alert('Forecast data uploaded!');
+          showNotification('✓ Forecast data loaded (' + data.length + ' rows)', 'success');
         } catch (err) {
-          alert('Error: ' + err.message);
+          showNotification('Error: ' + err.message, 'error');
         }
       };
       reader.readAsText(file);
+      event.target.value = '';
     }
     
     // ========== DECISION BOX (SPEND) ==========
@@ -2717,6 +3126,124 @@
         ttEl.classList.remove('tt-visible');
       }, { passive: true });
     }
+
+
+    /* Mobile sidebar toggle */
+    (function() {
+      var btn = document.getElementById('mobileControlsBtn');
+      var sb  = document.querySelector('.sidebar');
+      if (!btn || !sb) return;
+      btn.addEventListener('click', function() {
+        var open = sb.classList.toggle('mobile-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+
+
+    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    function initTooltips() {
+      var ttEl = document.getElementById('tt-root');
+      if (!ttEl) {
+        ttEl = document.createElement('div');
+        ttEl.id = 'tt-root';
+        document.body.appendChild(ttEl);
+      }
+
+      var hideTimer = null;
+      var activeEl = null;
+
+      function show(text, targetEl) {
+        clearTimeout(hideTimer);
+        activeEl = targetEl;
+        ttEl.textContent = text;
+        ttEl.classList.add('tt-visible');
+        position(targetEl);
+      }
+
+      function hide() {
+        hideTimer = setTimeout(function() {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        }, 80);
+      }
+
+      function position(el) {
+        var rect = el.getBoundingClientRect();
+        var ttW = 270;
+        var gap = 8;
+        var left = rect.left + rect.width / 2 - ttW / 2;
+        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+        ttEl.style.width = ttW + 'px';
+        ttEl.style.left = left + 'px';
+        // Measure height after setting content
+        var ttH = ttEl.offsetHeight || 60;
+        var top, transform;
+        if (rect.top - ttH - gap - 8 < 0) {
+          top = rect.bottom + window.scrollY + gap;
+          transform = 'none';
+        } else {
+          top = rect.top + window.scrollY - ttH - gap;
+          transform = 'none';
+        }
+        ttEl.style.top = top + 'px';
+        ttEl.style.transform = transform;
+        ttEl.style.position = 'absolute';
+      }
+
+      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      var killStyle = document.createElement('style');
+      killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
+      document.head.appendChild(killStyle);
+
+      /* Desktop: mouse events (event delegation) */
+      document.addEventListener('mouseover', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) return;
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (text && text !== 'Loading...') show(text, el);
+      });
+
+      document.addEventListener('mouseout', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (el) hide();
+      });
+
+      /* Mobile: tap to toggle */
+      document.addEventListener('click', function(e) {
+        var el = e.target.closest('[data-help], [data-tt]');
+        if (!el) {
+          // tap anywhere else hides tooltip
+          if (ttEl.classList.contains('tt-visible')) {
+            ttEl.classList.remove('tt-visible');
+            activeEl = null;
+          }
+          return;
+        }
+        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
+        if (!text || text === 'Loading...') return;
+        if (activeEl === el && ttEl.classList.contains('tt-visible')) {
+          ttEl.classList.remove('tt-visible');
+          activeEl = null;
+        } else {
+          show(text, el);
+        }
+        e.stopPropagation();
+      });
+
+      /* Reposition on scroll (don't hide, just reposition) */
+      window.addEventListener('scroll', function() {
+        if (activeEl && ttEl.classList.contains('tt-visible')) {
+          position(activeEl);
+        }
+      }, { passive: true });
+
+      /* Hide on resize */
+      window.addEventListener('resize', function() {
+        ttEl.classList.remove('tt-visible');
+        activeEl = null;
+      }, { passive: true });
+    }
+
 
 </script>
 
