@@ -359,6 +359,40 @@
       font-size: 18px;
       color: var(--muted);
     }
+
+    /* Email copy card */
+    .contact-card--email {
+      cursor: pointer;
+      border: 1px solid var(--border);
+      text-align: left;
+      font-family: inherit;
+      width: 100%;
+      position: relative;
+    }
+    .contact-card--email .copy-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: auto;
+      transition: color 140ms ease;
+    }
+    .contact-card--email .copy-icon {
+      font-size: 15px;
+      opacity: 0;
+      transition: opacity 140ms ease;
+    }
+    .contact-card--email:hover .copy-icon { opacity: 1; }
+    .contact-card--email:hover .copy-hint { color: var(--accent); }
+    .contact-card--email.copied {
+      border-color: #059669 !important;
+      box-shadow: 0 0 0 3px rgba(5,150,105,0.12), var(--shadow) !important;
+    }
+    .contact-card--email.copied .copy-hint { color: #059669; }
+    .contact-card--email.copied .copy-icon { opacity: 1; }
+
     @media (max-width: 640px) {
       .contact-grid { grid-template-columns: 1fr; }
     }
@@ -907,11 +941,14 @@
         </div>
 
         <div class="contact-grid reveal">
-          <a class="contact-card" href="/cdn-cgi/l/email-protection#d6a4a6b7a2a4bfb5bdb2bfa0bfb8b796b1bbb7bfbaf8b5b9bbe9a5a3b4bcb3b5a2eb9086f3e4e097f3e4e686b9a4a2b0b9babfb9f3e4e69fb8a7a3bfa4af">
+          <button class="contact-card contact-card--email" id="emailCopyCard" aria-label="Copy email address to clipboard">
             <span class="contact-card-label">Fastest</span>
-            <span class="contact-card-value">Email me: (<span class="__cf_email__" data-cfemail="0f7d7f6e7b7d666c646b667966616e4f68626e6663216c6062">[email&#160;protected]</span>)</span>
-            <span class="contact-card-arrow">↗</span>
-          </a>
+            <span class="contact-card-value">rpatrickdivina@gmail.com</span>
+            <span class="copy-hint">
+              <span class="copy-text">Click to copy</span>
+              <span class="copy-icon">⎘</span>
+            </span>
+          </button>
         
           <a class="contact-card" href="https://www.linkedin.com/in/ralph-patrick-divina-55534614a/" target="_blank" rel="noreferrer">
             <span class="contact-card-label">Professional</span>
@@ -962,3 +999,59 @@
           </div>
         </div>
     
+<script src="main.js"></script>
+<script>
+  /* ── Email copy to clipboard ── */
+  (function() {
+    var card = document.getElementById('emailCopyCard');
+    if (!card) return;
+    var copyText = card.querySelector('.copy-text');
+    var copyIcon = card.querySelector('.copy-icon');
+    var email = 'rpatrickdivina@gmail.com';
+    var resetTimer = null;
+
+    function handleCopy(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      navigator.clipboard.writeText(email).then(function() {
+        card.classList.add('copied');
+        if (copyText) copyText.textContent = 'Email copied!';
+        if (copyIcon) copyIcon.textContent = '✓';
+
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(function() {
+          card.classList.remove('copied');
+          if (copyText) copyText.textContent = 'Click to copy';
+          if (copyIcon) copyIcon.textContent = '⎘';
+        }, 2500);
+      }).catch(function() {
+        /* Fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = email;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        card.classList.add('copied');
+        if (copyText) copyText.textContent = 'Email copied!';
+        if (copyIcon) copyIcon.textContent = '✓';
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(function() {
+          card.classList.remove('copied');
+          if (copyText) copyText.textContent = 'Click to copy';
+          if (copyIcon) copyIcon.textContent = '⎘';
+        }, 2500);
+      });
+    }
+
+    card.addEventListener('click', handleCopy);
+    card.addEventListener('touchend', function(e) {
+      handleCopy(e);
+    }, { passive: false });
+  })();
+</script>
+</body>
+</html>

@@ -368,32 +368,55 @@ window.withStableScroll = function withStableScroll(fn) {
 
   if (!navLinks.length) return;
 
+  /* Lock prevents scroll-spy from overriding a just-clicked link */
+  var clickLocked = false;
+  var lockTimer = null;
+
+  function setActive(sectionId) {
+    navLinks.forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      var matches = href === '#' + sectionId;
+      a.style.color      = matches ? 'var(--accent)' : '';
+      a.style.fontWeight = matches ? '650' : '';
+    });
+  }
+
   function getActiveSection() {
     var scrollY = window.scrollY + 100;
     var active = '';
     for (var i = 0; i < sections.length; i++) {
       var el = document.getElementById(sections[i]);
-      if (el && el.offsetTop <= scrollY) {
-        active = sections[i];
-      }
+      if (el && el.offsetTop <= scrollY) active = sections[i];
     }
     return active;
   }
 
   function updateNav() {
-    var active = getActiveSection();
-    navLinks.forEach(function (a) {
-      var href = a.getAttribute('href') || '';
-      var matches = href === '#' + active;
-      if (matches) {
-        a.style.color = 'var(--accent)';
-        a.style.fontWeight = '650';
-      } else {
-        a.style.color = '';
-        a.style.fontWeight = '';
-      }
-    });
+    /* Skip scroll-spy updates while a click is in progress */
+    if (clickLocked) return;
+    setActive(getActiveSection());
   }
+
+  /* On click: immediately highlight the clicked link and lock scroll-spy */
+  navLinks.forEach(function (a) {
+    a.addEventListener('click', function () {
+      var href = a.getAttribute('href') || '';
+      var id = href.replace('#', '');
+      if (!id) return;
+
+      /* Apply highlight right away */
+      setActive(id);
+
+      /* Lock scroll-spy for long enough for smooth scroll to finish */
+      clickLocked = true;
+      clearTimeout(lockTimer);
+      lockTimer = setTimeout(function () {
+        clickLocked = false;
+        /* Re-sync once scrolling has settled */
+        setActive(getActiveSection());
+      }, 1000);
+    });
+  });
 
   window.addEventListener('scroll', updateNav, { passive: true });
   updateNav();
