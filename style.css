@@ -1508,6 +1508,7 @@ img { max-width: 100%; display: block; }
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
   gap: 8px;
+  align-items: stretch;
 }
 .data-needed-item {
   padding: 10px 12px;
@@ -1517,6 +1518,8 @@ img { max-width: 100%; display: block; }
   align-items: flex-start;
   gap: 9px;
   background: #fafbfc;
+  min-height: 88px;
+  box-sizing: border-box;
 }
 .data-needed-icon {
   width: 26px; height: 26px; font-size: 13px;

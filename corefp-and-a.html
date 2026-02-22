@@ -100,24 +100,6 @@
       box-shadow: 0 0 0 6px var(--accent-soft);
     }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: white;
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 140ms ease;
-    }
-    .back-link:hover {
-      border-color: rgba(12, 23, 45, 0.18);
-      box-shadow: 0 6px 18px rgba(11,18,32,0.06);
-    }
-
     /* Buttons */
     .btn {
       display: inline-flex;
@@ -229,13 +211,6 @@
     .main-content {
       padding: 24px 0 0 0;
       background: var(--bg);
-    }
-
-    .layout-grid {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      align-items: start;
     }
 
     /* Sidebar */
@@ -687,7 +662,7 @@
 
     /* Responsive */
     @media (max-width: 860px) {
-      .layout-grid {
+      .module-layout {
         grid-template-columns: 1fr;
       }
 
@@ -1170,18 +1145,6 @@
        SHARED SIDEBAR SHELL — standardised across all modules
        ═══════════════════════════════════════════════ */
 
-    /* Layout */
-    .module-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      align-items: start;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
-
-    .main-content { min-width: 0; }
 
     /* Mobile Controls Toggle Button */
     .mobile-controls-btn {
@@ -1571,15 +1534,16 @@
 
   <!-- HEADER -->
   <header class="site-header" id="top">
-    <div class="container nav">
-      <a class="brand" href="index.html#projects" aria-label="Back to portfolio">
-        <span class="brand-mark" aria-hidden="true"></span>
-        <span>FP&A Portfolio</span>
-      </a>
-
-      <a class="back-link" href="index.html#projects">
-        ← Back to Portfolio
-      </a>
+    <div class="container">
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html" class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          FP&amp;A Portfolio
+        </a>
+        <div class="nav-cta">
+          <a href="index.html#projects" class="btn btn-ghost">← Back to Portfolio</a>
+        </div>
+      </nav>
     </div>
   </header>
 
@@ -1615,9 +1579,8 @@
   </div>
 
 <!-- MAIN CONTENT -->
-  <main id="main" class="main-content">
-    <div class="container">
-      <div class="layout-grid">
+  <main id="main">
+    <div class="module-layout">
         <!-- SIDEBAR: unified card, collapsible accordion -->
             <!-- Mobile Controls Toggle (hidden on desktop) -->
     <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
@@ -1643,7 +1606,7 @@
 
       <!-- ② INDUSTRY -->
       <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="accordionOpen(this)">
+        <button class="sb-acc-header">
           <span>Industry</span>
           <span id="sbIndustryLabel" class="sb-acc-badge">SaaS</span>
           <span class="sb-acc-chevron">▼</span>
@@ -1661,7 +1624,7 @@
 
       <!-- ③ SCENARIO — with dynamic help-icon tooltips -->
       <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="accordionOpen(this)">
+        <button class="sb-acc-header">
           <span>Scenario</span>
           <span id="sbScenarioLabel" class="sb-acc-badge">Base Case</span>
           <span class="sb-acc-chevron">▼</span>
@@ -1686,7 +1649,7 @@
 
       <!-- ④ DRIVERS -->
       <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="accordionOpen(this)">
+        <button class="sb-acc-header">
           <span>Drivers</span>
           <span class="sb-acc-chevron">▼</span>
         </button>
@@ -1702,7 +1665,7 @@
 
       <!-- ⑤ DATA & UPLOAD -->
       <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="accordionOpen(this)">
+        <button class="sb-acc-header">
           <span>Data &amp; Upload</span>
           <span class="sb-acc-chevron">▼</span>
         </button>
@@ -1727,7 +1690,7 @@
     </aside>
 
         <!-- MAIN CONTENT AREA -->
-        <div>
+        <div class="main-content">
           <!-- Variance Mode Content -->
           <div id="varianceModeContent" style="display:none;">
             <div id="varianceUploadSection" class="card" style="margin-bottom:20px;">
@@ -1856,7 +1819,6 @@
             <!-- Commentary will be injected here -->
           </div>
         </div>
-      </div>
     </div>
   
   <!-- ── Next Module ──────────────────────────────────────── -->
@@ -4060,8 +4022,91 @@
       renderSensitivity();
       initTooltips();
       updateScenarioTooltips();
+
+      /* ── Mobile sidebar toggle (touch-safe, no double-fire) ── */
+      (function() {
+        var btn = document.getElementById('mobileControlsBtn');
+        var sb  = document.querySelector('.sidebar');
+        if (!btn || !sb) return;
+
+        var lastEventTime = 0;
+
+        function toggle(e) {
+          /* Prevent click firing after touchend on iOS/Android */
+          if (e.type === 'click' && Date.now() - lastEventTime < 500) return;
+          if (e.type === 'touchend') lastEventTime = Date.now();
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          var open = sb.classList.toggle('mobile-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        btn.addEventListener('touchend', toggle, { passive: false });
+        btn.addEventListener('click', toggle);
+      })();
+
+      /* ── Sidebar accordion: touch-safe, aria-expanded, hidden ── */
+      (function() {
+        var sidebar = document.querySelector('.sidebar');
+        if (!sidebar) return;
+
+        sidebar.querySelectorAll('.sb-acc-header').forEach(function(header) {
+          var body = header.nextElementSibling;
+          if (!body || !body.classList.contains('sb-acc-body')) return;
+
+          /* Set initial ARIA state from current DOM state */
+          var isOpen = header.classList.contains('open');
+          header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          if (!isOpen) body.setAttribute('hidden', '');
+
+          var lastEventTime = 0;
+
+          function handleToggle(e) {
+            if (e.type === 'click' && Date.now() - lastEventTime < 500) return;
+            if (e.type === 'touchend') lastEventTime = Date.now();
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            var opening = !header.classList.contains('open');
+
+            /* Close all other accordion panels */
+            sidebar.querySelectorAll('.sb-acc-header').forEach(function(h) {
+              if (h === header) return;
+              h.classList.remove('open');
+              h.setAttribute('aria-expanded', 'false');
+              var b = h.nextElementSibling;
+              if (b && b.classList.contains('sb-acc-body')) {
+                b.classList.remove('open');
+                b.setAttribute('hidden', '');
+              }
+            });
+
+            /* Toggle this panel */
+            header.classList.toggle('open', opening);
+            header.setAttribute('aria-expanded', opening ? 'true' : 'false');
+            body.classList.toggle('open', opening);
+            if (opening) {
+              body.removeAttribute('hidden');
+            } else {
+              body.setAttribute('hidden', '');
+            }
+          }
+
+          header.addEventListener('touchend', handleToggle, { passive: false });
+          header.addEventListener('click', handleToggle);
+
+          /* Remove the old inline onclick to avoid double-firing */
+          header.removeAttribute('onclick');
+        });
+      })();
     });
   </script>
+
+  <button class="to-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
 <script src="main.js"></script>
 <script>
     /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
@@ -4170,5 +4215,6 @@
 
 
 </script>
+
 </body>
 </html>
