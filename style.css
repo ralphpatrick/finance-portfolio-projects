@@ -26,7 +26,7 @@
 
 /* Base */
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 body {
   margin: 0;
   background: var(--bg);
@@ -64,9 +64,9 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255,255,255,0.78);
-  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.97);
   border-bottom: 1px solid var(--border);
+  will-change: transform;
 }
 
 .nav {
@@ -131,8 +131,7 @@ img { max-width: 100%; display: block; }
 .mobile-menu {
   display: none;
   border-top: 1px solid var(--border);
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.97);
 }
 .mobile-menu-inner {
   padding: 14px 0 18px 0;
@@ -592,8 +591,7 @@ img { max-width: 100%; display: block; }
   height: 42px;
   border-radius: 14px;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.97);
   display: grid;
   place-items: center;
   box-shadow: 0 10px 30px rgba(11,18,32,0.10);
