@@ -1624,3 +1624,19 @@ img { max-width: 100%; display: block; }
   flex-wrap: wrap;
   flex-shrink: 0;
 }
+
+
+
+/* --- Section anchor alignment (consistent title position on nav jump) --- */
+.section{
+  padding-top: 56px;
+  padding-bottom: 56px;
+  scroll-margin-top: 92px; /* accounts for sticky header */
+}
+@media (max-width: 560px){
+  .section{
+    padding-top: 44px;
+    padding-bottom: 44px;
+    scroll-margin-top: 84px;
+  }
+}
