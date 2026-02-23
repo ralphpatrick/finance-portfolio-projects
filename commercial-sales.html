@@ -659,7 +659,7 @@
       line-height: 1.55;
       border-radius: 9px;
       white-space: normal;
-      width: 260px;
+      width: 270px;
       max-width: calc(100vw - 24px);
       box-shadow: 0 4px 18px rgba(0,0,0,0.28);
       text-align: left;
@@ -1181,9 +1181,8 @@
 
         <!-- Promotion ROI Analysis -->
         <section class="module-section">
-          <h2 class="module-section-title">1. Promotion ROI Analysis</h2>
 
-          <!-- DECISION BOX: pinned at top of Promo ROI -->
+          <!-- DECISION BOX: pinned at very top of Promo ROI section -->
           <div class="decision-box" id="promoDecisionBox" aria-label="Promo ROI Decision">
             <div class="decision-box-eyebrow">Decision</div>
             <div class="decision-box-fallback" id="promoDecisionFallback">Load sample or upload data to see the decision.</div>
@@ -1193,7 +1192,12 @@
               <div class="decision-box-next" id="promoDecisionNext"></div>
             </div>
           </div>
-          
+
+          <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+            1. Promotion ROI Analysis
+            <span class="help-icon" data-help="Shows whether a promotion actually made money. Compare revenue and profit before vs. during a promo — after accounting for discounts and campaign costs — to decide if it's worth running again."></span>
+          </h2>
+
           <div class="module-card">
             <div class="card-header">
               <h3 class="card-title">Before / After Comparison</h3>
@@ -1209,23 +1213,23 @@
 
             <div class="input-grid">
               <div class="input-field">
-                <label>Baseline Revenue</label>
+                <label>Baseline Revenue <span class="help-icon" data-help="How much money you made before the promotion ran. This is your normal, business-as-usual sales number — the starting point to measure uplift against."></span></label>
                 <input type="number" id="baselineRev" value="50000" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Promo Revenue</label>
+                <label>Promo Revenue <span class="help-icon" data-help="How much money you made during the promotion period. Compare this to Baseline Revenue to see if the promo actually drove more sales."></span></label>
                 <input type="number" id="promoRev" value="85000" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Baseline GP%</label>
+                <label>Baseline GP% <span class="help-icon" data-help="Gross Profit % before the promo — for every $100 in normal sales, how many dollars are left after paying for the product itself. Your healthy, unaffected margin benchmark."></span></label>
                 <input type="number" step="0.1" id="baselineGP" value="42" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Promo GP%</label>
+                <label>Promo GP% <span class="help-icon" data-help="Gross Profit % during the promo. Discounts usually push this lower than baseline. If this drops too much, the extra volume from the promo may not be worth it."></span></label>
                 <input type="number" step="0.1" id="promoGP" value="28" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Promo Cost</label>
+                <label>Promo Cost <span class="help-icon" data-help="What you spent to run the promotion — ads, coupons, retailer fees, display materials, etc. This is the investment you need to earn back through incremental profit."></span></label>
                 <input type="number" id="promoCost" value="12000" onchange="withStableScroll(computePromoROI)">
               </div>
             </div>
@@ -1242,7 +1246,10 @@
 
         <!-- Channel P&L -->
         <section class="module-section">
-          <h2 class="module-section-title">2. Channel-level P&L</h2>
+          <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+            2. Channel-level P&amp;L
+            <span class="help-icon" data-help="Breaks down revenue and profit by sales channel (e.g. retail, online, direct). Helps you see which channels are actually profitable after costs — not just which ones sell the most."></span>
+          </h2>
           
           <div class="module-card">
             <div class="card-header">
@@ -1289,11 +1296,14 @@
 
         <!-- Price/Volume/Mix Bridge -->
         <section class="module-section">
-          <h2 class="module-section-title">3. Price / Volume / Mix Bridge</h2>
+          <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+            3. Price / Volume / Mix Bridge
+            <span class="help-icon" data-help="Explains why revenue went up or down. Was it because you raised prices? Sold more units? Or sold a different mix of products? This splits the total change into those three causes so you know exactly what to fix."></span>
+          </h2>
           
           <div class="module-card">
             <div class="card-header">
-              <h3 class="card-title">Revenue Variance Decomposition</h3>
+              <h3 class="card-title">Revenue Variance Decomposition <span class="help-icon" data-help="'Variance' just means 'the difference.' This card decomposes (breaks apart) the revenue difference between two periods into exactly what caused it — price changes, volume changes, or product mix changes — so leadership knows where to act."></span></h3>
               <div class="card-actions">
                 <button onclick="downloadPVMCSV()" class="btn-small">Export Analysis</button>
                 <button onclick="downloadPVMTemplate()" class="btn-small">Download Template</button>
@@ -1306,23 +1316,23 @@
 
             <div class="input-grid">
               <div class="input-field">
-                <label>Prior Period Revenue</label>
+                <label>Prior Period Revenue <span class="help-icon" data-help="Your total revenue in the previous period (e.g. last quarter or last year). This is the starting point — the number you're measuring the change from."></span></label>
                 <input type="number" id="priorRev" value="120000" onchange="computePVM()">
               </div>
               <div class="input-field">
-                <label>Current Period Revenue</label>
+                <label>Current Period Revenue <span class="help-icon" data-help="Your total revenue in the current period. The gap between this and Prior Period Revenue is what we're breaking down into its three root causes: price, volume, and mix."></span></label>
                 <input type="number" id="currentRev" value="138000" onchange="computePVM()">
               </div>
               <div class="input-field">
-                <label>Price Effect (%)</label>
+                <label>Price Effect (%) <span class="help-icon" data-help="How much of the revenue change came from charging more (or less) per unit. Positive = you raised prices. Negative = you cut prices. Helps isolate pricing decisions from sales volume."></span></label>
                 <input type="number" step="0.1" id="priceEffect" value="5.2" onchange="computePVM()">
               </div>
               <div class="input-field">
-                <label>Volume Effect (%)</label>
+                <label>Volume Effect (%) <span class="help-icon" data-help="How much of the revenue change came from selling more (or fewer) units. Positive = you sold more. This is usually the clearest signal of whether demand is growing or shrinking."></span></label>
                 <input type="number" step="0.1" id="volumeEffect" value="8.5" onchange="computePVM()">
               </div>
               <div class="input-field">
-                <label>Mix Effect (%)</label>
+                <label>Mix Effect (%) <span class="help-icon" data-help="How much of the revenue change came from selling a different blend of products — more premium vs. entry-level SKUs. Positive mix = shifted toward higher-priced items. Negative = shifted toward cheaper ones."></span></label>
                 <input type="number" step="0.1" id="mixEffect" value="1.3" onchange="computePVM()">
               </div>
             </div>
@@ -1390,11 +1400,14 @@
 
         <!-- Discount & Accrual Schedule -->
         <section class="module-section">
-          <h2 class="module-section-title">4. Discount & Accrual Schedule</h2>
+          <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+            4. Discount &amp; Accrual Schedule
+            <span class="help-icon" data-help="Tracks how discount costs are spread evenly across months instead of hitting all at once. This keeps your monthly profit figures accurate and prevents surprises at quarter-end when trade deals get settled."></span>
+          </h2>
           
           <div class="module-card">
             <div class="card-header">
-              <h3 class="card-title">Straight-line Accrual Logic</h3>
+              <h3 class="card-title">Straight-line Accrual Logic <span class="help-icon" data-help="'Straight-line' means the cost is divided equally across every month of the deal — no lumpy spikes. 'Accrual' means recognizing the cost as it's earned/incurred, not when cash actually moves. This prevents your December P&L from getting hit with the full year's discount bill at once."></span></h3>
               <div class="card-actions">
                 <button onclick="downloadAccrualCSV()" class="btn-small">Export Schedule</button>
                 <button onclick="downloadAccrualTemplate()" class="btn-small">Download Template</button>
@@ -1407,15 +1420,15 @@
 
             <div class="input-grid">
               <div class="input-field">
-                <label>Total Discount Pool ($)</label>
+                <label>Total Discount Pool ($) <span class="help-icon" data-help="The total amount of discounts or trade spend committed for the deal or campaign. Instead of booking this all in one month, it gets spread evenly — keeping your monthly P&L clean and predictable."></span></label>
                 <input type="number" id="discountPool" value="48000" onchange="computeAccrual()">
               </div>
               <div class="input-field">
-                <label>Start Month</label>
+                <label>Start Month <span class="help-icon" data-help="The first month the discount or trade deal kicks in. Accruals begin here, so your books show the cost building up from day one rather than all hitting at settlement."></span></label>
                 <input type="number" id="startMonth" value="1" min="1" max="12" onchange="computeAccrual()">
               </div>
               <div class="input-field">
-                <label>End Month</label>
+                <label>End Month <span class="help-icon" data-help="The last month of the deal. The total discount pool is divided equally across all months between Start and End — so each period absorbs its fair share of the cost."></span></label>
                 <input type="number" id="endMonth" value="12" min="1" max="12" onchange="computeAccrual()">
               </div>
             </div>
@@ -1614,28 +1627,73 @@
       document.getElementById('endMonth').value     = 12;
     }
 
-    function _buildChannelData() {
+    // Fixed sample channel data — never changes on refresh (deterministic)
+    const FIXED_CHANNEL_DATA = (function() {
+      // Pre-seeded values: [revenue, cogsPct, opex] per month×channel
       const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       const channels = ['Direct','Online','Retail','Partner','Enterprise'];
-      channelData = [];
+      // One fixed row of seeds per slot (60 rows = 12 months × 5 channels)
+      const seeds = [
+        [18200,0.42,3800],[14500,0.38,4200],[21000,0.45,5100],[11300,0.51,2800],[9800,0.47,3100],
+        [16700,0.40,3600],[19500,0.44,4800],[13200,0.36,3900],[22100,0.46,5400],[10500,0.50,2600],[12400,0.43,3300],[8900,0.48,2400],
+        [17300,0.41,3700],[15100,0.39,4100],[20400,0.44,5000],[12800,0.52,2900],[10200,0.46,3200],
+        [18600,0.42,3500],[21300,0.45,4700],[14700,0.37,4000],[23500,0.47,5500],[11000,0.49,2700],[13100,0.44,3400],[9400,0.47,2500],
+        [16900,0.40,3600],[15800,0.38,4300],[19700,0.44,4900],[13500,0.51,3000],[11600,0.48,3300],
+        [20100,0.43,3800],[22000,0.46,4600],[15400,0.37,4100],[24200,0.47,5300],[10700,0.50,2600],[12700,0.43,3200],[9100,0.46,2300],
+        [17600,0.41,3700],[16300,0.39,4200],[21100,0.45,5100],[14100,0.52,2900],[12000,0.47,3400],
+        [19300,0.42,3900],[22800,0.46,4700],[16000,0.38,4000],[24900,0.48,5600],[11200,0.51,2800],[13400,0.44,3500],[9700,0.48,2600],
+        [18100,0.41,3600],[16800,0.40,4300],[20800,0.44,5000],[13900,0.51,2900],[12300,0.47,3300],
+        [20500,0.43,3800],[23200,0.46,4800],[16500,0.37,4100],[25300,0.47,5400],[11500,0.50,2700],[13800,0.44,3400],[10000,0.47,2500]
+      ];
+      const rows = [];
+      let idx = 0;
       months.forEach(month => {
         channels.forEach(channel => {
-          const revenue = randInt(8000, 25000);
-          const cogs = revenue * randFloat(0.35, 0.55);
-          const opex = randInt(2000, 6000);
-          channelData.push({
+          const [rev, cogsPct, opex] = seeds[idx % seeds.length];
+          idx++;
+          const cogs = rev * cogsPct;
+          rows.push({
             month, channel,
-            revenue: revenue.toFixed(2),
+            revenue: rev.toFixed(2),
             cogs: cogs.toFixed(2),
             opex: opex.toFixed(2),
-            gp: ((revenue - cogs) / revenue * 100).toFixed(1),
-            contribution: (revenue - cogs - opex).toFixed(2)
+            gp: ((rev - cogs) / rev * 100).toFixed(1),
+            contribution: (rev - cogs - opex).toFixed(2)
           });
         });
       });
+      return rows;
+    })();
+
+    function _buildChannelData() {
+      // In sample mode: always use the fixed deterministic dataset (no random)
+      if (dataMode === 'sample') {
+        channelData = FIXED_CHANNEL_DATA.map(r => Object.assign({}, r));
+      } else {
+        // Random mode: generate fresh random data
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const channels = ['Direct','Online','Retail','Partner','Enterprise'];
+        channelData = [];
+        months.forEach(month => {
+          channels.forEach(channel => {
+            const revenue = randInt(8000, 25000);
+            const cogs = revenue * randFloat(0.35, 0.55);
+            const opex = randInt(2000, 6000);
+            channelData.push({
+              month, channel,
+              revenue: revenue.toFixed(2),
+              cogs: cogs.toFixed(2),
+              opex: opex.toFixed(2),
+              gp: ((revenue - cogs) / revenue * 100).toFixed(1),
+              contribution: (revenue - cogs - opex).toFixed(2)
+            });
+          });
+        });
+      }
     }
     
     function initializeSampleData() {
+      dataMode = 'sample'; // ensure sample mode before building channel data
       // Default promo = losing scenario (same numbers as original sample)
       promoData = { baseline_revenue: 50000, promo_revenue: 85000, baseline_gp: 42, promo_gp: 28, promo_cost: 12000 };
       document.getElementById('baselineRev').value = promoData.baseline_revenue;
@@ -1738,23 +1796,23 @@
       
       document.getElementById('promoKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label">Incremental Revenue</div>
+          <div class="kpi-box-label">Incremental Revenue <span class="help-icon" data-help="The extra revenue generated because of the promo — simply Promo Revenue minus Baseline Revenue. This is how much more you sold than you would have without it."></span></div>
           <div class="kpi-box-value">${formatCurrency(incrementalRev)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Incremental GP</div>
+          <div class="kpi-box-label">Incremental GP <span class="help-icon" data-help="The extra gross profit dollars from the promo, after accounting for lower margins during the deal. More revenue means nothing if the margin collapse wipes out the gain."></span></div>
           <div class="kpi-box-value">${formatCurrency(incrementalGP)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Net Promo Profit</div>
+          <div class="kpi-box-label">Net Promo Profit <span class="help-icon" data-help="The true bottom-line result of the promo: Incremental GP minus what you spent to run it. Positive = the promo paid for itself. Negative = you spent more than you earned back."></span></div>
           <div class="kpi-box-value">${formatCurrency(netProfit)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">ROI</div>
+          <div class="kpi-box-label">ROI <span class="help-icon" data-help="Return on Investment — for every $1 you spent on the promo, how many cents came back as profit. 100% ROI means you doubled your money. Negative ROI means the promo lost money."></span></div>
           <div class="kpi-box-value">${formatPercent(roi)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">CM%</div>
+          <div class="kpi-box-label">CM% <span class="help-icon" data-help="Contribution Margin % — what percentage of promo revenue is left after product costs AND promo spend. Tells you how efficiently the promotion converts revenue into real contribution toward overhead and profit."></span></div>
           <div class="kpi-box-value">${formatPercent(cmPct)}</div>
         </div>
       `;
@@ -1762,10 +1820,10 @@
       let tableHTML = `
         <thead>
           <tr>
-            <th>Metric</th>
-            <th>Baseline</th>
-            <th>Promo</th>
-            <th>Change</th>
+            <th>Metric <span class="help-icon" data-help="The financial measure being compared across baseline and promo periods."></span></th>
+            <th>Baseline <span class="help-icon" data-help="Your normal performance before the promotion — the benchmark everything gets measured against."></span></th>
+            <th>Promo <span class="help-icon" data-help="Performance during the promotion period, including any discounts and uplift in volume."></span></th>
+            <th>Change <span class="help-icon" data-help="The difference between Promo and Baseline. Positive = the promo helped. Negative = the promo hurt that metric."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -1820,13 +1878,13 @@
       let tableHTML = `
         <thead>
           <tr>
-            <th>Month</th>
-            <th>Channel</th>
-            <th>Revenue</th>
-            <th>COGS</th>
-            <th>GP%</th>
-            <th>OpEx</th>
-            <th>Contribution</th>
+            <th>Month <span class="help-icon" data-help="The calendar month of the data. Lets you spot seasonal patterns — e.g. if Retail spikes in December but Online is flat."></span></th>
+            <th>Channel <span class="help-icon" data-help="The sales route — e.g. Direct (you sell), Retail (through a store), Online (e-commerce), Partner (resellers). Each has different cost structures and margin profiles."></span></th>
+            <th>Revenue <span class="help-icon" data-help="Total sales dollars generated by this channel in this month. High revenue doesn't always mean high profit — check GP% and Contribution too."></span></th>
+            <th>COGS <span class="help-icon" data-help="Cost of Goods Sold — what it costs to produce or source the products sold. Subtract this from Revenue to get Gross Profit. Lower COGS = better margin."></span></th>
+            <th>GP% <span class="help-icon" data-help="Gross Profit % — the share of revenue left after product costs. A GP% of 40% means 40 cents of every dollar sold goes toward covering overheads and profit."></span></th>
+            <th>OpEx <span class="help-icon" data-help="Operating Expenses specific to this channel — e.g. sales team costs, trade spend, delivery fees, platform commissions. Subtract this from Gross Profit to get Contribution."></span></th>
+            <th>Contribution <span class="help-icon" data-help="How much this channel actually contributes to company profit after all channel-specific costs. This is the real scorecard — a channel with high revenue but negative Contribution is losing money."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -2451,71 +2509,6 @@
     }
 
 
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
-    function initTooltips() {
-      var ttEl = document.getElementById('tt-root');
-      if (!ttEl) {
-        ttEl = document.createElement('div');
-        ttEl.id = 'tt-root';
-        document.body.appendChild(ttEl);
-      }
-
-      var hideTimer = null;
-
-      function show(text, targetEl) {
-        clearTimeout(hideTimer);
-        ttEl.textContent = text;
-        ttEl.classList.add('tt-visible');
-        position(targetEl);
-      }
-
-      function hide() {
-        hideTimer = setTimeout(function() {
-          ttEl.classList.remove('tt-visible');
-        }, 80);
-      }
-
-      function position(el) {
-        var rect = el.getBoundingClientRect();
-        var ttW = 260;
-        var gap = 8;
-        var left = rect.left + rect.width / 2 - ttW / 2;
-        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
-        var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
-        if (rect.top - ttH - gap < 8) {
-          // Flip below if not enough room above
-          top = rect.bottom + gap;
-          transform = 'translateY(0)';
-        } else {
-          top = rect.top - gap;
-          transform = 'translateY(-100%)';
-        }
-        ttEl.style.left = left + 'px';
-        ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-      }
-
-      // Event delegation — works on dynamically injected elements too
-      document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (!el) return;
-        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
-        if (text) show(text, el);
-      });
-
-      document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (el) hide();
-      });
-
-      // Hide on scroll so tooltip doesn't chase the page
-      window.addEventListener('scroll', function() {
-        ttEl.classList.remove('tt-visible');
-      }, { passive: true });
-    }
-
-
     /* Mobile sidebar toggle */
     (function() {
       var btn = document.getElementById('mobileControlsBtn');
@@ -2559,23 +2552,22 @@
         var rect = el.getBoundingClientRect();
         var ttW = 270;
         var gap = 8;
+        // Horizontal: center on element, clamp to viewport
         var left = rect.left + rect.width / 2 - ttW / 2;
         left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
         ttEl.style.width = ttW + 'px';
         ttEl.style.left = left + 'px';
-        // Measure height after setting content
+        // Vertical: show above by default, flip below if too close to top
         var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
+        var top;
         if (rect.top - ttH - gap - 8 < 0) {
-          top = rect.bottom + window.scrollY + gap;
-          transform = 'none';
+          top = rect.bottom + gap;
         } else {
-          top = rect.top + window.scrollY - ttH - gap;
-          transform = 'none';
+          top = rect.top - ttH - gap;
         }
         ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-        ttEl.style.position = 'absolute';
+        ttEl.style.position = 'fixed';
+        ttEl.style.transform = 'none';
       }
 
       /* Kill CSS ::after tooltips — they clip in overflow containers */
@@ -2600,7 +2592,6 @@
       document.addEventListener('click', function(e) {
         var el = e.target.closest('[data-help], [data-tt]');
         if (!el) {
-          // tap anywhere else hides tooltip
           if (ttEl.classList.contains('tt-visible')) {
             ttEl.classList.remove('tt-visible');
             activeEl = null;
@@ -2618,7 +2609,7 @@
         e.stopPropagation();
       });
 
-      /* Reposition on scroll (don't hide, just reposition) */
+      /* Reposition on scroll */
       window.addEventListener('scroll', function() {
         if (activeEl && ttEl.classList.contains('tt-visible')) {
           position(activeEl);
@@ -2632,6 +2623,10 @@
       }, { passive: true });
     }
 
+    // ── Call tooltip engine on page load ──
+    document.addEventListener('DOMContentLoaded', function() {
+      initTooltips();
+    });
 
 </script>
 
