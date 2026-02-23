@@ -30,8 +30,8 @@
     /* ── Problem Grid ──────────────────────────────── */
     .problem-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1fr;
+      gap: 14px;
       margin-top: 8px;
     }
     .problem-card {
@@ -90,6 +90,7 @@
       white-space: nowrap;
       position: relative;
       z-index: 2;
+      flex-shrink: 0;
     }
 
     /* ── Hover preview overlay ─────────────────────── */
@@ -144,14 +145,13 @@
       .card-preview { display: none; }
     }
     @media (max-width: 640px) {
-      .problem-grid { grid-template-columns: 1fr; }
       .card-preview { display: none; }
     }
 
     /* ── Start Here section ────────────────────────── */
     .start-here-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr;
       gap: 14px;
       margin-top: 8px;
     }
@@ -534,7 +534,7 @@
             Follow this sequence for the complete CFO / FP&amp;A picture — from planning the model to ranking every lever that moves profit.
           </p>
 </div>
-<div class="start-here-grid" style="grid-template-columns: repeat(3, 1fr);">
+<div class="start-here-grid">
 <div class="start-step reveal">
 <div class="start-step-num">1</div>
 <p class="start-step-title">Core FP&amp;A Simulator</p>
@@ -918,7 +918,7 @@
 <div class="contact-grid reveal">
 <button aria-label="Copy email address to clipboard" class="contact-card contact-card--email" id="emailCopyCard">
 <span class="contact-card-label">Fastest</span>
-<span class="contact-card-value">rpatrickdivina@gmail.com</span>
+<span class="contact-card-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4537352431372c262e212c332c2b24052228242c296b262a28">[email&#160;protected]</a></span>
 <span class="copy-hint">
 <span class="copy-text">Click to copy</span>
 <span class="copy-icon">⎘</span>
@@ -970,7 +970,7 @@
             </div>
 </div>
 </div>
-<script src="main.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="main.js"></script>
 <script>
   /* ── Email copy to clipboard ── */
   (function() {
@@ -1018,12 +1018,4 @@
       });
     }
 
-    card.addEventListener('click', handleCopy);
-    card.addEventListener('touchend', function(e) {
-      handleCopy(e);
-    }, { passive: false });
-  })();
-</script>
-</div></section></main>  <a class="to-top" href="#top" aria-label="Go to top">↑</a>
-</body>
-</html>
+    card.addEventListener('click',
