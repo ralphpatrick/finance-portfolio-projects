@@ -783,7 +783,7 @@
       line-height: 1.55;
       border-radius: 9px;
       white-space: normal;
-      width: 260px;
+      width: 270px;
       max-width: calc(100vw - 24px);
       box-shadow: 0 4px 18px rgba(0,0,0,0.28);
       text-align: left;
@@ -1346,11 +1346,14 @@
 
         <!-- Rate Leakage -->
         <section class="module-section">
-        <h2 class="module-section-title">1. Vendor Rate Cards (Rate Discipline)</h2>
+        <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+          1. Vendor Rate Cards (Rate Discipline)
+          <span class="help-icon" data-help="Checks whether vendors are charging you exactly what was agreed in the contract. If they bill even $1 more per unit than the agreed rate, it silently drains profit month after month without anyone noticing — this section catches that."></span>
+        </h2>
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Rate Leakage Analysis</h3>
+            <h3 class="card-title">Rate Leakage Analysis <span class="help-icon" data-help="'Leakage' is the money that quietly flows out because actual invoiced rates exceed contracted rates. This analysis totals up that gap across all vendors so you can see the financial impact and prioritise who to challenge first."></span></h3>
             <div class="card-actions">
               <button onclick="downloadRateLeakageCSV()" class="btn-small">Export Results</button>
             </div>
@@ -1402,11 +1405,14 @@
     <!-- Accrual Tracking -->
     <section class="module-section section-muted">
       <div class="container">
-        <h2 class="module-section-title">2. Accrual Tracking</h2>
+        <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+          2. Accrual Tracking
+          <span class="help-icon" data-help="An accrual is a cost you've already received (e.g. a month of security guard services) but haven't been billed for yet. Tracking accruals means your P&L shows the true cost for the month — not just what invoices happened to arrive. This prevents nasty surprises at month-end close."></span>
+        </h2>
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Accrual Schedule</h3>
+            <h3 class="card-title">Accrual Schedule <span class="help-icon" data-help="A month-by-month record of costs incurred vs. invoices actually received. The gap between the two is the 'accrual' — money owed but not yet billed. A clean schedule keeps the finance team in control of month-end numbers and reduces last-minute adjustments."></span></h3>
             <div class="card-actions">
               <button onclick="downloadAccrualsCSV()" class="btn-small">Export Schedule</button>
             </div>
@@ -1442,15 +1448,18 @@
 
     <!-- Forecast vs Actual -->
     <section class="module-section">
-        <h2 class="module-section-title">3. Forecast vs Actual Spend</h2>
+        <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+          3. Forecast vs Actual Spend
+          <span class="help-icon" data-help="Compares what you predicted you'd spend with what you actually spent. The goal is to catch overruns early — before they become budget crises — and improve the accuracy of future forecasts so the business can plan confidently."></span>
+        </h2>
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Variance Analysis</h3>
+            <h3 class="card-title">Variance Analysis <span class="help-icon" data-help="'Variance' simply means the difference between plan and reality. A positive variance means you spent more than planned (bad). A negative variance means you came in under plan (good). This table breaks it down month by month so you can see trends and spot which months went off-track."></span></h3>
             <div class="card-actions">
               <div class="toggle-group">
-                <button class="toggle-btn active" onclick="setCompareMode('forecast')" data-mode="forecast">vs Forecast</button>
-                <button class="toggle-btn" onclick="setCompareMode('budget')" data-mode="budget">vs Budget</button>
+                <button class="toggle-btn active" onclick="setCompareMode('forecast')" data-mode="forecast" data-help="Compare actual spend against the rolling forecast — your most up-to-date prediction of what you'd spend.">vs Forecast</button>
+                <button class="toggle-btn" onclick="setCompareMode('budget')" data-mode="budget" data-help="Compare actual spend against the original approved budget — the number signed off at the start of the year. Useful for formal accountability.">vs Budget</button>
               </div>
               <button onclick="downloadForecastCSV()" class="btn-small">Export Analysis</button>
             </div>
@@ -1472,11 +1481,14 @@
     <!-- Risk & Anomaly Flags -->
     <section class="module-section section-muted">
       <div class="container">
-        <h2 class="module-section-title">4. Risk & Anomaly Flags</h2>
+        <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
+          4. Risk &amp; Anomaly Flags
+          <span class="help-icon" data-help="An automatic early-warning system that scans spend data for anything unusual or risky — such as a vendor billing way more than usual, a single supplier absorbing too much of your budget, or invoices that haven't arrived yet for costs already incurred. Flags problems before they escalate."></span>
+        </h2>
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Alert Configuration</h3>
+            <h3 class="card-title">Alert Configuration <span class="help-icon" data-help="Set the sensitivity of each alert type. Lower thresholds = more alerts (catching smaller issues). Higher thresholds = fewer alerts (only the worst offenders). Tune these to match your company's risk tolerance and the size of your vendor spend."></span></h3>
             <div class="card-actions">
               <button onclick="downloadRiskFlagsCSV()" class="btn-small">Export Alerts</button>
             </div>
@@ -1484,19 +1496,19 @@
 
           <div class="threshold-controls">
             <div class="threshold-field">
-              <label>Rate Variance %</label>
+              <label>Rate Variance % <span class="help-icon" data-help="Flag any vendor whose actual billed rate exceeds the contract rate by more than this percentage. E.g. at 5%, a vendor contracted at $10/unit gets flagged if they charge more than $10.50. Catches rate creep before it compounds."></span></label>
               <input type="number" id="thresholdRate" value="5" step="1" onchange="computeRiskFlags()">
             </div>
             <div class="threshold-field">
-              <label>Spend Spike %</label>
+              <label>Spend Spike % <span class="help-icon" data-help="Flag any category whose spend in a given month is this much above its monthly average. E.g. at 20%, if Logistics normally costs $50K/month, a month with $62K+ gets flagged. Helps catch one-off surprises or forecast misses early."></span></label>
               <input type="number" id="thresholdSpike" value="20" step="1" onchange="computeRiskFlags()">
             </div>
             <div class="threshold-field">
-              <label>Accrual Risk %</label>
+              <label>Accrual Risk % <span class="help-icon" data-help="Flag any vendor-month where the un-invoiced portion of spend exceeds this percentage of total incurred cost. E.g. at 20%, if you incurred $10K from a vendor but only have $7K invoiced, you get flagged. High accrual ratios risk P&L surprises at settlement."></span></label>
               <input type="number" id="thresholdAccrual" value="20" step="1" onchange="computeRiskFlags()">
             </div>
             <div class="threshold-field">
-              <label>Concentration %</label>
+              <label>Concentration % <span class="help-icon" data-help="Flag any single vendor whose share of your total spend exceeds this percentage. E.g. at 25%, any vendor absorbing more than a quarter of your total budget gets flagged. Over-reliance on one supplier is an operational risk — if they fail or hike rates, you have limited options."></span></label>
               <input type="number" id="thresholdConcentration" value="25" step="1" onchange="computeRiskFlags()">
             </div>
           </div>
@@ -1967,19 +1979,19 @@
       
       document.getElementById('rateKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label">Total Spend (Selected)</div>
+          <div class="kpi-box-label">Total Spend (Selected) <span class="help-icon" data-help="The total amount invoiced by all vendors in the selected filter period. This is the pool of spend you're auditing for rate discipline."></span></div>
           <div class="kpi-box-value">${formatCurrency(totalSpend)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Total Leakage $</div>
+          <div class="kpi-box-label">Total Leakage $ <span class="help-icon" data-help="The total dollar amount charged above contracted rates across all vendors. Even a small leakage percentage multiplied across high-volume vendors adds up to meaningful P&L impact."></span></div>
           <div class="kpi-box-value">${formatCurrency(totalLeakage)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Leakage % of Spend</div>
+          <div class="kpi-box-label">Leakage % of Spend <span class="help-icon" data-help="What fraction of your total spend is being lost to above-contract billing. Industry best practice is below 2%. Anything above 5% signals a serious gap in procurement controls that needs immediate attention."></span></div>
           <div class="kpi-box-value">${formatPercent(leakagePct)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label"># Flagged Transactions</div>
+          <div class="kpi-box-label"># Flagged Transactions <span class="help-icon" data-help="How many individual invoices or transactions were billed above the agreed rate. A high count means the overcharging is systemic — not a one-off — and requires a process fix, not just a vendor conversation."></span></div>
           <div class="kpi-box-value">${totalFlagged}</div>
         </div>
       `;
@@ -1987,13 +1999,13 @@
       let tableHTML = `
         <thead>
           <tr>
-            <th>Vendor</th>
-            <th>Service</th>
-            <th>Category</th>
-            <th>Contract Rate</th>
-            <th>Avg Paid Rate</th>
-            <th>Rate Variance %</th>
-            <th>Leakage $</th>
+            <th>Vendor <span class="help-icon" data-help="The supplier being analysed. Focus on high-spend vendors first — even a small rate variance on a large-volume vendor costs more than a big variance on a small one."></span></th>
+            <th>Service <span class="help-icon" data-help="The type of work or product being billed — e.g. delivery, cleaning, IT licenses. Rate cards are typically set per service type, so this tells you which contract line to check."></span></th>
+            <th>Category <span class="help-icon" data-help="The cost bucket this vendor falls into — e.g. Logistics, Facilities, IT Ops. Helps you spot if leakage is concentrated in one area of the business."></span></th>
+            <th>Contract Rate <span class="help-icon" data-help="The agreed price per unit in the signed contract or rate card. This is the 'should pay' number — the benchmark for every invoice."></span></th>
+            <th>Avg Paid Rate <span class="help-icon" data-help="The average rate actually charged across all transactions for this vendor. If this is higher than the Contract Rate, money is leaking."></span></th>
+            <th>Rate Variance % <span class="help-icon" data-help="How much higher the average paid rate is versus the contract rate, expressed as a percentage. Red = above threshold. This is the clearest signal of a contract compliance problem."></span></th>
+            <th>Leakage $ <span class="help-icon" data-help="The total dollar amount overpaid to this vendor due to above-contract rates. This is real recoverable money — start with the vendors showing the highest leakage dollar value."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -2114,15 +2126,15 @@
       
       document.getElementById('accrualKPIs').innerHTML = `
         <div class="kpi-box">
-          <div class="kpi-box-label">Total Accrued (YTD)</div>
+          <div class="kpi-box-label">Total Accrued (YTD) <span class="help-icon" data-help="The total costs recognised in the P&L this year that haven't been invoiced yet. This is money you 'owe' but haven't paid — a real liability that builds up if vendor invoicing is slow."></span></div>
           <div class="kpi-box-value">${formatCurrency(totalAccrued)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Current Month Accrual</div>
+          <div class="kpi-box-label">Current Month Accrual <span class="help-icon" data-help="How much of this month's spend is accrued but not yet invoiced. A large current-month accrual means finance needs to make careful P&L estimates — and chase vendors to submit invoices before month-end close."></span></div>
           <div class="kpi-box-value">${formatCurrency(currentMonth.accrual)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">% Incurred Not Invoiced</div>
+          <div class="kpi-box-label">% Incurred Not Invoiced <span class="help-icon" data-help="Of all the costs incurred this year, what percentage hasn't been formally billed yet. A high percentage signals slow vendor invoicing or poor PO management — and means your P&L is leaning heavily on estimates rather than real invoices."></span></div>
           <div class="kpi-box-value">${formatPercent(pctNotInvoiced)}</div>
         </div>
       `;
@@ -2130,11 +2142,11 @@
       let tableHTML = `
         <thead>
           <tr>
-            <th>Month</th>
-            <th>Incurred Amount</th>
-            <th>Invoiced Amount</th>
-            <th>Accrual Amount</th>
-            <th>Status</th>
+            <th>Month <span class="help-icon" data-help="The calendar month being reported. Look for months where the Accrual Amount is unusually large — that signals invoice timing problems or unresolved costs from that period."></span></th>
+            <th>Incurred Amount <span class="help-icon" data-help="Total costs actually incurred (services received, work done) in this month — regardless of whether an invoice arrived. This is what belongs in the P&L for the period."></span></th>
+            <th>Invoiced Amount <span class="help-icon" data-help="Total invoices actually received and processed from vendors in this month. If this is significantly below Incurred Amount, it means a chunk of real cost hasn't been formally billed yet."></span></th>
+            <th>Accrual Amount <span class="help-icon" data-help="The gap: Incurred minus Invoiced. This is the estimate the finance team must post to the books to ensure the P&L is accurate. Red = open accrual that needs to be tracked and settled."></span></th>
+            <th>Status <span class="help-icon" data-help="Open = the accrual hasn't been cleared by an invoice yet. Closed = the invoice arrived and matched the accrual estimate. Open accruals are risk items at month-end — they can change the P&L if the final invoice differs from the estimate."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -2296,11 +2308,11 @@
       let tableHTML = `
         <thead>
           <tr>
-            <th>Month</th>
-            <th>Actual</th>
-            <th>${compareMode === 'forecast' ? 'Forecast' : 'Budget'}</th>
-            <th>Variance $</th>
-            <th>Variance %</th>
+            <th>Month <span class="help-icon" data-help="The reporting month. Scan down this column looking for consecutive months of overspend — that pattern means the forecast is systematically too low and needs to be revised upward."></span></th>
+            <th>Actual <span class="help-icon" data-help="What was actually spent in this month, based on all vendor invoices and transactions processed. This is the ground truth."></span></th>
+            <th>${compareMode === 'forecast' ? 'Forecast <span class="help-icon" data-help="The rolling best estimate of what spend would be for this month, updated during the period. Comparing actuals to forecast shows whether recent predictions are tracking reality."></span>' : 'Budget <span class="help-icon" data-help="The original spend approved at the start of the year. Comparing to budget shows whether you\'re on track versus the annual plan — even if the forecast has since been revised."></span>'}</th>
+            <th>Variance $ <span class="help-icon" data-help="Actual minus Forecast/Budget in dollar terms. Red = you overspent. Green = you came in under. Large dollar variances on big cost categories need a written explanation for leadership."></span></th>
+            <th>Variance % <span class="help-icon" data-help="The variance as a percentage of the plan. More useful than the dollar figure alone when comparing months or categories of different sizes. Above 10% typically triggers a formal reforecast."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -3063,71 +3075,6 @@
     }
 
 
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
-    function initTooltips() {
-      var ttEl = document.getElementById('tt-root');
-      if (!ttEl) {
-        ttEl = document.createElement('div');
-        ttEl.id = 'tt-root';
-        document.body.appendChild(ttEl);
-      }
-
-      var hideTimer = null;
-
-      function show(text, targetEl) {
-        clearTimeout(hideTimer);
-        ttEl.textContent = text;
-        ttEl.classList.add('tt-visible');
-        position(targetEl);
-      }
-
-      function hide() {
-        hideTimer = setTimeout(function() {
-          ttEl.classList.remove('tt-visible');
-        }, 80);
-      }
-
-      function position(el) {
-        var rect = el.getBoundingClientRect();
-        var ttW = 260;
-        var gap = 8;
-        var left = rect.left + rect.width / 2 - ttW / 2;
-        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
-        var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
-        if (rect.top - ttH - gap < 8) {
-          // Flip below if not enough room above
-          top = rect.bottom + gap;
-          transform = 'translateY(0)';
-        } else {
-          top = rect.top - gap;
-          transform = 'translateY(-100%)';
-        }
-        ttEl.style.left = left + 'px';
-        ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-      }
-
-      // Event delegation — works on dynamically injected elements too
-      document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (!el) return;
-        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
-        if (text) show(text, el);
-      });
-
-      document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (el) hide();
-      });
-
-      // Hide on scroll so tooltip doesn't chase the page
-      window.addEventListener('scroll', function() {
-        ttEl.classList.remove('tt-visible');
-      }, { passive: true });
-    }
-
-
     /* Mobile sidebar toggle */
     (function() {
       var btn = document.getElementById('mobileControlsBtn');
@@ -3140,7 +3087,7 @@
     })();
 
 
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    /* ── Body-level tooltip engine ── */
     function initTooltips() {
       var ttEl = document.getElementById('tt-root');
       if (!ttEl) {
@@ -3175,27 +3122,24 @@
         left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
         ttEl.style.width = ttW + 'px';
         ttEl.style.left = left + 'px';
-        // Measure height after setting content
+        ttEl.style.position = 'fixed';
+        ttEl.style.transform = 'none';
         var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
+        var top;
         if (rect.top - ttH - gap - 8 < 0) {
-          top = rect.bottom + window.scrollY + gap;
-          transform = 'none';
+          top = rect.bottom + gap;
         } else {
-          top = rect.top + window.scrollY - ttH - gap;
-          transform = 'none';
+          top = rect.top - ttH - gap;
         }
         ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-        ttEl.style.position = 'absolute';
       }
 
-      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      /* Kill CSS ::after tooltips */
       var killStyle = document.createElement('style');
       killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
       document.head.appendChild(killStyle);
 
-      /* Desktop: mouse events (event delegation) */
+      /* Desktop: mouse events */
       document.addEventListener('mouseover', function(e) {
         var el = e.target.closest('[data-help], [data-tt]');
         if (!el) return;
@@ -3212,7 +3156,6 @@
       document.addEventListener('click', function(e) {
         var el = e.target.closest('[data-help], [data-tt]');
         if (!el) {
-          // tap anywhere else hides tooltip
           if (ttEl.classList.contains('tt-visible')) {
             ttEl.classList.remove('tt-visible');
             activeEl = null;
@@ -3230,11 +3173,9 @@
         e.stopPropagation();
       });
 
-      /* Reposition on scroll (don't hide, just reposition) */
+      /* Reposition on scroll */
       window.addEventListener('scroll', function() {
-        if (activeEl && ttEl.classList.contains('tt-visible')) {
-          position(activeEl);
-        }
+        if (activeEl && ttEl.classList.contains('tt-visible')) position(activeEl);
       }, { passive: true });
 
       /* Hide on resize */
@@ -3244,6 +3185,8 @@
       }, { passive: true });
     }
 
+    // ── Initialize tooltip engine ──
+    document.addEventListener('DOMContentLoaded', function() { initTooltips(); });
 
 </script>
 
