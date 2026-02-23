@@ -459,7 +459,7 @@
       line-height: 1.55;
       border-radius: 9px;
       white-space: normal;
-      width: 260px;
+      width: 270px;
       max-width: calc(100vw - 24px);
       box-shadow: 0 4px 18px rgba(0,0,0,0.28);
       text-align: left;
@@ -1013,18 +1013,18 @@
           <span class="help-icon" data-help="Top-line KPIs and the three levers that matter most to EBITDA and runway."></span>
         </div>
         <div class="kpi-grid">
-          <div class="kpi-box"><div class="kpi-box-label">Runway</div><div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">EBITDA / Mo</div><div class="kpi-box-value" id="kpi-ebitda">—</div><div class="kpi-box-sub">earnings before interest/tax</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">Gross Margin</div><div class="kpi-box-value" id="kpi-gm">—</div><div class="kpi-box-sub">% after COGS</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">Revenue / Mo</div><div class="kpi-box-value" id="kpi-revenue">—</div><div class="kpi-box-sub">price × volume</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">LTV/CAC</div><div class="kpi-box-value" id="kpi-ltvcac">—</div><div class="kpi-box-sub">unit economics ratio</div></div>
-          <div class="kpi-box"><div class="kpi-box-label">Top Driver</div><div class="kpi-box-value" id="kpi-topdriver" style="font-size:14px">—</div><div class="kpi-box-sub">highest runway impact</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Runway <span class="help-icon" data-help="How many months the company can keep operating before it runs out of cash — assuming income and spending stay the same. Under 6 months is a red flag that requires immediate action."></span></div><div class="kpi-box-value" id="kpi-runway">—</div><div class="kpi-box-sub">months</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">EBITDA / Mo <span class="help-icon" data-help="Earnings Before Interest, Tax, Depreciation & Amortisation — the monthly operating profit before accounting adjustments. Positive = the business earns more than it spends each month. Negative = it's burning cash."></span></div><div class="kpi-box-value" id="kpi-ebitda">—</div><div class="kpi-box-sub">earnings before interest/tax</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Gross Margin <span class="help-icon" data-help="The percentage of revenue left after paying for the cost of the product or service itself (COGS). E.g. 60% gross margin means for every $100 sold, $60 remains to cover salaries, rent, and profit. Below 40% is considered thin for most business models."></span></div><div class="kpi-box-value" id="kpi-gm">—</div><div class="kpi-box-sub">% after COGS</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Revenue / Mo <span class="help-icon" data-help="Total money coming in each month — calculated as Price × Volume (how much you charge × how many units you sell). This is the top line before any costs are deducted."></span></div><div class="kpi-box-value" id="kpi-revenue">—</div><div class="kpi-box-sub">price × volume</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">LTV/CAC <span class="help-icon" data-help="Lifetime Value divided by Customer Acquisition Cost. LTV = total revenue expected from one customer over their lifetime. CAC = what you spent to acquire them. A ratio above 3x means each customer is worth at least 3× what they cost to win — the standard benchmark for a healthy sales model."></span></div><div class="kpi-box-value" id="kpi-ltvcac">—</div><div class="kpi-box-sub">unit economics ratio</div></div>
+          <div class="kpi-box"><div class="kpi-box-label">Top Driver <span class="help-icon" data-help="The single business lever — price, volume, costs, or churn — that has the biggest impact on runway if it changes by just 5%. This tells you where to focus first: small improvements here move the needle more than large changes anywhere else."></span></div><div class="kpi-box-value" id="kpi-topdriver" style="font-size:14px">—</div><div class="kpi-box-sub">highest runway impact</div></div>
         </div>
         <div class="module-card">
           <div id="what-means" class="what-means"><p>Load data to see summary.</p></div>
           <div class="board-grid">
-            <div class="board-block"><div class="board-block-title">⚠ RISKS & WATCHOUTS</div><ul id="risks-list"><li>—</li></ul></div>
-            <div class="board-block"><div class="board-block-title">🔧 RECOMMENDED ACTIONS</div><ul id="levers-list"><li>—</li></ul></div>
+            <div class="board-block"><div class="board-block-title">⚠ RISKS & WATCHOUTS <span class="help-icon" data-help="The top warning signs in the current numbers — things that could hurt the business if left unaddressed, like a low LTV/CAC ratio, high churn, or thin margins."></span></div><ul id="risks-list"><li>—</li></ul></div>
+            <div class="board-block"><div class="board-block-title">🔧 RECOMMENDED ACTIONS <span class="help-icon" data-help="The highest-impact levers ranked by their effect on runway. These are the specific things the business should focus on first — improving any one of these by 5% produces the largest gain."></span></div><ul id="levers-list"><li>—</li></ul></div>
           </div>
         </div>
       </div>
@@ -1101,7 +1101,15 @@
         </div>
         <div class="module-card" style="overflow-x:auto;">
           <table class="data-table" id="sens-table">
-            <thead><tr><th>Rank</th><th>Driver</th><th>Base Value</th><th>+5% → EBITDA Change</th><th>+5% → Runway Change</th><th>−5% → EBITDA Change</th><th>−5% → Runway Change</th></tr></thead>
+            <thead><tr>
+              <th>Rank <span class="help-icon" data-help="Gold = #1 highest-impact lever, Silver = #2, Bronze = #3. Focus resources in this order for maximum runway improvement."></span></th>
+              <th>Driver <span class="help-icon" data-help="The business variable being tested — e.g. Price, Volume, COGS%. Each driver is nudged up and down by 5% to see how much runway changes."></span></th>
+              <th>Base Value <span class="help-icon" data-help="The current value of this driver from your assumptions — the starting point before any 5% movement is applied."></span></th>
+              <th>+5% → EBITDA Change <span class="help-icon" data-help="How much monthly profit (EBITDA) would change if this driver improved by 5%. E.g. a +$20K here means raising price by 5% adds $20K to monthly profit."></span></th>
+              <th>+5% → Runway Change <span class="help-icon" data-help="How many extra months of runway you'd gain if this driver improved by 5%. The bigger the number, the more important this lever is to protect cash."></span></th>
+              <th>−5% → EBITDA Change <span class="help-icon" data-help="How much monthly profit drops if this driver gets 5% worse — e.g. prices fall, costs rise, or more customers leave. Shows the downside risk of each variable."></span></th>
+              <th>−5% → Runway Change <span class="help-icon" data-help="Months of runway lost if this driver deteriorates by 5%. A large negative number here means this variable is a major risk — a small slip costs a lot of runway."></span></th>
+            </tr></thead>
             <tbody id="sens-tbody"></tbody>
           </table>
         </div>
@@ -1259,26 +1267,26 @@
     document.getElementById('kpi-tree').innerHTML = `
       <div class="kpi-tree">
         <div class="tree-row tree-row-1">
-          <div class="tree-node root"><div class="tree-node-label">Runway</div><div class="tree-node-value">${base.runway >= 99 ? '∞ mo' : base.runway.toFixed(1) + ' mo'}</div></div>
+          <div class="tree-node root"><div class="tree-node-label" data-help="How many months the company can survive at the current burn rate. This is the root metric — everything in the tree below is a driver of this number." style="cursor:help;">Runway</div><div class="tree-node-value">${base.runway >= 99 ? '∞ mo' : base.runway.toFixed(1) + ' mo'}</div></div>
         </div>
         <div class="tree-connector"><div class="tree-connector-line"></div></div>
         <div class="tree-row tree-row-2">
-          <div class="tree-node ${nodeClass(base.ebitda)}"><div class="tree-node-label">EBITDA / Mo</div><div class="tree-node-value">${fmtK(base.ebitda)}</div></div>
+          <div class="tree-node ${nodeClass(base.ebitda)}"><div class="tree-node-label" data-help="Monthly operating profit: Revenue minus all costs (COGS + OpEx). Positive = profitable. Negative = burning cash. Runway = Cash ÷ Monthly Burn, so improving EBITDA directly extends runway." style="cursor:help;">EBITDA / Mo</div><div class="tree-node-value">${fmtK(base.ebitda)}</div></div>
           <div class="tree-arrow">÷</div>
-          <div class="tree-node"><div class="tree-node-label">Monthly Burn</div><div class="tree-node-value">${fmtK(base.burn)}</div></div>
+          <div class="tree-node"><div class="tree-node-label" data-help="How much cash the business spends each month beyond what it earns. Only exists when EBITDA is negative. Runway = Cash on Hand ÷ Monthly Burn — so reducing burn directly extends survival time." style="cursor:help;">Monthly Burn</div><div class="tree-node-value">${fmtK(base.burn)}</div></div>
         </div>
         <div class="tree-connector"><div class="tree-connector-line"></div></div>
         <div class="tree-row tree-row-2">
-          <div class="tree-node positive"><div class="tree-node-label">Gross Profit</div><div class="tree-node-value">${fmtK(base.gp)}</div></div>
+          <div class="tree-node positive"><div class="tree-node-label" data-help="Revenue minus the direct cost to produce or deliver the product (COGS). This is the money available to pay for salaries, rent, software, and everything else. A higher gross profit means more room to operate and invest." style="cursor:help;">Gross Profit</div><div class="tree-node-value">${fmtK(base.gp)}</div></div>
           <div class="tree-arrow">−</div>
-          <div class="tree-node negative"><div class="tree-node-label">OpEx</div><div class="tree-node-value">${fmtK(inp.opex)}</div></div>
+          <div class="tree-node negative"><div class="tree-node-label" data-help="Operating Expenses — the ongoing costs of running the business that aren't tied directly to each sale: salaries, rent, marketing, software subscriptions, etc. Reducing OpEx improves EBITDA directly." style="cursor:help;">OpEx</div><div class="tree-node-value">${fmtK(inp.opex)}</div></div>
         </div>
         <div class="tree-connector"><div class="tree-connector-line"></div></div>
         <div class="tree-row tree-row-wide">
-          <div class="tree-node"><div class="tree-node-label">Revenue</div><div class="tree-node-value">${fmtK(base.revenue)}</div></div>
-          <div class="tree-node"><div class="tree-node-label">COGS (${pct(inp.cogs*100)})</div><div class="tree-node-value">${fmtK(base.cogsAmt)}</div></div>
-          <div class="tree-node"><div class="tree-node-label">Price</div><div class="tree-node-value">$${inp.price}</div></div>
-          <div class="tree-node"><div class="tree-node-label">Volume</div><div class="tree-node-value">${inp.volume.toLocaleString()}/mo</div></div>
+          <div class="tree-node"><div class="tree-node-label" data-help="Total money earned from sales each month — Price × Volume. This is the starting point before any costs are deducted. Growing revenue is only valuable if gross margin is healthy enough to convert it into profit." style="cursor:help;">Revenue</div><div class="tree-node-value">${fmtK(base.revenue)}</div></div>
+          <div class="tree-node"><div class="tree-node-label" data-help="Cost of Goods Sold — what it costs to produce or deliver each unit sold (materials, fulfilment, hosting, etc.). Shown as a % of revenue. Lower COGS % = more gross profit left over after each sale." style="cursor:help;">COGS (${pct(inp.cogs*100)})</div><div class="tree-node-value">${fmtK(base.cogsAmt)}</div></div>
+          <div class="tree-node"><div class="tree-node-label" data-help="The average amount charged per unit, subscription, or transaction. Raising price is often the highest-leverage action — it flows straight to gross profit with no added cost." style="cursor:help;">Price</div><div class="tree-node-value">$${inp.price}</div></div>
+          <div class="tree-node"><div class="tree-node-label" data-help="Number of units sold, customers served, or transactions processed per month. Growing volume increases revenue, but also increases COGS proportionally — unlike price, which doesn't." style="cursor:help;">Volume</div><div class="tree-node-value">${inp.volume.toLocaleString()}/mo</div></div>
         </div>
       </div>`;
 
@@ -1384,71 +1392,6 @@
     }
 
 
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
-    function initTooltips() {
-      var ttEl = document.getElementById('tt-root');
-      if (!ttEl) {
-        ttEl = document.createElement('div');
-        ttEl.id = 'tt-root';
-        document.body.appendChild(ttEl);
-      }
-
-      var hideTimer = null;
-
-      function show(text, targetEl) {
-        clearTimeout(hideTimer);
-        ttEl.textContent = text;
-        ttEl.classList.add('tt-visible');
-        position(targetEl);
-      }
-
-      function hide() {
-        hideTimer = setTimeout(function() {
-          ttEl.classList.remove('tt-visible');
-        }, 80);
-      }
-
-      function position(el) {
-        var rect = el.getBoundingClientRect();
-        var ttW = 260;
-        var gap = 8;
-        var left = rect.left + rect.width / 2 - ttW / 2;
-        left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
-        var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
-        if (rect.top - ttH - gap < 8) {
-          // Flip below if not enough room above
-          top = rect.bottom + gap;
-          transform = 'translateY(0)';
-        } else {
-          top = rect.top - gap;
-          transform = 'translateY(-100%)';
-        }
-        ttEl.style.left = left + 'px';
-        ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-      }
-
-      // Event delegation — works on dynamically injected elements too
-      document.addEventListener('mouseover', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (!el) return;
-        var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
-        if (text) show(text, el);
-      });
-
-      document.addEventListener('mouseout', function(e) {
-        var el = e.target.closest('[data-help], [data-tt]');
-        if (el) hide();
-      });
-
-      // Hide on scroll so tooltip doesn't chase the page
-      window.addEventListener('scroll', function() {
-        ttEl.classList.remove('tt-visible');
-      }, { passive: true });
-    }
-
-
     /* Mobile sidebar toggle */
     (function() {
       var btn = document.getElementById('mobileControlsBtn');
@@ -1461,7 +1404,7 @@
     })();
 
 
-    /* ── Body-level tooltip engine (fixes sidebar overflow clipping) ── */
+    /* ── Body-level tooltip engine ── */
     function initTooltips() {
       var ttEl = document.getElementById('tt-root');
       if (!ttEl) {
@@ -1496,27 +1439,18 @@
         left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
         ttEl.style.width = ttW + 'px';
         ttEl.style.left = left + 'px';
-        // Measure height after setting content
+        ttEl.style.position = 'fixed';
+        ttEl.style.transform = 'none';
         var ttH = ttEl.offsetHeight || 60;
-        var top, transform;
-        if (rect.top - ttH - gap - 8 < 0) {
-          top = rect.bottom + window.scrollY + gap;
-          transform = 'none';
-        } else {
-          top = rect.top + window.scrollY - ttH - gap;
-          transform = 'none';
-        }
+        var top = (rect.top - ttH - gap - 8 < 0) ? rect.bottom + gap : rect.top - ttH - gap;
         ttEl.style.top = top + 'px';
-        ttEl.style.transform = transform;
-        ttEl.style.position = 'absolute';
       }
 
-      /* Kill CSS ::after tooltips — they clip in overflow containers */
+      /* Kill CSS ::after tooltips */
       var killStyle = document.createElement('style');
       killStyle.textContent = '.help-icon::after,.help-icon:hover::after,[data-help]::after,[data-tt]::after,.term-helper::after,.term-helper:hover::after{content:none!important;display:none!important;}';
       document.head.appendChild(killStyle);
 
-      /* Desktop: mouse events (event delegation) */
       document.addEventListener('mouseover', function(e) {
         var el = e.target.closest('[data-help], [data-tt]');
         if (!el) return;
@@ -1529,42 +1463,27 @@
         if (el) hide();
       });
 
-      /* Mobile: tap to toggle */
       document.addEventListener('click', function(e) {
         var el = e.target.closest('[data-help], [data-tt]');
         if (!el) {
-          // tap anywhere else hides tooltip
-          if (ttEl.classList.contains('tt-visible')) {
-            ttEl.classList.remove('tt-visible');
-            activeEl = null;
-          }
+          if (ttEl.classList.contains('tt-visible')) { ttEl.classList.remove('tt-visible'); activeEl = null; }
           return;
         }
         var text = el.getAttribute('data-help') || el.getAttribute('data-tt');
         if (!text || text === 'Loading...') return;
-        if (activeEl === el && ttEl.classList.contains('tt-visible')) {
-          ttEl.classList.remove('tt-visible');
-          activeEl = null;
-        } else {
-          show(text, el);
-        }
+        if (activeEl === el && ttEl.classList.contains('tt-visible')) { ttEl.classList.remove('tt-visible'); activeEl = null; }
+        else { show(text, el); }
         e.stopPropagation();
       });
 
-      /* Reposition on scroll (don't hide, just reposition) */
       window.addEventListener('scroll', function() {
-        if (activeEl && ttEl.classList.contains('tt-visible')) {
-          position(activeEl);
-        }
+        if (activeEl && ttEl.classList.contains('tt-visible')) position(activeEl);
       }, { passive: true });
 
-      /* Hide on resize */
       window.addEventListener('resize', function() {
-        ttEl.classList.remove('tt-visible');
-        activeEl = null;
+        ttEl.classList.remove('tt-visible'); activeEl = null;
       }, { passive: true });
     }
-
 
 </script>
 </body>
