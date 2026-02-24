@@ -1369,6 +1369,7 @@
         <div class="sb-acc-body">
           <button onclick="useSampleData()" class="sb-acc-btn">Use Sample Data</button>
           <button onclick="randomizeSampleData()" class="sb-acc-btn primary">🎲 Generate Random</button>
+          <button onclick="loadWorstCase()" class="sb-acc-btn" style="background:#fef2f2;border-color:rgba(220,38,38,0.35);color:#dc2626;margin-top:4px;">🔴 Worst Case Demo</button>
         </div>
       </div>
 
@@ -2026,6 +2027,138 @@
       });
 
       renderAll();
+      }); // end withStableScroll
+    }
+
+    // ========== WORST CASE DEMO ==========
+    // Engineered to push ALL four "So What" explainers into 🔴 red simultaneously:
+    //   Rate Leakage  → leakagePct >= 5%   (need: >5% avg overbilling across vendors)
+    //   Accruals      → pctNotInvoiced >= 25% (need: invoicedPct ~0.55–0.65)
+    //   Forecast      → totalVariancePct > 10% OR overrunMonths >= 3
+    //   Risk flags    → highCount > 0 (leakage >$2k, spike >40%, accrual ratio >30%, conc >40%)
+
+    function loadWorstCase() {
+      withStableScroll(function () {
+        dataMode = 'sample';
+        updateDataModeBadge('worst');
+        const badge = document.getElementById('dataModeBadge');
+        if (badge) badge.textContent = 'WORST CASE';
+
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+        // ── Vendors: a dominant one (concentration risk) + heavy leakers ──────
+        const vendors = [
+          // V001 will dominate spend → concentration risk >40%
+          { id:'V001', name:'MegaHaul Logistics',   category:'Logistics',    service:'Delivery',     unit:'delivery', rate:15  },
+          { id:'V002', name:'OverCharge Express',    category:'Logistics',    service:'Delivery',     unit:'delivery', rate:12  },
+          { id:'V003', name:'BillingError Facilities',category:'Facilities',  service:'Maintenance',  unit:'job',      rate:250 },
+          { id:'V004', name:'CleanSlate Corp',       category:'Facilities',   service:'Cleaning',     unit:'hour',     rate:35  },
+          { id:'V005', name:'HelpDesk Unlimited',    category:'Support',      service:'Ticket',       unit:'ticket',   rate:3.5 },
+          { id:'V006', name:'ContractBreach Staff',  category:'Contractors',  service:'Hourly',       unit:'hour',     rate:65  },
+        ];
+
+        rateCards = vendors.map(v => ({
+          vendor_id: v.id, vendor_name: v.name, service: v.service,
+          unit: v.unit, contract_rate: v.rate, currency: 'USD',
+          effective_start: '2024-01-01', effective_end: '2024-12-31', category: v.category
+        }));
+
+        // ── Transactions: massive overbilling on all vendors ──────────────────
+        // Target: leakagePct well above 5%, V001 eats >40% of total spend
+        transactions = [];
+        let invCounter = 3000;
+
+        months.forEach((month, mIdx) => {
+          const monthNum = mIdx + 1;
+          const pad = n => String(n).padStart(2,'0');
+
+          vendors.forEach(v => {
+            // V001 gets 8x more units to create concentration risk
+            const unitCount = v.id === 'V001' ? 800 : 60;
+            // Every transaction is overbilled 20–45% above contract
+            const leakMultiplier = 1.20 + Math.sin(mIdx + vendors.indexOf(v)) * 0.12 + 0.08;
+            const billedRate = v.rate * leakMultiplier;
+            const amount = unitCount * billedRate;
+
+            transactions.push({
+              date: `2024-${pad(monthNum)}-${pad(10 + (mIdx % 18))}`,
+              vendor_id: v.id,
+              service: v.service,
+              units: unitCount,
+              unit_rate: billedRate.toFixed(2),
+              amount: amount.toFixed(2),
+              cost_center: 'CC10' + (mIdx % 4),
+              category: v.category,
+              invoice_id: 'INV' + (invCounter++),
+              po_id: 'PO' + (2000 + mIdx)
+            });
+
+            // Extra mid-month transactions for V001 (spend spike months: Mar, Jul, Oct)
+            if (v.id === 'V001' && [2, 6, 9].includes(mIdx)) {
+              const spikeUnits = 1200; // creates >40% spike above monthly avg
+              transactions.push({
+                date: `2024-${pad(monthNum)}-20`,
+                vendor_id: v.id, service: v.service,
+                units: spikeUnits,
+                unit_rate: (v.rate * 1.35).toFixed(2),
+                amount: (spikeUnits * v.rate * 1.35).toFixed(2),
+                cost_center: 'CC102', category: v.category,
+                invoice_id: 'INV' + (invCounter++),
+                po_id: 'PO2099'
+              });
+            }
+          });
+        });
+
+        // ── Accruals: only 55–62% invoiced → pctNotInvoiced ~38–45% ──────────
+        accruals = [];
+        months.forEach((month, mIdx) => {
+          const monthNum = mIdx + 1;
+          vendors.forEach(v => {
+            const mt = transactions.filter(t =>
+              t.vendor_id === v.id && t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`)
+            );
+            if (!mt.length) return;
+            const incurred  = mt.reduce((s,t) => s + parseFloat(t.amount), 0);
+            // Invoiced only 55–63% of incurred → well above 25% not-invoiced threshold
+            const invoicedPct = 0.55 + (mIdx % 3) * 0.027;
+            const invoiced  = incurred * invoicedPct;
+            const accrual   = incurred - invoiced;
+            accruals.push({
+              month, vendor_id: v.id, service: v.service,
+              incurred_amount: incurred.toFixed(2),
+              invoiced_amount: invoiced.toFixed(2),
+              accrual_amount:  accrual.toFixed(2),
+              status: 'Open', notes: 'Vendor invoicing severely delayed'
+            });
+          });
+        });
+
+        // ── Forecast vs Actual: set forecast at 65% of actual spend per month ──
+        // This guarantees actuals always run ~54% over forecast (well past the 10% red threshold)
+        forecastBudget = [];
+        const costCenters = ['CC100','CC101','CC102','CC103'];
+        months.forEach((month, mIdx) => {
+          const monthNum = mIdx + 1;
+          // Sum actual transactions for this month to anchor forecast below it
+          const monthActual = transactions
+            .filter(t => t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`))
+            .reduce((s, t) => s + parseFloat(t.amount), 0);
+          // Spread forecast across cost_centers × categories (20 buckets), each = 65% of actual / 20
+          const forecastPerBucket = (monthActual * 0.65) / 20;
+          const budgetPerBucket   = forecastPerBucket * 1.02;
+          costCenters.forEach(cc => {
+            ['Logistics','Facilities','Support','Contractors','IT Ops'].forEach(cat => {
+              forecastBudget.push({
+                month, cost_center: cc, category: cat,
+                forecast_amount: forecastPerBucket.toFixed(2),
+                budget_amount:   budgetPerBucket.toFixed(2)
+              });
+            });
+          });
+        });
+
+        renderAll();
       }); // end withStableScroll
     }
 
