@@ -524,12 +524,40 @@
     #accrualSoWhat::-webkit-scrollbar-thumb:hover,
     #forecastSoWhat::-webkit-scrollbar-thumb:hover,
     #riskSoWhat::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.32); }
-    /* Sticky headers inside scrollable table containers */
-    #rateTableScroll .data-table thead th {
-      position: sticky; top: 0;
-      background: #f8f9fb; z-index: 2;
-      box-shadow: 0 1px 0 var(--border);
+    /* Fixed-layout tables: rate & accrual */
+    #rateTable,
+    #accrualTable {
+      table-layout: fixed;
+      width: 100%;
     }
+    #rateTable tbody tr,
+    #accrualTable tbody tr {
+      height: 40px;
+    }
+    #rateTable td,
+    #rateTable th,
+    #accrualTable td,
+    #accrualTable th {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* Rate table column widths */
+    #rateTable colgroup col:nth-child(1) { width: 22%; }  /* Vendor */
+    #rateTable colgroup col:nth-child(2) { width: 18%; }  /* Service */
+    #rateTable colgroup col:nth-child(3) { width: 14%; }  /* Category */
+    #rateTable colgroup col:nth-child(4) { width: 13%; }  /* Contract Rate */
+    #rateTable colgroup col:nth-child(5) { width: 13%; }  /* Avg Paid Rate */
+    #rateTable colgroup col:nth-child(6) { width: 11%; }  /* Rate Variance % */
+    #rateTable colgroup col:nth-child(7) { width: 9%; }   /* Leakage $ */
+    /* Accrual table column widths */
+    #accrualTable colgroup col:nth-child(1) { width: 10%; }  /* Month */
+    #accrualTable colgroup col:nth-child(2) { width: 14%; }  /* Invoice Count */
+    #accrualTable colgroup col:nth-child(3) { width: 13%; }  /* Open Records */
+    #accrualTable colgroup col:nth-child(4) { width: 16%; }  /* Incurred */
+    #accrualTable colgroup col:nth-child(5) { width: 16%; }  /* Invoiced */
+    #accrualTable colgroup col:nth-child(6) { width: 16%; }  /* Accrual Amount */
+    #accrualTable colgroup col:nth-child(7) { width: 15%; }  /* Status */
   
     /* ── Data-needed strip ── */
     .data-needed-section {
@@ -1552,7 +1580,7 @@
 
           <!-- So What: Risk & Anomaly Flags -->
           <div id="riskSoWhat" style="margin:0 0 16px 0;padding:18px 20px;border:1.5px solid rgba(245,158,11,0.30);border-radius:14px;background:#fffbeb;box-shadow:0 2px 8px rgba(245,158,11,0.08);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#b45309;margin-bottom:8px;">💡 So What — Risk &amp; Anomaly Flags</div>
+            <div id="riskSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#b45309;margin-bottom:8px;">💡 So What — Risk &amp; Anomaly Flags</div>
             <ul id="riskSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
           </div>
 
@@ -2085,6 +2113,9 @@
       `;
       
       let tableHTML = `
+        <colgroup>
+          <col><col><col><col><col><col><col>
+        </colgroup>
         <thead>
           <tr>
             <th>Vendor <span class="help-icon" data-help="The supplier being analysed. Focus on high-spend vendors first — even a small rate variance on a large-volume vendor costs more than a big variance on a small one."></span></th>
@@ -2305,7 +2336,7 @@
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">% Incurred Not Invoiced
-            <span class="help-icon" data-help="Share of total incurred spend that hasn't been formally invoiced yet. High = P&L relying on estimates."></span>
+            <span class="help-icon" data-help="Share of total incurred spend not yet formally invoiced — P&L is relying on estimates for this portion. Thresholds: ✅ Healthy = below 10% · ⚠️ Moderate = 10–24% · 🔴 High Risk = 25%+"></span>
           </div>
           <div class="kpi-box-value">${formatPercent(pctNotInvoiced)}</div>
         </div>
@@ -2322,6 +2353,9 @@
         </div>`;
 
       let tableHTML = `
+        <colgroup>
+          <col><col><col><col><col><col><col>
+        </colgroup>
         <thead>
           <tr>
             <th style="width:60px;">Month</th>
@@ -3021,26 +3055,39 @@
       }
 
       // --- So What: Risk & Anomaly Flags ---
-      const riskSoWhat = document.getElementById('riskSoWhat');
-      const riskSoWhatList = document.getElementById('riskSoWhatList');
+      const riskSoWhat      = document.getElementById('riskSoWhat');
+      const riskSoWhatLabel = document.getElementById('riskSoWhatLabel');
+      const riskSoWhatList  = document.getElementById('riskSoWhatList');
 
       if (alerts.length === 0) {
         riskSoWhat.style.display = 'none';
       } else {
         riskSoWhat.style.display = '';
+
+        // Severity-driven colour scheme
+        const rColor  = highCount > 0 ? '#dc2626' : medCount > 0 ? '#d97706' : '#6b7280';
+        const rBorder = highCount > 0 ? 'rgba(220,38,38,0.25)' : medCount > 0 ? 'rgba(245,158,11,0.30)' : 'rgba(107,114,128,0.20)';
+        const rBg     = highCount > 0 ? '#fef9f9' : medCount > 0 ? '#fffbeb' : '#f9fafb';
+        const rIcon   = highCount > 0 ? '🔴' : medCount > 0 ? '⚠️' : '✅';
+        const rStatus = highCount > 0 ? 'High Severity — Immediate Action' : medCount > 0 ? 'Moderate — Monitor Closely' : 'Low Risk — No Critical Flags';
+
+        riskSoWhat.style.border     = `1.5px solid ${rBorder}`;
+        riskSoWhat.style.background = rBg;
+        riskSoWhatLabel.style.color = rColor;
+        riskSoWhatLabel.textContent = `💡 So What — ${rIcon} ${rStatus}`;
         const rbullet = (color, text) =>
           `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${color};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
         const rbullets = [];
 
         // Overall summary
         if (highCount > 0) {
-          rbullets.push(rbullet('#dc2626', `<strong style="color:#0b1220;">${highCount} high-severity issue${highCount > 1 ? 's' : ''} require immediate attention.</strong> These represent the biggest risks to spend control and margin — prioritise these before the next reporting period.`));
+          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">${highCount} high-severity issue${highCount > 1 ? 's' : ''} require immediate attention.</strong> These represent the biggest risks to spend control and margin — prioritise these before the next reporting period.`));
         }
         if (medCount > 0 && highCount === 0) {
-          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${medCount} medium-severity flag${medCount > 1 ? 's' : ''} detected.</strong> These are worth monitoring closely — escalate if trends worsen or if the same vendors appear repeatedly.`));
+          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">${medCount} medium-severity flag${medCount > 1 ? 's' : ''} detected.</strong> These are worth monitoring closely — escalate if trends worsen or if the same vendors appear repeatedly.`));
         }
         if (highCount === 0 && medCount === 0) {
-          rbullets.push(rbullet('#6b7280', `<strong style="color:#0b1220;">No critical risks flagged.</strong> Only low-severity anomalies detected. Current thresholds may need tightening if you want earlier warnings.`));
+          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">No critical risks flagged.</strong> Only low-severity anomalies detected. Current thresholds may need tightening if you want earlier warnings.`));
         }
 
         // Rate leakage
@@ -3066,6 +3113,14 @@
         if (accrualFlags.length > 0) {
           rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${accrualFlags.length} accrual risk flag${accrualFlags.length > 1 ? 's' : ''}.</strong> These vendor-months have a high proportion of spend that is incurred but not yet invoiced — creating P&L uncertainty at close. Chase vendors for timely invoicing or revise accrual methodology to use contract run-rates.`));
         }
+
+        // Decision row
+        const riskAction = highCount > 0
+          ? 'Pause spend with vendors flagged for rate leakage until invoices are audited. Escalate high-severity issues to procurement and the CFO before next payment run. Set a 48-hour resolution deadline on each high flag.'
+          : medCount > 0
+          ? 'Assign ownership of each medium flag to a vendor manager this week. Review threshold settings — if the same vendors appear repeatedly, tighten contract clauses at next renewal. Re-run this analysis after 30 days to check for improvement.'
+          : 'No urgent action required. Review threshold settings to ensure they are sensitive enough to catch early-stage issues. Schedule a quarterly anomaly review to track trends over time.';
+        rbullets.push(rbullet(highCount > 0 ? '#dc2626' : medCount > 0 ? '#d97706' : '#6b7280', `<strong style="color:#0b1220;">Decision:</strong> ${riskAction}`));
 
         riskSoWhatList.innerHTML = rbullets.join('');
       }
