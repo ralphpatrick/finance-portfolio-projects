@@ -1457,7 +1457,7 @@
             <ul id="rateSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
           </div>
 
-          <div id="rateTableScroll" style="max-height:400px;overflow-y:auto;overflow-x:auto;border:1px solid var(--border);border-radius:10px;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.15) transparent;">
+          <div id="rateTableScroll" style="height:401px;min-height:401px;overflow-y:auto;overflow-x:auto;border:1px solid var(--border);border-radius:10px;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.15) transparent;">
             <table class="data-table" id="rateTable" style="margin:0;border:none;border-radius:0;">
               <!-- Table populated by JS -->
             </table>
@@ -1587,14 +1587,14 @@
 
           <!-- Alert counter -->
           <div id="alertCounterBar" style="display:none;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <span style="font-size:13px;font-weight:600;color:var(--text);">Flagged Issues</span>
-              <span id="alertCountTotal" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(12,23,45,0.08);color:var(--text);">0</span>
-              <span id="alertCountHigh" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(220,38,38,0.12);color:#dc2626;"></span>
-              <span id="alertCountMed" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(245,158,11,0.12);color:#d97706;"></span>
-              <span id="alertCountLow" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(107,114,128,0.12);color:#6b7280;"></span>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:13px;font-weight:600;color:var(--text);margin-right:4px;">Flagged Issues</span>
+              <button id="alertCountTotal" onclick="filterAlerts('all')"   style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:rgba(12,23,45,0.08);color:var(--text);border:2px solid transparent;cursor:pointer;transition:all 120ms ease;" title="Show all">0</button>
+              <button id="alertCountHigh"  onclick="filterAlerts('high')"  style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:rgba(220,38,38,0.12);color:#dc2626;border:2px solid transparent;cursor:pointer;transition:all 120ms ease;display:none;" title="Show High only"></button>
+              <button id="alertCountMed"   onclick="filterAlerts('med')"   style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:rgba(245,158,11,0.12);color:#d97706;border:2px solid transparent;cursor:pointer;transition:all 120ms ease;display:none;" title="Show Med only"></button>
+              <button id="alertCountLow"   onclick="filterAlerts('low')"   style="font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px;background:rgba(107,114,128,0.12);color:#6b7280;border:2px solid transparent;cursor:pointer;transition:all 120ms ease;display:none;" title="Show Low only"></button>
             </div>
-            <span style="font-size:11px;color:var(--muted);">Scroll inside to see all</span>
+            <span style="font-size:11px;color:var(--muted);">Click a badge to filter · Scroll inside to see all</span>
           </div>
 
           <!-- Scrollable alerts container -->
@@ -3162,7 +3162,7 @@
       
       document.getElementById('alertsContainer').innerHTML = alertsHTML;
 
-      // --- Alert counter ---
+      // --- Alert counter / filter buttons ---
       const counterBar = document.getElementById('alertCounterBar');
       const highCount = alerts.filter(a => a.severity === 'high').length;
       const medCount  = alerts.filter(a => a.severity === 'med').length;
@@ -3177,12 +3177,11 @@
         const hEl = document.getElementById('alertCountHigh');
         const mEl = document.getElementById('alertCountMed');
         const lEl = document.getElementById('alertCountLow');
-        hEl.textContent = highCount ? highCount + ' High' : '';
-        hEl.style.display = highCount ? '' : 'none';
-        mEl.textContent = medCount ? medCount + ' Med' : '';
-        mEl.style.display = medCount ? '' : 'none';
-        lEl.textContent = lowCount ? lowCount + ' Low' : '';
-        lEl.style.display = lowCount ? '' : 'none';
+        hEl.textContent = highCount ? highCount + ' High' : ''; hEl.style.display = highCount ? '' : 'none';
+        mEl.textContent = medCount  ? medCount  + ' Med'  : ''; mEl.style.display = medCount  ? '' : 'none';
+        lEl.textContent = lowCount  ? lowCount  + ' Low'  : ''; lEl.style.display = lowCount  ? '' : 'none';
+        // Reset to "all" view whenever flags are recomputed
+        filterAlerts('all');
       } else {
         counterBar.style.display = 'none';
       }
@@ -3259,6 +3258,36 @@
       }
 
       renderSpendDecisionBox();
+    }
+
+    // ── Alert filter — called by the counter buttons ──────────────────────────
+    // severity: 'all' | 'high' | 'med' | 'low'
+    function filterAlerts(severity) {
+      // Update active button styles
+      const ids = { all: 'alertCountTotal', high: 'alertCountHigh', med: 'alertCountMed', low: 'alertCountLow' };
+      const borders = {
+        all:  'rgba(12,23,45,0.30)',
+        high: '#dc2626',
+        med:  '#d97706',
+        low:  '#6b7280'
+      };
+      Object.entries(ids).forEach(([key, id]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.style.borderColor = (key === severity) ? (borders[key] || 'transparent') : 'transparent';
+        btn.style.boxShadow   = (key === severity) ? '0 0 0 0px transparent' : '';
+      });
+
+      // Show / hide alert cards
+      const cards = document.querySelectorAll('#alertsContainer .alert-card');
+      cards.forEach(card => {
+        if (severity === 'all') {
+          card.style.display = '';
+        } else {
+          // card has class "alert-card high|med|low"
+          card.style.display = card.classList.contains(severity) ? '' : 'none';
+        }
+      });
     }
     
     // ========== CSV DOWNLOADS ==========
