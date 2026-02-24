@@ -398,6 +398,10 @@
       box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
       margin-bottom: 24px;
       transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+      /* Fixed size: eyebrow + verdict + header row + 4 data rows — never resizes with data changes */
+      min-height: 310px;
+      max-height: 310px;
+      overflow: hidden;
     }
     /* Positive — green */
     .decision-box--positive {
@@ -459,6 +463,9 @@
     .exception-row:last-child {
       border-bottom: none;
     }
+    .exception-row[onclick]:hover {
+      background: rgba(246,248,251,0.8);
+    }
     .exception-row-header {
       background: rgba(246,248,251,0.8);
       font-weight: 700;
@@ -491,6 +498,38 @@
       .main-content { overflow-anchor: none; }
     .module-card { overflow-anchor: none; }
     .data-table { overflow-anchor: none; }
+    #alertsScroll::-webkit-scrollbar { width: 4px; }
+    #alertsScroll::-webkit-scrollbar-track { background: transparent; }
+    #alertsScroll::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    #alertsScroll::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+    /* Rate table scroll container */
+    #rateTableScroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    #rateTableScroll::-webkit-scrollbar-track { background: transparent; }
+    #rateTableScroll::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    #rateTableScroll::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+    /* So What explainer scrollbars */
+    #rateSoWhat::-webkit-scrollbar,
+    #accrualSoWhat::-webkit-scrollbar,
+    #forecastSoWhat::-webkit-scrollbar,
+    #riskSoWhat::-webkit-scrollbar { width: 4px; }
+    #rateSoWhat::-webkit-scrollbar-track,
+    #accrualSoWhat::-webkit-scrollbar-track,
+    #forecastSoWhat::-webkit-scrollbar-track,
+    #riskSoWhat::-webkit-scrollbar-track { background: transparent; }
+    #rateSoWhat::-webkit-scrollbar-thumb,
+    #accrualSoWhat::-webkit-scrollbar-thumb,
+    #forecastSoWhat::-webkit-scrollbar-thumb,
+    #riskSoWhat::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.18); border-radius: 4px; }
+    #rateSoWhat::-webkit-scrollbar-thumb:hover,
+    #accrualSoWhat::-webkit-scrollbar-thumb:hover,
+    #forecastSoWhat::-webkit-scrollbar-thumb:hover,
+    #riskSoWhat::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.32); }
+    /* Sticky headers inside scrollable table containers */
+    #rateTableScroll .data-table thead th {
+      position: sticky; top: 0;
+      background: #f8f9fb; z-index: 2;
+      box-shadow: 0 1px 0 var(--border);
+    }
   
     /* ── Data-needed strip ── */
     .data-needed-section {
@@ -1251,13 +1290,19 @@
   <!-- DATA NEEDED STRIP -->
   <div class="data-needed-section">
     <div class="data-needed-wrap">
-      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
-      <div class="data-needed-grid">
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">📋</div><div><div class="data-needed-name">Vendor Rate Cards</div><div class="data-needed-desc">Agreed unit rates by vendor &amp; service type → detects rate card mismatches</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🧾</div><div><div class="data-needed-name">Purchase Orders / Invoices</div><div class="data-needed-desc">Actual billed amounts vs. PO values → flags unapproved spend</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📦</div><div><div class="data-needed-name">Accrual Register</div><div class="data-needed-desc">Services received but not yet invoiced → open accrual tracking</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📊</div><div><div class="data-needed-name">Budget vs Actual Report</div><div class="data-needed-desc">Approved budget per cost centre → spend vs forecast variance</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">🔍</div><div><div class="data-needed-name">Spend Anomaly Log</div><div class="data-needed-desc">Flagged transactions outside policy → risk &amp; anomaly analysis</div></div></div>
+      <div class="data-needed-label">📂 &nbsp;One file powers this entire module</div>
+      <div class="data-needed-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+        <div class="data-needed-item" style="border-color:rgba(15,118,110,0.30);background:#f0fdf9;">
+          <div class="data-needed-icon" style="background:rgba(15,118,110,0.12);">📄</div>
+          <div>
+            <div class="data-needed-name">Single Flat CSV</div>
+            <div class="data-needed-desc">One row per invoice line — all 4 analyses run from this single file. No joins, no extra sheets needed.</div>
+          </div>
+        </div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">🔍</div><div><div class="data-needed-name">Rate Leakage</div><div class="data-needed-desc">Are vendors billing above contracted rates? Flags every line where unit price exceeds the agreed rate.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📦</div><div><div class="data-needed-name">Accrual Tracking</div><div class="data-needed-desc">Is accrued spend matching actual invoices? Surfaces over- and under-accruals before period close.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📊</div><div><div class="data-needed-name">Forecast vs Actual</div><div class="data-needed-desc">How accurate are spend forecasts? Shows variance by vendor and category to sharpen future planning.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">⚑</div><div><div class="data-needed-name">Risk &amp; Anomaly</div><div class="data-needed-desc">Any suspicious patterns? Auto-flags duplicate invoices, missing POs, and statistical spend outliers.</div></div></div>
       </div>
     </div>
   </div>
@@ -1294,38 +1339,30 @@
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <button onclick="useSampleData()" class="sb-acc-btn">Use Sample</button>
+          <button onclick="useSampleData()" class="sb-acc-btn">Use Sample Data</button>
           <button onclick="randomizeSampleData()" class="sb-acc-btn primary">🎲 Generate Random</button>
-          <button onclick="downloadAllTemplates()" class="sb-acc-btn">Download Templates</button>
         </div>
       </div>
 
       <!-- Upload Data -->
       <div class="sb-acc-group">
         <button class="sb-acc-header" onclick="sidebarAccordion(this)">
-          <span>Data &amp; Upload</span>
+          <span>Upload Your Data</span>
           <span id="sbUploadLabel" class="sb-acc-badge">CSV</span>
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <div style="font-size:10px;color:var(--muted);margin-bottom:8px;line-height:1.5;">Upload your own CSV files. Each replaces the corresponding sample dataset.</div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.6;">Upload <strong>one flat CSV</strong> — one row per invoice line with all columns. The module derives rate leakage, accruals, and forecast from this single file.</div>
           <div style="position:relative;margin-top:4px;">
-            <input type="file" id="rateCardsUpload" accept=".csv" onchange="handleRateCardsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <button class="sb-acc-btn" style="width:100%;">📋 Rate Cards CSV</button>
+            <input type="file" id="flatUpload" accept=".csv" onchange="handleFlatUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
+            <button class="sb-acc-btn primary" style="width:100%;">📄 Upload Spend CSV</button>
           </div>
-          <div style="position:relative;margin-top:4px;">
-            <input type="file" id="transactionsUpload" accept=".csv" onchange="handleTransactionsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <button class="sb-acc-btn" style="width:100%;">💳 Transactions CSV</button>
+          <button onclick="downloadFlatTemplate()" class="sb-acc-btn" style="margin-top:6px;width:100%;">⬇ Download Template</button>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:8px;">Export Current Dataset</div>
+            <button onclick="exportDatasetXLSX()" class="sb-acc-btn" style="width:100%;">📊 Export as Excel (.xlsx)</button>
+            <button onclick="exportDatasetCSV()" class="sb-acc-btn" style="margin-top:4px;width:100%;">📋 Export as CSV</button>
           </div>
-          <div style="position:relative;margin-top:4px;">
-            <input type="file" id="accrualsUpload" accept=".csv" onchange="handleAccrualsUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <button class="sb-acc-btn" style="width:100%;">📅 Accruals CSV</button>
-          </div>
-          <div style="position:relative;margin-top:4px;">
-            <input type="file" id="forecastUpload" accept=".csv" onchange="handleForecastUpload(event)" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <button class="sb-acc-btn" style="width:100%;">📈 Forecast CSV</button>
-          </div>
-          <button onclick="downloadAllTemplates()" class="sb-acc-btn" style="margin-top:8px;">⬇ Download Templates</button>
         </div>
       </div>
 
@@ -1345,7 +1382,7 @@
         </div>
 
         <!-- Rate Leakage -->
-        <section class="module-section">
+        <section class="module-section" id="section-rate-leakage">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
           1. Vendor Rate Cards (Rate Discipline)
           <span class="help-icon" data-help="Checks whether vendors are charging you exactly what was agreed in the contract. If they bill even $1 more per unit than the agreed rate, it silently drains profit month after month without anyone noticing — this section catches that."></span>
@@ -1385,25 +1422,22 @@
             </div>
           </div>
 
-          <!-- So What: Rate Leakage -->
-          <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(220,38,38,0.25);border-radius:14px;background:#fef9f9;box-shadow:0 2px 8px rgba(220,38,38,0.06);">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#dc2626;margin-bottom:8px;">💡 So What — Rate Leakage Analysis</div>
-            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span>Rate leakage is the gap between what you contracted to pay and what vendors actually charged — direct P&amp;L impact that bypasses budget.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span>Top leaking vendors should be prioritised for immediate contract review and rate re-negotiation; even a 50% reduction in leakage on the top 3 vendors typically saves 2–4% of total vendor spend.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If leakage is rising:</strong> Escalate to procurement — add PO matching controls and require invoice approval against contract rates before payment.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#dc2626;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If leakage is flat/low:</strong> Rate discipline is working — document controls for audit and focus on contract renewal terms instead.</li>
-            </ul>
+          <!-- So What: Rate Leakage — rendered dynamically by JS -->
+          <div id="rateSoWhat" style="margin:16px 0 8px;padding:18px 20px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
+            <div id="rateSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;"></div>
+            <ul id="rateSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
           </div>
 
-          <table class="data-table" id="rateTable">
-            <!-- Table populated by JS -->
-          </table>
+          <div id="rateTableScroll" style="max-height:400px;overflow-y:auto;overflow-x:auto;border:1px solid var(--border);border-radius:10px;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.15) transparent;">
+            <table class="data-table" id="rateTable" style="margin:0;border:none;border-radius:0;">
+              <!-- Table populated by JS -->
+            </table>
+          </div>
         </div>
     </section>
 
     <!-- Accrual Tracking -->
-    <section class="module-section section-muted">
+    <section class="module-section section-muted" id="section-accruals">
       <div class="container">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
           2. Accrual Tracking
@@ -1412,7 +1446,7 @@
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Accrual Schedule <span class="help-icon" data-help="A month-by-month record of costs incurred vs. invoices actually received. The gap between the two is the 'accrual' — money owed but not yet billed. A clean schedule keeps the finance team in control of month-end numbers and reduces last-minute adjustments."></span></h3>
+            <h3 class="card-title">Accrual Schedule <span class="help-icon" data-help="A month-by-month record of costs incurred vs. invoices actually received. The gap between the two is the 'accrual' — money owed but not yet billed. Invoice Count shows how many distinct invoices were received that month, so you can cross-check the Decision Box's 'Open accruals' count directly."></span></h3>
             <div class="card-actions">
               <button onclick="downloadAccrualsCSV()" class="btn-small">Export Schedule</button>
             </div>
@@ -1429,16 +1463,13 @@
             </div>
           </div>
 
-          <!-- So What: Accrual Schedule -->
-          <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;box-shadow:0 2px 8px rgba(15,118,110,0.06);">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:8px;">💡 So What — Accrual Schedule</div>
-            <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Accruals are expenses recognised in the P&amp;L before a vendor invoice arrives. A growing accrual balance means real cost is accumulating that may not yet be reflected in cash or AP — understating true run-rate spend.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>The gap between accrued and invoiced is the primary source of month-end P&amp;L surprises. Wide or growing gaps indicate weak purchase-order discipline or delayed vendor invoicing cycles.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If accruals are significantly above invoiced:</strong> Tighten PO-to-invoice matching, chase vendors for timely billing, and review whether accruals are based on contracts or guesses.</li>
-              <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If accruals are below invoiced:</strong> Under-accrual risk — the P&amp;L will take a surprise hit when invoices arrive. Increase accrual estimates using invoice run-rate data.</li>
-            </ul>
+          <!-- So What: Accrual Schedule — rendered dynamically by JS -->
+          <div id="accrualSoWhat" style="margin:16px 0 8px;padding:18px 20px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
+            <div id="accrualSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;"></div>
+            <ul id="accrualSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
           </div>
+
+          <div id="accrualTableBanner"></div>
 
           <table class="data-table" id="accrualTable">
             <!-- Table populated by JS -->
@@ -1447,7 +1478,7 @@
     </section>
 
     <!-- Forecast vs Actual -->
-    <section class="module-section">
+    <section class="module-section" id="section-forecast">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
           3. Forecast vs Actual Spend
           <span class="help-icon" data-help="Compares what you predicted you'd spend with what you actually spent. The goal is to catch overruns early — before they become budget crises — and improve the accuracy of future forecasts so the business can plan confidently."></span>
@@ -1472,6 +1503,12 @@
             </div>
           </div>
 
+          <!-- So What: Forecast vs Actual — rendered dynamically by JS -->
+          <div id="forecastSoWhat" style="margin:16px 0 8px;padding:18px 20px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
+            <div id="forecastSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;"></div>
+            <ul id="forecastSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
+          </div>
+
           <table class="data-table" id="forecastTable">
             <!-- Table populated by JS -->
           </table>
@@ -1479,7 +1516,7 @@
     </section>
 
     <!-- Risk & Anomaly Flags -->
-    <section class="module-section section-muted">
+    <section class="module-section section-muted" id="section-risk">
       <div class="container">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
           4. Risk &amp; Anomaly Flags
@@ -1513,8 +1550,29 @@
             </div>
           </div>
 
-          <div class="alert-grid" id="alertsContainer">
-            <!-- Alert cards populated by JS -->
+          <!-- So What: Risk & Anomaly Flags -->
+          <div id="riskSoWhat" style="margin:0 0 16px 0;padding:18px 20px;border:1.5px solid rgba(245,158,11,0.30);border-radius:14px;background:#fffbeb;box-shadow:0 2px 8px rgba(245,158,11,0.08);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#b45309;margin-bottom:8px;">💡 So What — Risk &amp; Anomaly Flags</div>
+            <ul id="riskSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
+          </div>
+
+          <!-- Alert counter -->
+          <div id="alertCounterBar" style="display:none;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Flagged Issues</span>
+              <span id="alertCountTotal" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(12,23,45,0.08);color:var(--text);">0</span>
+              <span id="alertCountHigh" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(220,38,38,0.12);color:#dc2626;"></span>
+              <span id="alertCountMed" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(245,158,11,0.12);color:#d97706;"></span>
+              <span id="alertCountLow" style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(107,114,128,0.12);color:#6b7280;"></span>
+            </div>
+            <span style="font-size:11px;color:var(--muted);">Scroll inside to see all</span>
+          </div>
+
+          <!-- Scrollable alerts container -->
+          <div id="alertsScroll" style="max-height:480px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.15) transparent;">
+            <div class="alert-grid" id="alertsContainer">
+              <!-- Alert cards populated by JS -->
+            </div>
           </div>
         </div>
     </section>
@@ -1590,6 +1648,9 @@
       accrual: 20,
       concentration: 25
     };
+
+    // Cached risk alert counts — updated by computeRiskFlags(), read by renderSpendDecisionBox()
+    let _riskAlertCounts = { total: 0, high: 0, med: 0, low: 0 };
     
     // ========== UTILITY FUNCTIONS ==========
     
@@ -1649,6 +1710,22 @@
     }
     
     // ========== SAMPLE DATA GENERATION ==========
+
+    // Prevent page jump when re-rendering: save scroll, run fn, restore scroll
+    function withStableScroll(fn) {
+      const scrollY = window.scrollY || window.pageYOffset;
+      // Anchor the page height so content changes don't shift scroll position
+      document.documentElement.style.minHeight = document.documentElement.scrollHeight + 'px';
+      fn();
+      // Use requestAnimationFrame to restore after DOM has updated
+      requestAnimationFrame(function() {
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+        // Release the height lock after another frame
+        requestAnimationFrame(function() {
+          document.documentElement.style.minHeight = '';
+        });
+      });
+    }
     
     function useSampleData() {
       withStableScroll(function() {
@@ -2039,6 +2116,66 @@
       document.getElementById('rateTable').innerHTML = tableHTML;
       
       renderLeakageChart(leakageArray.slice(0, 8));
+
+      // --- Dynamic So What: Rate Leakage ---
+      const soWhatEl    = document.getElementById('rateSoWhat');
+      const soWhatLabel = document.getElementById('rateSoWhatLabel');
+      const soWhatList  = document.getElementById('rateSoWhatList');
+      soWhatEl.style.display = '';
+
+      const isClean    = leakagePct < 2;
+      const isModerate = leakagePct >= 2 && leakagePct < 5;
+      const isCritical = leakagePct >= 5;
+      const accentColor = isCritical ? '#dc2626' : isModerate ? '#d97706' : '#0f766e';
+      const borderColor = isCritical ? 'rgba(220,38,38,0.25)' : isModerate ? 'rgba(245,158,11,0.30)' : 'rgba(15,118,110,0.25)';
+      const bgColor     = isCritical ? '#fef9f9' : isModerate ? '#fffbeb' : '#f0fdf9';
+
+      soWhatEl.style.border    = `1.5px solid ${borderColor}`;
+      soWhatEl.style.background = bgColor;
+
+      const statusIcon  = isCritical ? '🔴' : isModerate ? '⚠️' : '✅';
+      const statusLabel = isCritical ? 'Critical — Action Required' : isModerate ? 'Moderate — Watch Closely' : 'Healthy — Rate Discipline Working';
+      soWhatLabel.style.color   = accentColor;
+      soWhatLabel.textContent   = `💡 So What — ${statusIcon} ${statusLabel}`;
+
+      const b = (text) => `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${accentColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
+      const bullets = [];
+      const topVendor  = leakageArray[0];
+      const leakVendorCount = leakageArray.filter(v => v.leakage_amount > 0).length;
+
+      // Overall verdict
+      if (isCritical) {
+        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — well above the 5% critical threshold. ${formatCurrency(totalLeakage)} is being lost to above-contract billing. This is a procurement control failure that needs immediate escalation.`));
+      } else if (isModerate) {
+        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — in the caution zone (2–5%). ${formatCurrency(totalLeakage)} is being overpaid vs contracted rates. Not yet critical but trending the wrong way.`));
+      } else {
+        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — below the 2% healthy threshold. Rate discipline is working. ${totalLeakage > 0 ? `The remaining ${formatCurrency(totalLeakage)} of leakage is within normal tolerance for invoice rounding and timing differences.` : 'No material overcharging detected.'}`));
+      }
+
+      // Top leaking vendor
+      if (topVendor && topVendor.leakage_amount > 0) {
+        bullets.push(b(`<strong style="color:#0b1220;">Worst offender: ${topVendor.vendor_name}</strong> — ${formatCurrency(topVendor.leakage_amount)} in leakage at a ${formatPercent(topVendor.rate_variance_pct)} rate premium above contract. Start here: pull the last 3 months of invoices and reconcile line by line against the rate card.`));
+      }
+
+      // Vendor breadth
+      if (leakVendorCount > 1) {
+        bullets.push(b(`<strong style="color:#0b1220;">${leakVendorCount} vendors are overcharging</strong> — this isn't a one-vendor problem. ${leakVendorCount >= 4 ? 'Breadth this wide suggests the rate card enforcement process itself is broken, not just individual vendor behaviour. Fix the process, not just the vendors.' : 'Address the top 2–3 by dollar leakage first, then work down the list.'}`));
+      }
+
+      // Flagged transactions
+      if (totalFlagged > 0) {
+        bullets.push(b(`<strong style="color:#0b1220;">${totalFlagged.toLocaleString()} transactions flagged</strong> above contracted rates. ${totalFlagged > 50 ? 'Volume this high means manual review isn\'t feasible — implement automated invoice matching against rate cards in the AP system.' : 'Pull these transactions and dispute directly with vendors before the next payment cycle.'}`));
+      }
+
+      // Action
+      const action = isCritical
+        ? 'Freeze payments to top leaking vendors pending invoice audit. Escalate to procurement. Implement PO-matched approval workflow before next payment run.'
+        : isModerate
+        ? 'Schedule vendor reviews with the top 2–3 offenders this month. Add rate card compliance as a standing agenda item in vendor QBRs.'
+        : 'No urgent action needed. Review at next contract renewal cycle and tighten rate card clauses to include penalty clauses for over-billing.';
+      bullets.push(b(`<strong style="color:#0b1220;">Decision:</strong> ${action}`));
+
+      soWhatList.innerHTML = bullets.join('');
     }
     
     function renderLeakageChart(topVendors) {
@@ -2125,59 +2262,221 @@
         const monthAccruals = accruals.filter(a => a.month === month);
         const incurred = monthAccruals.reduce((sum, a) => sum + parseFloat(a.incurred_amount), 0);
         const invoiced = monthAccruals.reduce((sum, a) => sum + parseFloat(a.invoiced_amount), 0);
-        const accrual = monthAccruals.reduce((sum, a) => sum + parseFloat(a.accrual_amount), 0);
-        return { month, incurred, invoiced, accrual };
+        const accrual  = monthAccruals.reduce((sum, a) => sum + parseFloat(a.accrual_amount), 0);
+        // Count distinct invoice_ids from transactions for this month
+        const monthNum = months.indexOf(month) + 1;
+        const monthTrans = transactions.filter(t =>
+          t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`)
+        );
+        const invoiceCount = new Set(monthTrans.map(t => t.invoice_id).filter(Boolean)).size;
+        return { month, incurred, invoiced, accrual, invoiceCount };
       });
       
-      const totalAccrued = monthlyTotals.reduce((sum, m) => sum + m.accrual, 0);
-      const currentMonth = monthlyTotals[monthlyTotals.length - 1];
+      const totalAccrued  = monthlyTotals.reduce((sum, m) => sum + m.accrual, 0);
       const totalIncurred = monthlyTotals.reduce((sum, m) => sum + m.incurred, 0);
       const totalInvoiced = monthlyTotals.reduce((sum, m) => sum + m.invoiced, 0);
+      const totalInvoiceCount = monthlyTotals.reduce((sum, m) => sum + m.invoiceCount, 0);
+      const openMonths    = monthlyTotals.filter(m => m.accrual > 0).length;
       const pctNotInvoiced = totalIncurred > 0 ? ((totalIncurred - totalInvoiced) / totalIncurred) * 100 : 0;
+
+      // This is the EXACT number the Decision Box shows as "Open accruals (not invoiced): 94"
+      // = individual vendor-month records where accrual_amount > 0
+      const openVendorMonthRecords = accruals.filter(a => parseFloat(a.accrual_amount) > 0);
+      const openVendorMonthCount   = openVendorMonthRecords.length;
       
       document.getElementById('accrualKPIs').innerHTML = `
+        <div class="kpi-box" style="border:1.5px solid rgba(220,38,38,0.35);background:rgba(220,38,38,0.04);">
+          <div class="kpi-box-label" style="color:#dc2626;font-weight:700;">Open Vendor-Accrual Records
+            <span class="help-icon" data-help="This is the exact number the Decision Box shows as 'Open accruals (not invoiced)'. It counts individual vendor × month combinations where the accrual is still unsettled — e.g. QuickShip in Jan + QuickShip in Feb = 2 records. Click any ▶ month row below to see the breakdown. The 12-month table shows aggregates; these vendor records are the underlying detail."></span>
+          </div>
+          <div class="kpi-box-value" style="color:#dc2626;">${openVendorMonthCount}</div>
+        </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Total Accrued (YTD) <span class="help-icon" data-help="The total costs recognised in the P&L this year that haven't been invoiced yet. This is money you 'owe' but haven't paid — a real liability that builds up if vendor invoicing is slow."></span></div>
+          <div class="kpi-box-label">Total Accrued (YTD)
+            <span class="help-icon" data-help="Total dollar value of costs incurred but not yet invoiced across the year."></span>
+          </div>
           <div class="kpi-box-value">${formatCurrency(totalAccrued)}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">Current Month Accrual <span class="help-icon" data-help="How much of this month's spend is accrued but not yet invoiced. A large current-month accrual means finance needs to make careful P&L estimates — and chase vendors to submit invoices before month-end close."></span></div>
-          <div class="kpi-box-value">${formatCurrency(currentMonth.accrual)}</div>
+          <div class="kpi-box-label">Total Invoices Received
+            <span class="help-icon" data-help="Distinct invoice IDs across all transactions this year."></span>
+          </div>
+          <div class="kpi-box-value">${totalInvoiceCount.toLocaleString()}</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-box-label">% Incurred Not Invoiced <span class="help-icon" data-help="Of all the costs incurred this year, what percentage hasn't been formally billed yet. A high percentage signals slow vendor invoicing or poor PO management — and means your P&L is leaning heavily on estimates rather than real invoices."></span></div>
+          <div class="kpi-box-label">% Incurred Not Invoiced
+            <span class="help-icon" data-help="Share of total incurred spend that hasn't been formally invoiced yet. High = P&L relying on estimates."></span>
+          </div>
           <div class="kpi-box-value">${formatPercent(pctNotInvoiced)}</div>
         </div>
       `;
-      
+
+      // Small explanatory banner linking the KPI to the table
+      const bannerColor = openVendorMonthCount > 0 ? '#dc2626' : '#059669';
+      const bannerBg    = openVendorMonthCount > 0 ? 'rgba(220,38,38,0.05)' : 'rgba(5,150,105,0.05)';
+      const bannerBorder= openVendorMonthCount > 0 ? 'rgba(220,38,38,0.20)' : 'rgba(5,150,105,0.20)';
+      document.getElementById('accrualTableBanner').innerHTML = `
+        <div style="padding:10px 14px;border:1px solid ${bannerBorder};border-radius:8px;background:${bannerBg};font-size:12px;color:${bannerColor};display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-weight:700;">📋 How the Decision Box "Open accruals: ${openVendorMonthCount}" maps here:</span>
+          <span style="color:#5d6b7a;">Each row below is one month. Click <strong>▶</strong> to expand and see which ${openVendorMonthCount} vendor records are still open — those are the exact records being counted.</span>
+        </div>`;
+
       let tableHTML = `
         <thead>
           <tr>
-            <th>Month <span class="help-icon" data-help="The calendar month being reported. Look for months where the Accrual Amount is unusually large — that signals invoice timing problems or unresolved costs from that period."></span></th>
-            <th>Incurred Amount <span class="help-icon" data-help="Total costs actually incurred (services received, work done) in this month — regardless of whether an invoice arrived. This is what belongs in the P&L for the period."></span></th>
-            <th>Invoiced Amount <span class="help-icon" data-help="Total invoices actually received and processed from vendors in this month. If this is significantly below Incurred Amount, it means a chunk of real cost hasn't been formally billed yet."></span></th>
-            <th>Accrual Amount <span class="help-icon" data-help="The gap: Incurred minus Invoiced. This is the estimate the finance team must post to the books to ensure the P&L is accurate. Red = open accrual that needs to be tracked and settled."></span></th>
-            <th>Status <span class="help-icon" data-help="Open = the accrual hasn't been cleared by an invoice yet. Closed = the invoice arrived and matched the accrual estimate. Open accruals are risk items at month-end — they can change the P&L if the final invoice differs from the estimate."></span></th>
+            <th style="width:60px;">Month</th>
+            <th>Invoice Count <span class="help-icon" data-help="Distinct invoices received this month."></span></th>
+            <th>Open Records <span class="help-icon" data-help="How many vendor-month accrual records are still open within this month. These add up to the total shown in the Decision Box. Expand the row to see each vendor."></span></th>
+            <th>Incurred Amount</th>
+            <th>Invoiced Amount</th>
+            <th>Accrual Amount <span class="help-icon" data-help="Incurred minus Invoiced. Red = open balance. Expand ▶ to see which vendors account for it."></span></th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
       `;
+
+      const totalAccrualAmt = monthlyTotals.reduce((s,m) => s + m.accrual, 0);
+
       monthlyTotals.forEach(m => {
-        const status = m.accrual > 0 ? 'Open' : 'Closed';
+        // Per-month open vendor records
+        const monthVendorRows = accruals.filter(a => a.month === m.month);
+        const openVendorRows  = monthVendorRows.filter(a => parseFloat(a.accrual_amount) > 0);
+        const openVendorCt    = openVendorRows.length;
+        const hasDetail       = openVendorCt > 0;
+        const expandId        = `accrual-detail-${m.month}`;
+
+        const statusBadge = m.accrual > 0
+          ? `<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(220,38,38,0.10);color:#dc2626;">Open</span>`
+          : `<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(5,150,105,0.10);color:#059669;">Closed</span>`;
+
         tableHTML += `
-          <tr>
-            <td>${m.month}</td>
+          <tr style="cursor:${hasDetail ? 'pointer' : 'default'};" onclick="${hasDetail ? `toggleAccrualRow('${expandId}','chevron-${m.month}')` : ''}">
+            <td>
+              <strong>${m.month}</strong>
+              ${hasDetail ? `<span id="chevron-${m.month}" style="font-size:10px;color:var(--accent);margin-left:4px;">▶</span>` : ''}
+            </td>
+            <td>${m.invoiceCount > 0 ? m.invoiceCount : '<span style="color:var(--muted);">—</span>'}</td>
+            <td>${openVendorCt > 0
+              ? `<span style="font-weight:700;color:#dc2626;">${openVendorCt}</span> <span style="font-size:10px;color:var(--muted);">vendor${openVendorCt !== 1 ? 's' : ''}</span>`
+              : `<span style="color:#059669;">0</span>`}</td>
             <td>${formatCurrency(m.incurred)}</td>
             <td>${formatCurrency(m.invoiced)}</td>
-            <td class="${m.accrual > 0 ? 'highlight-red' : ''}">${formatCurrency(m.accrual)}</td>
-            <td>${status}</td>
+            <td class="${m.accrual > 0 ? 'highlight-red' : 'highlight-green'}">${formatCurrency(m.accrual)}</td>
+            <td>${statusBadge}</td>
           </tr>
         `;
+
+        // Expandable vendor detail (hidden by default)
+        if (hasDetail) {
+          tableHTML += `
+            <tr id="${expandId}" style="display:none;">
+              <td colspan="7" style="padding:0;background:rgba(254,249,249,0.8);">
+                <table style="width:100%;font-size:12px;border-collapse:collapse;">
+                  <thead>
+                    <tr style="background:rgba(220,38,38,0.08);">
+                      <th style="padding:6px 10px 6px 32px;font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;text-align:left;">Vendor</th>
+                      <th style="padding:6px 10px;font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;text-align:left;">Service</th>
+                      <th style="padding:6px 10px;font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;text-align:right;">Incurred</th>
+                      <th style="padding:6px 10px;font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;text-align:right;">Invoiced</th>
+                      <th style="padding:6px 10px;font-size:10px;color:#dc2626;font-weight:700;text-transform:uppercase;text-align:right;">Open Accrual ← counted in Decision Box</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+          `;
+          openVendorRows.forEach(a => {
+            const rc = rateCards.find(r => r.vendor_id === a.vendor_id);
+            const vName = rc ? rc.vendor_name : a.vendor_id;
+            tableHTML += `
+              <tr style="border-top:1px solid rgba(220,38,38,0.10);">
+                <td style="padding:5px 10px 5px 32px;">${vName}</td>
+                <td style="padding:5px 10px;color:var(--muted);">${a.service}</td>
+                <td style="padding:5px 10px;text-align:right;">${formatCurrency(parseFloat(a.incurred_amount))}</td>
+                <td style="padding:5px 10px;text-align:right;">${formatCurrency(parseFloat(a.invoiced_amount))}</td>
+                <td style="padding:5px 10px;text-align:right;color:#dc2626;font-weight:600;">${formatCurrency(parseFloat(a.accrual_amount))}</td>
+              </tr>
+            `;
+          });
+          tableHTML += `</tbody></table></td></tr>`;
+        }
       });
+
+      // Footer totals row
+      tableHTML += `
+        <tr style="background:rgba(246,248,251,0.9);font-weight:700;border-top:2px solid var(--border);">
+          <td>Total</td>
+          <td>${totalInvoiceCount.toLocaleString()}</td>
+          <td style="color:#dc2626;">${openVendorMonthCount} <span style="font-size:10px;font-weight:400;color:var(--muted);">= Decision Box</span></td>
+          <td>${formatCurrency(totalIncurred)}</td>
+          <td>${formatCurrency(totalInvoiced)}</td>
+          <td class="${totalAccrualAmt > 0 ? 'highlight-red' : ''}">${formatCurrency(totalAccrualAmt)}</td>
+          <td><span style="font-size:11px;color:var(--muted);">${openMonths} open month${openMonths !== 1 ? 's' : ''}</span></td>
+        </tr>
+      `;
       tableHTML += '</tbody>';
       document.getElementById('accrualTable').innerHTML = tableHTML;
       
       renderAccrualChart(monthlyTotals);
+
+      // --- Dynamic So What: Accrual Schedule ---
+      const aSwEl    = document.getElementById('accrualSoWhat');
+      const aSwLabel = document.getElementById('accrualSoWhatLabel');
+      const aSwList  = document.getElementById('accrualSoWhatList');
+      aSwEl.style.display = '';
+
+      // Classify state
+      const isAccrualClean    = pctNotInvoiced < 10;
+      const isAccrualModerate = pctNotInvoiced >= 10 && pctNotInvoiced < 25;
+      const isAccrualHigh     = pctNotInvoiced >= 25;
+      const aColor  = isAccrualHigh ? '#dc2626' : isAccrualModerate ? '#d97706' : '#0f766e';
+      const aBorder = isAccrualHigh ? 'rgba(220,38,38,0.25)' : isAccrualModerate ? 'rgba(245,158,11,0.30)' : 'rgba(15,118,110,0.25)';
+      const aBg     = isAccrualHigh ? '#fef9f9' : isAccrualModerate ? '#fffbeb' : '#f0fdf9';
+
+      aSwEl.style.border     = `1.5px solid ${aBorder}`;
+      aSwEl.style.background = aBg;
+
+      const aIcon  = isAccrualHigh ? '🔴' : isAccrualModerate ? '⚠️' : '✅';
+      const aStatus = isAccrualHigh ? 'High Accrual Risk' : isAccrualModerate ? 'Moderate — Monitor Closely' : 'Healthy — Invoicing On Track';
+      aSwLabel.style.color = aColor;
+      aSwLabel.textContent  = `💡 So What — ${aIcon} ${aStatus}`;
+
+      const ab = (text) => `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${aColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
+      const aBullets = [];
+      const worstAccrualMonth = monthlyTotals.reduce((a,b) => b.accrual > a.accrual ? b : a, monthlyTotals[0]);
+
+      // Overall
+      if (isAccrualHigh) {
+        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} sitting as open accruals. This level of un-invoiced cost creates significant P&L uncertainty and close risk. Finance estimates are replacing real invoices.`));
+      } else if (isAccrualModerate) {
+        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals. This is manageable but watch the trend. If the gap between incurred and invoiced keeps widening month-on-month, invoice discipline is slipping.`));
+      } else {
+        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are un-invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals. Vendors are billing on time and accrual estimates are closely matching actuals. Month-end close risk is low.`));
+      }
+
+      // Open months
+      if (openMonths > 0) {
+        aBullets.push(ab(`<strong style="color:#0b1220;">${openMonths} of 12 months still have open accruals.</strong> ${openMonths >= 6 ? `Over half the year has unsettled accruals — this suggests vendors have a systematic invoicing lag. Contractually require invoices within 30 days of service delivery.` : `Focus on the ${openMonths} open month${openMonths > 1 ? 's' : ''} — chase the relevant vendors for invoice submission before the next close.`}`));
+      }
+
+      // Worst month
+      if (worstAccrualMonth && worstAccrualMonth.accrual > 0) {
+        aBullets.push(ab(`<strong style="color:#0b1220;">Highest open accrual: ${worstAccrualMonth.month}</strong> — ${formatCurrency(worstAccrualMonth.accrual)} un-invoiced (${formatPercent(worstAccrualMonth.incurred > 0 ? worstAccrualMonth.accrual / worstAccrualMonth.incurred * 100 : 0)} of that month's spend). Prioritise getting invoices for this month — the accrual estimate may not match the final invoice, creating a P&L true-up.`));
+      }
+
+      // Invoice count context
+      if (totalInvoiceCount > 0) {
+        aBullets.push(ab(`<strong style="color:#0b1220;">${totalInvoiceCount.toLocaleString()} invoices received, ${openVendorMonthCount} vendor-accrual records still open.</strong> ${openVendorMonthCount > 0 ? `Expand any red month row in the table below to see exactly which vendors are still outstanding — those are the records the Decision Box is flagging.` : 'All vendor accruals are fully invoiced and balanced.'}`));
+      }
+
+      // Action
+      const aAction = isAccrualHigh
+        ? 'Immediately contact vendors with the largest open accruals and set a hard deadline for invoice submission. Review whether your accrual estimates are based on contracts (good) or guesses (bad). Brief CFO on P&L close exposure before month-end.'
+        : isAccrualModerate
+        ? 'Add accrual reconciliation to your monthly vendor review cadence. Ensure accrual amounts are based on contract rates, not estimates. Flag any accrual older than 60 days for escalation.'
+        : 'No urgent action. Maintain current invoicing requirements in vendor contracts and verify accrual methodology at next audit cycle.';
+      aBullets.push(ab(`<strong style="color:#0b1220;">Decision:</strong> ${aAction}`));
+
+      aSwList.innerHTML = aBullets.join('');
     }
     
     function renderAccrualChart(monthlyTotals) {
@@ -2329,19 +2628,108 @@
         <tbody>
       `;
       comparison.forEach(c => {
-        const varianceClass = Math.abs(c.variancePct) > 10 ? 'highlight-red' : '';
+        // Positive variance = overspent (bad = red). Negative = underspent (good = green).
+        const dollarClass  = c.variance > 0 ? 'highlight-red' : c.variance < 0 ? 'highlight-green' : '';
+        const pctClass     = c.variancePct > 0 ? 'highlight-red' : c.variancePct < 0 ? 'highlight-green' : '';
+        const dollarPrefix = c.variance > 0 ? '+' : '';
+        const pctPrefix    = c.variancePct > 0 ? '+' : '';
         tableHTML += `
           <tr>
             <td>${c.month}</td>
             <td>${formatCurrency(c.actual)}</td>
             <td>${formatCurrency(c.compare)}</td>
-            <td class="${c.variance > 0 ? 'highlight-red' : 'highlight-green'}">${formatCurrency(c.variance)}</td>
-            <td class="${varianceClass}">${formatPercent(c.variancePct)}</td>
+            <td class="${dollarClass}">${dollarPrefix}${formatCurrency(c.variance)}</td>
+            <td class="${pctClass}">${pctPrefix}${formatPercent(c.variancePct)}</td>
           </tr>
         `;
       });
       tableHTML += '</tbody>';
       document.getElementById('forecastTable').innerHTML = tableHTML;
+      
+      // --- Dynamic So What: Forecast vs Actual ---
+      const totalActual      = comparison.reduce((s,c) => s + c.actual, 0);
+      const totalCompare     = comparison.reduce((s,c) => s + c.compare, 0);
+      const totalVariance    = totalActual - totalCompare;
+      const totalVariancePct = totalCompare > 0 ? (totalVariance / totalCompare) * 100 : 0;
+      const overrunMonths    = comparison.filter(c => c.variancePct > 10);
+      const underrunMonths   = comparison.filter(c => c.variancePct < -10);
+      const onTrackMonths    = comparison.filter(c => c.variancePct >= -10 && c.variancePct <= 10);
+      const worstMonth       = comparison.reduce((a, b) => b.variancePct > a.variancePct ? b : a, comparison[0]);
+      const bestMonth        = comparison.reduce((a, b) => b.variancePct < a.variancePct ? b : a, comparison[0]);
+      const label            = compareMode === 'forecast' ? 'forecast' : 'budget';
+
+      const soWhatEl    = document.getElementById('forecastSoWhat');
+      const soWhatLabel = document.getElementById('forecastSoWhatLabel');
+      const soWhatList  = document.getElementById('forecastSoWhatList');
+      soWhatEl.style.display = '';
+
+      // Classify overall state — mirrors exactly how sections 1 and 2 work
+      const isCritical  = totalVariancePct > 10 || overrunMonths.length >= 3;
+      const isModerate  = !isCritical && (totalVariancePct > 3 || overrunMonths.length >= 1);
+      const isHealthy   = !isCritical && !isModerate;
+
+      const accentColor = isCritical ? '#dc2626' : isModerate ? '#d97706' : '#0f766e';
+      const borderColor = isCritical ? 'rgba(220,38,38,0.25)'    : isModerate ? 'rgba(245,158,11,0.30)' : 'rgba(15,118,110,0.25)';
+      const bgColor     = isCritical ? '#fef9f9'                 : isModerate ? '#fffbeb'               : '#f0fdf9';
+      const statusIcon  = isCritical ? '🔴' : isModerate ? '⚠️' : '✅';
+      const statusLabel = isCritical
+        ? 'Overspend — Reforecast Required'
+        : isModerate
+        ? 'Caution — Monitor Closely'
+        : 'On Track — Forecast Discipline Holding';
+
+      soWhatEl.style.border     = `1.5px solid ${borderColor}`;
+      soWhatEl.style.background = bgColor;
+      soWhatLabel.style.color   = accentColor;
+      soWhatLabel.textContent   = `💡 So What — ${statusIcon} ${statusLabel}`;
+
+      const b = (text) =>
+        `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${accentColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
+
+      const bullets = [];
+
+      // ① Overall position
+      if (isCritical) {
+        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — actual spend exceeded the ${label} by ${formatCurrency(Math.abs(totalVariance))} across the year. This is a material overrun requiring a formal explanation to leadership and an updated rolling forecast.`));
+      } else if (isModerate) {
+        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — spend is running slightly above plan (${formatCurrency(Math.abs(totalVariance))}). Still within tolerance but the trend needs watching — if overrun months persist, trigger a reforecast before it becomes material.`));
+      } else if (totalVariancePct < 0) {
+        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${formatPercent(Math.abs(totalVariancePct))} under ${label}</strong> — actual spend came in ${formatCurrency(Math.abs(totalVariance))} below plan. ${underrunMonths.length > 0 ? 'Confirm whether spend was genuinely saved or just deferred — delayed costs will surface in later months and distort the forecast.' : 'Forecast accuracy is strong. No immediate action required.'}`));
+      } else {
+        bullets.push(b(`<strong style="color:#0b1220;">Overall: On track</strong> — total spend is within ${formatPercent(Math.abs(totalVariancePct))} of ${label} (${totalVariance >= 0 ? '+' : ''}${formatCurrency(totalVariance)}). Forecast discipline is holding across the year.`));
+      }
+
+      // ② Overrun months breakdown
+      if (overrunMonths.length > 0) {
+        const names = overrunMonths.map(c => `${c.month} (+${formatPercent(c.variancePct)})`).join(', ');
+        bullets.push(b(`<strong style="color:#0b1220;">${overrunMonths.length} month${overrunMonths.length > 1 ? 's' : ''} exceeded ${label} by >10%:</strong> ${names}. ${overrunMonths.length >= 3 ? 'Three or more overrun months signals a systematic bias — the forecast baseline is set too low and needs to be revised upward, not just explained away.' : 'Determine if each overrun was a one-off event or a recurring driver before adjusting the forecast.'}`));
+      }
+
+      // ③ Underrun months (only surface if no overrun issue — otherwise it's noise)
+      if (underrunMonths.length > 0 && overrunMonths.length === 0) {
+        const names = underrunMonths.map(c => `${c.month} (${formatPercent(c.variancePct)})`).join(', ');
+        bullets.push(b(`<strong style="color:#0b1220;">${underrunMonths.length} month${underrunMonths.length > 1 ? 's' : ''} came in >10% under ${label}:</strong> ${names}. Verify spend was genuinely lower — not delayed into subsequent months. If genuine savings, consider whether budget can be reallocated.`));
+      }
+
+      // ④ Worst single month callout
+      if (worstMonth && worstMonth.variancePct > 5) {
+        bullets.push(b(`<strong style="color:#0b1220;">Worst month: ${worstMonth.month}</strong> — ${formatCurrency(worstMonth.variance)} over ${label} (+${formatPercent(worstMonth.variancePct)}). Drill into which vendors or cost centres drove the spike and confirm whether the driver is recurring before the next close.`));
+      }
+
+      // ⑤ Best month callout (only when overall is positive — reward the good)
+      if (isHealthy && bestMonth && bestMonth.variancePct < -5) {
+        bullets.push(b(`<strong style="color:#0b1220;">Best month: ${bestMonth.month}</strong> — ${formatCurrency(Math.abs(bestMonth.variance))} under ${label} (${formatPercent(bestMonth.variancePct)}). Document what drove this — whether it was a delayed invoice, genuine saving, or tighter vendor management — so the practice can be repeated.`));
+      }
+
+      // ⑥ Clear decision
+      const decision = isCritical
+        ? `Trigger a reforecast now. Identify the top 2–3 cost categories driving overruns, get owner sign-off on revised numbers, and present to leadership before next reporting cycle. Do not wait for month-end.`
+        : isModerate
+        ? `Put the ${overrunMonths.length} overrun month${overrunMonths.length > 1 ? 's' : ''} on your agenda for the next spend review. If the overspend driver is structural (headcount, contracts, volume), update the rolling forecast rather than carry the variance forward.`
+        : `No action required on variance. Maintain current controls and use this as a baseline for the next budget cycle — the forecast methodology is working.`;
+      bullets.push(b(`<strong style="color:#0b1220;">Decision:</strong> ${decision}`));
+
+      soWhatList.innerHTML = bullets.join('');
       
       renderForecastChart(comparison);
     }
@@ -2606,6 +2994,82 @@
       }
       
       document.getElementById('alertsContainer').innerHTML = alertsHTML;
+
+      // --- Alert counter ---
+      const counterBar = document.getElementById('alertCounterBar');
+      const highCount = alerts.filter(a => a.severity === 'high').length;
+      const medCount  = alerts.filter(a => a.severity === 'med').length;
+      const lowCount  = alerts.filter(a => a.severity === 'low').length;
+
+      // Cache for decision box
+      _riskAlertCounts = { total: alerts.length, high: highCount, med: medCount, low: lowCount };
+
+      if (alerts.length > 0) {
+        counterBar.style.display = 'flex';
+        document.getElementById('alertCountTotal').textContent = alerts.length + ' total';
+        const hEl = document.getElementById('alertCountHigh');
+        const mEl = document.getElementById('alertCountMed');
+        const lEl = document.getElementById('alertCountLow');
+        hEl.textContent = highCount ? highCount + ' High' : '';
+        hEl.style.display = highCount ? '' : 'none';
+        mEl.textContent = medCount ? medCount + ' Med' : '';
+        mEl.style.display = medCount ? '' : 'none';
+        lEl.textContent = lowCount ? lowCount + ' Low' : '';
+        lEl.style.display = lowCount ? '' : 'none';
+      } else {
+        counterBar.style.display = 'none';
+      }
+
+      // --- So What: Risk & Anomaly Flags ---
+      const riskSoWhat = document.getElementById('riskSoWhat');
+      const riskSoWhatList = document.getElementById('riskSoWhatList');
+
+      if (alerts.length === 0) {
+        riskSoWhat.style.display = 'none';
+      } else {
+        riskSoWhat.style.display = '';
+        const rbullet = (color, text) =>
+          `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${color};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
+        const rbullets = [];
+
+        // Overall summary
+        if (highCount > 0) {
+          rbullets.push(rbullet('#dc2626', `<strong style="color:#0b1220;">${highCount} high-severity issue${highCount > 1 ? 's' : ''} require immediate attention.</strong> These represent the biggest risks to spend control and margin — prioritise these before the next reporting period.`));
+        }
+        if (medCount > 0 && highCount === 0) {
+          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${medCount} medium-severity flag${medCount > 1 ? 's' : ''} detected.</strong> These are worth monitoring closely — escalate if trends worsen or if the same vendors appear repeatedly.`));
+        }
+        if (highCount === 0 && medCount === 0) {
+          rbullets.push(rbullet('#6b7280', `<strong style="color:#0b1220;">No critical risks flagged.</strong> Only low-severity anomalies detected. Current thresholds may need tightening if you want earlier warnings.`));
+        }
+
+        // Rate leakage
+        const rateFlags = alerts.filter(a => a.title.startsWith('Rate Leakage'));
+        if (rateFlags.length > 0) {
+          rbullets.push(rbullet('#dc2626', `<strong style="color:#0b1220;">${rateFlags.length} vendor${rateFlags.length > 1 ? 's' : ''} flagged for rate leakage.</strong> These vendors are billing above their contracted rates. Each one needs an invoice audit; if overcharging is confirmed, escalate to procurement for rate correction or PO clawback.`));
+        }
+
+        // Spend spikes
+        const spikeFlags = alerts.filter(a => a.title.startsWith('Spend Spike'));
+        if (spikeFlags.length > 0) {
+          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${spikeFlags.length} spend spike${spikeFlags.length > 1 ? 's' : ''} detected.</strong> These categories had unusually high spend in specific months. Determine if these are one-off events (e.g. project kick-off) or recurring — recurring spikes mean your forecast baseline needs to be updated.`));
+        }
+
+        // Concentration risk
+        const concFlags = alerts.filter(a => a.title.startsWith('Concentration'));
+        if (concFlags.length > 0) {
+          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${concFlags.length} vendor${concFlags.length > 1 ? 's' : ''} flagged for concentration risk.</strong> Over-reliance on a single supplier is an operational hazard. If that vendor raises rates, delays delivery, or exits, you have limited options. Begin qualifying a second source or negotiate volume-tiered pricing.`));
+        }
+
+        // Accrual risk
+        const accrualFlags = alerts.filter(a => a.title.startsWith('Accrual Risk'));
+        if (accrualFlags.length > 0) {
+          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${accrualFlags.length} accrual risk flag${accrualFlags.length > 1 ? 's' : ''}.</strong> These vendor-months have a high proportion of spend that is incurred but not yet invoiced — creating P&L uncertainty at close. Chase vendors for timely invoicing or revise accrual methodology to use contract run-rates.`));
+        }
+
+        riskSoWhatList.innerHTML = rbullets.join('');
+      }
+
       renderSpendDecisionBox();
     }
     
@@ -2694,58 +3158,16 @@
     }
     
     function downloadRiskFlagsCSV() {
-      const headers = ['severity', 'title', 'description', 'why_it_matters', 'recommended_action'];
-      const alerts = [];
-      
-      // Simplified version - would need to reconstruct from computeRiskFlags
-      alert('Risk flags export completed - see console for implementation');
-      console.log('Export would include all computed alerts');
+      showNotification('Use "Export as Excel" in the sidebar to get all risk flags in Sheet 4 (Rate Leakage)', 'info');
     }
     
     // ========== TEMPLATE DOWNLOADS ==========
     
-    function downloadRateCardsTemplate() {
-      const headers = ['vendor_id', 'vendor_name', 'service', 'unit', 'contract_rate', 'currency', 'effective_start', 'effective_end', 'category'];
-      const rows = [
-        { vendor_id: 'V001', vendor_name: 'Example Vendor', service: 'Delivery', unit: 'delivery', contract_rate: 15, currency: 'USD', effective_start: '2024-01-01', effective_end: '2024-12-31', category: 'Logistics' },
-        { vendor_id: 'V002', vendor_name: 'Sample Corp', service: 'Hourly', unit: 'hour', contract_rate: 65, currency: 'USD', effective_start: '2024-01-01', effective_end: '2024-12-31', category: 'Contractors' }
-      ];
-      downloadCSV('vendor_rate_cards_template.csv', headers, rows);
-    }
-    
-    function downloadTransactionsTemplate() {
-      const headers = ['date', 'vendor_id', 'service', 'units', 'unit_rate', 'amount', 'cost_center', 'category', 'invoice_id', 'po_id'];
-      const rows = [
-        { date: '2024-01-15', vendor_id: 'V001', service: 'Delivery', units: 50, unit_rate: 15.50, amount: 775, cost_center: 'CC100', category: 'Logistics', invoice_id: 'INV1001', po_id: 'PO2001' },
-        { date: '2024-01-20', vendor_id: 'V002', service: 'Hourly', units: 40, unit_rate: 68, amount: 2720, cost_center: 'CC101', category: 'Contractors', invoice_id: 'INV1002', po_id: 'PO2002' }
-      ];
-      downloadCSV('spend_transactions_template.csv', headers, rows);
-    }
-    
-    function downloadAccrualsTemplate() {
-      const headers = ['month', 'vendor_id', 'service', 'incurred_amount', 'invoiced_amount', 'accrual_amount', 'status', 'notes'];
-      const rows = [
-        { month: 'Jan', vendor_id: 'V001', service: 'Delivery', incurred_amount: 12000, invoiced_amount: 10000, accrual_amount: 2000, status: 'Open', notes: 'Invoice pending' },
-        { month: 'Jan', vendor_id: 'V002', service: 'Hourly', incurred_amount: 15000, invoiced_amount: 15000, accrual_amount: 0, status: 'Closed', notes: '' }
-      ];
-      downloadCSV('accruals_template.csv', headers, rows);
-    }
-    
-    function downloadForecastTemplate() {
-      const headers = ['month', 'cost_center', 'category', 'forecast_amount', 'budget_amount'];
-      const rows = [
-        { month: 'Jan', cost_center: 'CC100', category: 'Logistics', forecast_amount: 8000, budget_amount: 8200 },
-        { month: 'Jan', cost_center: 'CC101', category: 'Contractors', forecast_amount: 12000, budget_amount: 11800 }
-      ];
-      downloadCSV('forecast_budget_template.csv', headers, rows);
-    }
-    
-    function downloadAllTemplates() {
-      downloadRateCardsTemplate();
-      setTimeout(() => downloadTransactionsTemplate(), 300);
-      setTimeout(() => downloadAccrualsTemplate(), 600);
-      setTimeout(() => downloadForecastTemplate(), 900);
-    }
+    // Template downloads handled by downloadFlatTemplate() above
+    function downloadRateCardsTemplate()    { downloadFlatTemplate(); }
+    function downloadTransactionsTemplate() { downloadFlatTemplate(); }
+    function downloadAccrualsTemplate()     { downloadFlatTemplate(); }
+    function downloadForecastTemplate()     { downloadFlatTemplate(); }
     
     function showNotification(message, type) {
       type = type || 'info';
@@ -2783,23 +3205,32 @@
 
     // ========== CSV UPLOADS ==========
     
-    function handleRateCardsUpload(event) {
+    // ========== FLAT CSV UPLOAD (single dataset) ==========
+
+    // Required columns in the flat CSV
+    const FLAT_CSV_REQUIRED = [
+      'date','vendor_id','vendor_name','category','service','unit',
+      'contract_rate','unit_rate','units','amount','cost_center',
+      'invoice_id','po_id','accrual_amount','invoiced_amount',
+      'forecast_amount','budget_amount'
+    ];
+
+    function handleFlatUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
           const { headers, data } = parseCSV(e.target.result);
-          const required = ['vendor_id', 'vendor_name', 'service', 'unit', 'contract_rate', 'currency', 'effective_start', 'effective_end', 'category'];
-          if (!validateHeaders(headers, required)) {
-            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
+          if (!validateHeaders(headers, FLAT_CSV_REQUIRED)) {
+            showNotification('Missing columns. Required: ' + FLAT_CSV_REQUIRED.join(', '), 'error');
             return;
           }
-          rateCards = data;
+          deriveDatasetsFromFlat(data);
           dataMode = 'uploaded';
           updateDataModeBadge('csv');
           renderAll();
-          showNotification('✓ Rate cards loaded (' + data.length + ' rows)', 'success');
+          showNotification('✓ Loaded ' + data.length + ' rows — all sections updated', 'success');
         } catch (err) {
           showNotification('Error: ' + err.message, 'error');
         }
@@ -2807,81 +3238,284 @@
       reader.readAsText(file);
       event.target.value = '';
     }
-    
-    function handleTransactionsUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const { headers, data } = parseCSV(e.target.result);
-          const required = ['date', 'vendor_id', 'service', 'units', 'unit_rate', 'amount', 'cost_center', 'category', 'invoice_id', 'po_id'];
-          if (!validateHeaders(headers, required)) {
-            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
-            return;
-          }
-          transactions = data;
-          dataMode = 'uploaded';
-          updateDataModeBadge('csv');
-          renderAll();
-          showNotification('✓ Transactions loaded (' + data.length + ' rows)', 'success');
-        } catch (err) {
-          showNotification('Error: ' + err.message, 'error');
+
+    // Derive the 4 internal arrays from one flat file
+    function deriveDatasetsFromFlat(rows) {
+      // 1. Transactions (one row per invoice line)
+      transactions = rows.map(r => ({
+        date:        r.date,
+        vendor_id:   r.vendor_id,
+        service:     r.service,
+        units:       r.units,
+        unit_rate:   r.unit_rate,
+        amount:      r.amount,
+        cost_center: r.cost_center,
+        category:    r.category,
+        invoice_id:  r.invoice_id,
+        po_id:       r.po_id
+      }));
+
+      // 2. Rate cards — one entry per unique vendor_id+service, use first-seen contract_rate
+      const rcMap = {};
+      rows.forEach(r => {
+        const key = r.vendor_id + '|' + r.service;
+        if (!rcMap[key]) {
+          rcMap[key] = {
+            vendor_id:       r.vendor_id,
+            vendor_name:     r.vendor_name,
+            service:         r.service,
+            unit:            r.unit,
+            contract_rate:   r.contract_rate,
+            currency:        'USD',
+            effective_start: r.date,
+            effective_end:   r.date,
+            category:        r.category
+          };
         }
-      };
-      reader.readAsText(file);
-      event.target.value = '';
-    }
-    
-    function handleAccrualsUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const { headers, data } = parseCSV(e.target.result);
-          const required = ['month', 'vendor_id', 'service', 'incurred_amount', 'invoiced_amount', 'accrual_amount', 'status', 'notes'];
-          if (!validateHeaders(headers, required)) {
-            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
-            return;
-          }
-          accruals = data;
-          dataMode = 'uploaded';
-          updateDataModeBadge('csv');
-          renderAll();
-          showNotification('✓ Accruals loaded (' + data.length + ' rows)', 'success');
-        } catch (err) {
-          showNotification('Error: ' + err.message, 'error');
+      });
+      rateCards = Object.values(rcMap);
+
+      // 3. Accruals — aggregate per month+vendor_id
+      const accrualMap = {};
+      const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      rows.forEach(r => {
+        const monthNum = parseInt(r.date.substring(5,7));
+        const month = monthNames[monthNum - 1];
+        const key = month + '|' + r.vendor_id;
+        if (!accrualMap[key]) {
+          accrualMap[key] = {
+            month, vendor_id: r.vendor_id, service: r.service,
+            incurred_amount: 0, invoiced_amount: 0, accrual_amount: 0, status: 'Closed', notes: ''
+          };
         }
-      };
-      reader.readAsText(file);
-      event.target.value = '';
-    }
-    
-    function handleForecastUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const { headers, data } = parseCSV(e.target.result);
-          const required = ['month', 'cost_center', 'category', 'forecast_amount', 'budget_amount'];
-          if (!validateHeaders(headers, required)) {
-            showNotification('Invalid CSV. Required columns: ' + required.join(', '), 'error');
-            return;
-          }
-          forecastBudget = data;
-          dataMode = 'uploaded';
-          updateDataModeBadge('csv');
-          renderAll();
-          showNotification('✓ Forecast data loaded (' + data.length + ' rows)', 'success');
-        } catch (err) {
-          showNotification('Error: ' + err.message, 'error');
+        accrualMap[key].incurred_amount += parseFloat(r.amount) || 0;
+        accrualMap[key].invoiced_amount += parseFloat(r.invoiced_amount) || 0;
+        accrualMap[key].accrual_amount  += parseFloat(r.accrual_amount)  || 0;
+      });
+      accruals = Object.values(accrualMap).map(a => {
+        a.status = a.accrual_amount > 0 ? 'Open' : 'Closed';
+        a.incurred_amount = a.incurred_amount.toFixed(2);
+        a.invoiced_amount = a.invoiced_amount.toFixed(2);
+        a.accrual_amount  = a.accrual_amount.toFixed(2);
+        return a;
+      });
+
+      // 4. Forecast/Budget — aggregate per month+cost_center+category
+      const fbMap = {};
+      rows.forEach(r => {
+        const monthNum = parseInt(r.date.substring(5,7));
+        const month = monthNames[monthNum - 1];
+        const key = month + '|' + r.cost_center + '|' + r.category;
+        if (!fbMap[key]) {
+          fbMap[key] = {
+            month, cost_center: r.cost_center, category: r.category,
+            forecast_amount: 0, budget_amount: 0
+          };
         }
-      };
-      reader.readAsText(file);
-      event.target.value = '';
+        fbMap[key].forecast_amount += parseFloat(r.forecast_amount) || 0;
+        fbMap[key].budget_amount   += parseFloat(r.budget_amount)   || 0;
+      });
+      forecastBudget = Object.values(fbMap).map(f => {
+        f.forecast_amount = f.forecast_amount.toFixed(2);
+        f.budget_amount   = f.budget_amount.toFixed(2);
+        return f;
+      });
     }
+
+    // ========== FLAT TEMPLATE DOWNLOAD ==========
+
+    function downloadFlatTemplate() {
+      const headers = FLAT_CSV_REQUIRED;
+      const rows = [
+        {
+          date:'2024-01-15', vendor_id:'V001', vendor_name:'QuickShip Logistics',
+          category:'Logistics', service:'Delivery', unit:'delivery',
+          contract_rate:'15.00', unit_rate:'15.50', units:'50', amount:'775.00',
+          cost_center:'CC100', invoice_id:'INV1001', po_id:'PO2001',
+          accrual_amount:'200.00', invoiced_amount:'575.00',
+          forecast_amount:'8000.00', budget_amount:'8200.00'
+        },
+        {
+          date:'2024-01-20', vendor_id:'V002', vendor_name:'TechStaff Solutions',
+          category:'Contractors', service:'Hourly', unit:'hour',
+          contract_rate:'65.00', unit_rate:'68.00', units:'40', amount:'2720.00',
+          cost_center:'CC101', invoice_id:'INV1002', po_id:'PO2002',
+          accrual_amount:'0.00', invoiced_amount:'2720.00',
+          forecast_amount:'12000.00', budget_amount:'11800.00'
+        },
+        {
+          date:'2024-02-10', vendor_id:'V001', vendor_name:'QuickShip Logistics',
+          category:'Logistics', service:'Delivery', unit:'delivery',
+          contract_rate:'15.00', unit_rate:'15.00', units:'60', amount:'900.00',
+          cost_center:'CC100', invoice_id:'INV1003', po_id:'PO2003',
+          accrual_amount:'0.00', invoiced_amount:'900.00',
+          forecast_amount:'8000.00', budget_amount:'8200.00'
+        }
+      ];
+      downloadCSV('ops_spend_template.csv', headers, rows);
+      showNotification('✓ Template downloaded — fill it in and upload above', 'success');
+    }
+
+    // ========== EXPORT CURRENT DATASET ==========
+
+    function exportDatasetCSV() {
+      // Export flat representation of current transactions enriched with rate card + accrual + forecast data
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const headers = FLAT_CSV_REQUIRED;
+      const rows = transactions.map(t => {
+        const rc = rateCards.find(r => r.vendor_id === t.vendor_id && r.service === t.service) || {};
+        const monthNum = parseInt(t.date.substring(5,7));
+        const month = months[monthNum - 1];
+        const acc = accruals.find(a => a.month === month && a.vendor_id === t.vendor_id) || {};
+        const fb  = forecastBudget.find(f => f.month === month && f.cost_center === t.cost_center && f.category === t.category) || {};
+        return {
+          date:             t.date,
+          vendor_id:        t.vendor_id,
+          vendor_name:      rc.vendor_name || t.vendor_id,
+          category:         t.category,
+          service:          t.service,
+          unit:             rc.unit || '',
+          contract_rate:    rc.contract_rate || '',
+          unit_rate:        t.unit_rate,
+          units:            t.units,
+          amount:           t.amount,
+          cost_center:      t.cost_center,
+          invoice_id:       t.invoice_id,
+          po_id:            t.po_id,
+          accrual_amount:   acc.accrual_amount  || '0.00',
+          invoiced_amount:  acc.invoiced_amount || t.amount,
+          forecast_amount:  fb.forecast_amount  || '0.00',
+          budget_amount:    fb.budget_amount    || '0.00'
+        };
+      });
+      downloadCSV('ops_spend_export.csv', headers, rows);
+      showNotification('✓ CSV exported (' + rows.length + ' rows)', 'success');
+    }
+
+    function exportDatasetXLSX() {
+      // Build XLSX in-browser using SheetJS (loaded from CDN)
+      if (typeof XLSX === 'undefined') {
+        // Load SheetJS dynamically
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        s.onload = () => _doXLSXExport();
+        s.onerror = () => showNotification('Could not load XLSX library. Try CSV export instead.', 'error');
+        document.head.appendChild(s);
+      } else {
+        _doXLSXExport();
+      }
+    }
+
+    function _doXLSXExport() {
+      try {
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const wb = XLSX.utils.book_new();
+
+        // ── Sheet 1: All Transactions (flat, same format as upload template) ──
+        const txRows = transactions.map(t => {
+          const rc  = rateCards.find(r => r.vendor_id === t.vendor_id && r.service === t.service) || {};
+          const mN  = parseInt(t.date.substring(5,7));
+          const mon = months[mN - 1];
+          const acc = accruals.find(a => a.month === mon && a.vendor_id === t.vendor_id) || {};
+          const fb  = forecastBudget.find(f => f.month === mon && f.cost_center === t.cost_center && f.category === t.category) || {};
+          return {
+            Date: t.date, Vendor_ID: t.vendor_id, Vendor_Name: rc.vendor_name || t.vendor_id,
+            Category: t.category, Service: t.service, Unit: rc.unit || '',
+            Contract_Rate: parseFloat(rc.contract_rate) || 0,
+            Unit_Rate: parseFloat(t.unit_rate), Units: parseFloat(t.units),
+            Amount: parseFloat(t.amount), Cost_Center: t.cost_center,
+            Invoice_ID: t.invoice_id, PO_ID: t.po_id,
+            Accrual_Amount: parseFloat(acc.accrual_amount) || 0,
+            Invoiced_Amount: parseFloat(acc.invoiced_amount) || parseFloat(t.amount),
+            Forecast_Amount: parseFloat(fb.forecast_amount) || 0,
+            Budget_Amount: parseFloat(fb.budget_amount) || 0
+          };
+        });
+        const ws1 = XLSX.utils.json_to_sheet(txRows);
+        ws1['!cols'] = [{wch:12},{wch:10},{wch:24},{wch:14},{wch:14},{wch:10},
+                        {wch:14},{wch:10},{wch:8},{wch:12},{wch:12},{wch:12},{wch:10},
+                        {wch:14},{wch:15},{wch:15},{wch:14}];
+        XLSX.utils.book_append_sheet(wb, ws1, 'Transactions');
+
+        // ── Sheet 2: Accrual Summary by Month ──
+        const accrualRows = months.map(month => {
+          const monthAccruals = accruals.filter(a => a.month === month);
+          const mN = months.indexOf(month) + 1;
+          const mTx = transactions.filter(t => t.date.startsWith(`2024-${String(mN).padStart(2,'0')}`));
+          const invoiceCount = new Set(mTx.map(t => t.invoice_id).filter(Boolean)).size;
+          const incurred  = monthAccruals.reduce((s,a) => s + parseFloat(a.incurred_amount), 0);
+          const invoiced  = monthAccruals.reduce((s,a) => s + parseFloat(a.invoiced_amount), 0);
+          const accrual   = monthAccruals.reduce((s,a) => s + parseFloat(a.accrual_amount),  0);
+          return {
+            Month: month,
+            Invoice_Count: invoiceCount,
+            Incurred_Amount: incurred,
+            Invoiced_Amount: invoiced,
+            Accrual_Amount: accrual,
+            Status: accrual > 0 ? 'Open' : 'Closed'
+          };
+        });
+        const ws2 = XLSX.utils.json_to_sheet(accrualRows);
+        ws2['!cols'] = [{wch:8},{wch:14},{wch:16},{wch:16},{wch:15},{wch:8}];
+        XLSX.utils.book_append_sheet(wb, ws2, 'Accrual Summary');
+
+        // ── Sheet 3: Forecast vs Actual by Month ──
+        const fvRows = months.map(month => {
+          const mN = months.indexOf(month) + 1;
+          const mTx = transactions.filter(t => t.date.startsWith(`2024-${String(mN).padStart(2,'0')}`));
+          const actual   = mTx.reduce((s,t) => s + parseFloat(t.amount), 0);
+          const mFB      = forecastBudget.filter(f => f.month === month);
+          const forecast = mFB.reduce((s,f) => s + parseFloat(f.forecast_amount), 0);
+          const budget   = mFB.reduce((s,f) => s + parseFloat(f.budget_amount),   0);
+          return {
+            Month: month,
+            Actual: actual,
+            Forecast: forecast,
+            Budget: budget,
+            Variance_vs_Forecast: actual - forecast,
+            Variance_Pct: forecast > 0 ? ((actual - forecast) / forecast * 100).toFixed(1) + '%' : 'N/A'
+          };
+        });
+        const ws3 = XLSX.utils.json_to_sheet(fvRows);
+        ws3['!cols'] = [{wch:8},{wch:12},{wch:12},{wch:12},{wch:20},{wch:16}];
+        XLSX.utils.book_append_sheet(wb, ws3, 'Forecast vs Actual');
+
+        // ── Sheet 4: Rate Leakage Summary ──
+        const leakMap = {};
+        transactions.forEach(t => {
+          const rc = rateCards.find(r => r.vendor_id === t.vendor_id && r.service === t.service);
+          if (!rc) return;
+          const key = t.vendor_id;
+          if (!leakMap[key]) leakMap[key] = { vendor_id: t.vendor_id, vendor_name: rc.vendor_name, service: rc.service, contract_rate: parseFloat(rc.contract_rate), total_amount: 0, total_units: 0, leakage_amount: 0 };
+          leakMap[key].total_amount += parseFloat(t.amount);
+          leakMap[key].total_units  += parseFloat(t.units);
+          if (parseFloat(t.unit_rate) > parseFloat(rc.contract_rate)) {
+            leakMap[key].leakage_amount += (parseFloat(t.unit_rate) - parseFloat(rc.contract_rate)) * parseFloat(t.units);
+          }
+        });
+        const leakRows = Object.values(leakMap).map(v => {
+          const avg = v.total_units > 0 ? v.total_amount / v.total_units : 0;
+          return {
+            Vendor_ID: v.vendor_id, Vendor_Name: v.vendor_name, Service: v.service,
+            Contract_Rate: v.contract_rate,
+            Avg_Paid_Rate: parseFloat(avg.toFixed(2)),
+            Variance_Pct: v.contract_rate > 0 ? parseFloat(((avg - v.contract_rate)/v.contract_rate*100).toFixed(2)) : 0,
+            Leakage_Amount: parseFloat(v.leakage_amount.toFixed(2))
+          };
+        }).sort((a,b) => b.Leakage_Amount - a.Leakage_Amount);
+        const ws4 = XLSX.utils.json_to_sheet(leakRows);
+        ws4['!cols'] = [{wch:10},{wch:24},{wch:14},{wch:14},{wch:14},{wch:14},{wch:16}];
+        XLSX.utils.book_append_sheet(wb, ws4, 'Rate Leakage');
+
+        XLSX.writeFile(wb, 'ops_spend_analytics.xlsx');
+        showNotification('✓ Excel exported — 4 sheets: Transactions, Accruals, Forecast, Leakage', 'success');
+      } catch(err) {
+        showNotification('Export failed: ' + err.message, 'error');
+      }
+    }
+
+    // Keep old individual CSV export functions (used by section export buttons)
+    function downloadAllTemplates() { downloadFlatTemplate(); }
     
     // ========== DECISION BOX (SPEND) ==========
 
@@ -3007,7 +3641,7 @@
       fallback.style.display = 'none';
       content.style.display  = '';
 
-      // Apply color state: Fix leakage = negative, Freeze = caution, Approve = positive
+      // Apply color state
       const box = document.getElementById('spendDecisionBox');
       box.classList.remove('decision-box--positive', 'decision-box--caution', 'decision-box--negative');
       if (verdict === 'Fix leakage first') {
@@ -3021,6 +3655,24 @@
       document.getElementById('spendDecisionVerdict').innerHTML =
         `Decision: <span class="verdict-action">${verdict}</span>`;
 
+      // Anchors
+      const exceptionAnchors = {
+        'Rate card mismatch':           { href: '#section-rate-leakage', label: '↓ Section 1' },
+        'Open accruals (not invoiced)': { href: '#section-accruals',     label: '↓ Section 2' },
+        'Unapproved spend spike':       { href: '#section-forecast',     label: '↓ Section 3' },
+      };
+
+      // Fixed row order: §1 Rate, §2 Accruals, §3 Spike
+      const FIXED_ROWS = [
+        { label: 'Rate card mismatch',           unit: 'transactions', action: 'Renegotiate or enforce PO controls' },
+        { label: 'Open accruals (not invoiced)',  unit: 'records',      action: 'Follow up with vendors on invoice timing' },
+        { label: 'Unapproved spend spike',        unit: 'months',       action: 'Investigate & update forecast' },
+      ];
+
+      // Build lookup
+      const exMap = {};
+      topExceptions.forEach(ex => { exMap[ex.label] = ex; });
+
       let exceptionsHTML = `
         <div class="exception-row exception-row-header">
           <span>Exception</span>
@@ -3029,27 +3681,94 @@
         </div>
       `;
 
-      if (topExceptions.length === 0) {
-        exceptionsHTML += `
-          <div class="exception-row">
-            <span class="exception-label">No exceptions detected</span>
-            <span class="exception-count">—</span>
-            <span class="exception-action">All clear</span>
-          </div>
-        `;
-      } else {
-        topExceptions.forEach(ex => {
+      FIXED_ROWS.forEach(row => {
+        const ex      = exMap[row.label];
+        const anchor  = exceptionAnchors[row.label];
+        const hasData = ex && ex.count > 0;
+
+        if (hasData) {
+          const countLabel = `${ex.count} <span style="font-size:10px;font-weight:500;color:var(--muted);">${row.unit}</span>`;
+          const labelHTML = anchor
+            ? `<a href="${anchor.href}" onclick="scrollToSection(event,'${anchor.href}')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                ${row.label}
+                <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);flex-shrink:0;">${anchor.label}</span>
+               </a>`
+            : row.label;
           exceptionsHTML += `
-            <div class="exception-row">
-              <span class="exception-label">${ex.label}</span>
-              <span class="exception-count">${ex.count}</span>
-              <span class="exception-action">${ex.action}</span>
+            <div class="exception-row" style="cursor:pointer;" ${anchor ? `onclick="scrollToSection(event,'${anchor.href}')"` : ''}>
+              <span class="exception-label">${labelHTML}</span>
+              <span class="exception-count">${countLabel}</span>
+              <span class="exception-action">${row.action}</span>
             </div>
           `;
-        });
-      }
+        } else {
+          const labelHTML = anchor
+            ? `<span style="display:flex;align-items:center;gap:6px;">
+                ${row.label}
+                <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.05);color:var(--muted);flex-shrink:0;">${anchor.label}</span>
+               </span>`
+            : row.label;
+          exceptionsHTML += `
+            <div class="exception-row" style="opacity:0.42;pointer-events:none;">
+              <span class="exception-label" style="color:var(--muted);">${labelHTML}</span>
+              <span class="exception-count" style="color:var(--muted);">n/a</span>
+              <span class="exception-action" style="color:var(--muted);">—</span>
+            </div>
+          `;
+        }
+      });
+
+      // Section 4 row — Risk & Anomaly metric
+      const rc = _riskAlertCounts;
+      const hasRisk = rc.total > 0;
+      const riskCountHTML = hasRisk
+        ? `<span style="font-size:12px;font-weight:700;color:var(--text);">${rc.total} total</span>`
+          + (rc.high ? `&nbsp;<span style="font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:rgba(220,38,38,0.12);color:#dc2626;">${rc.high} High</span>` : '')
+          + (rc.med  ? `&nbsp;<span style="font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:rgba(245,158,11,0.12);color:#d97706;">${rc.med} Med</span>`  : '')
+          + (rc.low  ? `&nbsp;<span style="font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;background:rgba(107,114,128,0.12);color:#6b7280;">${rc.low} Low</span>`  : '')
+        : `<span style="color:var(--muted);font-size:11px;">—</span>`;
+
+      exceptionsHTML += `
+        <div class="exception-row" style="cursor:pointer;background:rgba(246,248,251,0.6);" onclick="scrollToSection(event,'#section-risk')">
+          <span class="exception-label">
+            <a href="#section-risk" onclick="scrollToSection(event,'#section-risk')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              ⚑ Risk &amp; Anomaly Flags
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);flex-shrink:0;">↓ Section 4</span>
+            </a>
+          </span>
+          <span style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">${riskCountHTML}</span>
+          <span class="exception-action" style="${hasRisk ? '' : 'color:var(--muted);'}">Review flagged issues</span>
+        </div>
+      `;
 
       document.getElementById('spendDecisionExceptions').innerHTML = exceptionsHTML;
+    }
+
+    // ========== SCROLL TO SECTION ==========
+
+    function toggleAccrualRow(rowId, chevronId) {
+      const row = document.getElementById(rowId);
+      const chevron = document.getElementById(chevronId);
+      if (!row) return;
+      const isVisible = row.style.display !== 'none';
+      row.style.display = isVisible ? 'none' : 'table-row';
+      if (chevron) chevron.textContent = isVisible ? '▶' : '▼';
+    }
+
+    function scrollToSection(event, href) {
+      event.preventDefault();
+      const target = document.querySelector(href);
+      if (!target) return;
+      const offset = 80; // account for sticky nav
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+      // Briefly highlight the section heading
+      const heading = target.querySelector('h2');
+      if (heading) {
+        heading.style.transition = 'color 300ms ease';
+        heading.style.color = 'var(--accent)';
+        setTimeout(() => { heading.style.color = ''; }, 1800);
+      }
     }
 
     // ========== RENDER ALL ==========
