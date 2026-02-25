@@ -497,6 +497,553 @@
       box-shadow: 0 2px 4px rgba(11,18,32,0.08);
     }
 
+    /* ---- Variance Toggle Helper Microcopy ---- */
+    .toggle-hint {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.3;
+      max-width: 130px;
+      text-align: center;
+    }
+    .toggle-with-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .toggle-hints-row {
+      display: flex;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--muted);
+      padding: 0 4px;
+    }
+    .toggle-hint-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+    .toggle-hint-label {
+      font-weight: 600;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      opacity: 0.75;
+      white-space: nowrap;
+    }
+
+    /* ---- Plan Builder Sub-card ---- */
+    .plan-builder-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      background: rgba(246,248,251,0.4);
+      overflow: hidden;
+    }
+    .plan-builder-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .plan-builder-title {
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--text);
+      flex: 1;
+      min-width: 200px;
+    }
+    .plan-builder-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    /* Toggle switch */
+    .pb-switch {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .pb-switch input[type="checkbox"] { display: none; }
+    .pb-switch-track {
+      width: 32px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(12,23,45,0.15);
+      position: relative;
+      transition: background 150ms ease;
+      flex-shrink: 0;
+    }
+    .pb-switch input:checked + .pb-switch-track {
+      background: var(--text);
+    }
+    .pb-switch-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 150ms ease;
+    }
+    .pb-switch input:checked + .pb-switch-track .pb-switch-thumb {
+      transform: translateX(14px);
+    }
+    .pb-switch-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    /* Status chip */
+    .pb-status-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background 150ms, color 150ms;
+    }
+    .pb-status-chip.not-locked {
+      background: rgba(245,158,11,0.12);
+      color: #92400e;
+    }
+    .pb-status-chip.locked {
+      background: rgba(5,150,105,0.12);
+      color: #065f46;
+    }
+    /* Plan builder body */
+    .plan-builder-body {
+      padding: 16px;
+    }
+    .plan-builder-body.pb-hidden { display: none; }
+    .pb-disabled-msg {
+      padding: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    /* Plan builder table wrapper */
+    .pb-table-section {
+      margin-bottom: 20px;
+    }
+    .pb-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+    .pb-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .pb-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      overflow-x: auto;
+      display: block;
+      white-space: nowrap;
+    }
+    .pb-table th {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 650;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      background: white;
+    }
+    .pb-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .pb-table tr:last-child td { border-bottom: none; }
+    .pb-table tr:hover td { background: rgba(246,248,251,0.5); }
+    .pb-table-empty td {
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+      padding: 18px;
+    }
+    /* Status badges in plan builder */
+    .pb-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .pb-badge.draft      { background: rgba(107,114,128,0.12); color: #6b7280; }
+    .pb-badge.submitted  { background: rgba(245,158,11,0.12); color: #92400e; }
+    .pb-badge.approved   { background: rgba(5,150,105,0.12); color: #065f46; }
+    .pb-badge.rejected   { background: rgba(220,38,38,0.12); color: #dc2626; }
+    .pb-badge.committed  { background: rgba(59,130,246,0.12); color: #1d4ed8; }
+    .pb-badge.invoiced   { background: rgba(5,150,105,0.12); color: #065f46; }
+    .pb-badge.cancelled  { background: rgba(107,114,128,0.12); color: #6b7280; text-decoration: line-through; }
+    /* Modal overlay */
+    .pb-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .pb-modal-overlay.open { display: flex; }
+    .pb-modal {
+      background: white;
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      margin: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+    .pb-modal-title {
+      font-size: 16px;
+      font-weight: 650;
+      margin-bottom: 16px;
+    }
+    .pb-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pb-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .pb-form-field.full { grid-column: 1 / -1; }
+    .pb-form-field label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    .pb-form-field input,
+    .pb-form-field select {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: var(--font-sans);
+      background: white;
+      color: var(--text);
+      transition: border-color 120ms;
+    }
+    .pb-form-field input:focus,
+    .pb-form-field select:focus {
+      outline: none;
+      border-color: rgba(12,23,45,0.3);
+    }
+    .pb-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .btn-small.btn-danger {
+      color: #dc2626;
+      border-color: rgba(220,38,38,0.25);
+    }
+    .btn-small.btn-danger:hover {
+      background: rgba(220,38,38,0.06);
+    }
+    .btn-small.btn-accent {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+    .btn-small.btn-accent:hover {
+      box-shadow: 0 4px 14px rgba(11,18,32,0.18);
+    }
+    .pb-action-btn {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 120ms ease;
+      white-space: nowrap;
+    }
+    .pb-action-btn:hover {
+      border-color: rgba(12,23,45,0.2);
+      background: rgba(246,248,251,0.8);
+    }
+    .pb-action-btn.danger {
+      color: #dc2626;
+      border-color: rgba(220,38,38,0.2);
+    }
+    .pb-action-btn.danger:hover {
+      background: rgba(220,38,38,0.05);
+    }
+    .pb-source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(59,130,246,0.1);
+      color: #1d4ed8;
+    }
+
+    /* ---- Plan Builder Guide Panel (floating) ---- */
+    .pb-guide-fab {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 900;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--text);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(11,18,32,0.22);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .pb-guide-fab:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 24px rgba(11,18,32,0.28);
+    }
+    .pb-guide-fab .pb-guide-fab-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f59e0b;
+      border: 2px solid white;
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .pb-guide-panel {
+      position: fixed;
+      bottom: 84px;
+      right: 28px;
+      z-index: 900;
+      width: 320px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 48px rgba(11,18,32,0.18);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      max-height: calc(100vh - 120px);
+    }
+    .pb-guide-panel.open { display: flex; }
+    .pb-guide-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px 12px;
+      background: var(--text);
+      color: white;
+    }
+    .pb-guide-panel-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .pb-guide-panel-subtitle {
+      font-size: 10px;
+      opacity: 0.65;
+      margin-top: 1px;
+    }
+    .pb-guide-close {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 120ms;
+      flex-shrink: 0;
+    }
+    .pb-guide-close:hover { background: rgba(255,255,255,0.25); }
+    .pb-guide-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.12) transparent;
+    }
+    .pb-guide-step {
+      display: flex;
+      gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 100ms;
+      position: relative;
+    }
+    .pb-guide-step:last-child { border-bottom: none; }
+    .pb-guide-step:hover { background: rgba(246,248,251,0.7); }
+    .pb-guide-step.done { opacity: 0.55; }
+    .pb-guide-step.active { background: rgba(15,118,110,0.04); }
+    .pb-guide-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: background 150ms, color 150ms;
+    }
+    .pb-guide-num.pending {
+      background: rgba(12,23,45,0.08);
+      color: var(--muted);
+    }
+    .pb-guide-num.active {
+      background: var(--text);
+      color: white;
+    }
+    .pb-guide-num.done {
+      background: rgba(5,150,105,0.15);
+      color: #059669;
+    }
+    .pb-guide-content {}
+    .pb-guide-step-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin-bottom: 3px;
+      line-height: 1.3;
+    }
+    .pb-guide-step-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .pb-guide-step-action {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .pb-guide-done-tick {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: #059669;
+    }
+    .pb-guide-progress-bar-wrap {
+      padding: 10px 16px 12px;
+      background: rgba(246,248,251,0.6);
+      border-top: 1px solid var(--border);
+    }
+    .pb-guide-progress-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pb-guide-progress-track {
+      height: 4px;
+      background: rgba(12,23,45,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .pb-guide-progress-fill {
+      height: 100%;
+      background: #0f766e;
+      border-radius: 999px;
+      transition: width 300ms ease;
+    }
+    /* pb-info icon: inline ⓘ used in section titles */
+    .pb-info {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(12,23,45,0.08);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      font-style: normal;
+      cursor: pointer;
+      vertical-align: middle;
+      margin-left: 5px;
+      line-height: 1;
+      transition: background 120ms, color 120ms;
+      flex-shrink: 0;
+    }
+    .pb-info:hover {
+      background: var(--text);
+      color: white;
+    }
+    @media (max-width: 480px) {
+      .pb-guide-panel {
+        right: 12px;
+        bottom: 80px;
+        width: calc(100vw - 24px);
+      }
+      .pb-guide-fab {
+        right: 12px;
+        bottom: 16px;
+      }
+    }
+
     /* ---- Decision Box ---- */
     .decision-box {
       background: white;
@@ -1646,13 +2193,118 @@
           <div class="card-header">
             <h3 class="card-title">Variance Analysis <span class="help-icon" data-help="'Variance' simply means the difference between plan and reality. A positive variance means you spent more than planned (bad). A negative variance means you came in under plan (good). This table breaks it down month by month so you can see trends and spot which months went off-track."></span></h3>
             <div class="card-actions">
-              <div class="toggle-group">
-                <button class="toggle-btn active" onclick="setCompareMode('forecast')" data-mode="forecast" data-help="Compare actual spend against the rolling forecast — your most up-to-date prediction of what you'd spend.">vs Forecast</button>
-                <button class="toggle-btn" onclick="setCompareMode('budget')" data-mode="budget" data-help="Compare actual spend against the original approved budget — the number signed off at the start of the year. Useful for formal accountability.">vs Budget</button>
+              <div class="toggle-with-hint">
+                <div class="toggle-group">
+                  <button class="toggle-btn active" onclick="setCompareMode('forecast')" data-mode="forecast" data-help="Compare actual spend against the rolling forecast — your most up-to-date prediction of what you'd spend.">vs Forecast</button>
+                  <button class="toggle-btn" onclick="setCompareMode('budget')" data-mode="budget" data-help="Compare actual spend against the original approved budget — the number signed off at the start of the year. Useful for formal accountability.">vs Budget</button>
+                </div>
+                <div class="toggle-hints-row">
+                  <div class="toggle-hint-item">
+                    <span class="toggle-hint-label">Forecast</span>
+                    <span style="font-size:9px;color:var(--muted);opacity:0.7;">Rolling / Latest</span>
+                  </div>
+                  <div style="width:8px;"></div>
+                  <div class="toggle-hint-item">
+                    <span class="toggle-hint-label">Budget</span>
+                    <span style="font-size:9px;color:var(--muted);opacity:0.7;">Approved Baseline / Forecast v1</span>
+                  </div>
+                </div>
               </div>
               <button onclick="downloadForecastCSV()" class="btn-small">Export Analysis</button>
             </div>
           </div>
+
+          <!-- ═══ Plan Builder: Intake → Commitments ═══ -->
+          <div class="plan-builder-card" id="planBuilderCard">
+            <div class="plan-builder-header">
+              <div class="plan-builder-title">
+                Plan Builder: Intake → Commitments
+                <span class="pb-info" data-help="The Plan Builder turns your marketing spend requests into a finance-grade forecast. It has two layers: Intake (who asked for budget and how much) and Commitments (what finance has formally approved and can track). Together they produce a rolling forecast and a locked budget baseline for variance analysis.">i</span>
+              </div>
+              <div class="plan-builder-actions">
+                <label class="pb-switch" title="Enable Plan Builder to use commitments as forecast source">
+                  <input type="checkbox" id="pbToggle" onchange="pbToggleChanged()">
+                  <span class="pb-switch-track"><span class="pb-switch-thumb"></span></span>
+                  <span class="pb-switch-label">Enable Plan Builder</span>
+                </label>
+                <span class="pb-status-chip not-locked" id="pbStatusChip">Budget Baseline: Not locked</span>
+              </div>
+            </div>
+
+            <div id="pbDisabledMsg" class="pb-disabled-msg">
+              Plan Builder is off — the module uses Sample / Random / Upload data as forecast source.<br>
+              <span style="color:var(--accent);font-weight:600;cursor:pointer;" onclick="document.getElementById('pbToggle').checked=true;pbToggleChanged();">Enable Plan Builder →</span>
+            </div>
+
+            <div id="pbBody" class="plan-builder-body pb-hidden">
+              <!-- Action buttons row -->
+              <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px;">
+                <button class="btn-small btn-accent" onclick="pbBuildPlan()" data-help="Recalculates the forecast from all current Commitments and refreshes the Forecast chart and Variance table below. Run this after any changes to commitments.">Build Plan</button>
+                <button class="btn-small" id="pbLockBtn" onclick="pbLockBudget()" data-help="Snapshots today's commitment totals as the Budget Baseline (your Approved Forecast v1). After locking, editing commitments updates the rolling Forecast but the Budget stays frozen — this is what creates meaningful variance analysis.">Lock Budget Baseline</button>
+                <button class="btn-small btn-danger" onclick="pbResetBudget()" data-help="Clears the locked budget snapshot. While unlocked, Budget = Forecast (no variance). Use Reset if the baseline was set too early or needs to be re-approved.">Reset Baseline</button>
+                <button class="btn-small" onclick="pbExportJSON()" data-help="Downloads all intake rows, commitments, and the budget baseline as a JSON file — useful for version control, sharing with another finance team member, or backing up before major changes.">Export Plan (JSON)</button>
+                <label class="btn-small" style="cursor:pointer;display:inline-flex;align-items:center;" data-help="Load a previously exported plan JSON file. This will overwrite the current intake, commitments, and baseline. Use Import to restore a backup or load a plan shared by a colleague.">
+                  Import Plan (JSON)
+                  <input type="file" accept=".json" style="display:none;" onchange="pbImportJSON(event)">
+                </label>
+              </div>
+
+              <!-- ── Intake table ── -->
+              <div class="pb-table-section">
+                <div class="pb-section-header">
+                  <span class="pb-section-title">
+                    Intake — Requests Pipeline
+                    <span class="pb-info" data-help="Intake is the &quot;ask&quot; layer. Any team can submit a spend request here — campaign name, owner, cost center, amount, and the months it spans. Requests start as Draft, get Submitted for review, then either Approved (moves to Commitments) or Rejected. Finance owns the approval gate. Intake alone has no effect on the forecast — only approved Commitments drive the numbers.">i</span>
+                  </span>
+                  <button class="btn-small" onclick="pbOpenIntakeModal()">+ Add Intake</button>
+                </div>
+                <div style="overflow-x:auto;">
+                  <table class="pb-table" id="pbIntakeTable">
+                    <thead>
+                      <tr>
+                        <th>Request ID</th><th>Campaign</th><th>Owner</th><th>Category</th>
+                        <th>Cost Center</th><th>Amount</th><th>Start Month</th><th>End Month</th>
+                        <th>Status</th><th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pbIntakeTbody">
+                      <tr class="pb-table-empty"><td colspan="10">No intake requests yet — click "+ Add Intake" to begin.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ── Commitments table ── -->
+              <div class="pb-table-section">
+                <div class="pb-section-header">
+                  <span class="pb-section-title">
+                    Commitments — Finance-Trust Source
+                    <span class="pb-info" data-help="Commitments are finance&apos;s source of truth. Once an intake request is approved, it becomes a Commitment — a formal record of a vendor, amount, and time range that finance stands behind. Committed and Invoiced rows are phased evenly across months and summed to build the rolling Forecast. When you click &quot;Lock Budget Baseline&quot;, the current commitment totals become the frozen Budget that actuals are measured against.">i</span>
+                  </span>
+                  <button class="btn-small" onclick="pbOpenCommitmentModal()">+ Add Commitment</button>
+                </div>
+                <div style="overflow-x:auto;">
+                  <table class="pb-table" id="pbCommitmentsTable">
+                    <thead>
+                      <tr>
+                        <th>Commitment ID</th><th>Linked Request</th><th>Vendor</th><th>Category</th>
+                        <th>Cost Center</th><th>Amount</th><th>Start Month</th><th>End Month</th>
+                        <th>Status</th><th>Phasing</th><th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pbCommitTbody">
+                      <tr class="pb-table-empty"><td colspan="11">No commitments yet — approve an intake request or click "+ Add Commitment".</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="pbSourceBadgeRow" style="display:none;margin-bottom:8px;">
+                <span class="pb-source-badge">📋 Plan Builder Active — Forecast sourced from Commitments</span>
+              </div>
+            </div>
+          </div>
+          <!-- ═══ /Plan Builder ═══ -->
 
           <div class="chart-container">
             <div class="chart-title" id="forecastChartTitle">Actual vs Forecast</div>
@@ -2987,6 +3639,13 @@
     function renderForecastVsActual() {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       
+      // ── Plan Builder integration ──
+      // If Plan Builder is enabled and has valid commitments, use its forecast/budget;
+      // otherwise fall back to the existing forecastBudget (sample/random/upload).
+      const activeForecastBudget = (typeof pbGetForecastBudget === 'function')
+        ? pbGetForecastBudget(forecastBudget)
+        : forecastBudget;
+      
       const actualByMonth = months.map(month => {
         const monthNum = months.indexOf(month) + 1;
         const monthTrans = transactions.filter(t => t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`));
@@ -2995,7 +3654,7 @@
       });
       
       const comparison = actualByMonth.map(a => {
-        const monthForecast = forecastBudget.filter(f => f.month === a.month);
+        const monthForecast = activeForecastBudget.filter(f => f.month === a.month);
         const forecast = monthForecast.reduce((sum, f) => sum + parseFloat(f.forecast_amount), 0);
         const budget = monthForecast.reduce((sum, f) => sum + parseFloat(f.budget_amount), 0);
         const compare = compareMode === 'forecast' ? forecast : budget;
@@ -4683,7 +5342,741 @@
     // ── Initialize tooltip engine ──
     document.addEventListener('DOMContentLoaded', function() { initTooltips(); });
 
+    // ════════════════════════════════════════════════════════════
+    //  PLAN BUILDER GUIDE PANEL
+    // ════════════════════════════════════════════════════════════
+    const PB_GUIDE_STEPS = 5;
+    let pbGuideDone = [false, false, false, false, false]; // index 0 = step 1
+    let pbGuideOpen = false;
+
+    function pbGuideLoad() {
+      try {
+        const saved = localStorage.getItem('pbGuideDone');
+        if (saved) pbGuideDone = JSON.parse(saved);
+      } catch(e) {}
+    }
+
+    function pbGuideSave() {
+      try { localStorage.setItem('pbGuideDone', JSON.stringify(pbGuideDone)); } catch(e) {}
+    }
+
+    function pbGuideToggle() {
+      pbGuideOpen = !pbGuideOpen;
+      const panel = document.getElementById('pbGuidePanel');
+      panel.classList.toggle('open', pbGuideOpen);
+      pbGuideRender();
+    }
+
+    function pbGuideMarkDone(step) {
+      pbGuideDone[step - 1] = true;
+      pbGuideSave();
+      pbGuideRender();
+    }
+
+    function pbGuideStepClick(step) {
+      // Mark as active/focused — no-op UI feedback
+      pbGuideRender(step);
+    }
+
+    function pbGuideRender(activeStep) {
+      const doneCount = pbGuideDone.filter(Boolean).length;
+
+      for (let i = 1; i <= PB_GUIDE_STEPS; i++) {
+        const done    = pbGuideDone[i - 1];
+        const active  = (activeStep === i);
+        const stepEl  = document.getElementById('pbGS' + i);
+        const numEl   = document.getElementById('pbGN' + i);
+        const tickEl  = document.getElementById('pbGT' + i);
+        if (!stepEl) continue;
+
+        stepEl.classList.toggle('done', done);
+        stepEl.classList.toggle('active', active);
+        numEl.className = 'pb-guide-num ' + (done ? 'done' : active ? 'active' : 'pending');
+        numEl.textContent = done ? '✓' : String(i);
+        tickEl.style.display = done ? '' : 'none';
+      }
+
+      // Progress bar
+      const pct = Math.round((doneCount / PB_GUIDE_STEPS) * 100);
+      const fill = document.getElementById('pbGuideProgressFill');
+      const txt  = document.getElementById('pbGuideProgressText');
+      if (fill) fill.style.width = pct + '%';
+      if (txt)  txt.textContent  = doneCount + ' / ' + PB_GUIDE_STEPS + ' steps';
+
+      // Badge
+      const badge = document.getElementById('pbGuideBadge');
+      const remaining = PB_GUIDE_STEPS - doneCount;
+      if (badge) {
+        badge.textContent = remaining;
+        badge.style.display = remaining > 0 ? '' : 'none';
+      }
+    }
+
+    // Auto-detect step completion from Plan Builder actions
+    // Hook into pbToggleChanged, pbBuildPlan, pbLockBudget
+    const _origPbToggleChanged = typeof pbToggleChanged === 'function' ? pbToggleChanged : null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      pbGuideLoad();
+      pbGuideRender();
+
+      // Patch pbToggleChanged to auto-mark step 1
+      const origToggle = window.pbToggleChanged;
+      window.pbToggleChanged = function() {
+        if (origToggle) origToggle();
+        if (document.getElementById('pbToggle') && document.getElementById('pbToggle').checked) {
+          pbGuideMarkDone(1);
+        }
+      };
+
+      // Patch pbBuildPlan to auto-mark step 4
+      const origBuild = window.pbBuildPlan;
+      window.pbBuildPlan = function() {
+        if (origBuild) origBuild();
+        pbGuideMarkDone(4);
+      };
+
+      // Patch pbLockBudget to auto-mark step 5
+      const origLock = window.pbLockBudget;
+      window.pbLockBudget = function() {
+        if (origLock) origLock();
+        pbGuideMarkDone(5);
+      };
+
+      // Patch pbApproveToCommit to auto-mark step 3
+      const origApprove = window.pbApproveToCommit;
+      window.pbApproveToCommit = function(id) {
+        if (origApprove) origApprove(id);
+        pbGuideMarkDone(3);
+      };
+
+      // Patch pbSaveIntake to auto-mark step 2 on first save
+      const origSaveIntake = window.pbSaveIntake;
+      window.pbSaveIntake = function() {
+        if (origSaveIntake) origSaveIntake();
+        pbGuideMarkDone(2);
+      };
+    });
+
+
+
+    // ════════════════════════════════════════════════════════════
+    //  PLAN BUILDER: Intake → Commitments → Forecast
+    // ════════════════════════════════════════════════════════════
+
+    // ── State ──
+    let pbEnabled       = false;
+    let pbIntake        = [];   // { id, campaign, owner, category, costCenter, amount, startMonth, endMonth, status }
+    let pbCommitments   = [];   // { id, linkedRequest, vendor, category, costCenter, amount, startMonth, endMonth, status, phasing }
+    let pbBudgetBaseline = {};  // { "month|costCenter|category": amount }
+    let pbBudgetLocked   = false;
+
+    const PB_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // ── localStorage helpers ──
+    function savePlanBuilderToStorage() {
+      try {
+        localStorage.setItem('planBuilderEnabled',    JSON.stringify(pbEnabled));
+        localStorage.setItem('planIntake',            JSON.stringify(pbIntake));
+        localStorage.setItem('planCommitments',       JSON.stringify(pbCommitments));
+        localStorage.setItem('planBudgetBaseline',    JSON.stringify(pbBudgetBaseline));
+        localStorage.setItem('planBudgetLocked',      JSON.stringify(pbBudgetLocked));
+      } catch(e) { /* storage full / private mode */ }
+    }
+
+    function loadPlanBuilderFromStorage() {
+      try {
+        const en = localStorage.getItem('planBuilderEnabled');
+        const pi = localStorage.getItem('planIntake');
+        const pc = localStorage.getItem('planCommitments');
+        const pb = localStorage.getItem('planBudgetBaseline');
+        const pl = localStorage.getItem('planBudgetLocked');
+        if (en !== null) pbEnabled       = JSON.parse(en);
+        if (pi !== null) pbIntake        = JSON.parse(pi);
+        if (pc !== null) pbCommitments   = JSON.parse(pc);
+        if (pb !== null) pbBudgetBaseline = JSON.parse(pb);
+        if (pl !== null) pbBudgetLocked  = JSON.parse(pl);
+      } catch(e) { /* corrupt data — leave defaults */ }
+    }
+
+    // ── Toggle ──
+    function pbToggleChanged() {
+      pbEnabled = document.getElementById('pbToggle').checked;
+      savePlanBuilderToStorage();
+      pbRenderUI();
+      renderForecastVsActual();
+    }
+
+    function pbRenderUI() {
+      const toggle = document.getElementById('pbToggle');
+      toggle.checked = pbEnabled;
+      document.getElementById('pbDisabledMsg').style.display = pbEnabled ? 'none' : '';
+      const body = document.getElementById('pbBody');
+      body.classList.toggle('pb-hidden', !pbEnabled);
+      document.getElementById('pbSourceBadgeRow').style.display =
+        (pbEnabled && pbHasValidCommitments()) ? '' : 'none';
+      pbRenderStatusChip();
+      pbRenderIntakeTable();
+      pbRenderCommitmentsTable();
+    }
+
+    function pbRenderStatusChip() {
+      const chip = document.getElementById('pbStatusChip');
+      chip.textContent = pbBudgetLocked ? 'Budget Baseline: Locked' : 'Budget Baseline: Not locked';
+      chip.className = 'pb-status-chip ' + (pbBudgetLocked ? 'locked' : 'not-locked');
+    }
+
+    // ── Forecast calc ──
+    function pbHasValidCommitments() {
+      return pbCommitments.some(c => c.status === 'Committed' || c.status === 'Invoiced');
+    }
+
+    /**
+     * Builds forecastBudget[] from Plan Builder commitments.
+     * Returns entries shaped: { month, cost_center, category, forecast_amount, budget_amount }
+     *
+     * Budget amount:
+     *   - If baseline is locked: use stored baseline for that key; 0 for new keys (strict governance).
+     *   - If baseline not locked: budget_amount = forecast_amount (usable before approval).
+     */
+    function buildForecastBudgetFromPlanBuilder() {
+      // Accumulate forecast allocations
+      const forecastMap = {}; // key: "month|costCenter|category" → amount
+
+      pbCommitments.forEach(c => {
+        if (c.status !== 'Committed' && c.status !== 'Invoiced') return;
+        const startIdx = PB_MONTHS.indexOf(c.startMonth);
+        const endIdx   = PB_MONTHS.indexOf(c.endMonth);
+        if (startIdx < 0 || endIdx < 0) return;
+        const numMonths = endIdx - startIdx + 1;
+        const monthly   = parseFloat(c.amount) / (numMonths > 0 ? numMonths : 1);
+        for (let i = startIdx; i <= endIdx; i++) {
+          const key = `${PB_MONTHS[i]}|${c.costCenter}|${c.category}`;
+          forecastMap[key] = (forecastMap[key] || 0) + monthly;
+        }
+      });
+
+      return Object.entries(forecastMap).map(([key, fa]) => {
+        const [month, cost_center, category] = key.split('|');
+        const budget_amount = pbBudgetLocked
+          ? (pbBudgetBaseline[key] !== undefined ? pbBudgetBaseline[key] : 0)
+          : fa; // not locked → budget = forecast
+        return { month, cost_center, category, forecast_amount: fa, budget_amount };
+      });
+    }
+
+    // ── Build Plan (trigger re-render) ──
+    function pbBuildPlan() {
+      savePlanBuilderToStorage();
+      pbRenderUI();
+      renderForecastVsActual();
+    }
+
+    // ── Lock Budget Baseline ──
+    function pbLockBudget() {
+      if (!pbEnabled) return;
+      // Capture current forecast allocations as baseline snapshot
+      pbBudgetBaseline = {};
+      pbCommitments.forEach(c => {
+        if (c.status !== 'Committed' && c.status !== 'Invoiced') return;
+        const startIdx = PB_MONTHS.indexOf(c.startMonth);
+        const endIdx   = PB_MONTHS.indexOf(c.endMonth);
+        if (startIdx < 0 || endIdx < 0) return;
+        const numMonths = endIdx - startIdx + 1;
+        const monthly   = parseFloat(c.amount) / (numMonths > 0 ? numMonths : 1);
+        for (let i = startIdx; i <= endIdx; i++) {
+          const key = `${PB_MONTHS[i]}|${c.costCenter}|${c.category}`;
+          pbBudgetBaseline[key] = (pbBudgetBaseline[key] || 0) + monthly;
+        }
+      });
+      pbBudgetLocked = true;
+      savePlanBuilderToStorage();
+      pbRenderStatusChip();
+      renderForecastVsActual();
+    }
+
+    // ── Reset Budget Baseline ──
+    function pbResetBudget() {
+      pbBudgetBaseline = {};
+      pbBudgetLocked   = false;
+      savePlanBuilderToStorage();
+      pbRenderStatusChip();
+      renderForecastVsActual();
+    }
+
+    // ── Export / Import JSON ──
+    function pbExportJSON() {
+      const payload = {
+        enabled: pbEnabled,
+        intake: pbIntake,
+        commitments: pbCommitments,
+        budgetBaseline: pbBudgetBaseline,
+        budgetLocked: pbBudgetLocked
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href     = url;
+      a.download = 'plan-builder-export.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function pbImportJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          // Minimal shape validation
+          if (typeof data !== 'object') throw new Error('Not an object');
+          if (Array.isArray(data.intake))      pbIntake        = data.intake;
+          if (Array.isArray(data.commitments)) pbCommitments   = data.commitments;
+          if (typeof data.budgetBaseline === 'object' && data.budgetBaseline !== null)
+                                               pbBudgetBaseline = data.budgetBaseline;
+          if (typeof data.budgetLocked === 'boolean') pbBudgetLocked = data.budgetLocked;
+          if (typeof data.enabled === 'boolean') {
+            pbEnabled = data.enabled;
+            document.getElementById('pbToggle').checked = pbEnabled;
+          }
+          savePlanBuilderToStorage();
+          pbRenderUI();
+          renderForecastVsActual();
+        } catch(err) {
+          alert('Import failed: invalid JSON or unexpected format.\n' + err.message);
+        }
+        // reset the file input so same file can be re-imported
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // ── Intake CRUD ──
+    let _pbIntakeIdCounter = 1;
+
+    function pbOpenIntakeModal(editId) {
+      const existing = editId ? pbIntake.find(r => r.id === editId) : null;
+      const modal = document.getElementById('pbIntakeModal');
+      document.getElementById('pbIntakeModalTitle').textContent = existing ? 'Edit Intake Request' : 'Add Intake Request';
+      document.getElementById('pbIM_id').value          = existing ? existing.id : '';
+      document.getElementById('pbIM_campaign').value    = existing ? existing.campaign : '';
+      document.getElementById('pbIM_owner').value       = existing ? existing.owner : '';
+      document.getElementById('pbIM_category').value    = existing ? existing.category : '';
+      document.getElementById('pbIM_costCenter').value  = existing ? existing.costCenter : '';
+      document.getElementById('pbIM_amount').value      = existing ? existing.amount : '';
+      document.getElementById('pbIM_startMonth').value  = existing ? existing.startMonth : 'Jan';
+      document.getElementById('pbIM_endMonth').value    = existing ? existing.endMonth : 'Dec';
+      document.getElementById('pbIM_status').value      = existing ? existing.status : 'Draft';
+      modal.classList.add('open');
+    }
+
+    function pbCloseIntakeModal() {
+      document.getElementById('pbIntakeModal').classList.remove('open');
+    }
+
+    function pbSaveIntake() {
+      const id         = document.getElementById('pbIM_id').value.trim();
+      const campaign   = document.getElementById('pbIM_campaign').value.trim();
+      const owner      = document.getElementById('pbIM_owner').value.trim();
+      const category   = document.getElementById('pbIM_category').value.trim();
+      const costCenter = document.getElementById('pbIM_costCenter').value.trim();
+      const amount     = parseFloat(document.getElementById('pbIM_amount').value) || 0;
+      const startMonth = document.getElementById('pbIM_startMonth').value;
+      const endMonth   = document.getElementById('pbIM_endMonth').value;
+      const status     = document.getElementById('pbIM_status').value;
+
+      if (!campaign) { alert('Campaign is required.'); return; }
+      if (amount <= 0) { alert('Amount must be greater than 0.'); return; }
+
+      const row = {
+        id: id || ('REQ-' + String(_pbIntakeIdCounter++).padStart(3,'0')),
+        campaign, owner, category, costCenter, amount, startMonth, endMonth, status
+      };
+      const idx = pbIntake.findIndex(r => r.id === row.id);
+      if (idx >= 0) pbIntake[idx] = row; else pbIntake.push(row);
+
+      savePlanBuilderToStorage();
+      pbRenderIntakeTable();
+      pbCloseIntakeModal();
+    }
+
+    function pbDeleteIntake(id) {
+      pbIntake = pbIntake.filter(r => r.id !== id);
+      savePlanBuilderToStorage();
+      pbRenderIntakeTable();
+    }
+
+    function pbApproveToCommit(intakeId) {
+      const row = pbIntake.find(r => r.id === intakeId);
+      if (!row) return;
+      // Update intake status to Approved
+      row.status = 'Approved';
+      // Create a matching commitment
+      const cid = 'CMT-' + String(pbCommitments.length + 1).padStart(3,'0');
+      pbCommitments.push({
+        id: cid,
+        linkedRequest: row.id,
+        vendor: row.campaign, // default vendor = campaign name
+        category: row.category,
+        costCenter: row.costCenter,
+        amount: row.amount,
+        startMonth: row.startMonth,
+        endMonth: row.endMonth,
+        status: 'Committed',
+        phasing: 'Even'
+      });
+      savePlanBuilderToStorage();
+      pbRenderIntakeTable();
+      pbRenderCommitmentsTable();
+      pbRenderUI();
+      renderForecastVsActual();
+    }
+
+    function pbRenderIntakeTable() {
+      const tbody = document.getElementById('pbIntakeTbody');
+      if (!pbIntake.length) {
+        tbody.innerHTML = '<tr class="pb-table-empty"><td colspan="10">No intake requests yet — click "+ Add Intake" to begin.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = pbIntake.map(r => `
+        <tr>
+          <td><code style="font-size:11px;">${r.id}</code></td>
+          <td>${escHtml(r.campaign)}</td>
+          <td>${escHtml(r.owner)}</td>
+          <td>${escHtml(r.category)}</td>
+          <td>${escHtml(r.costCenter)}</td>
+          <td>$${Number(r.amount).toLocaleString()}</td>
+          <td>${r.startMonth}</td>
+          <td>${r.endMonth}</td>
+          <td><span class="pb-badge ${r.status.toLowerCase()}">${r.status}</span></td>
+          <td style="display:flex;gap:5px;flex-wrap:nowrap;">
+            ${r.status !== 'Approved' && r.status !== 'Rejected'
+              ? `<button class="pb-action-btn" onclick="pbApproveToCommit('${r.id}')">Approve → Commit</button>`
+              : ''}
+            <button class="pb-action-btn" onclick="pbOpenIntakeModal('${r.id}')">Edit</button>
+            <button class="pb-action-btn danger" onclick="pbDeleteIntake('${r.id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Commitment CRUD ──
+    let _pbCommitIdCounter = 1;
+
+    function pbOpenCommitmentModal(editId) {
+      const existing = editId ? pbCommitments.find(c => c.id === editId) : null;
+      const modal = document.getElementById('pbCommitModal');
+      document.getElementById('pbCM_modalTitle').textContent = existing ? 'Edit Commitment' : 'Add Commitment';
+      document.getElementById('pbCM_id').value             = existing ? existing.id : '';
+      document.getElementById('pbCM_linkedRequest').value  = existing ? existing.linkedRequest : '';
+      document.getElementById('pbCM_vendor').value         = existing ? existing.vendor : '';
+      document.getElementById('pbCM_category').value       = existing ? existing.category : '';
+      document.getElementById('pbCM_costCenter').value     = existing ? existing.costCenter : '';
+      document.getElementById('pbCM_amount').value         = existing ? existing.amount : '';
+      document.getElementById('pbCM_startMonth').value     = existing ? existing.startMonth : 'Jan';
+      document.getElementById('pbCM_endMonth').value       = existing ? existing.endMonth : 'Dec';
+      document.getElementById('pbCM_status').value         = existing ? existing.status : 'Committed';
+      modal.classList.add('open');
+    }
+
+    function pbCloseCommitmentModal() {
+      document.getElementById('pbCommitModal').classList.remove('open');
+    }
+
+    function pbSaveCommitment() {
+      const id            = document.getElementById('pbCM_id').value.trim();
+      const linkedRequest = document.getElementById('pbCM_linkedRequest').value.trim();
+      const vendor        = document.getElementById('pbCM_vendor').value.trim();
+      const category      = document.getElementById('pbCM_category').value.trim();
+      const costCenter    = document.getElementById('pbCM_costCenter').value.trim();
+      const amount        = parseFloat(document.getElementById('pbCM_amount').value) || 0;
+      const startMonth    = document.getElementById('pbCM_startMonth').value;
+      const endMonth      = document.getElementById('pbCM_endMonth').value;
+      const status        = document.getElementById('pbCM_status').value;
+
+      if (!vendor) { alert('Vendor is required.'); return; }
+      if (amount <= 0) { alert('Amount must be greater than 0.'); return; }
+
+      const row = {
+        id: id || ('CMT-' + String(_pbCommitIdCounter++).padStart(3,'0')),
+        linkedRequest, vendor, category, costCenter, amount,
+        startMonth, endMonth, status, phasing: 'Even'
+      };
+      const idx = pbCommitments.findIndex(c => c.id === row.id);
+      if (idx >= 0) pbCommitments[idx] = row; else pbCommitments.push(row);
+
+      savePlanBuilderToStorage();
+      pbRenderCommitmentsTable();
+      pbRenderUI();
+      renderForecastVsActual();
+      pbCloseCommitmentModal();
+    }
+
+    function pbDeleteCommitment(id) {
+      pbCommitments = pbCommitments.filter(c => c.id !== id);
+      savePlanBuilderToStorage();
+      pbRenderCommitmentsTable();
+      pbRenderUI();
+      renderForecastVsActual();
+    }
+
+    function pbRenderCommitmentsTable() {
+      const tbody = document.getElementById('pbCommitTbody');
+      if (!pbCommitments.length) {
+        tbody.innerHTML = '<tr class="pb-table-empty"><td colspan="11">No commitments yet — approve an intake request or click "+ Add Commitment".</td></tr>';
+        return;
+      }
+      tbody.innerHTML = pbCommitments.map(c => `
+        <tr>
+          <td><code style="font-size:11px;">${c.id}</code></td>
+          <td><code style="font-size:11px;color:var(--muted);">${c.linkedRequest || '—'}</code></td>
+          <td>${escHtml(c.vendor)}</td>
+          <td>${escHtml(c.category)}</td>
+          <td>${escHtml(c.costCenter)}</td>
+          <td>$${Number(c.amount).toLocaleString()}</td>
+          <td>${c.startMonth}</td>
+          <td>${c.endMonth}</td>
+          <td><span class="pb-badge ${c.status.toLowerCase()}">${c.status}</span></td>
+          <td style="font-size:11px;color:var(--muted);">${c.phasing}</td>
+          <td style="display:flex;gap:5px;flex-wrap:nowrap;">
+            <button class="pb-action-btn" onclick="pbOpenCommitmentModal('${c.id}')">Edit</button>
+            <button class="pb-action-btn danger" onclick="pbDeleteCommitment('${c.id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Integration: wire Plan Builder into forecastBudget ──
+    // Called at the top of renderForecastVsActual (patched below via wrapper)
+    function pbGetForecastBudget(existingForecastBudget) {
+      if (pbEnabled && pbHasValidCommitments()) {
+        return buildForecastBudgetFromPlanBuilder();
+      }
+      return existingForecastBudget;
+    }
+
+    // ── Init Plan Builder on DOMContentLoaded ──
+    document.addEventListener('DOMContentLoaded', function() {
+      loadPlanBuilderFromStorage();
+      pbRenderUI();
+    });
+
+    // ── Month options helper ──
+    function pbMonthOptions(selected) {
+      return PB_MONTHS.map(m =>
+        `<option value="${m}"${m === selected ? ' selected' : ''}>${m}</option>`
+      ).join('');
+    }
+
+
+
 </script>
+
+<!-- ═══ Plan Builder Modals ═══ -->
+
+<!-- Intake Modal -->
+<div class="pb-modal-overlay" id="pbIntakeModal" onclick="if(event.target===this)pbCloseIntakeModal()">
+  <div class="pb-modal">
+    <div class="pb-modal-title" id="pbIntakeModalTitle">Add Intake Request</div>
+    <input type="hidden" id="pbIM_id">
+    <div class="pb-form-grid">
+      <div class="pb-form-field full">
+        <label>Campaign *</label>
+        <input type="text" id="pbIM_campaign" placeholder="e.g. Q3 Paid Social">
+      </div>
+      <div class="pb-form-field">
+        <label>Owner</label>
+        <input type="text" id="pbIM_owner" placeholder="e.g. J. Smith">
+      </div>
+      <div class="pb-form-field">
+        <label>Category</label>
+        <input type="text" id="pbIM_category" placeholder="e.g. Digital Marketing">
+      </div>
+      <div class="pb-form-field">
+        <label>Cost Center</label>
+        <input type="text" id="pbIM_costCenter" placeholder="e.g. CC-MKT">
+      </div>
+      <div class="pb-form-field">
+        <label>Amount ($) *</label>
+        <input type="number" id="pbIM_amount" placeholder="e.g. 12000" min="0" step="100">
+      </div>
+      <div class="pb-form-field">
+        <label>Start Month</label>
+        <select id="pbIM_startMonth"></select>
+      </div>
+      <div class="pb-form-field">
+        <label>End Month</label>
+        <select id="pbIM_endMonth"></select>
+      </div>
+      <div class="pb-form-field">
+        <label>Status</label>
+        <select id="pbIM_status">
+          <option value="Draft">Draft</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+    </div>
+    <div class="pb-modal-actions">
+      <button class="btn-small" onclick="pbCloseIntakeModal()">Cancel</button>
+      <button class="btn-small btn-accent" onclick="pbSaveIntake()">Save Intake</button>
+    </div>
+  </div>
+</div>
+
+<!-- Commitment Modal -->
+<div class="pb-modal-overlay" id="pbCommitModal" onclick="if(event.target===this)pbCloseCommitmentModal()">
+  <div class="pb-modal">
+    <div class="pb-modal-title" id="pbCM_modalTitle">Add Commitment</div>
+    <input type="hidden" id="pbCM_id">
+    <div class="pb-form-grid">
+      <div class="pb-form-field">
+        <label>Linked Request ID</label>
+        <input type="text" id="pbCM_linkedRequest" placeholder="e.g. REQ-001 (optional)">
+      </div>
+      <div class="pb-form-field">
+        <label>Vendor *</label>
+        <input type="text" id="pbCM_vendor" placeholder="e.g. Google Ads">
+      </div>
+      <div class="pb-form-field">
+        <label>Category</label>
+        <input type="text" id="pbCM_category" placeholder="e.g. Digital Marketing">
+      </div>
+      <div class="pb-form-field">
+        <label>Cost Center</label>
+        <input type="text" id="pbCM_costCenter" placeholder="e.g. CC-MKT">
+      </div>
+      <div class="pb-form-field">
+        <label>Amount ($) *</label>
+        <input type="number" id="pbCM_amount" placeholder="e.g. 12000" min="0" step="100">
+      </div>
+      <div class="pb-form-field">
+        <label>Start Month</label>
+        <select id="pbCM_startMonth"></select>
+      </div>
+      <div class="pb-form-field">
+        <label>End Month</label>
+        <select id="pbCM_endMonth"></select>
+      </div>
+      <div class="pb-form-field">
+        <label>Status</label>
+        <select id="pbCM_status">
+          <option value="Committed">Committed</option>
+          <option value="Invoiced">Invoiced</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+    <div class="pb-modal-actions">
+      <button class="btn-small" onclick="pbCloseCommitmentModal()">Cancel</button>
+      <button class="btn-small btn-accent" onclick="pbSaveCommitment()">Save Commitment</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Populate month selects in modals once DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  ['pbIM_startMonth','pbIM_endMonth','pbCM_startMonth','pbCM_endMonth'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].forEach((m, i) => {
+        const opt = document.createElement('option');
+        opt.value = m; opt.textContent = m;
+        // Default end = Dec, start = Jan
+        if ((id.includes('end') && i === 11) || (id.includes('start') && i === 0)) opt.selected = true;
+        el.appendChild(opt);
+      });
+    }
+  });
+});
+</script>
+
+<!-- ═══ Plan Builder Guide Panel ═══ -->
+<button class="pb-guide-fab" id="pbGuideFab" onclick="pbGuideToggle()" title="Plan Builder step-by-step guide" aria-label="Open Plan Builder guide">
+  <span>📋</span>
+  <span class="pb-guide-fab-badge" id="pbGuideBadge">5</span>
+</button>
+
+<div class="pb-guide-panel" id="pbGuidePanel">
+  <div class="pb-guide-panel-head">
+    <div>
+      <div class="pb-guide-panel-title">Budget Build Guide</div>
+      <div class="pb-guide-panel-subtitle">Intake → Commitments → Locked Baseline</div>
+    </div>
+    <button class="pb-guide-close" onclick="pbGuideToggle()" aria-label="Close guide">✕</button>
+  </div>
+
+  <div class="pb-guide-body" id="pbGuideBody">
+
+    <div class="pb-guide-step" id="pbGS1" onclick="pbGuideStepClick(1)">
+      <div class="pb-guide-num pending" id="pbGN1">1</div>
+      <div class="pb-guide-content">
+        <div class="pb-guide-step-title">Enable the Plan Builder</div>
+        <div class="pb-guide-step-desc">Flip the toggle in the Plan Builder card header. The module switches from Sample/Random data to your own commitments as the forecast source.</div>
+        <span class="pb-guide-step-action" onclick="event.stopPropagation();document.getElementById('pbToggle').checked=true;pbToggleChanged();pbGuideMarkDone(1);">Enable now →</span>
+      </div>
+      <span class="pb-guide-done-tick" id="pbGT1" style="display:none;">✓</span>
+    </div>
+
+    <div class="pb-guide-step" id="pbGS2" onclick="pbGuideStepClick(2)">
+      <div class="pb-guide-num pending" id="pbGN2">2</div>
+      <div class="pb-guide-content">
+        <div class="pb-guide-step-title">Add spend requests to Intake</div>
+        <div class="pb-guide-step-desc">Click <strong>+ Add Intake</strong> for each campaign or spend request. Fill in: Campaign, Owner, Category, Cost Center, Amount, and the months it spans (Start → End Month). Set Status to <em>Draft</em> or <em>Submitted</em>.</div>
+        <span class="pb-guide-step-action" onclick="event.stopPropagation();pbOpenIntakeModal();pbGuideMarkDone(2);">Add first intake →</span>
+      </div>
+      <span class="pb-guide-done-tick" id="pbGT2" style="display:none;">✓</span>
+    </div>
+
+    <div class="pb-guide-step" id="pbGS3" onclick="pbGuideStepClick(3)">
+      <div class="pb-guide-num pending" id="pbGN3">3</div>
+      <div class="pb-guide-content">
+        <div class="pb-guide-step-title">Approve requests → Commitments</div>
+        <div class="pb-guide-step-desc">For each intake row you want to fund, click <strong>Approve → Commit</strong>. This creates a matching Commitment row that finance controls. You can also add Commitments directly if you skip the Intake step.</div>
+      </div>
+      <span class="pb-guide-done-tick" id="pbGT3" style="display:none;">✓</span>
+    </div>
+
+    <div class="pb-guide-step" id="pbGS4" onclick="pbGuideStepClick(4)">
+      <div class="pb-guide-num pending" id="pbGN4">4</div>
+      <div class="pb-guide-content">
+        <div class="pb-guide-step-title">Build the Plan</div>
+        <div class="pb-guide-step-desc">Click <strong>Build Plan</strong> to calculate monthly allocations from your commitments. Each commitment's amount is spread evenly across its months. The Forecast chart and Variance table update instantly.</div>
+        <span class="pb-guide-step-action" onclick="event.stopPropagation();pbBuildPlan();pbGuideMarkDone(4);">Build Plan now →</span>
+      </div>
+      <span class="pb-guide-done-tick" id="pbGT4" style="display:none;">✓</span>
+    </div>
+
+    <div class="pb-guide-step" id="pbGS5" onclick="pbGuideStepClick(5)">
+      <div class="pb-guide-num pending" id="pbGN5">5</div>
+      <div class="pb-guide-content">
+        <div class="pb-guide-step-title">Lock the Budget Baseline</div>
+        <div class="pb-guide-step-desc">Once the plan is reviewed and approved, click <strong>Lock Budget Baseline</strong>. This freezes the current forecast as the official Budget (Approved Forecast v1). Future commitment edits update the rolling Forecast but the Budget stays fixed — enabling real variance analysis (Actual vs Budget).</div>
+        <span class="pb-guide-step-action" onclick="event.stopPropagation();pbLockBudget();pbGuideMarkDone(5);">Lock baseline now →</span>
+      </div>
+      <span class="pb-guide-done-tick" id="pbGT5" style="display:none;">✓</span>
+    </div>
+
+  </div>
+
+  <div class="pb-guide-progress-bar-wrap">
+    <div class="pb-guide-progress-label">
+      <span>Progress</span>
+      <span id="pbGuideProgressText">0 / 5 steps</span>
+    </div>
+    <div class="pb-guide-progress-track">
+      <div class="pb-guide-progress-fill" id="pbGuideProgressFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+<!-- ═══ /Plan Builder Guide Panel ═══ -->
 
 </body>
 </html>
