@@ -1,11 +1,257 @@
+<!--
+  COMMERCIAL-SALES.HTML — UI/UX Upgrade Notes
+  ============================================
+  Changes made (patterns copied from operations-spend.html):
+  1. Decision Box → Hero Insight: added plain-English summary line at top,
+     fixed min/max height to prevent layout jumping, added exception-row
+     linking pattern (same grid + anchor links as ops-spend).
+  2. "What • So What • Now What" framework: added wswn CSS + restructured
+     PVM explainer and channel P&L insights using .wswn/.wswn-row/.wswn-label.
+  3. Threshold tooltips: added ⓘ help-icon beside GP%/Margin labels with
+     Health ↔ High Risk explanation in data-help attributes.
+  4. Fixed-height containers + scroll: channel P&L table wrapped in
+     #channelTableScroll (height:340px, overflow-y:auto). Accrual table
+     wrapped in #accrualTableScroll. Table layouts set to table-layout:fixed.
+  5. Tables: fixed column widths via colgroup, stable 40px row height,
+     sticky thead, no layout jumping.
+  6. Sidebar export button: "Export current dataset" → exportCurrentDataset()
+     downloads CSV of the currently active/filtered view.
+  7. Data section copy: "📂 One file powers this entire module" with four
+     analysis cards (Promo ROI, Channel P&L, PVM, Accrual).
+  8. Decision Box linking: exception rows with anchor links to sections +
+     smooth scroll + highlight (scrollToSection pattern from ops-spend).
+  9. wswn CSS / scrollbar CSS / exception-row CSS all ported from ops-spend.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Commercial / Sales Finance Model · FP&A Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    /* ── CSS Variables & Reset (from style.css) ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:          #ffffff;
+      --bg-muted:    #f6f8fb;
+      --text:        #0b1220;
+      --muted:       #5d6b7a;
+      --border:      rgba(12, 23, 45, 0.10);
+      --shadow:      0 10px 30px rgba(11, 18, 32, 0.08);
+      --shadow-soft: 0 8px 18px rgba(11, 18, 32, 0.06);
+      --accent:      #0f766e;
+      --accent-2:    #1b4d7a;
+      --accent-soft: rgba(15, 118, 110, 0.10);
+      --radius:      18px;
+      --radius-sm:   14px;
+      --max:         1120px;
+      --font-sans:   ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-mono:   'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      padding: 10px 12px;
+      background: var(--text);
+      color: white;
+      border-radius: 10px;
+      z-index: 9999;
+    }
+    .skip-link:focus { left: 12px; }
+
+    /* ── Site Header ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid var(--border);
+      will-change: transform;
+    }
+    .container {
+      width: min(var(--max), calc(100% - 48px));
+      margin: 0 auto;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 16px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    .brand-mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px var(--accent-soft);
+    }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, border-color 140ms ease;
+      user-select: none;
+      text-decoration: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+    .btn-solid {
+      background: var(--text);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-solid:hover { box-shadow: var(--shadow); }
+    .btn-ghost {
+      background: white;
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-ghost:hover { border-color: rgba(12, 23, 45, 0.18); box-shadow: 0 6px 18px rgba(11,18,32,0.06); }
+
+    /* ── Module Hero ── */
+    .module-hero {
+      padding: 40px 0 36px 0;
+      border-bottom: 1px solid var(--border);
+      height: 250px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .module-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .module-title {
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin: 0 0 10px 0;
+    }
+    .module-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 0 0;
+      max-width: 70ch;
+      height: calc(15px * 1.5 * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .feature-chips {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      margin-top: 16px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .feature-chips::-webkit-scrollbar { display: none; }
+    .chip {
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.8);
+      color: var(--text);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Help icon ── */
+    .help-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: rgba(12,23,45,0.07); color: var(--muted);
+      font-size: 10px; font-weight: 700; cursor: help;
+      vertical-align: middle; flex-shrink: 0;
+      transition: background 120ms ease;
+      user-select: none;
+    }
+    .help-icon::before { content: 'i'; font-style: italic; }
+    .help-icon:hover { background: rgba(15,118,110,0.15); color: var(--accent); }
+
+    /* ── Tooltip root element (JS-powered) ── */
+    #tt-root {
+      position: fixed; z-index: 99999;
+      background: rgba(11,18,32,0.92);
+      color: white; font-size: 12px; line-height: 1.45;
+      padding: 8px 12px; border-radius: 10px;
+      max-width: 280px; pointer-events: none;
+      opacity: 0; transition: opacity 120ms ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    #tt-root.tt-visible { opacity: 1; }
+
+    /* ── Next module bar ── */
+    .next-module-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      padding: 24px 32px; border-top: 1px solid var(--border);
+      background: white; margin-top: 0;
+    }
+    .next-module-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px;
+    }
+    .next-module-title {
+      font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px;
+    }
+    .next-module-why { font-size: 13px; color: var(--muted); }
+    .next-module-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ── Back to top ── */
+    .to-top {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--text); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; text-decoration: none;
+      box-shadow: var(--shadow); transition: all 140ms ease;
+      z-index: 100;
+    }
+    .to-top:hover { transform: translateY(-2px); }
+  </style>
   <style>
     /* Prevent horizontal overflow */
     html, body { overflow-x: clip; }
@@ -22,19 +268,6 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 32px 24px;
-    }
-    
-    /* Sticky sidebar */
-    .data-badge {
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(15,118,110,0.10);
-      border: 1px solid rgba(15,118,110,0.20);
-      color: var(--accent);
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 12px;
     }
     
     /* Main content area */
@@ -309,6 +542,83 @@
     .decision-box--negative .decision-box-eyebrow { color: #dc2626; }
     .decision-box--negative .verdict-action        { color: #dc2626; }
     .decision-box--negative .decision-box-bullets li::before { color: #dc2626; }
+    /* Caution — amber (Proceed with Conditions) */
+    .decision-box--caution {
+      border-color: #d97706;
+      background: #fffbeb;
+      box-shadow: 0 0 0 4px rgba(217,119,6,0.10), var(--shadow-soft);
+    }
+    .decision-box--caution .decision-box-eyebrow { color: #b45309; }
+    .decision-box--caution .verdict-action        { color: #b45309; }
+    .decision-box--caution .decision-box-bullets li::before { color: #d97706; }
+
+    /* ── Inline term tooltip (pp explainer etc.) ── */
+    .term-tt {
+      border-bottom: 1px dashed rgba(12,23,45,0.35);
+      cursor: help;
+      white-space: nowrap;
+    }
+
+    /* ── Issues popover ── */
+    .issues-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      border-bottom: 1px dashed #dc2626;
+      color: #dc2626;
+      font-weight: 700;
+      position: relative;
+      white-space: nowrap;
+    }
+    .issues-trigger::after {
+      content: ' ⓘ';
+      font-size: 11px;
+      opacity: 0.75;
+    }
+    #issuesPopover {
+      position: fixed;
+      z-index: 99998;
+      background: white;
+      border: 1.5px solid #dc2626;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(220,38,38,0.15), 0 2px 8px rgba(0,0,0,0.10);
+      min-width: 280px;
+      max-width: 340px;
+      padding: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease, transform 140ms ease;
+      transform: translateY(4px);
+    }
+    #issuesPopover.pop-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .pop-header {
+      background: #fef2f2;
+      border-bottom: 1px solid rgba(220,38,38,0.15);
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #dc2626;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pop-close { background: none; border: none; cursor: pointer; font-size: 14px; color: #dc2626; opacity: 0.6; line-height: 1; padding: 0; }
+    .pop-close:hover { opacity: 1; }
+    .pop-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .pop-issue-row { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--text); line-height: 1.45; }
+    .pop-issue-icon { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; margin-top: 1px; }
+    .pop-issue-icon.red   { background: rgba(220,38,38,0.12); color: #dc2626; }
+    .pop-issue-icon.amber { background: rgba(217,119,6,0.12); color: #d97706; }
+    .pop-issue-label { font-weight: 600; color: var(--text); }
+    .pop-issue-desc  { color: var(--muted); font-size: 11px; margin-top: 1px; }
     .decision-box-eyebrow {
       font-size: 11px;
       font-weight: 700;
@@ -367,6 +677,235 @@
       .main-content { overflow-anchor: none; }
     .module-card { overflow-anchor: none; }
     .data-table { overflow-anchor: none; }
+
+    /* ── Decision Box fixed size (no layout jump on data change) ── */
+    .decision-box {
+      min-height: 420px;
+      max-height: 420px;
+      overflow: hidden;
+    }
+    /* ── Decision Box hero summary line ── */
+    .decision-box-summary {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.4;
+      padding: 10px 14px;
+      background: rgba(12,23,45,0.04);
+      border-radius: 8px;
+    }
+    /* ── Exception rows (ops-spend pattern) ── */
+    .decision-box-exceptions {
+      margin: 0 0 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .exception-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      align-items: center;
+    }
+    .exception-row:last-child { border-bottom: none; }
+    .exception-row[onclick]:hover { background: rgba(246,248,251,0.8); cursor: pointer; }
+    .exception-row-header {
+      background: rgba(246,248,251,0.8);
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    .exception-label { color: var(--text); font-weight: 600; }
+    .exception-count { color: #dc2626; font-weight: 700; font-family: var(--font-mono, monospace); text-align: right; }
+    .exception-action { color: var(--accent); font-size: 12px; font-weight: 600; text-align: right; }
+
+    /* ── What / So What / Now What framework ── */
+    .wswn { display: flex; flex-direction: column; gap: 0; }
+    .wswn-row {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 6px 0;
+      border-top: 1px solid rgba(12,23,45,0.06);
+    }
+    .wswn-row:first-child { border-top: none; }
+    .wswn-label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.09em;
+      padding: 3px 7px; border-radius: 4px; white-space: nowrap; text-align: center;
+      margin-top: 3px; flex-shrink: 0;
+    }
+    .wswn-label.lbl-what    { background: rgba(12,23,45,0.07);   color: #374151; }
+    .wswn-label.lbl-sowhat  { background: rgba(245,158,11,0.14); color: #92400e; }
+    .wswn-label.lbl-nowwhat { background: rgba(15,118,110,0.13); color: #134e4a; }
+    /* Content: styled for readability within fixed-height container */
+    .wswn-content {
+      font-size: 13px; color: #5d6b7a; line-height: 1.55;
+      padding-right: 4px;
+    }
+    /* .scrollable kept for markup compat */
+    .wswn-content.scrollable { }
+    /* ═══ WSWN Dynamic Risk States ═══ */
+    /* Default — teal/green (Healthy) */
+    .wswn-wrap {
+      margin: 16px 0 8px;
+      padding: 18px 20px;
+      border: 1.5px solid rgba(15,118,110,0.25);
+      border-radius: 14px;
+      background: #f0fdf9;
+      transition: border-color 250ms ease, background 250ms ease, box-shadow 250ms ease;
+      /* Fixed container height — prevents layout jumping when content changes */
+      min-height: 180px;
+      max-height: 180px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(12,23,45,0.18) transparent;
+    }
+    /* WSWN scrollbar styling */
+    .wswn-wrap::-webkit-scrollbar { width: 4px; }
+    .wswn-wrap::-webkit-scrollbar-track { background: transparent; }
+    .wswn-wrap::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.18); border-radius: 4px; }
+    .wswn-wrap::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.32); }
+    .wswn-wrap-header {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+      transition: color 250ms ease;
+    }
+    /* Risk state: moderate/amber */
+    .wswn-wrap--moderate {
+      border-color: rgba(217,119,6,0.35);
+      background: #fffbeb;
+      box-shadow: 0 0 0 3px rgba(217,119,6,0.07);
+    }
+    .wswn-wrap--moderate .wswn-wrap-header { color: #92400e; }
+    /* Risk state: high/red */
+    .wswn-wrap--high {
+      border-color: rgba(220,38,38,0.35);
+      background: #fef2f2;
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.07);
+    }
+    .wswn-wrap--high .wswn-wrap-header { color: #991b1b; }
+    /* Risk state: healthy/green explicit */
+    .wswn-wrap--healthy {
+      border-color: rgba(15,118,110,0.30);
+      background: #f0fdf9;
+      box-shadow: 0 0 0 3px rgba(15,118,110,0.07);
+    }
+    .wswn-wrap--healthy .wswn-wrap-header { color: #134e4a; }
+    /* Bold Now What content */
+    .wswn-nowwhat-bold { font-weight: 700; color: var(--text) !important; font-size: 13px; }
+    .wswn-nowwhat-bold.risk-red { color: #dc2626 !important; }
+    .wswn-nowwhat-bold.risk-amber { color: #b45309 !important; }
+    .wswn-nowwhat-bold.risk-green { color: #0f766e !important; }
+    /* WSWN label with threshold cursor */
+    .wswn-label[data-help] { cursor: help; }
+    /* Bold numbers inside WSWN content */
+    .wswn-content strong { font-weight: 700; color: var(--text); }
+    .wswn-wrap-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #0f766e;
+      margin-bottom: 10px;
+    }
+
+    /* ── Fixed-layout tables ── */
+    #channelTable, #accrualTable, #promoTable {
+      table-layout: fixed;
+      width: 100%;
+    }
+    #channelTable tbody tr,
+    #accrualTable tbody tr,
+    #promoTable tbody tr { height: 40px; }
+    /* Break-even row in promo table overrides the fixed height */
+    #promoTable tbody tr.breakeven-row { height: auto; }
+    #channelTable td, #channelTable th,
+    #accrualTable td, #accrualTable th,
+    #promoTable td, #promoTable th {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* Break-even row td can wrap */
+    #promoTable tbody tr.breakeven-row td {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      height: auto;
+    }
+    /* Column widths: Channel table */
+    #channelTable colgroup col:nth-child(1) { width: 10%; }
+    #channelTable colgroup col:nth-child(2) { width: 14%; }
+    #channelTable colgroup col:nth-child(3) { width: 14%; }
+    #channelTable colgroup col:nth-child(4) { width: 14%; }
+    #channelTable colgroup col:nth-child(5) { width: 14%; }
+    #channelTable colgroup col:nth-child(6) { width: 14%; }
+    #channelTable colgroup col:nth-child(7) { width: 20%; }
+    /* Column widths: Accrual table */
+    #accrualTable colgroup col:nth-child(1) { width: 12%; }
+    #accrualTable colgroup col:nth-child(2) { width: 22%; }
+    #accrualTable colgroup col:nth-child(3) { width: 22%; }
+    #accrualTable colgroup col:nth-child(4) { width: 22%; }
+    #accrualTable colgroup col:nth-child(5) { width: 22%; }
+
+    /* ── Fixed-height scroll containers ── */
+    #channelTableScroll {
+      height: 340px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    #channelTableScroll table { margin: 0; }
+    #channelTableScroll thead th {
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 2;
+      border-bottom: 2px solid var(--border);
+    }
+    #accrualTableScroll {
+      height: 300px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    #accrualTableScroll table { margin: 0; }
+    #accrualTableScroll thead th {
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 2;
+      border-bottom: 2px solid var(--border);
+    }
+    /* Scrollbar styling (from ops-spend) */
+    #channelTableScroll::-webkit-scrollbar { width: 5px; }
+    #channelTableScroll::-webkit-scrollbar-track { background: transparent; }
+    #channelTableScroll::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    #channelTableScroll::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+    #accrualTableScroll::-webkit-scrollbar { width: 5px; }
+    #accrualTableScroll::-webkit-scrollbar-track { background: transparent; }
+    #accrualTableScroll::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+    #accrualTableScroll::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
+    /* Channel-level insight wswn scroll */
+    #channelWswn::-webkit-scrollbar { width: 4px; }
+    #channelWswn::-webkit-scrollbar-track { background: transparent; }
+    #channelWswn::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
+
+    /* Section highlight flash (from ops-spend scrollToSection) */
+    .section-highlight h2 { transition: color 300ms ease !important; color: var(--accent) !important; }
   
     /* ── Data-needed strip ── */
     .data-needed-section {
@@ -1116,10 +1655,12 @@
         <h1 class="module-title">Commercial / Sales Finance Model</h1>
         <p class="module-subtitle">Quantify price, volume, mix, and trade spend impact on margin and profitability.</p>
         <div class="feature-chips">
-          <span class="chip">Price/Volume/Mix</span>
-          <span class="chip">Promo ROI</span>
-          <span class="chip">Channel P&amp;L</span>
-          <span class="chip">Accrual Logic</span>
+          <span class="chip">✅ Promo ROI</span>
+          <span class="chip">📊 Channel P&amp;L</span>
+          <span class="chip">🔀 Price / Volume / Mix</span>
+          <span class="chip">💰 Trade Accrual</span>
+          <span class="chip">🎯 Break-even Analysis</span>
+          <span class="chip">📂 Single CSV Upload</span>
         </div>
       </div>
     </section>
@@ -1127,13 +1668,19 @@
   <!-- DATA NEEDED STRIP -->
   <div class="data-needed-section">
     <div class="data-needed-wrap">
-      <div class="data-needed-label">📂 &nbsp;Data needed for this module</div>
-      <div class="data-needed-grid">
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">📊</div><div><div class="data-needed-name">Channel P&L Report</div><div class="data-needed-desc">Revenue &amp; cost broken out by sales channel → drives margin analysis</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🏷️</div><div><div class="data-needed-name">Pricing &amp; Rate Cards</div><div class="data-needed-desc">List prices, discount tiers &amp; promotional rates → price/volume/mix</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📋</div><div><div class="data-needed-name">Promotion Log</div><div class="data-needed-desc">Past and current promo details &amp; spend → measures ROI pre/post</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">💰</div><div><div class="data-needed-name">Accrual Schedule</div><div class="data-needed-desc">Trade spend accruals &amp; settlements → keeps P&L from being misstated</div></div></div>
-          <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">📄</div><div><div class="data-needed-name">Sales Order Data</div><div class="data-needed-desc">Volume sold per SKU/channel by period → quantity &amp; mix drivers</div></div></div>
+      <div class="data-needed-label">📂 &nbsp;One flat CSV powers all 4 analyses — upload in the sidebar to use your own data</div>
+      <div class="data-needed-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+        <div class="data-needed-item" style="border-color:rgba(15,118,110,0.30);background:#f0fdf9;">
+          <div class="data-needed-icon" style="background:rgba(15,118,110,0.12);">📄</div>
+          <div>
+            <div class="data-needed-name">Single Flat CSV</div>
+            <div class="data-needed-desc">One row per channel/month. All 4 analyses run from this one file — no joins needed.</div>
+          </div>
+        </div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">🎯</div><div><div class="data-needed-name">Promo ROI</div><div class="data-needed-desc">GP before vs. during promo minus campaign cost = true promo profit.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">📊</div><div><div class="data-needed-name">Channel P&amp;L</div><div class="data-needed-desc">Which channels profit after COGS &amp; OpEx? Slice by month and channel.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;">🔀</div><div><div class="data-needed-name">Price / Volume / Mix</div><div class="data-needed-desc">Why did revenue change? Splits variance into 3 root causes for leadership.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">💰</div><div><div class="data-needed-name">Accrual Schedule</div><div class="data-needed-desc">Straight-line accrual keeps P&amp;L clean — no spikes at quarter-end.</div></div></div>
       </div>
     </div>
   </div>
@@ -1163,6 +1710,43 @@
         <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
       </div>
 
+      <!-- UPLOAD YOUR DATA -->
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="sidebarAccordion(this)">
+          <span>📂 Upload Your Data</span>
+          <span class="sb-acc-chevron">▼</span>
+        </button>
+        <div class="sb-acc-body">
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px;">
+            Upload a single flat CSV — one row per channel/month record. The module auto-populates all 4 sections.
+          </div>
+          <!-- Drop zone -->
+          <div id="csvDropZone"
+            style="border:2px dashed var(--border);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:border-color 150ms,background 150ms;background:#fafbfc;"
+            onclick="document.getElementById('flatCsvUpload').click()"
+            ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='rgba(15,118,110,0.05)';"
+            ondragleave="this.style.borderColor='var(--border)';this.style.background='#fafbfc';"
+            ondrop="handleFlatCsvDrop(event)">
+            <div style="font-size:20px;margin-bottom:4px;">📄</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Drop CSV here or click to browse</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:3px;">Flat CSV — all sections in one file</div>
+            <input type="file" id="flatCsvUpload" accept=".csv" style="display:none;" onchange="handleFlatCsvUpload(event)">
+          </div>
+          <!-- Upload status -->
+          <div id="csvUploadStatus" style="display:none;margin-top:8px;padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.5;"></div>
+          <!-- Download template button -->
+          <button onclick="downloadFlatTemplate()" class="sb-acc-btn" style="margin-top:8px;">⬇ Download CSV Template</button>
+          <!-- Column guide -->
+          <div style="margin-top:10px;padding:8px 10px;background:rgba(12,23,45,0.03);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.6;">
+            <strong style="color:var(--text);display:block;margin-bottom:4px;">Required columns:</strong>
+            month, channel, revenue, cogs, gp_pct, opex, contribution<br>
+            baseline_revenue, promo_revenue, baseline_gp, promo_gp, promo_cost<br>
+            prior_revenue, current_revenue, price_effect, volume_effect, mix_effect<br>
+            discount_pool, start_month, end_month
+          </div>
+        </div>
+      </div>
+
       <!-- Actions -->
       <div class="sb-acc-group">
         <button class="sb-acc-header" onclick="sidebarAccordion(this)">
@@ -1170,7 +1754,8 @@
           <span class="sb-acc-chevron">▼</span>
         </button>
         <div class="sb-acc-body">
-          <button onclick="downloadAllTemplates()" class="sb-acc-btn">Download Templates</button>
+          <button onclick="exportCurrentDataset()" class="sb-acc-btn primary">⬇ Export current dataset</button>
+          <button onclick="loadWorstCase()" class="sb-acc-btn" style="background:#fef2f2;border-color:rgba(220,38,38,0.35);color:#dc2626;margin-top:4px;">🔴 Worst Case Demo</button>
         </div>
       </div>
 
@@ -1180,16 +1765,17 @@
       <div class="main-content">
 
         <!-- Promotion ROI Analysis -->
-        <section class="module-section">
+        <section class="module-section" id="section-promo">
 
           <!-- DECISION BOX: pinned at very top of Promo ROI section -->
-          <div class="decision-box" id="promoDecisionBox" aria-label="Promo ROI Decision">
+          <div class="decision-box" id="promoDecisionBox" aria-label="Commercial Sales Decision">
             <div class="decision-box-eyebrow">Decision</div>
+            <div id="promoDecisionSubtitle" style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;display:none;"></div>
             <div class="decision-box-fallback" id="promoDecisionFallback">Load sample or upload data to see the decision.</div>
             <div id="promoDecisionContent" style="display:none;">
+              <div class="decision-box-summary" id="promoDecisionSummary"></div>
               <div class="decision-box-verdict" id="promoDecisionVerdict"></div>
-              <ul class="decision-box-bullets" id="promoDecisionBullets"></ul>
-              <div class="decision-box-next" id="promoDecisionNext"></div>
+              <div class="decision-box-exceptions" id="promoDecisionExceptions"></div>
             </div>
           </div>
 
@@ -1221,11 +1807,11 @@
                 <input type="number" id="promoRev" value="85000" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Baseline GP% <span class="help-icon" data-help="Gross Profit % before the promo — for every $100 in normal sales, how many dollars are left after paying for the product itself. Your healthy, unaffected margin benchmark."></span></label>
+                <label>Baseline GP% <span class="help-icon" data-help="Healthy: GP% above 35% — the promo is adding margin without eroding the base. High Risk: GP% drops below 20% during promo — discounts are wiping out profit faster than volume can recover it."></span></label>
                 <input type="number" step="0.1" id="baselineGP" value="42" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
-                <label>Promo GP% <span class="help-icon" data-help="Gross Profit % during the promo. Discounts usually push this lower than baseline. If this drops too much, the extra volume from the promo may not be worth it."></span></label>
+                <label>Promo GP% <span class="help-icon" data-help="Healthy: Promo GP% stays within 5pp of Baseline GP% — margin holds even with discounts. High Risk: Promo GP% falls more than 10pp vs baseline — the promotion is destroying margin. High Risk threshold also triggered if Promo GP% drops below 20% absolute."></span></label>
                 <input type="number" step="0.1" id="promoGP" value="28" onchange="withStableScroll(computePromoROI)">
               </div>
               <div class="input-field">
@@ -1241,11 +1827,33 @@
             <div style="overflow-x:auto;"><table class="data-table" id="promoTable">
               <!-- Table populated by JS -->
             </table></div>
+
+            <!-- ── Promo ROI WSWN Explainer ── -->
+            <div class="wswn-wrap" id="promoWswn" style="display:none;">
+              <div class="wswn-wrap-header">
+                💡 Promo ROI Insight
+                <span class="help-icon" data-help="Thresholds — Healthy: Net Profit &gt; 0 and GP% drop &lt; 5pp. At Risk: Net Profit &gt; 0 but GP% dropped 5–10pp. High Risk: Net Profit &lt; 0, OR GP% dropped more than 10pp."></span>
+              </div>
+              <div class="wswn">
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-what" data-help="What: The raw factual output — revenue uplift, GP% movement, net profit, and ROI. No interpretation yet.">What</span>
+                  <span class="wswn-content" id="promoWswnWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-sowhat" data-help="So What — thresholds: ✅ Healthy = Net Profit &gt; 0 AND GP% drop &lt; 5pp. ⚠️ Caution = Net Profit &gt; 0 BUT GP% dropped 5–10pp. 🔴 High Risk = Net Profit ≤ 0 OR GP% dropped &gt; 10pp.">So What</span>
+                  <span class="wswn-content scrollable" id="promoWswnSoWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-nowwhat" data-help="Now What: The recommended action based on where this promo lands. Healthy → scale it. Caution → trim discount. High Risk → restructure before re-running.">Now What</span>
+                  <span class="wswn-content" id="promoWswnNowWhat">—</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- Channel P&L -->
-        <section class="module-section">
+        <section class="module-section" id="section-channel">
           <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
             2. Channel-level P&amp;L
             <span class="help-icon" data-help="Breaks down revenue and profit by sales channel (e.g. retail, online, direct). Helps you see which channels are actually profitable after costs — not just which ones sell the most."></span>
@@ -1277,25 +1885,37 @@
               <canvas id="channelChart" class="chart-canvas"></canvas>
             </div>
 
-            <!-- So What: 12-Month Channel Performance -->
-            <div style="margin:16px 0 8px;padding:18px 20px;border:1.5px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;box-shadow:0 2px 8px rgba(15,118,110,0.06);">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:8px;">💡 So What — 12-Month Channel Performance</div>
-              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;">
-                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>This chart shows which channels are generating the most revenue and which are underperforming relative to their cost and promotion investment — the foundation for trade spend reallocation decisions.</li>
-                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span>Channels with high revenue but low gross margin are consuming promotion budget without delivering bottom-line return — a common pattern in trade spend that signals price or discount architecture issues.</li>
-                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If one channel dominates revenue:</strong> Assess concentration risk — dependence on a single retailer or platform creates negotiating leverage risk. Model the impact of a 15% volume loss in that channel.</li>
-                <li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">›</span><strong style="color:#0b1220;">If a channel is declining:</strong> Run a price/volume/mix decomposition before cutting the budget — revenue decline may reflect mix shift, not structural volume loss, requiring different remediation.</li>
-              </ul>
+            <!-- What • So What • Now What — Channel insight -->
+            <div class="wswn-wrap" id="channelWswnWrap" style="display:none;">
+              <div class="wswn-wrap-header">
+                💡 Channel Performance Insight
+                <span class="help-icon" data-help="Thresholds — Healthy: GP% above 40%, contribution margin positive for all channels. At Risk: GP% 30–40%, any channel contribution negative. High Risk: GP% below 30%, or a single channel drives more than 70% of revenue (concentration risk)."></span>
+              </div>
+              <div class="wswn">
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-what" data-help="What: Channel-level breakdown — revenue, blended GP%, top channel share, and count of contribution-positive vs. negative channels.">What</span>
+                  <span class="wswn-content" id="channelWswnWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-sowhat" data-help="So What — thresholds: ✅ Healthy = all channels contribution-positive AND no single channel &gt; 70% of revenue. ⚠️ Moderate = all positive BUT one channel &gt; 70% (concentration risk). 🔴 High Risk = any channel contribution-negative (costs exceed revenue for that channel).">So What</span>
+                  <span class="wswn-content scrollable" id="channelWswnSoWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-nowwhat" data-help="Now What: Healthy → maintain mix discipline and recheck monthly. Moderate → build out secondary channels. High Risk → investigate negative channels: raise price, cut OpEx, or exit.">Now What</span>
+                  <span class="wswn-content" id="channelWswnNowWhat">—</span>
+                </div>
+              </div>
             </div>
 
-            <div style="overflow-x:auto;"><table class="data-table" id="channelTable">
+            <div id="channelTableScroll"><table class="data-table" id="channelTable">
+              <colgroup><col><col><col><col><col><col><col></colgroup>
               <!-- Table populated by JS -->
             </table></div>
           </div>
         </section>
 
         <!-- Price/Volume/Mix Bridge -->
-        <section class="module-section">
+        <section class="module-section" id="section-pvm">
           <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
             3. Price / Volume / Mix Bridge
             <span class="help-icon" data-help="Explains why revenue went up or down. Was it because you raised prices? Sold more units? Or sold a different mix of products? This splits the total change into those three causes so you know exactly what to fix."></span>
@@ -1376,22 +1996,25 @@
               </div>
 
               <!-- Section label -->
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text);margin-bottom:10px;">📖 What you're looking at</div>
-
-              <!-- Dynamic verdict block -->
-              <div id="pvmVerdictBlock" style="padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.65;margin-bottom:14px;"></div>
-
-              <!-- Biggest lever highlight -->
-              <div id="pvmLeverBlock" style="padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:16px;background:rgba(27,77,122,0.05);border:1px solid rgba(27,77,122,0.12);color:var(--text);"></div>
-
-              <!-- Static framework explanation -->
-              <div style="font-size:12px;color:var(--muted);line-height:1.75;border-top:1px solid var(--border);padding-top:14px;">
-                <strong style="color:var(--text);">How to read this bridge:</strong>
-                Every dollar of revenue variance has exactly one of three root causes — and the waterfall stacks them to show how you got from Prior to Current.
-                <strong>Price</strong> captures what changed because you charged more or less per unit.
-                <strong>Volume</strong> captures what changed because you sold more or fewer units overall.
-                <strong>Mix</strong> captures what changed because the blend of what you sold shifted toward higher- or lower-priced products.
-                If Volume is green but Mix is red, you're selling more units of the wrong thing — a classic sign to rebalance the portfolio or revisit SKU strategy.
+              <div class="wswn-wrap" id="pvmWswn" style="margin-top:0;border-radius:0 0 14px 14px;border-top:1.5px solid rgba(15,118,110,0.25)!important;">
+                <div class="wswn-wrap-header">
+                  💡 PVM Insight
+                  <span class="help-icon" data-help="Thresholds — Healthy: all three drivers positive (broad-based growth). At Risk: growth but one driver is negative (headwind). High Risk: overall revenue decline, or Volume and Mix both negative (demand and portfolio deteriorating together)."></span>
+                </div>
+                <div class="wswn">
+                  <div class="wswn-row">
+                    <span class="wswn-label lbl-what" data-help="What: The factual variance split — total revenue change vs. prior period, and how much of that came from Price, Volume, and Mix respectively.">What</span>
+                    <span class="wswn-content" id="pvmWswnWhat">—</span>
+                  </div>
+                  <div class="wswn-row">
+                    <span class="wswn-label lbl-sowhat" data-help="So What — thresholds: ✅ Healthy = all 3 drivers positive (broad-based growth). ⚠️ Moderate = growing overall but 1 driver is a headwind (masked drag). 🔴 High Risk = revenue declining AND 2+ drivers negative, or all 3 negative (broad deterioration needing full commercial review).">So What</span>
+                    <span class="wswn-content scrollable" id="pvmWswnSoWhat">—</span>
+                  </div>
+                  <div class="wswn-row">
+                    <span class="wswn-label lbl-nowwhat" data-help="Now What: Fix the biggest headwind driver. Price negative → review discounts. Volume negative → check demand or supply. Mix negative → shift portfolio toward higher-revenue SKUs. All positive → protect the top driver.">Now What</span>
+                    <span class="wswn-content" id="pvmWswnNowWhat">—</span>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- ── end PVM Explainer ── -->
@@ -1399,7 +2022,7 @@
         </section>
 
         <!-- Discount & Accrual Schedule -->
-        <section class="module-section">
+        <section class="module-section" id="section-accrual">
           <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
             4. Discount &amp; Accrual Schedule
             <span class="help-icon" data-help="Tracks how discount costs are spread evenly across months instead of hitting all at once. This keeps your monthly profit figures accurate and prevents surprises at quarter-end when trade deals get settled."></span>
@@ -1433,9 +2056,32 @@
               </div>
             </div>
 
-            <div style="overflow-x:auto;"><table class="data-table" id="accrualTable">
+            <div id="accrualTableScroll"><table class="data-table" id="accrualTable">
+              <colgroup><col><col><col><col><col></colgroup>
               <!-- Table populated by JS -->
             </table></div>
+
+            <!-- ── Accrual WSWN Explainer ── -->
+            <div class="wswn-wrap" id="accrualWswn" style="display:none;margin-top:16px;">
+              <div class="wswn-wrap-header">
+                💡 Accrual Schedule Insight
+                <span class="help-icon" data-help="Thresholds — Healthy: discount pool spread over 6+ months, monthly accrual below 5% of expected monthly revenue. At Risk: deal compressed into fewer than 4 months, accrual spikes month-end. High Risk: entire pool hits in 1–2 months — P&amp;L will show distorted loss that month, creating audit and forecasting risk."></span>
+              </div>
+              <div class="wswn">
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-what" data-help="What: The total discount pool, the accrual spread period, monthly charge, and how many months have zero accrual.">What</span>
+                  <span class="wswn-content" id="accrualWswnWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-sowhat" data-help="So What — thresholds: ✅ Healthy = pool spread over 6+ months (manageable monthly charge). ⚠️ Moderate = 3–5 months (elevated but workable — flag for FP&A). 🔴 High Risk = 1–2 months (entire pool hits in one period, distorting P&L and creating audit risk).">So What</span>
+                  <span class="wswn-content scrollable" id="accrualWswnSoWhat">—</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-nowwhat" data-help="Now What: Healthy → post monthly journal entries and reconcile at settlement. Moderate → add P&L footnote per accrual month. High Risk → renegotiate deal spread or document the spike clearly for audit and board pack.">Now What</span>
+                  <span class="wswn-content" id="accrualWswnNowWhat">—</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1452,13 +2098,19 @@
             <div class="demo-card">
               <div class="demo-card-title">Channel Economics That Matter</div>
               <div class="demo-card-text">
-                Move beyond top-line dashboards to channel-level P&Ls that expose true profitability.
+                Move beyond top-line dashboards to channel-level P&amp;Ls that expose true profitability by sales route.
+              </div>
+            </div>
+            <div class="demo-card">
+              <div class="demo-card-title">Price / Volume / Mix Clarity</div>
+              <div class="demo-card-text">
+                Decompose revenue variance into its three root causes — so leadership knows exactly what to fix, not just that numbers moved.
               </div>
             </div>
             <div class="demo-card">
               <div class="demo-card-title">Finance-Grade Accrual Logic</div>
               <div class="demo-card-text">
-                Clean discount accrual schedules reduce audit risk and month-end chaos.
+                Clean straight-line discount accrual schedules prevent month-end P&amp;L distortion and reduce audit risk at deal settlement.
               </div>
             </div>
           </div>
@@ -1485,7 +2137,24 @@
 
   <a href="#" class="to-top" aria-label="Back to top">↑</a>
 
-  <script src="main.js"></script>
+  <script>
+    /* ── withStableScroll: run fn without the page jumping ── */
+    function withStableScroll(fn) {
+      var scrollY = window.scrollY;
+      if (typeof fn === 'function') fn();
+      else if (typeof fn === 'string') window[fn] && window[fn]();
+      // Restore scroll position after a tick
+      requestAnimationFrame(function() {
+        window.scrollTo(0, scrollY);
+      });
+    }
+    /* ── fmt: accounting-style currency formatter ── */
+    function fmt(val) {
+      var v = Math.round(val);
+      if (v < 0) return '($' + Math.abs(v).toLocaleString() + ')';
+      return '$' + v.toLocaleString();
+    }
+  </script>
   <script>
     /* =========================================
        Commercial / Sales Finance - JavaScript
@@ -1511,11 +2180,37 @@
     }
     
     function formatCurrency(val) {
-      return '$' + Math.round(val).toLocaleString();
+      const rounded = Math.round(val);
+      if (rounded < 0) return '($' + Math.abs(rounded).toLocaleString() + ')';
+      return '$' + rounded.toLocaleString();
     }
     
     function formatPercent(val) {
+      if (val < 0) return '(' + Math.abs(val).toFixed(1) + '%)';
       return val.toFixed(1) + '%';
+    }
+
+    // For KPI boxes — returns HTML with red/green color based on sign
+    function formatCurrencyColored(val, positiveIsGood = true) {
+      const rounded = Math.round(val);
+      const isGood = positiveIsGood ? rounded >= 0 : rounded <= 0;
+      const isNeutral = rounded === 0;
+      const color = isNeutral ? 'var(--text)' : (isGood ? '#0f766e' : '#dc2626');
+      const text = rounded < 0 ? '($' + Math.abs(rounded).toLocaleString() + ')' : '$' + rounded.toLocaleString();
+      return `<span style="color:${color}">${text}</span>`;
+    }
+    function formatPercentColored(val, positiveIsGood = true) {
+      const isGood = positiveIsGood ? val >= 0 : val <= 0;
+      const isNeutral = Math.abs(val) < 0.01;
+      const color = isNeutral ? 'var(--text)' : (isGood ? '#0f766e' : '#dc2626');
+      const text = val < 0 ? '(' + Math.abs(val).toFixed(1) + '%)' : val.toFixed(1) + '%';
+      return `<span style="color:${color}">${text}</span>`;
+    }
+
+    // Wraps numbers and percentages in WSWN text with <strong>
+    function wrapNumbers(text) {
+      // Match: $1,234 / $1,234,567 / +$... / ($...) / 12.3% / +12.3% / 12.3pp / -12pp etc.
+      return text.replace(/(\(?\$[\d,]+\)?|\+?\$[\d,]+|-?\$[\d,]+|\(?\d+\.?\d*pp\)?|\+?\d+\.?\d*pp|-?\d+\.?\d*pp|\(?\d+\.?\d*%\)?|\+?\d+\.?\d*%|-?\d+\.?\d*%|\d+\.?\d*x)/g, '<strong>$1</strong>');
     }
     
     // ========== CSV PARSING ==========
@@ -1559,6 +2254,15 @@
       var r = document.getElementById('btnRandomMode');
       if (s) { s.style.background = 'var(--text)'; s.style.color = 'white'; }
       if (r) { r.style.background = 'transparent'; r.style.color = 'var(--muted)'; }
+      // Reset any inline styles left by loadWorstCase (red badge override)
+      var badge = document.getElementById('dataModeBadge');
+      if (badge) {
+        badge.style.background  = '';
+        badge.style.borderColor = '';
+        badge.style.color       = '';
+        badge.classList.remove('random');
+        badge.textContent = 'SAMPLE';
+      }
     }
     function useSampleData() {
       withStableScroll(function() {
@@ -1710,27 +2414,40 @@
         dataMode = 'random';
         document.getElementById('dataModeBadge').textContent = 'RANDOM';
         document.getElementById('dataModeBadge').classList.add('random');
+        // Reset badge style (in case Worst Case was active)
+        document.getElementById('dataModeBadge').style.background = '';
+        document.getElementById('dataModeBadge').style.borderColor = '';
+        document.getElementById('dataModeBadge').style.color = '';
         var s = document.getElementById('btnSampleMode');
         var r = document.getElementById('btnRandomMode');
         if (s) { s.style.background = 'transparent'; s.style.color = 'var(--muted)'; }
         if (r) { r.style.background = 'var(--text)'; r.style.color = 'white'; }
 
-        // 60% chance of a profitable promo so users see healthy outcomes more often
-        const makeWinner = Math.random() < 0.6;
-
+        // Pick a random scenario type for variety
+        // 0=winning promo, 1=losing promo, 2=cautionary (profitable but squeezed margin)
+        const scenarioRoll = Math.random();
         let baseRev, promoRev, baseGP, promoGP, promoCost;
-        if (makeWinner) {
+        if (scenarioRoll < 0.40) {
+          // WINNING: profitable, margin holds
           baseRev   = randInt(40000, 100000);
-          promoRev  = Math.round(baseRev * randFloat(1.7, 2.5));  // strong volume lift
+          promoRev  = Math.round(baseRev * randFloat(1.7, 2.5));
           baseGP    = randFloat(38, 55);
-          promoGP   = baseGP - randFloat(0, 5);                   // GP% holds mostly
-          promoCost = randInt(2000, 8000);                         // lean spend
+          promoGP   = baseGP - randFloat(0, 4);
+          promoCost = randInt(2000, 8000);
+        } else if (scenarioRoll < 0.65) {
+          // CAUTION: profitable but margin 5–10pp squeezed
+          baseRev   = randInt(40000, 90000);
+          promoRev  = Math.round(baseRev * randFloat(1.4, 2.0));
+          baseGP    = randFloat(38, 52);
+          promoGP   = baseGP - randFloat(5.5, 9.5);  // just into caution zone
+          promoCost = randInt(4000, 12000);
         } else {
+          // LOSING: GP% craters, high spend
           baseRev   = randInt(30000, 80000);
           promoRev  = Math.round(baseRev * randFloat(1.2, 1.6));
           baseGP    = randFloat(35, 50);
-          promoGP   = Math.max(8, baseGP - randFloat(12, 22));    // GP% craters
-          promoCost = randInt(10000, 22000);                       // heavy spend
+          promoGP   = Math.max(8, baseGP - randFloat(12, 22));
+          promoCost = randInt(10000, 22000);
         }
 
         document.getElementById('baselineRev').value = baseRev;
@@ -1739,16 +2456,25 @@
         document.getElementById('promoGP').value     = promoGP.toFixed(1);
         document.getElementById('promoCost').value   = promoCost;
 
-        // Random channel data
+        // Random channel data — 30% chance some channels go negative (contribution < 0)
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         const numChannels = randInt(3, 5);
         const channelNames = ['Direct','Online','Retail','Partner','Enterprise'].slice(0, numChannels);
+        const negChannelCount = Math.random() < 0.35 ? randInt(1, Math.max(1, numChannels - 1)) : 0;
+        // Decide which channels go negative
+        const negChannelSet = new Set();
+        while (negChannelSet.size < negChannelCount) {
+          negChannelSet.add(channelNames[Math.floor(Math.random() * channelNames.length)]);
+        }
         channelData = [];
         months.forEach(month => {
           channelNames.forEach(channel => {
-            const revenue = randInt(5000, 35000);
-            const cogs = revenue * randFloat(0.30, 0.60);
-            const opex = randInt(1500, 8000);
+            const isNeg = negChannelSet.has(channel);
+            const revenue = randInt(isNeg ? 4000 : 5000, isNeg ? 14000 : 35000);
+            // Negative channels: COGS eats 60–80% + heavy opex → guaranteed negative contribution
+            const cogsPct = isNeg ? randFloat(0.60, 0.80) : randFloat(0.30, 0.58);
+            const cogs = revenue * cogsPct;
+            const opex = isNeg ? randInt(5000, 9000) : randInt(1500, 8000);
             channelData.push({
               month, channel,
               revenue: revenue.toFixed(2),
@@ -1762,21 +2488,57 @@
 
         // Random PVM — allow negative price or mix to show headwinds
         const priorRev = randInt(80000, 180000);
-        const variance = randFloat(0.05, 0.30);
+        const variance = randFloat(-0.10, 0.30);
         document.getElementById('priorRev').value     = priorRev;
         document.getElementById('currentRev').value   = Math.round(priorRev * (1 + variance));
-        document.getElementById('priceEffect').value  = randFloat(-4, 10).toFixed(1);
-        document.getElementById('volumeEffect').value = randFloat(2, 18).toFixed(1);
+        document.getElementById('priceEffect').value  = randFloat(-6, 10).toFixed(1);
+        document.getElementById('volumeEffect').value = randFloat(-5, 18).toFixed(1);
         document.getElementById('mixEffect').value    = randFloat(-6, 8).toFixed(1);
+
+        // Random accrual — spread across all risk bands (low/moderate/high) equally
         document.getElementById('discountPool').value = randInt(20000, 80000);
-        document.getElementById('startMonth').value   = randInt(1, 3);
-        document.getElementById('endMonth').value     = randInt(10, 12);
+        const accrualScenario = Math.random();
+        if (accrualScenario < 0.33) {
+          // HIGH RISK: 1–2 months
+          document.getElementById('startMonth').value = randInt(4, 8);
+          document.getElementById('endMonth').value   = document.getElementById('startMonth').value + randInt(0, 1);
+        } else if (accrualScenario < 0.66) {
+          // MODERATE: 3–5 months
+          const s = randInt(2, 7);
+          document.getElementById('startMonth').value = s;
+          document.getElementById('endMonth').value   = s + randInt(2, 4);
+        } else {
+          // HEALTHY: 6–12 months
+          document.getElementById('startMonth').value = randInt(1, 3);
+          document.getElementById('endMonth').value   = randInt(9, 12);
+        }
 
         populateChannelFilters();
         renderAll();
       });
     }
     
+    // ========== WSWN RISK COLOR HELPER ==========
+    // riskLevel: 'healthy' | 'moderate' | 'high'
+    function applyWswnRisk(wrapEl, headerEl, riskLevel, headerText) {
+      if (!wrapEl) return;
+      wrapEl.classList.remove('wswn-wrap--healthy','wswn-wrap--moderate','wswn-wrap--high');
+      wrapEl.classList.add('wswn-wrap--' + riskLevel);
+      if (headerEl) {
+        const icon = riskLevel === 'healthy' ? '✅' : riskLevel === 'moderate' ? '⚠️' : '🔴';
+        const label = riskLevel === 'healthy' ? 'Healthy — On Track' : riskLevel === 'moderate' ? 'Moderate — Monitor Closely' : 'High Risk — Action Required';
+        headerEl.innerHTML = `${icon} ${headerText} &nbsp;<span style="font-weight:600;font-size:10px;opacity:0.8;">${label}</span> `;
+      }
+    }
+    function boldNowWhat(el, riskLevel) {
+      if (!el) return;
+      el.classList.add('wswn-nowwhat-bold');
+      el.classList.remove('risk-red','risk-amber','risk-green');
+      if (riskLevel === 'high') el.classList.add('risk-red');
+      else if (riskLevel === 'moderate') el.classList.add('risk-amber');
+      else el.classList.add('risk-green');
+    }
+
     // ========== PROMO ROI FUNCTIONS ==========
     
     function computePromoROI() {
@@ -1797,33 +2559,72 @@
       document.getElementById('promoKPIs').innerHTML = `
         <div class="kpi-box">
           <div class="kpi-box-label">Incremental Revenue <span class="help-icon" data-help="The extra revenue generated because of the promo — simply Promo Revenue minus Baseline Revenue. This is how much more you sold than you would have without it."></span></div>
-          <div class="kpi-box-value">${formatCurrency(incrementalRev)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(incrementalRev)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">Incremental GP <span class="help-icon" data-help="The extra gross profit dollars from the promo, after accounting for lower margins during the deal. More revenue means nothing if the margin collapse wipes out the gain."></span></div>
-          <div class="kpi-box-value">${formatCurrency(incrementalGP)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(incrementalGP)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">Net Promo Profit <span class="help-icon" data-help="The true bottom-line result of the promo: Incremental GP minus what you spent to run it. Positive = the promo paid for itself. Negative = you spent more than you earned back."></span></div>
-          <div class="kpi-box-value">${formatCurrency(netProfit)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(netProfit)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">ROI <span class="help-icon" data-help="Return on Investment — for every $1 you spent on the promo, how many cents came back as profit. 100% ROI means you doubled your money. Negative ROI means the promo lost money."></span></div>
-          <div class="kpi-box-value">${formatPercent(roi)}</div>
+          <div class="kpi-box-value">${formatPercentColored(roi)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label">CM% <span class="help-icon" data-help="Contribution Margin % — what percentage of promo revenue is left after product costs AND promo spend. Tells you how efficiently the promotion converts revenue into real contribution toward overhead and profit."></span></div>
-          <div class="kpi-box-value">${formatPercent(cmPct)}</div>
+          <div class="kpi-box-value">${formatPercentColored(cmPct)}</div>
         </div>
       `;
       
+      // Break-even GP% calculation for the manager
+      const breakEvenGP = promoCost > 0 && promoRev > 0
+        ? ((baselineGPDollar + promoCost) / promoRev * 100)
+        : null;
+      const breakEvenNote = breakEvenGP !== null
+        ? (() => {
+            const gap = promoGP - breakEvenGP;
+            const absGap = Math.abs(gap);
+            let gapText, metColor;
+            if (absGap < 0.05) {
+              // Exactly at break-even
+              gapText   = '✅ Break-even exactly reached';
+              metColor  = '#0f766e';
+            } else if (gap > 0) {
+              gapText   = `✅ Profitable — ${gap.toFixed(1)}pp above break-even`;
+              metColor  = '#0f766e';
+            } else {
+              gapText   = `🔴 ${absGap.toFixed(1)}pp short — promo is losing money`;
+              metColor  = '#dc2626';
+            }
+            return `<tr class="breakeven-row" style="background:rgba(217,119,6,0.05);border-top:2px solid rgba(217,119,6,0.25);">
+              <td colspan="3" style="font-size:12px;color:#92400e;font-weight:600;padding:8px 12px;white-space:nowrap;overflow:visible;">
+                🎯 Break-even Promo GP%
+                <span class="help-icon" data-help="The minimum Promo GP% needed to fully cover the promo cost AND match baseline profit. Above this = profitable promo. Below = net loss."></span>
+              </td>
+              <td style="font-size:13px;font-weight:700;color:${metColor};white-space:normal;overflow:visible;padding:8px 12px;line-height:1.4;">
+                ${breakEvenGP.toFixed(1)}% needed &mdash; currently ${promoGP.toFixed(1)}% &mdash; ${gapText}
+              </td>
+            </tr>`;
+          })()
+        : '';
+
+      // Color helper for Change column
+      const chgColor = (v, lowerIsBetter = false) => {
+        if (Math.abs(v) < 0.01) return 'var(--muted)';
+        const good = lowerIsBetter ? v < 0 : v > 0;
+        return good ? '#0f766e' : '#dc2626';
+      };
+
       let tableHTML = `
         <thead>
           <tr>
             <th>Metric <span class="help-icon" data-help="The financial measure being compared across baseline and promo periods."></span></th>
             <th>Baseline <span class="help-icon" data-help="Your normal performance before the promotion — the benchmark everything gets measured against."></span></th>
             <th>Promo <span class="help-icon" data-help="Performance during the promotion period, including any discounts and uplift in volume."></span></th>
-            <th>Change <span class="help-icon" data-help="The difference between Promo and Baseline. Positive = the promo helped. Negative = the promo hurt that metric."></span></th>
+            <th>Change <span class="help-icon" data-help="The difference between Promo and Baseline. Green = promo helped this metric. Red = promo hurt it."></span></th>
           </tr>
         </thead>
         <tbody>
@@ -1831,36 +2632,38 @@
             <td>Revenue</td>
             <td>${formatCurrency(baselineRev)}</td>
             <td>${formatCurrency(promoRev)}</td>
-            <td>${formatCurrency(incrementalRev)}</td>
+            <td style="color:${chgColor(incrementalRev)};font-weight:600;">${formatCurrency(incrementalRev)}</td>
           </tr>
           <tr>
             <td>GP%</td>
             <td>${formatPercent(baselineGP)}</td>
             <td>${formatPercent(promoGP)}</td>
-            <td>${formatPercent(promoGP - baselineGP)}</td>
+            <td style="color:${chgColor(promoGP - baselineGP)};font-weight:600;">${formatPercent(promoGP - baselineGP)}</td>
           </tr>
           <tr>
             <td>GP $</td>
             <td>${formatCurrency(baselineGPDollar)}</td>
             <td>${formatCurrency(promoGPDollar)}</td>
-            <td>${formatCurrency(incrementalGP)}</td>
+            <td style="color:${chgColor(incrementalGP)};font-weight:600;">${formatCurrency(incrementalGP)}</td>
           </tr>
           <tr>
             <td>Promo Cost</td>
-            <td>-</td>
+            <td>—</td>
             <td>${formatCurrency(promoCost)}</td>
-            <td>${formatCurrency(promoCost)}</td>
+            <td style="color:#dc2626;font-weight:600;">${formatCurrency(promoCost)}</td>
           </tr>
-          <tr>
+          <tr style="border-top:2px solid var(--border);">
             <td><strong>Net Profit</strong></td>
             <td>${formatCurrency(baselineGPDollar)}</td>
             <td>${formatCurrency(promoGPDollar - promoCost)}</td>
-            <td>${formatCurrency(netProfit)}</td>
+            <td style="color:${chgColor(netProfit)};font-weight:700;font-size:14px;">${formatCurrency(netProfit)}</td>
           </tr>
+          ${breakEvenNote}
         </tbody>
       `;
       document.getElementById('promoTable').innerHTML = tableHTML;
       renderPromoDecisionBox();
+      renderPromoWswn();
     }
     
     // ========== CHANNEL P&L FUNCTIONS ==========
@@ -1890,15 +2693,19 @@
         <tbody>
       `;
       filtered.forEach(d => {
+        const contrib = parseFloat(d.contribution);
+        const isNegContrib = contrib < 0;
+        const rowStyle = isNegContrib ? ' style="background:rgba(220,38,38,0.06);"' : '';
+        const contribStyle = isNegContrib ? ' style="color:#dc2626;font-weight:600;"' : '';
         tableHTML += `
-          <tr>
+          <tr${rowStyle}>
             <td>${d.month}</td>
             <td>${d.channel}</td>
             <td>${formatCurrency(parseFloat(d.revenue))}</td>
             <td>${formatCurrency(parseFloat(d.cogs))}</td>
-            <td>${d.gp}%</td>
+            <td style="color:${parseFloat(d.gp) >= 40 ? '#0f766e' : parseFloat(d.gp) >= 30 ? '#b45309' : '#dc2626'};font-weight:600;">${d.gp}%</td>
             <td>${formatCurrency(parseFloat(d.opex))}</td>
-            <td>${formatCurrency(parseFloat(d.contribution))}</td>
+            <td${contribStyle}>${formatCurrency(contrib)}</td>
           </tr>
         `;
       });
@@ -1906,6 +2713,7 @@
       document.getElementById('channelTable').innerHTML = tableHTML;
       
       renderChannelChart();
+      renderChannelWswn();
     }
     
     function renderChannelChart() {
@@ -1992,19 +2800,19 @@
       document.getElementById('pvmKPIs').innerHTML = `
         <div class="kpi-box">
           <div class="kpi-box-label">Total Variance</div>
-          <div class="kpi-box-value">${formatCurrency(totalVariance)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(totalVariance)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label"><span class="tooltip" data-tooltip="Revenue change from price">Price Effect</span></div>
-          <div class="kpi-box-value">${formatCurrency(priceDollar)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(priceDollar)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label"><span class="tooltip" data-tooltip="Revenue change from volume">Volume Effect</span></div>
-          <div class="kpi-box-value">${formatCurrency(volumeDollar)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(volumeDollar)}</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-box-label"><span class="tooltip" data-tooltip="Revenue change from mix">Mix Effect</span></div>
-          <div class="kpi-box-value">${formatCurrency(mixDollar)}</div>
+          <div class="kpi-box-value">${formatCurrencyColored(mixDollar)}</div>
         </div>
       `;
       
@@ -2024,13 +2832,15 @@
       // Color helpers
       const posC = '#0f766e', posBg = 'rgba(15,118,110,0.10)';
       const negC = '#dc2626', negBg = 'rgba(220,38,38,0.10)';
-      const warnC = '#b45309', warnBg = 'rgba(180,83,9,0.10)';
       const pillStyle = (val) => `background:${val >= 0 ? posBg : negBg};color:${val >= 0 ? posC : negC};`;
       const fmt = (v) => (v >= 0 ? '+' : '') + '$' + Math.abs(Math.round(v)).toLocaleString();
       const fmtPct = (v) => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
 
       // Total badge
-      document.getElementById('pvmTotalValue').textContent = (totalVariance >= 0 ? '+' : '') + '$' + Math.abs(Math.round(totalVariance)).toLocaleString();
+      const pvmTotalEl = document.getElementById('pvmTotalValue');
+      const tvSign = totalVariance >= 0 ? '+' : '';
+      pvmTotalEl.textContent = tvSign + '$' + Math.abs(Math.round(totalVariance)).toLocaleString();
+      pvmTotalEl.style.color = totalVariance >= 0 ? '#0f766e' : '#dc2626';
       document.getElementById('pvmTotalPct').textContent = fmtPct(totalPct);
       const badge = document.getElementById('pvmTotalBadge');
       badge.textContent = isGrowth ? '▲ Growth' : '▼ Decline';
@@ -2059,50 +2869,55 @@
       const allPositive = headwinds.length === 0;
       const allNegative = tailwinds.length === 0;
 
-      // Verdict block
-      let verdictStyle, verdictHTML;
-      if (isGrowth && allPositive) {
-        verdictStyle = `background:#f0fdf9;border-left:3px solid ${posC};`;
-        verdictHTML = `<strong style="color:${posC};">✓ Broad-based growth — all three drivers are tailwinds.</strong><br>
-          Revenue grew <strong>${fmtPct(totalPct)}</strong> vs prior period.
-          Price contributed <strong>${fmt(priceDollar)}</strong>, Volume contributed <strong>${fmt(volumeDollar)}</strong>, and Mix contributed <strong>${fmt(mixDollar)}</strong>.
-          This is the healthiest PVM profile — you're charging more, selling more, and shifting toward higher-value products simultaneously.`;
-      } else if (isGrowth && headwinds.length > 0) {
-        verdictStyle = `background:#fffbeb;border-left:3px solid ${warnC};`;
-        const drag = headwinds.map(d => `${d.name} (${fmt(d.dollar)})`).join(', ');
-        verdictHTML = `<strong style="color:${warnC};">⚡ Growth with a hidden headwind — ${drag} is dragging against the tailwinds.</strong><br>
-          Revenue grew <strong>${fmtPct(totalPct)}</strong> overall, but it would have been higher without the drag.
-          The biggest tailwind is <strong>${biggest.name}</strong> at <strong>${fmt(biggest.dollar)}</strong>.
-          Watch the headwind closely — if it widens, the growth story weakens.`;
-      } else if (!isGrowth && allNegative) {
-        verdictStyle = `background:#fef2f2;border-left:3px solid ${negC};`;
-        verdictHTML = `<strong style="color:${negC};">⚠ Revenue declined across all three dimensions.</strong><br>
-          Revenue fell <strong>${fmtPct(totalPct)}</strong> vs prior period — Price, Volume, and Mix are all headwinds.
-          This is a broad-based deterioration requiring a full commercial review: pricing power, sales capacity, and SKU portfolio all need attention.`;
-      } else {
-        verdictStyle = `background:#fef2f2;border-left:3px solid ${negC};`;
-        verdictHTML = `<strong style="color:${negC};">⚠ Revenue declined ${fmtPct(totalPct)} vs prior period.</strong><br>
-          ${tailwinds.length > 0 ? `Some drivers helped (${tailwinds.map(d => d.name + ' ' + fmt(d.dollar)).join(', ')}), but they weren't enough to offset the headwinds.` : ''}
-          Focus on the largest drag: <strong>${biggest.name}</strong> at <strong>${fmt(biggest.dollar)}</strong>.`;
-      }
-      const vb = document.getElementById('pvmVerdictBlock');
-      vb.style.cssText = `padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.65;margin-bottom:14px;${verdictStyle}`;
-      vb.innerHTML = verdictHTML;
+      // Build WSWN content
+      let whatText, soWhatText, nowWhatText;
 
-      // Lever block
-      const lb = document.getElementById('pvmLeverBlock');
+      // WHAT — factual description of the data
+      whatText = `Revenue ${isGrowth ? 'grew' : 'declined'} ${fmtPct(totalPct)} vs prior period (${fmt(totalVariance)}). ` +
+        `Price: ${fmt(priceDollar)} (${fmtPct(priceEff)}), Volume: ${fmt(volumeDollar)} (${fmtPct(volEff)}), Mix: ${fmt(mixDollar)} (${fmtPct(mixEff)}).`;
+
+      // SO WHAT — interpretation
+      if (isGrowth && allPositive) {
+        soWhatText = `Broad-based growth — all three drivers are tailwinds. This is the healthiest PVM profile: you're charging more, selling more, and shifting toward higher-value products simultaneously. The biggest contributor is ${biggest.name} at ${fmt(biggest.dollar)}.`;
+      } else if (isGrowth && headwinds.length > 0) {
+        const drag = headwinds.map(d => `${d.name} (${fmt(d.dollar)})`).join(', ');
+        soWhatText = `Growth is happening but masked by a headwind: ${drag} is dragging against the tailwinds. If the headwind widens, the growth story weakens. The biggest positive lever is ${biggest.name} at ${fmt(biggest.dollar)}.`;
+      } else if (!isGrowth && allNegative) {
+        soWhatText = `Revenue declined across all three dimensions — this is a broad-based deterioration. Pricing power, sales volume, and product mix are all moving in the wrong direction simultaneously. Requires a full commercial review.`;
+      } else {
+        const worstDrag = headwinds.sort((a,b) => a.dollar - b.dollar)[0];
+        soWhatText = `Revenue declined ${fmtPct(totalPct)} despite some positive drivers. ${tailwinds.length > 0 ? `${tailwinds.map(d=>d.name+' ('+fmt(d.dollar)+')').join(', ')} helped, but wasn't enough.` : ''} The largest drag is ${worstDrag.name} at ${fmt(worstDrag.dollar)}.`;
+      }
+
+      // NOW WHAT — action
       if (headwinds.length > 0) {
         const worst = headwinds.sort((a,b) => a.dollar - b.dollar)[0];
-        lb.innerHTML = `<strong>🎯 Key action:</strong> The <strong>${worst.name}</strong> effect is dragging revenue by <strong>${fmt(worst.dollar)}</strong>.
-          ${worst.name === 'Mix' ? 'Consider rebalancing the product portfolio toward higher-revenue SKUs.' :
-            worst.name === 'Price' ? 'Review discount depth, price erosion, or competitive pricing pressure.' :
-            'Investigate volume decline by channel, region, or customer segment.'}`;
+        nowWhatText = `Focus on the ${worst.name} headwind (${fmt(worst.dollar)}). ` +
+          (worst.name === 'Mix' ? 'Rebalance the product portfolio toward higher-revenue SKUs — if Volume is green but Mix is red, you\'re selling more of the wrong product.' :
+           worst.name === 'Price' ? 'Review discount depth, price erosion, and competitive pricing pressure. Consider selective price recovery on high-margin SKUs.' :
+           'Investigate volume decline by channel, region, or customer segment. Check if this is demand-led or supply/capacity constrained.') +
+          ` Protect ${biggest.name} (current top driver).`;
       } else {
-        lb.innerHTML = `<strong>🎯 Biggest growth lever:</strong> <strong>${biggest.name}</strong> drove <strong>${fmt(biggest.dollar)}</strong> of the total uplift.
-          To sustain momentum, protect this driver while strengthening the smaller contributors.`;
+        nowWhatText = `Protect ${biggest.name} — it drove ${fmt(biggest.dollar)} of the uplift. To sustain momentum, invest in the smaller contributors to make this growth more diversified and resilient.`;
       }
+
+      document.getElementById('pvmWswnWhat').innerHTML = wrapNumbers(whatText);
+      document.getElementById('pvmWswnSoWhat').innerHTML = wrapNumbers(soWhatText);
+      document.getElementById('pvmWswnNowWhat').innerHTML = wrapNumbers(nowWhatText);
+
+      // Determine risk level for PVM
+      let pvmRisk;
+      if (!isGrowth && allNegative) pvmRisk = 'high';
+      else if (!isGrowth || headwinds.length > 1) pvmRisk = 'moderate';
+      else if (headwinds.length === 1) pvmRisk = 'moderate';
+      else pvmRisk = 'healthy';
+
+      const pvmWrap = document.getElementById('pvmWswn');
+      const pvmHeader = pvmWrap ? pvmWrap.querySelector('.wswn-wrap-header') : null;
+      applyWswnRisk(pvmWrap, pvmHeader, pvmRisk, '💡 PVM Insight');
+      boldNowWhat(document.getElementById('pvmWswnNowWhat'), pvmRisk);
     }
-    
+
     function renderPVMChart(prior, price, volume, mix, current) {
       const canvas = document.getElementById('pvmChart');
       const container = canvas.parentElement;
@@ -2201,25 +3016,36 @@
         <thead>
           <tr>
             <th>Month</th>
-            <th>Monthly Accrual</th>
-            <th>Cumulative</th>
-            <th>Remaining Pool</th>
+            <th>Monthly Accrual <span class="help-icon" data-help="The share of the total discount pool booked in this month. Zero means the deal is not active in this period."></span></th>
+            <th>Cumulative <span class="help-icon" data-help="Running total of discount cost recognised so far. Should reach the full pool by the end month."></span></th>
+            <th>Remaining Pool <span class="help-icon" data-help="How much of the discount pool has not yet been accrued. Should hit $0 by the deal end month."></span></th>
           </tr>
         </thead>
         <tbody>
       `;
       accrualSchedule.forEach(a => {
+        const isActive = parseFloat(a.accrual) > 0;
+        const rowStyle = isActive ? ' style="background:rgba(15,118,110,0.04);"' : ' style="color:var(--muted);"';
         tableHTML += `
-          <tr>
-            <td>${a.month}</td>
-            <td>${formatCurrency(parseFloat(a.accrual))}</td>
+          <tr${rowStyle}>
+            <td>${a.month}${isActive ? ' <span style="font-size:9px;font-weight:700;color:#0f766e;background:rgba(15,118,110,0.10);padding:1px 5px;border-radius:999px;vertical-align:middle;">ACTIVE</span>' : ''}</td>
+            <td style="font-weight:${isActive ? '600' : '400'};">${isActive ? formatCurrency(parseFloat(a.accrual)) : '—'}</td>
             <td>${formatCurrency(parseFloat(a.cumulative))}</td>
-            <td>${formatCurrency(parseFloat(a.remaining))}</td>
+            <td style="color:${parseFloat(a.remaining) > 0 ? 'var(--muted)' : '#0f766e'};">${formatCurrency(parseFloat(a.remaining))}</td>
           </tr>
         `;
       });
-      tableHTML += '</tbody>';
+      // Totals row
+      tableHTML += `
+          <tr style="border-top:2px solid var(--border);background:rgba(12,23,45,0.03);">
+            <td><strong>Total</strong></td>
+            <td><strong>${formatCurrency(pool)}</strong></td>
+            <td><strong>${formatCurrency(pool)}</strong></td>
+            <td style="color:#0f766e;font-weight:700;">$0 remaining</td>
+          </tr>
+        </tbody>`;
       document.getElementById('accrualTable').innerHTML = tableHTML;
+      renderAccrualWswn();
     }
     
     // ========== CSV DOWNLOADS ==========
@@ -2407,6 +3233,21 @@
     
     // ========== DECISION BOX (PROMO ROI) ==========
 
+    function scrollToSection(event, href) {
+      event.preventDefault();
+      const target = document.querySelector(href);
+      if (!target) return;
+      const offset = 80;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+      const heading = target.querySelector('h2');
+      if (heading) {
+        heading.style.transition = 'color 300ms ease';
+        heading.style.color = 'var(--accent)';
+        setTimeout(() => { heading.style.color = ''; }, 1800);
+      }
+    }
+
     function renderPromoDecisionBox() {
       const fallback = document.getElementById('promoDecisionFallback');
       const content  = document.getElementById('promoDecisionContent');
@@ -2417,7 +3258,6 @@
       const promoGP     = parseFloat(document.getElementById('promoGP').value)     || 0;
       const promoCost   = parseFloat(document.getElementById('promoCost').value)   || 0;
 
-      // Need at least revenue values
       if (!baselineRev && !promoRev) {
         fallback.style.display = '';
         content.style.display = 'none';
@@ -2428,68 +3268,683 @@
       const promoGPDollar     = promoRev    * (promoGP    / 100);
       const incrementalGP     = promoGPDollar - baselineGPDollar;
       const netProfit         = incrementalGP - promoCost;
-      const marginImpactPp    = promoGP - baselineGP;           // percentage points
+      const marginImpactPp    = promoGP - baselineGP;
+      const revenueUplift     = promoRev - baselineRev;
 
-      // Decision logic
       const profitable    = netProfit > 0;
-      const marginOk      = marginImpactPp >= 0;                // not negative pp
-      const runPromo      = profitable && marginOk;
+      const marginOk      = marginImpactPp >= -5;
+      const marginCaution = marginImpactPp < -5 && marginImpactPp >= -10;
+      const runPromo    = profitable && marginOk;
+      const cautionPromo = profitable && marginCaution;
 
-      // "What to do next" recommendation based on what hurts most
-      let nextAction;
-      if (runPromo) {
-        nextAction = 'Scale this promo — profit is positive and margin holds.';
-      } else if (!profitable && marginImpactPp < 0) {
-        // Both hurting — biggest lever?
-        const discountDamage = Math.abs(marginImpactPp);
-        const costDamage     = promoCost / (promoRev || 1) * 100;
-        nextAction = discountDamage > costDamage
-          ? 'Reduce discount depth to recover margin before running.'
-          : 'Limit redemptions or cut promo cost — spend outweighs the uplift.';
-      } else if (!profitable) {
-        nextAction = 'Limit redemptions — promo cost exceeds the profit it generates.';
+      // ── SECTION 1: Promo ROI signal (mirrors renderPromoWswn) ──
+      const promoRisk = runPromo ? 'healthy' : cautionPromo ? 'moderate' : 'high';
+      const promoSignal = (netProfit >= 0 ? '+' : '') + '$' + Math.abs(Math.round(netProfit)).toLocaleString() +
+        ' net · ' + (marginImpactPp >= 0 ? '+' : '') + marginImpactPp.toFixed(1) + 'pp GP';
+      const promoSignalColor = promoRisk === 'healthy' ? '#059669' : promoRisk === 'moderate' ? '#b45309' : '#dc2626';
+      const promoAction = runPromo ? 'Scale this promo'
+        : cautionPromo ? 'Reduce discount depth by 2–3pp'
+        : 'Restructure: cut cost or raise Promo GP%';
+
+      // ── SECTION 2: Channel P&L signal (mirrors renderChannelWswn) ──
+      const negChannelsMap = {};
+      if (channelData && channelData.length > 0) {
+        channelData.forEach(d => {
+          negChannelsMap[d.channel] = (negChannelsMap[d.channel] || 0) + parseFloat(d.contribution);
+        });
+      }
+      const negChannelNames = Object.entries(negChannelsMap).filter(([,v]) => v < 0).map(([k]) => k);
+      const negCount = negChannelNames.length;
+      // Compute blended GP% for channel signal
+      const allRevTotal = channelData.reduce((s,d) => s + parseFloat(d.revenue), 0);
+      const blendedGP   = allRevTotal > 0
+        ? channelData.reduce((s,d) => s + parseFloat(d.gp) * parseFloat(d.revenue), 0) / allRevTotal
+        : 0;
+      const channelRisk = negCount > 0 ? 'high' : 'healthy';
+      let channelSignal, channelSignalColor, channelAction;
+      if (negCount > 0) {
+        channelSignal = negCount + ' channel' + (negCount > 1 ? 's' : '') + ' negative · GP ' + blendedGP.toFixed(1) + '%';
+        channelSignalColor = '#dc2626';
+        channelAction = 'Investigate ' + negChannelNames.slice(0,2).join(', ') + (negChannelNames.length > 2 ? '…' : '');
       } else {
-        // Profitable but margin compressed
-        nextAction = 'Shift budget to the highest-margin channel to protect overall GP%.';
+        channelSignal = 'All profitable · Blended GP ' + blendedGP.toFixed(1) + '%';
+        channelSignalColor = '#059669';
+        channelAction = blendedGP >= 40 ? 'Maintain mix discipline' : 'Monitor GP% erosion';
+      }
+
+      // ── SECTION 3: PVM signal (mirrors renderPVMExplainer) ──
+      const priorRev    = parseFloat(document.getElementById('priorRev').value)     || 0;
+      const currentRevV = parseFloat(document.getElementById('currentRev').value)   || 0;
+      const priceEff    = parseFloat(document.getElementById('priceEffect').value)  || 0;
+      const volEff      = parseFloat(document.getElementById('volumeEffect').value) || 0;
+      const mixEff      = parseFloat(document.getElementById('mixEffect').value)    || 0;
+      const totalVariance = currentRevV - priorRev;
+      const priceDollar = priorRev * (priceEff / 100);
+      const volumeDollar = priorRev * (volEff / 100);
+      const mixDollar   = priorRev * (mixEff / 100);
+      const pvmDrivers  = [
+        { name: 'Price', dollar: priceDollar },
+        { name: 'Volume', dollar: volumeDollar },
+        { name: 'Mix', dollar: mixDollar }
+      ];
+      const pvmHeadwinds = pvmDrivers.filter(d => d.dollar < 0);
+      const isGrowth     = totalVariance >= 0;
+      const allNegPVM    = pvmHeadwinds.length === 3;
+      const pvmRisk      = (!isGrowth && allNegPVM) ? 'high' : (!isGrowth || pvmHeadwinds.length > 1) ? 'moderate' : pvmHeadwinds.length === 1 ? 'moderate' : 'healthy';
+      const pvmSign      = totalVariance >= 0 ? '+' : '';
+      const pvmSignal    = pvmSign + '$' + Math.abs(Math.round(totalVariance)).toLocaleString() + ' variance · '
+        + pvmHeadwinds.length + ' headwind' + (pvmHeadwinds.length !== 1 ? 's' : '');
+      const pvmSignalColor = pvmRisk === 'healthy' ? '#059669' : pvmRisk === 'moderate' ? '#b45309' : '#dc2626';
+      let pvmAction;
+      if (pvmHeadwinds.length > 0) {
+        const worst = pvmHeadwinds.sort((a,b) => a.dollar - b.dollar)[0];
+        pvmAction = 'Fix ' + worst.name + ' headwind (' + (worst.dollar >= 0 ? '+' : '') + '$' + Math.abs(Math.round(worst.dollar)).toLocaleString() + ')';
+      } else {
+        pvmAction = 'Protect top growth driver';
+      }
+
+      // ── SECTION 4: Accrual signal (mirrors renderAccrualWswn) ──
+      const accrualPool   = parseFloat(document.getElementById('discountPool').value) || 0;
+      const accrualStart  = parseInt(document.getElementById('startMonth').value)    || 1;
+      const accrualEnd    = parseInt(document.getElementById('endMonth').value)      || 12;
+      const accrualMonths = Math.max(1, accrualEnd - accrualStart + 1);
+      const monthlyAccr   = accrualPool > 0 ? accrualPool / accrualMonths : 0;
+      const accrualRiskLevel = accrualMonths < 3 ? 'high' : accrualMonths < 6 ? 'moderate' : 'healthy';
+      const accrualSignal = '$' + Math.round(monthlyAccr).toLocaleString() + '/mo · '
+        + accrualMonths + ' month' + (accrualMonths !== 1 ? 's' : '');
+      const accrualSignalColor = accrualRiskLevel === 'healthy' ? '#059669' : accrualRiskLevel === 'moderate' ? '#b45309' : '#dc2626';
+      const accrualAction = accrualRiskLevel === 'healthy' ? 'Post monthly journals & reconcile'
+        : accrualRiskLevel === 'moderate' ? 'Add P&L footnote per accrual month'
+        : 'Renegotiate spread or document spike';
+
+      // ── Hero summary line ──
+      let summaryText;
+      if (runPromo) {
+        summaryText = `Promo is profitable — net gain of $${Math.round(netProfit).toLocaleString()} after all costs. Margin holds within acceptable range.`;
+      } else if (cautionPromo) {
+        summaryText = `Promo is profitable (+$${Math.round(netProfit).toLocaleString()}) but margin compressed ${Math.abs(marginImpactPp).toFixed(1)}pp — above the 5pp caution threshold. Reduce discount depth before scaling.`;
+      } else if (!profitable && marginImpactPp < -10) {
+        summaryText = `Promo is losing money — discount depth destroyed margin (${Math.abs(marginImpactPp).toFixed(1)}pp drop) and promo cost of $${promoCost.toLocaleString()} cannot be recovered.`;
+      } else if (!profitable) {
+        summaryText = `Promo cost of $${promoCost.toLocaleString()} exceeds incremental profit of $${Math.max(0,Math.round(incrementalGP)).toLocaleString()}. Reduce spend or raise qualifying spend threshold.`;
+      } else {
+        summaryText = `Revenue uplift of $${Math.round(revenueUplift).toLocaleString()} is positive but margin compressed ${Math.abs(marginImpactPp).toFixed(1)}pp — monitor closely.`;
+      }
+      document.getElementById('promoDecisionSummary').textContent = summaryText;
+
+      // ── Subtitle bar ──
+      const accrualRiskEmoji = accrualRiskLevel === 'healthy' ? '✅ Low' : accrualRiskLevel === 'moderate' ? '⚠️ Moderate' : '🔴 High';
+      const issuesList = [];
+      if (!runPromo && !cautionPromo) issuesList.push({ sev:'red',  label:'Promo losing money',   desc:`Net profit: ($${Math.round(Math.abs(netProfit)).toLocaleString()}). Cost exceeds incremental GP.` });
+      if (cautionPromo)               issuesList.push({ sev:'amber',label:'Margin squeezed',       desc:`GP% dropped ${Math.abs(marginImpactPp).toFixed(1)}pp — above 5pp caution threshold.` });
+      if (!marginOk && !cautionPromo) issuesList.push({ sev:'red',  label:'Margin destruction',   desc:`GP% collapsed ${Math.abs(marginImpactPp).toFixed(1)}pp — exceeds the 10pp danger threshold.` });
+      if (negCount > 0)               issuesList.push({ sev:'red',  label:`${negCount} channel${negCount>1?'s':''} underwater`, desc:`${negChannelNames.join(', ')} contribution-negative.` });
+      if (accrualMonths < 3)          issuesList.push({ sev:'red',  label:'Accrual spike risk',   desc:`Entire pool in ${accrualMonths} month${accrualMonths>1?'s':''}. Will distort P&L.` });
+      else if (accrualMonths < 6)     issuesList.push({ sev:'amber',label:'Moderate accrual risk', desc:`Pool over ${accrualMonths} months — flag for FP&A commentary.` });
+      window._decisionIssues = issuesList;
+
+      const subtitleEl = document.getElementById('promoDecisionSubtitle');
+      if (subtitleEl) {
+        const netProfitFmt = netProfit < 0
+          ? `($${Math.round(Math.abs(netProfit)).toLocaleString()})`
+          : `+$${Math.round(netProfit).toLocaleString()}`;
+        const riskFlags = issuesList.length;
+        const ppTip = `data-tt="pp = percentage points — a direct arithmetic difference between two percentages. E.g. going from 42% to 22% GP is a 20pp drop, not 20%."`;
+        subtitleEl.innerHTML =
+          `<strong>${netProfitFmt}</strong> promo net profit &middot; ` +
+          `<strong>${Math.abs(marginImpactPp).toFixed(1)}</strong><span class="term-tt" ${ppTip}>pp</span> margin ${marginImpactPp < 0 ? 'compression' : 'expansion'} &middot; ` +
+          `<strong>${negCount}</strong> negative-contribution channel${negCount !== 1 ? 's' : ''} &middot; ` +
+          `accrual risk: <strong>${accrualRiskEmoji}</strong>` +
+          (riskFlags > 0 ? ` &middot; <span class="issues-trigger" onclick="toggleIssuesPopover(event, this)">${riskFlags} issue${riskFlags !== 1 ? 's' : ''} require your attention</span>` : ' &middot; <span style="color:#059669;font-weight:600;">✅ No critical issues</span>');
+        subtitleEl.style.display = '';
       }
 
       fallback.style.display = 'none';
       content.style.display  = '';
 
-      // Apply color state: Yes = positive, No = negative
       const box = document.getElementById('promoDecisionBox');
-      box.classList.remove('decision-box--positive', 'decision-box--negative');
-      box.classList.add(runPromo ? 'decision-box--positive' : 'decision-box--negative');
+      box.classList.remove('decision-box--positive', 'decision-box--negative', 'decision-box--caution');
+      if (runPromo)          box.classList.add('decision-box--positive');
+      else if (cautionPromo) box.classList.add('decision-box--caution');
+      else                   box.classList.add('decision-box--negative');
 
-      const verdictLabel = runPromo ? 'Yes — run the promo' : 'No — don\'t run the promo';
+      let verdictLabel, verdictDetail;
+      if (runPromo) {
+        verdictLabel  = 'Yes — run the promo';
+        verdictDetail = `Net profit of ${formatCurrency(netProfit)} on $${promoCost.toLocaleString()} spend. GP% held within ${Math.abs(marginImpactPp).toFixed(1)}pp of baseline — safe to scale.`;
+      } else if (cautionPromo) {
+        verdictLabel  = 'Proceed with conditions';
+        verdictDetail = `Profitable (+${formatCurrency(netProfit)}) but GP% compressed ${Math.abs(marginImpactPp).toFixed(1)}pp. Reduce discount depth by 2–3pp before scaling.`;
+      } else {
+        verdictLabel  = 'No — don\'t run the promo';
+        verdictDetail = `Net loss of ${formatCurrency(netProfit)}. The $${promoCost.toLocaleString()} spend could not be recovered from incremental GP. Restructure parameters first.`;
+      }
       document.getElementById('promoDecisionVerdict').innerHTML =
-        `Run promo? <span class="verdict-action">${verdictLabel}</span>`;
+        `Run promo? <span class="verdict-action">${verdictLabel}</span> <span style="font-size:13px;font-weight:400;color:var(--muted);display:block;margin-top:3px;">${verdictDetail}</span>`;
 
-      const marginSign = marginImpactPp >= 0 ? '+' : '';
-      document.getElementById('promoDecisionBullets').innerHTML = `
-        <li>Expected profit impact: <strong>$${Math.round(netProfit).toLocaleString()}</strong></li>
-        <li>Margin impact: <strong>${marginSign}${marginImpactPp.toFixed(1)} pp</strong> (promo GP% vs baseline)</li>
+      // ── Exception rows — signals & actions mirror WSWN sections exactly ──
+      document.getElementById('promoDecisionExceptions').innerHTML = `
+        <div class="exception-row exception-row-header">
+          <span>Focus Area</span>
+          <span>Signal</span>
+          <span>Action</span>
+        </div>
+        <div class="exception-row" onclick="scrollToSection(event,'#section-promo')" style="cursor:pointer;">
+          <span class="exception-label">
+            <a href="#section-promo" onclick="scrollToSection(event,'#section-promo')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;">
+              🎯 Promo ROI
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);">↓ Section 1</span>
+            </a>
+          </span>
+          <span class="exception-count" style="color:${promoSignalColor};">${promoSignal}</span>
+          <span class="exception-action">${promoAction}</span>
+        </div>
+        <div class="exception-row" onclick="scrollToSection(event,'#section-channel')" style="cursor:pointer;">
+          <span class="exception-label">
+            <a href="#section-channel" onclick="scrollToSection(event,'#section-channel')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;">
+              📊 Channel P&amp;L
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);">↓ Section 2</span>
+            </a>
+          </span>
+          <span class="exception-count" style="color:${channelSignalColor};">${channelSignal}</span>
+          <span class="exception-action">${channelAction}</span>
+        </div>
+        <div class="exception-row" onclick="scrollToSection(event,'#section-pvm')" style="cursor:pointer;">
+          <span class="exception-label">
+            <a href="#section-pvm" onclick="scrollToSection(event,'#section-pvm')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;">
+              🔀 Price / Volume / Mix
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);">↓ Section 3</span>
+            </a>
+          </span>
+          <span class="exception-count" style="color:${pvmSignalColor};">${pvmSignal}</span>
+          <span class="exception-action">${pvmAction}</span>
+        </div>
+        <div class="exception-row" onclick="scrollToSection(event,'#section-accrual')" style="cursor:pointer;">
+          <span class="exception-label">
+            <a href="#section-accrual" onclick="scrollToSection(event,'#section-accrual')" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;">
+              💰 Accrual Schedule
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;background:rgba(12,23,45,0.07);color:var(--muted);">↓ Section 4</span>
+            </a>
+          </span>
+          <span class="exception-count" style="color:${accrualSignalColor};">${accrualSignal}</span>
+          <span class="exception-action">${accrualAction}</span>
+        </div>
       `;
+    }
 
-      document.getElementById('promoDecisionNext').innerHTML =
-        `What to do next: <span>${nextAction}</span>`;
+    // ========== FLAT CSV UPLOAD ==========
+
+    // Flat CSV format — ALL sections in one file, one row per channel-month record.
+    // Promo ROI, PVM, and Accrual are scalar fields repeated on every row (same value).
+    // Required columns:
+    //   month, channel, revenue, cogs, gp_pct, opex, contribution  (Section 2 — per row)
+    //   baseline_revenue, promo_revenue, baseline_gp, promo_gp, promo_cost  (Section 1 — scalar)
+    //   prior_revenue, current_revenue, price_effect, volume_effect, mix_effect  (Section 3 — scalar)
+    //   discount_pool, start_month, end_month  (Section 4 — scalar)
+
+    const FLAT_REQUIRED = ['month','channel','revenue','cogs','gp_pct','opex','contribution',
+      'baseline_revenue','promo_revenue','baseline_gp','promo_gp','promo_cost',
+      'prior_revenue','current_revenue','price_effect','volume_effect','mix_effect',
+      'discount_pool','start_month','end_month'];
+
+    function showCsvStatus(msg, type) {
+      // type: 'ok' | 'error' | 'info'
+      const el = document.getElementById('csvUploadStatus');
+      if (!el) return;
+      el.style.display = '';
+      el.style.background = type === 'ok' ? 'rgba(15,118,110,0.10)' : type === 'error' ? 'rgba(220,38,38,0.08)' : 'rgba(12,23,45,0.04)';
+      el.style.color = type === 'ok' ? '#0f766e' : type === 'error' ? '#dc2626' : 'var(--muted)';
+      el.style.border = type === 'ok' ? '1px solid rgba(15,118,110,0.25)' : type === 'error' ? '1px solid rgba(220,38,38,0.25)' : '1px solid var(--border)';
+      el.innerHTML = msg;
+    }
+
+    function handleFlatCsvDrop(event) {
+      event.preventDefault();
+      const dz = document.getElementById('csvDropZone');
+      if (dz) { dz.style.borderColor = 'var(--border)'; dz.style.background = '#fafbfc'; }
+      const file = event.dataTransfer.files[0];
+      if (!file || !file.name.endsWith('.csv')) {
+        showCsvStatus('❌ Please drop a .csv file.', 'error'); return;
+      }
+      _readAndParseFlatCsv(file);
+    }
+
+    function handleFlatCsvUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      _readAndParseFlatCsv(file);
+      event.target.value = ''; // allow re-upload of same file
+    }
+
+    function _readAndParseFlatCsv(file) {
+      showCsvStatus('⏳ Parsing…', 'info');
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const { headers, data } = parseCSV(e.target.result);
+          // Validate required columns
+          const missing = FLAT_REQUIRED.filter(c => !headers.includes(c));
+          if (missing.length > 0) {
+            showCsvStatus('❌ Missing columns: <strong>' + missing.join(', ') + '</strong><br>Download the template to see the expected format.', 'error');
+            return;
+          }
+          if (data.length === 0) {
+            showCsvStatus('❌ CSV has headers but no data rows.', 'error'); return;
+          }
+
+          // Section 1 — Promo ROI (take from first data row — scalar across all rows)
+          const r0 = data[0];
+          document.getElementById('baselineRev').value  = parseFloat(r0.baseline_revenue) || 0;
+          document.getElementById('promoRev').value     = parseFloat(r0.promo_revenue)    || 0;
+          document.getElementById('baselineGP').value   = parseFloat(r0.baseline_gp)      || 0;
+          document.getElementById('promoGP').value      = parseFloat(r0.promo_gp)         || 0;
+          document.getElementById('promoCost').value    = parseFloat(r0.promo_cost)        || 0;
+
+          // Section 2 — Channel P&L (ALL rows, just the channel columns)
+          channelData = data.map(row => ({
+            month:        row.month,
+            channel:      row.channel,
+            revenue:      parseFloat(row.revenue).toFixed(2),
+            cogs:         parseFloat(row.cogs).toFixed(2),
+            gp:           parseFloat(row.gp_pct).toFixed(1),
+            opex:         parseFloat(row.opex).toFixed(2),
+            contribution: parseFloat(row.contribution).toFixed(2)
+          }));
+
+          // Section 3 — PVM (scalar from first row)
+          document.getElementById('priorRev').value     = parseFloat(r0.prior_revenue)    || 0;
+          document.getElementById('currentRev').value   = parseFloat(r0.current_revenue)  || 0;
+          document.getElementById('priceEffect').value  = parseFloat(r0.price_effect)     || 0;
+          document.getElementById('volumeEffect').value = parseFloat(r0.volume_effect)    || 0;
+          document.getElementById('mixEffect').value    = parseFloat(r0.mix_effect)       || 0;
+
+          // Section 4 — Accrual (scalar from first row)
+          document.getElementById('discountPool').value = parseFloat(r0.discount_pool)    || 0;
+          document.getElementById('startMonth').value   = parseInt(r0.start_month)        || 1;
+          document.getElementById('endMonth').value     = parseInt(r0.end_month)          || 12;
+
+          // Update badge
+          dataMode = 'uploaded';
+          var badge = document.getElementById('dataModeBadge');
+          if (badge) {
+            badge.textContent = 'CSV';
+            badge.style.background = 'rgba(8,145,178,0.12)';
+            badge.style.borderColor = 'rgba(8,145,178,0.30)';
+            badge.style.color = '#0369a1';
+          }
+
+          populateChannelFilters();
+          renderAll();
+          showCsvStatus(
+            '✅ Loaded <strong>' + data.length + ' rows</strong> from <em>' + file.name + '</em><br>' +
+            'Channels: ' + [...new Set(channelData.map(d => d.channel))].join(', '),
+            'ok'
+          );
+        } catch (err) {
+          showCsvStatus('❌ Parse error: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function downloadFlatTemplate() {
+      // Build a template with 2 sample rows (Jan Direct + Jan Online)
+      const headers = [
+        'month','channel','revenue','cogs','gp_pct','opex','contribution',
+        'baseline_revenue','promo_revenue','baseline_gp','promo_gp','promo_cost',
+        'prior_revenue','current_revenue','price_effect','volume_effect','mix_effect',
+        'discount_pool','start_month','end_month'
+      ];
+      const rows = [
+        {
+          month:'Jan', channel:'Direct', revenue:18200, cogs:7644, gp_pct:58, opex:3800, contribution:6756,
+          baseline_revenue:50000, promo_revenue:105000, baseline_gp:40, promo_gp:42, promo_cost:4500,
+          prior_revenue:120000, current_revenue:168000, price_effect:7.5, volume_effect:18.2, mix_effect:4.3,
+          discount_pool:48000, start_month:1, end_month:12
+        },
+        {
+          month:'Jan', channel:'Online', revenue:14500, cogs:5510, gp_pct:62, opex:4200, contribution:4790,
+          baseline_revenue:50000, promo_revenue:105000, baseline_gp:40, promo_gp:42, promo_cost:4500,
+          prior_revenue:120000, current_revenue:168000, price_effect:7.5, volume_effect:18.2, mix_effect:4.3,
+          discount_pool:48000, start_month:1, end_month:12
+        }
+      ];
+      downloadCSV('commercial_sales_template.csv', headers, rows);
+    }
+
+    // ========== EXPORT CURRENT DATASET (flat format) ==========
+
+    function exportCurrentDataset() {
+      const now = new Date();
+      const ts = now.toISOString().slice(0,16).replace('T','_').replace(':','-');
+      const mode = dataMode || 'sample';
+
+      // Scalar values from inputs
+      const bRev  = parseFloat(document.getElementById('baselineRev').value)  || 0;
+      const pRev  = parseFloat(document.getElementById('promoRev').value)     || 0;
+      const bGP   = parseFloat(document.getElementById('baselineGP').value)   || 0;
+      const pGP   = parseFloat(document.getElementById('promoGP').value)      || 0;
+      const pCost = parseFloat(document.getElementById('promoCost').value)     || 0;
+      const priorR  = parseFloat(document.getElementById('priorRev').value)    || 0;
+      const currR   = parseFloat(document.getElementById('currentRev').value)  || 0;
+      const priceE  = parseFloat(document.getElementById('priceEffect').value) || 0;
+      const volE    = parseFloat(document.getElementById('volumeEffect').value)|| 0;
+      const mixE    = parseFloat(document.getElementById('mixEffect').value)   || 0;
+      const pool    = parseFloat(document.getElementById('discountPool').value) || 0;
+      const sMonth  = parseInt(document.getElementById('startMonth').value)    || 1;
+      const eMonth  = parseInt(document.getElementById('endMonth').value)      || 12;
+
+      const headers = [
+        'month','channel','revenue','cogs','gp_pct','opex','contribution',
+        'baseline_revenue','promo_revenue','baseline_gp','promo_gp','promo_cost',
+        'prior_revenue','current_revenue','price_effect','volume_effect','mix_effect',
+        'discount_pool','start_month','end_month'
+      ];
+
+      // One row per channel-month; scalars repeated on every row
+      const rows = channelData.map(d => ({
+        month:            d.month,
+        channel:          d.channel,
+        revenue:          d.revenue,
+        cogs:             d.cogs,
+        gp_pct:           d.gp,
+        opex:             d.opex,
+        contribution:     d.contribution,
+        baseline_revenue: bRev,
+        promo_revenue:    pRev,
+        baseline_gp:      bGP,
+        promo_gp:         pGP,
+        promo_cost:       pCost,
+        prior_revenue:    priorR,
+        current_revenue:  currR,
+        price_effect:     priceE,
+        volume_effect:    volE,
+        mix_effect:       mixE,
+        discount_pool:    pool,
+        start_month:      sMonth,
+        end_month:        eMonth
+      }));
+
+      downloadCSV(`commercial-sales_${mode}_${ts}.csv`, headers, rows);
+    }
+
+    // ========== WSWN EXPLAINERS ==========
+
+    function renderPromoWswn() {
+      const el = document.getElementById('promoWswn');
+      if (!el) return;
+      const baselineRev = parseFloat(document.getElementById('baselineRev').value) || 0;
+      const promoRev    = parseFloat(document.getElementById('promoRev').value) || 0;
+      const baselineGP  = parseFloat(document.getElementById('baselineGP').value) || 0;
+      const promoGP     = parseFloat(document.getElementById('promoGP').value) || 0;
+      const promoCost   = parseFloat(document.getElementById('promoCost').value) || 0;
+      if (!baselineRev && !promoRev) { el.style.display = 'none'; return; }
+      el.style.display = '';
+
+      const baselineGPDollar = baselineRev * (baselineGP / 100);
+      const promoGPDollar    = promoRev * (promoGP / 100);
+      const incrementalGP    = promoGPDollar - baselineGPDollar;
+      const netProfit        = incrementalGP - promoCost;
+      const marginDrop       = promoGP - baselineGP;
+      const revenueUplift    = promoRev - baselineRev;
+      const upliftPct        = baselineRev > 0 ? (revenueUplift / baselineRev * 100) : 0;
+      const roi              = promoCost > 0 ? (netProfit / promoCost * 100) : 0;
+
+      // WHAT
+      document.getElementById('promoWswnWhat').innerHTML = wrapNumbers(
+        `Promo drove ${upliftPct >= 0 ? '+' : ''}${upliftPct.toFixed(1)}% revenue uplift ($${Math.round(revenueUplift).toLocaleString()}). ` +
+        `GP% moved from ${baselineGP.toFixed(1)}% to ${promoGP.toFixed(1)}% (${marginDrop >= 0 ? '+' : ''}${marginDrop.toFixed(1)}pp). ` +
+        `Net promo profit: ${netProfit >= 0 ? '+' : ''}$${Math.round(netProfit).toLocaleString()} after $${promoCost.toLocaleString()} spend. ROI: ${roi.toFixed(0)}%.`
+      );
+
+      // SO WHAT
+      let soWhat;
+      let promoRisk;
+      if (netProfit > 0 && marginDrop >= -5) {
+        soWhat = `✅ Healthy outcome. The promo paid for itself — margin held within the 5pp threshold and incremental GP ($${Math.round(incrementalGP).toLocaleString()}) more than covered the campaign cost. This profile is repeatable.`;
+        promoRisk = 'healthy';
+      } else if (netProfit > 0 && marginDrop < -5 && marginDrop >= -10) {
+        soWhat = `⚠️ Profitable but margin compressed ${Math.abs(marginDrop).toFixed(1)}pp — above the 5pp warning threshold. Revenue grew, but GP% erosion is notable. If discount depth continues at this level across multiple promos, cumulative margin damage will compound.`;
+        promoRisk = 'moderate';
+      } else if (netProfit <= 0 && marginDrop < -10) {
+        soWhat = `🔴 High Risk. GP% dropped ${Math.abs(marginDrop).toFixed(1)}pp — exceeding the 10pp danger threshold. The discount wiped out too much margin, and the $${promoCost.toLocaleString()} campaign cost could not be recovered from incremental profit ($${Math.round(Math.max(0, incrementalGP)).toLocaleString()}). Net loss: $${Math.round(Math.abs(netProfit)).toLocaleString()}.`;
+        promoRisk = 'high';
+      } else {
+        soWhat = `⚠️ Promo lost $${Math.round(Math.abs(netProfit)).toLocaleString()} net. Campaign cost ($${promoCost.toLocaleString()}) exceeded incremental gross profit ($${Math.round(Math.max(0, incrementalGP)).toLocaleString()}). The revenue uplift did not compensate for the spend.`;
+        promoRisk = 'moderate';
+      }
+      document.getElementById('promoWswnSoWhat').innerHTML = wrapNumbers(soWhat);
+
+      // NOW WHAT
+      let nowWhat;
+      if (netProfit > 0 && marginDrop >= -5) {
+        nowWhat = `Scale this promo — increase frequency or budget. Track sustained volume after the promo ends to confirm it builds lasting demand, not just a demand pull-forward.`;
+      } else if (netProfit > 0 && marginDrop < -5) {
+        nowWhat = `Reduce discount depth by 2–3pp on the next run to see if volume holds. If uplift degrades minimally, you can recover margin significantly. Also check if the same GP result can be achieved with a smaller campaign budget.`;
+      } else {
+        nowWhat = `Do not repeat at current parameters. Either reduce the discount depth (raise Promo GP%), cut campaign cost, or require a higher qualifying basket/order size. Target: Net Profit > 0 with GP% drop < 5pp.`;
+      }
+      document.getElementById('promoWswnNowWhat').innerHTML = wrapNumbers(nowWhat);
+
+      // Apply dynamic risk coloring
+      applyWswnRisk(
+        document.getElementById('promoWswn'),
+        document.getElementById('promoWswn') ? document.getElementById('promoWswn').querySelector('.wswn-wrap-header') : null,
+        promoRisk, '💡 Promo ROI Insight'
+      );
+      boldNowWhat(document.getElementById('promoWswnNowWhat'), promoRisk);
+    }
+
+    function renderChannelWswn() {
+      const wrap    = document.getElementById('channelWswnWrap');
+      const whatEl    = document.getElementById('channelWswnWhat');
+      const soWhatEl  = document.getElementById('channelWswnSoWhat');
+      const nowWhatEl = document.getElementById('channelWswnNowWhat');
+      if (!whatEl || !channelData || !channelData.length) {
+        if (wrap) wrap.style.display = 'none';
+        return;
+      }
+
+      const monthFilter   = document.getElementById('channelMonthFilter').value;
+      const channelFilter = document.getElementById('channelFilter').value;
+      const filtered = channelData.filter(d => {
+        if (monthFilter !== 'all' && d.month !== monthFilter) return false;
+        if (channelFilter !== 'all' && d.channel !== channelFilter) return false;
+        return true;
+      });
+      if (!filtered.length) {
+        if (wrap) wrap.style.display = 'none';
+        return;
+      }
+      if (wrap) wrap.style.display = '';
+
+      const channels = [...new Set(filtered.map(d => d.channel))];
+      const channelStats = channels.map(ch => {
+        const rows = filtered.filter(d => d.channel === ch);
+        const rev  = rows.reduce((s, d) => s + parseFloat(d.revenue), 0);
+        const gp   = rows.reduce((s, d) => s + parseFloat(d.gp) * parseFloat(d.revenue), 0) / rev;
+        const contrib = rows.reduce((s, d) => s + parseFloat(d.contribution), 0);
+        return { ch, rev, gp, contrib };
+      }).sort((a, b) => b.rev - a.rev);
+
+      const totalRev   = channelStats.reduce((s, c) => s + c.rev, 0);
+      const topChannel = channelStats[0];
+      const topShare   = totalRev > 0 ? (topChannel.rev / totalRev * 100) : 0;
+      const avgGP      = channelStats.reduce((s, c) => s + c.gp * c.rev, 0) / totalRev;
+      const negContrib = channelStats.filter(c => c.contrib < 0);
+
+      const viewLabel = monthFilter !== 'all' ? monthFilter : (channelFilter !== 'all' ? channelFilter : 'all channels / all months');
+
+      whatEl.innerHTML = wrapNumbers(
+        `Showing ${viewLabel}: ${channels.length} channel${channels.length > 1 ? 's' : ''} with total revenue $${Math.round(totalRev).toLocaleString()}. ` +
+        `Blended GP%: ${avgGP.toFixed(1)}%. Top channel: ${topChannel.ch} (${topShare.toFixed(0)}% of revenue).`
+      );
+
+      let channelRisk;
+      if (negContrib.length > 0) {
+        soWhatEl.innerHTML = wrapNumbers(`🔴 ${negContrib.map(c => c.ch).join(', ')} ${negContrib.length > 1 ? 'are' : 'is'} contribution-negative — revenue is not covering COGS + OpEx. ` +
+          `${topShare > 70 ? `Also: ${topChannel.ch} drives ${topShare.toFixed(0)}% of revenue — dangerous concentration risk if this channel softens.` : ''}` +
+          ` Average GP% of ${avgGP.toFixed(1)}% is ${avgGP >= 40 ? 'healthy' : avgGP >= 30 ? 'below 40% target — at risk' : 'below 30% — high risk, scaling will worsen losses'}.`);
+        channelRisk = 'high';
+      } else if (topShare > 70) {
+        soWhatEl.innerHTML = wrapNumbers(`⚠️ All channels are contribution-positive (healthy). However, ${topChannel.ch} drives ${topShare.toFixed(0)}% of revenue — high concentration. If this channel faces pricing pressure or a buyer pullback, the entire P&L is exposed.`);
+        channelRisk = 'moderate';
+      } else {
+        soWhatEl.innerHTML = wrapNumbers(`✅ All channels profitable with diversified revenue. GP% of ${avgGP.toFixed(1)}% is ${avgGP >= 40 ? 'above the 40% healthy threshold' : 'approaching the 40% threshold — monitor COGS trends'}. No immediate concerns.`);
+        channelRisk = 'healthy';
+      }
+
+      if (negContrib.length > 0) {
+        nowWhatEl.innerHTML = wrapNumbers(`Investigate ${negContrib.map(c => c.ch).join(', ')} — either raise channel pricing, reduce allocated OpEx, or exit if the channel cannot reach contribution breakeven. Run PVM decomposition on these channels before cutting to confirm the issue is structural.`);
+      } else if (topShare > 70) {
+        nowWhatEl.innerHTML = wrapNumbers(`Invest in building out the #2 and #3 channels to reduce concentration risk. Set a target: no single channel above 50% of revenue within 3 quarters.`);
+      } else {
+        nowWhatEl.innerHTML = wrapNumbers(`Maintain channel mix discipline. Re-run this view monthly to catch early GP% erosion — small COGS or OpEx creep is easier to correct before it compounds.`);
+      }
+
+      // Apply dynamic risk colors
+      const channelHeader = wrap ? wrap.querySelector('.wswn-wrap-header') : null;
+      applyWswnRisk(wrap, channelHeader, channelRisk, '💡 Channel Performance Insight');
+      boldNowWhat(nowWhatEl, channelRisk);
+    }
+
+    function renderAccrualWswn() {
+      const el = document.getElementById('accrualWswn');
+      if (!el) return;
+      const pool  = parseFloat(document.getElementById('discountPool').value) || 0;
+      const start = parseInt(document.getElementById('startMonth').value) || 1;
+      const end   = parseInt(document.getElementById('endMonth').value) || 12;
+      if (!pool) { el.style.display = 'none'; return; }
+      el.style.display = '';
+
+      const numMonths    = Math.max(1, end - start + 1);
+      const monthlyAccr  = pool / numMonths;
+      const monthNames   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const spanLabel    = numMonths === 12 ? 'full year' : `${monthNames[start-1]}–${monthNames[end-1]} (${numMonths} months)`;
+
+      document.getElementById('accrualWswnWhat').innerHTML = wrapNumbers(
+        `$${Math.round(pool).toLocaleString()} total discount pool spread evenly over ${spanLabel}. ` +
+        `Monthly accrual: $${Math.round(monthlyAccr).toLocaleString()}/mo. ${12 - numMonths} months have zero accrual.`
+      );
+
+      let soWhat;
+      let accrualRisk;
+      if (numMonths >= 6) {
+        soWhat = `✅ Healthy spread. The pool is distributed over ${numMonths} months, keeping monthly P&L impact manageable at $${Math.round(monthlyAccr).toLocaleString()}/mo. Straight-line accrual prevents any single month from absorbing a disproportionate charge.`;
+        accrualRisk = 'healthy';
+      } else if (numMonths >= 3) {
+        soWhat = `⚠️ Moderate concentration — ${numMonths} months is workable but each month absorbs $${Math.round(monthlyAccr).toLocaleString()}. If the deal period aligns with a soft revenue month, that period's P&L may look temporarily weak. Flag for FP&A commentary.`;
+        accrualRisk = 'moderate';
+      } else {
+        soWhat = `🔴 High Accrual Risk. The entire $${Math.round(pool).toLocaleString()} pool hits in ${numMonths === 1 ? 'a single month' : numMonths + ' months'}, creating a spike of $${Math.round(monthlyAccr).toLocaleString()}/mo. This will distort the P&L for those months and may trigger audit questions or forecasting confusion without clear accrual documentation.`;
+        accrualRisk = 'high';
+      }
+      document.getElementById('accrualWswnSoWhat').innerHTML = wrapNumbers(soWhat);
+
+      let nowWhat;
+      if (numMonths >= 6) {
+        nowWhat = `Ensure the accrual journal entry is posted monthly so no catch-up adjustments are needed at quarter-end. Reconcile cumulative accrual vs. actual cash paid at deal settlement.`;
+      } else if (numMonths >= 3) {
+        nowWhat = `Add a footnote to the P&L for each accrual month explaining the charge. Confirm the deal end date is firm — if the deal extends, the accrual schedule must be updated immediately to avoid over-accruing.`;
+      } else {
+        nowWhat = `Consider negotiating the deal to span a longer period, or document the spike clearly in the board/management pack. If possible, restructure the trade terms to spread the spend over 6+ months for cleaner P&L presentation.`;
+      }
+      document.getElementById('accrualWswnNowWhat').innerHTML = wrapNumbers(nowWhat);
+
+      // Apply dynamic risk colors
+      applyWswnRisk(el, el ? el.querySelector('.wswn-wrap-header') : null, accrualRisk, '💡 Accrual Schedule Insight');
+      boldNowWhat(document.getElementById('accrualWswnNowWhat'), accrualRisk);
+    }
+
+    // ========== WORST CASE DEMO ==========
+    // Sets all inputs to their most extreme negative values to showcase high-risk states
+    function loadWorstCase() {
+      withStableScroll(function() {
+        dataMode = 'sample';
+        document.getElementById('dataModeBadge').textContent = 'WORST CASE';
+        document.getElementById('dataModeBadge').style.background = 'rgba(220,38,38,0.12)';
+        document.getElementById('dataModeBadge').style.borderColor = 'rgba(220,38,38,0.30)';
+        document.getElementById('dataModeBadge').style.color = '#dc2626';
+        _setSampleBtnState();
+
+        // Section 1: Promo — devastating loss scenario
+        document.getElementById('baselineRev').value  = 80000;
+        document.getElementById('promoRev').value     = 90000;   // very small volume uplift
+        document.getElementById('baselineGP').value   = 45;
+        document.getElementById('promoGP').value      = 14;      // GP% craters: -31pp
+        document.getElementById('promoCost').value    = 28000;   // massive spend
+
+        // Section 3: PVM — all three drivers negative
+        document.getElementById('priorRev').value     = 200000;
+        document.getElementById('currentRev').value   = 148000;  // -26% decline
+        document.getElementById('priceEffect').value  = -8.5;
+        document.getElementById('volumeEffect').value = -12.3;
+        document.getElementById('mixEffect').value    = -4.7;
+
+        // Section 4: Accrual — single-month spike
+        document.getElementById('discountPool').value = 72000;
+        document.getElementById('startMonth').value   = 6;
+        document.getElementById('endMonth').value     = 6;       // all in one month
+
+        // Section 2: Channel data — manufacture worst-case channel P&L
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const channels = ['Direct','Online','Retail','Partner','Enterprise'];
+        channelData = [];
+        months.forEach(month => {
+          channels.forEach(channel => {
+            const revenue = Math.round(5000 + Math.random() * 8000);
+            const cogsPct = 0.72 + Math.random() * 0.15;  // very high COGS 72–87%
+            const cogs = revenue * cogsPct;
+            const opex = 4000 + Math.random() * 4000;     // heavy opex
+            channelData.push({
+              month, channel,
+              revenue: revenue.toFixed(2),
+              cogs: cogs.toFixed(2),
+              opex: opex.toFixed(2),
+              gp: ((revenue - cogs) / revenue * 100).toFixed(1),
+              contribution: (revenue - cogs - opex).toFixed(2)
+            });
+          });
+        });
+
+        populateChannelFilters();
+        renderAll();
+      });
     }
 
     // ========== RENDER ALL ==========
     
     function renderAll() {
-      computePromoROI();
+      computePromoROI();        // builds promo KPIs + promo WSWN (no channel dependency)
       populateChannelFilters();
-      renderChannelPL();
+      renderChannelPL();        // builds channelData into table + channel WSWN
       computePVM();
       computeAccrual();
-      renderPromoDecisionBox();
+      renderChannelWswn();
+      renderAccrualWswn();
+      renderPromoDecisionBox(); // called last so channelData is fully populated for subtitle
     }
     
     // ========== INIT ==========
     
     window.addEventListener('DOMContentLoaded', () => {
-      initializeSampleData();
+      // Pre-load the winning promo sample so the module is ready to use immediately
+      _setSampleBtnState();
+      document.getElementById('baselineRev').value  = 50000;
+      document.getElementById('promoRev').value     = 105000;
+      document.getElementById('baselineGP').value   = 40;
+      document.getElementById('promoGP').value      = 42;
+      document.getElementById('promoCost').value    = 4500;
+      document.getElementById('priorRev').value     = 120000;
+      document.getElementById('currentRev').value   = 168000;
+      document.getElementById('priceEffect').value  = 7.5;
+      document.getElementById('volumeEffect').value = 18.2;
+      document.getElementById('mixEffect').value    = 4.3;
+      document.getElementById('discountPool').value = 48000;
+      document.getElementById('startMonth').value   = 1;
+      document.getElementById('endMonth').value     = 12;
+      _buildChannelData();
+      populateChannelFilters();
       renderAll();
     });
   
@@ -2626,7 +4081,57 @@
     // ── Call tooltip engine on page load ──
     document.addEventListener('DOMContentLoaded', function() {
       initTooltips();
+      // Create issues popover element
+      var pop = document.createElement('div');
+      pop.id = 'issuesPopover';
+      pop.innerHTML = '<div class="pop-header"><span>⚠ Issues Requiring Attention</span><button class="pop-close" onclick="closeIssuesPopover()">✕</button></div><div class="pop-body" id="issuesPopoverBody"></div>';
+      document.body.appendChild(pop);
+      // Close popover when clicking outside
+      document.addEventListener('click', function(e) {
+        var p = document.getElementById('issuesPopover');
+        if (!p) return;
+        if (!p.contains(e.target) && !e.target.closest('.issues-trigger')) {
+          p.classList.remove('pop-visible');
+        }
+      });
     });
+
+    var _issuesPopoverOpen = false;
+    function toggleIssuesPopover(event, triggerEl) {
+      event.stopPropagation();
+      var pop = document.getElementById('issuesPopover');
+      var body = document.getElementById('issuesPopoverBody');
+      if (!pop || !body) return;
+      // Build issue rows
+      var issues = window._decisionIssues || [];
+      if (!issues.length) { pop.classList.remove('pop-visible'); return; }
+      body.innerHTML = issues.map(function(issue) {
+        return '<div class="pop-issue-row">' +
+          '<div class="pop-issue-icon ' + issue.sev + '">' + (issue.sev === 'red' ? '!' : '~') + '</div>' +
+          '<div><div class="pop-issue-label">' + issue.label + '</div>' +
+          '<div class="pop-issue-desc">' + issue.desc + '</div></div>' +
+          '</div>';
+      }).join('');
+      // Position near trigger
+      if (pop.classList.contains('pop-visible')) {
+        pop.classList.remove('pop-visible');
+        return;
+      }
+      pop.classList.add('pop-visible');
+      var rect = triggerEl.getBoundingClientRect();
+      var popW = 320;
+      var left = rect.left;
+      if (left + popW > window.innerWidth - 12) left = window.innerWidth - popW - 12;
+      left = Math.max(12, left);
+      var top = rect.bottom + 8;
+      if (top + 200 > window.innerHeight) top = rect.top - 8 - pop.offsetHeight;
+      pop.style.left = left + 'px';
+      pop.style.top  = top + 'px';
+    }
+    function closeIssuesPopover() {
+      var pop = document.getElementById('issuesPopover');
+      if (pop) pop.classList.remove('pop-visible');
+    }
 
 </script>
 
