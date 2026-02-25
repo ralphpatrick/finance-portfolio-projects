@@ -334,8 +334,116 @@
       font-size: 13px;
       font-family: var(--font-sans);
       background: white;
+      transition: border-color 120ms ease;
     }
-    
+    .threshold-field input:focus { outline: none; border-color: rgba(12,23,45,0.30); }
+
+    /* ── Risk v2: helper text & inline warnings ── */
+    .threshold-helper {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .threshold-warn {
+      display: none;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 5px;
+      line-height: 1.4;
+    }
+    .threshold-warn.w-noisy  { color: #92400e; background: rgba(245,158,11,0.13); }
+    .threshold-warn.w-strict { color: #374151; background: rgba(12,23,45,0.07);   }
+    .threshold-warn.w-dead   { color: #dc2626; background: rgba(220,38,38,0.09);  }
+
+    /* ── Risk v2: preset + mode config bar ── */
+    .risk-cfg-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .risk-cfg-left, .risk-cfg-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .risk-cfg-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    /* Preset select reuses filter-row styling */
+    .preset-sel {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      background: white;
+      color: var(--text);
+      cursor: pointer;
+    }
+    /* Sensitivity pill */
+    .sens-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background 160ms, color 160ms;
+    }
+    .sens-pill.sp-high { background: rgba(220,38,38,0.10);   color: #dc2626; }
+    .sens-pill.sp-mid  { background: rgba(12,23,45,0.07);    color: var(--muted); }
+    .sens-pill.sp-low  { background: rgba(107,114,128,0.10); color: #6b7280; }
+
+    /* ── Reset-to-preset link (appears when custom is active) ── */
+    #resetPresetLink {
+      display: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+      white-space: nowrap;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+    }
+    #resetPresetLink:hover { opacity: 0.75; }
+
+    /* ── Risk v2: triggered-by badge on alert cards ── */
+    .trig-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .trig-badge.tb-thr  { background: rgba(12,23,45,0.08);   color: #374151; }
+    .trig-badge.tb-adap { background: rgba(99,102,241,0.12); color: #4338ca; }
+    .trig-badge.tb-both { background: rgba(220,38,38,0.10);  color: #dc2626; }
+
+    /* ── Risk v2: friendly empty state ── */
+    .alerts-empty {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .alerts-empty-icon  { font-size: 24px; margin-bottom: 10px; }
+    .alerts-empty-title { font-size: 14px; font-weight: 650; color: var(--text); margin-bottom: 4px; }
+    .alerts-empty-sub   { font-size: 13px; color: var(--muted); line-height: 1.5; max-width: 360px; margin: 0 auto; }
+
     /* Demo section */
     .demo-section {
       padding: 32px 0;
@@ -398,9 +506,9 @@
       box-shadow: 0 0 0 4px rgba(15,118,110,0.08), var(--shadow-soft);
       margin-bottom: 24px;
       transition: border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
-      /* Fixed size: eyebrow + verdict + header row + 4 data rows — never resizes with data changes */
-      min-height: 310px;
-      max-height: 310px;
+      /* Fixed size: eyebrow + summary + verdict + header row + 4 data rows — never resizes with data changes */
+      min-height: 345px;
+      max-height: 345px;
       overflow: hidden;
     }
     /* Positive — green */
@@ -524,6 +632,26 @@
     #accrualSoWhat::-webkit-scrollbar-thumb:hover,
     #forecastSoWhat::-webkit-scrollbar-thumb:hover,
     #riskSoWhat::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.32); }
+    /* ── What / So What / Now What framework ── */
+    .wswn { display: flex; flex-direction: column; gap: 0; }
+    .wswn-row { display: grid; grid-template-columns: 82px 1fr; gap: 10px; align-items: baseline; padding: 5px 0; border-top: 1px solid rgba(12,23,45,0.06); }
+    .wswn-row:first-child { border-top: none; }
+    .wswn-label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      padding: 3px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .wswn-label.lbl-what    { background: rgba(12,23,45,0.07);  color: #374151; }
+    .wswn-label.lbl-sowhat  { background: rgba(245,158,11,0.14); color: #92400e; }
+    .wswn-label.lbl-nowwhat { background: rgba(15,118,110,0.13); color: #134e4a; }
+    .wswn-content { font-size: 13px; color: #5d6b7a; line-height: 1.55; }
+
     /* Fixed-layout tables: rate & accrual */
     #rateTable,
     #accrualTable {
@@ -1405,6 +1533,7 @@
           <div class="decision-box-eyebrow">Decision</div>
           <div class="decision-box-fallback" id="spendDecisionFallback">Load sample or upload data to see the decision.</div>
           <div id="spendDecisionContent" style="display:none;">
+            <div id="spendDecisionSummary" style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;"></div>
             <div class="decision-box-verdict" id="spendDecisionVerdict"></div>
             <div class="decision-box-exceptions" id="spendDecisionExceptions"></div>
           </div>
@@ -1554,34 +1683,79 @@
         
         <div class="module-card">
           <div class="card-header">
-            <h3 class="card-title">Alert Configuration <span class="help-icon" data-help="Set the sensitivity of each alert type. Lower thresholds = more alerts (catching smaller issues). Higher thresholds = fewer alerts (only the worst offenders). Tune these to match your company's risk tolerance and the size of your vendor spend."></span></h3>
+            <h3 class="card-title">Alert Configuration
+              <span class="help-icon" data-help="Set the trigger point for each alert type. Higher value = fewer alerts (only the most extreme cases fire). Lower value = more alerts (catches smaller issues early). Tune to match your organisation's risk appetite."></span>
+            </h3>
             <div class="card-actions">
               <button onclick="downloadRiskFlagsCSV()" class="btn-small">Export Alerts</button>
             </div>
           </div>
 
+          <!-- ── v2: Preset + Detection mode bar ── -->
+          <div class="risk-cfg-bar">
+            <div class="risk-cfg-left">
+              <span class="risk-cfg-lbl">Preset</span>
+              <select id="riskPreset" class="preset-sel" onchange="applyRiskPreset(this.value)">
+                <option value="conservative">Conservative — lower thresholds, more alerts</option>
+                <option value="balanced" selected>Balanced — default</option>
+                <option value="strict">Strict — higher thresholds, fewer alerts</option>
+                <option value="custom" disabled hidden>Custom</option>
+              </select>
+              <span class="risk-cfg-lbl" style="margin-left:4px;">Sensitivity</span>
+              <span id="sensitivityPill" class="sens-pill sp-mid">Balanced</span>
+              <button id="resetPresetLink" onclick="resetToLastPreset()" title="Revert threshold inputs back to the last named preset">↺ Reset to preset</button>
+            </div>
+            <div class="risk-cfg-right">
+              <span class="risk-cfg-lbl">Detection</span>
+              <div class="toggle-group">
+                <button id="modeThreshBtn" class="toggle-btn active"
+                  onclick="setDetectionMode('threshold')">Threshold <span id="modeThreshCount" style="font-size:10px;font-weight:700;background:rgba(12,23,45,0.12);padding:1px 6px;border-radius:999px;margin-left:3px;"></span></button>
+                <button id="modeAdaptBtn"  class="toggle-btn"
+                  onclick="setDetectionMode('adaptive')"
+                  data-help="Adaptive mode adds a MAD (Median Absolute Deviation) statistical layer for spend spikes. A spike fires if: the threshold condition OR the adaptive condition is met — whichever triggers first. This catches real anomalies even when they don't cross the fixed % trigger.">Adaptive ✦ <span id="modeAdaptCount" style="font-size:10px;font-weight:700;background:rgba(99,102,241,0.15);color:#4338ca;padding:1px 6px;border-radius:999px;margin-left:3px;"></span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── v2: Four threshold inputs with helper + warnings ── -->
           <div class="threshold-controls">
             <div class="threshold-field">
-              <label>Rate Variance % <span class="help-icon" data-help="Flag any vendor whose actual billed rate exceeds the contract rate by more than this percentage. E.g. at 5%, a vendor contracted at $10/unit gets flagged if they charge more than $10.50. Catches rate creep before it compounds."></span></label>
-              <input type="number" id="thresholdRate" value="5" step="1" onchange="computeRiskFlags()">
+              <label>Rate variance trigger (%)
+                <span class="help-icon" data-help="Flags a vendor when their average billed rate exceeds the contract rate by more than this %. Higher = fewer alerts. E.g. at 20%, a $10/unit vendor is only flagged if they charge above $12."></span>
+              </label>
+              <input type="number" id="thresholdRate" value="20" min="1" max="100" step="1" oninput="onThresholdInput()">
+              <span class="threshold-helper">Higher = fewer alerts. Flags when metric exceeds this %.</span>
+              <span id="warnRate" class="threshold-warn"></span>
             </div>
             <div class="threshold-field">
-              <label>Spend Spike % <span class="help-icon" data-help="Flag any category whose spend in a given month is this much above its monthly average. E.g. at 20%, if Logistics normally costs $50K/month, a month with $62K+ gets flagged. Helps catch one-off surprises or forecast misses early."></span></label>
-              <input type="number" id="thresholdSpike" value="20" step="1" onchange="computeRiskFlags()">
+              <label>Spend spike trigger (%)
+                <span class="help-icon" data-help="Flags a category-month when spend is more than this % above the category's monthly average. In Adaptive mode a MAD outlier check also runs — the flag fires if either condition is met."></span>
+              </label>
+              <input type="number" id="thresholdSpike" value="35" min="1" max="500" step="1" oninput="onThresholdInput()">
+              <span class="threshold-helper">Higher = fewer alerts. Flags when metric exceeds this %.</span>
+              <span id="warnSpike" class="threshold-warn"></span>
             </div>
             <div class="threshold-field">
-              <label>Accrual Risk % <span class="help-icon" data-help="Flag any vendor-month where the un-invoiced portion of spend exceeds this percentage of total incurred cost. E.g. at 20%, if you incurred $10K from a vendor but only have $7K invoiced, you get flagged. High accrual ratios risk P&L surprises at settlement."></span></label>
-              <input type="number" id="thresholdAccrual" value="20" step="1" onchange="computeRiskFlags()">
+              <label>Accrual risk trigger (%)
+                <span class="help-icon" data-help="Flags a vendor-month when un-invoiced spend exceeds this % of total incurred cost. Higher = fewer alerts."></span>
+              </label>
+              <input type="number" id="thresholdAccrual" value="25" min="1" max="100" step="1" oninput="onThresholdInput()">
+              <span class="threshold-helper">Higher = fewer alerts. Flags when metric exceeds this %.</span>
+              <span id="warnAccrual" class="threshold-warn"></span>
             </div>
             <div class="threshold-field">
-              <label>Concentration % <span class="help-icon" data-help="Flag any single vendor whose share of your total spend exceeds this percentage. E.g. at 25%, any vendor absorbing more than a quarter of your total budget gets flagged. Over-reliance on one supplier is an operational risk — if they fail or hike rates, you have limited options."></span></label>
-              <input type="number" id="thresholdConcentration" value="25" step="1" onchange="computeRiskFlags()">
+              <label>Vendor concentration trigger (%)
+                <span class="help-icon" data-help="Flags any vendor whose share of total spend exceeds this %. Capped at 65% — above that, alerts become mathematically improbable. Higher = fewer alerts."></span>
+              </label>
+              <input type="number" id="thresholdConcentration" value="30" min="1" max="65" step="1" oninput="onThresholdInput()">
+              <span class="threshold-helper">Higher = fewer alerts. Flags when metric exceeds this %.</span>
+              <span id="warnConcentration" class="threshold-warn"></span>
             </div>
           </div>
 
           <!-- So What: Risk & Anomaly Flags -->
           <div id="riskSoWhat" style="margin:0 0 16px 0;padding:18px 20px;border:1.5px solid rgba(245,158,11,0.30);border-radius:14px;background:#fffbeb;box-shadow:0 2px 8px rgba(245,158,11,0.08);display:none;min-height:180px;max-height:180px;overflow-y:auto;box-sizing:border-box;scrollbar-width:thin;scrollbar-color:rgba(12,23,45,0.18) transparent;">
-            <div id="riskSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#b45309;margin-bottom:8px;">💡 So What — Risk &amp; Anomaly Flags</div>
+            <div id="riskSoWhatLabel" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#b45309;margin-bottom:8px;">💡 What · So What · Now What — Risk &amp; Anomaly Flags</div>
             <ul id="riskSoWhatList" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;"></ul>
           </div>
 
@@ -1672,11 +1846,27 @@
     let forecastBudget = [];
     
     let thresholds = {
-      rateVariance: 5,
-      spike: 20,
-      accrual: 20,
-      concentration: 25
+      rateVariance: 20,
+      spike: 35,
+      accrual: 25,
+      concentration: 30
     };
+
+    // ── Risk v2 state ─────────────────────────────────────────────────────
+    // preset:        'conservative' | 'balanced' | 'strict' | 'custom'
+    // detectionMode: 'threshold' | 'adaptive'
+    //
+    // Preset table — Conservative = low triggers (more alerts),
+    //                Strict       = high triggers (fewer alerts)
+    const RISK_PRESETS = {
+      conservative: { rateVariance: 10, spike: 20, accrual: 15, concentration: 20 },
+      balanced:     { rateVariance: 20, spike: 35, accrual: 25, concentration: 30 },
+      strict:       { rateVariance: 40, spike: 60, accrual: 40, concentration: 50 }
+    };
+    let _riskPreset    = 'balanced';   // current preset name
+    let _lastNamedPreset = 'balanced'; // last named (non-custom) preset — used for reset
+    let _detectionMode = 'threshold';  // 'threshold' | 'adaptive'
+    // ─────────────────────────────────────────────────────────────────────
 
     // Cached risk alert counts — updated by computeRiskFlags(), read by renderSpendDecisionBox()
     let _riskAlertCounts = { total: 0, high: 0, med: 0, low: 0 };
@@ -2299,47 +2489,63 @@
 
       const statusIcon  = isCritical ? '🔴' : isModerate ? '⚠️' : '✅';
       const statusLabel = isCritical ? 'Critical — Action Required' : isModerate ? 'Moderate — Watch Closely' : 'Healthy — Rate Discipline Working';
-      soWhatLabel.style.color   = accentColor;
-      soWhatLabel.textContent   = `💡 So What — ${statusIcon} ${statusLabel}`;
+      soWhatLabel.style.color = accentColor;
+      soWhatLabel.innerHTML   = `💡 What · So What · Now What — ${statusIcon} ${statusLabel} <span class="help-icon" style="margin-left:4px;vertical-align:middle;" data-help="How the status is determined — ✅ Healthy: leakage below 2% of total spend · ⚠️ Moderate: 2–5% · 🔴 Critical: 5%+. Leakage = total overbilled amount ÷ total spend."></span>`;
 
-      const b = (text) => `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${accentColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
-      const bullets = [];
-      const topVendor  = leakageArray[0];
+      const topVendor       = leakageArray[0];
       const leakVendorCount = leakageArray.filter(v => v.leakage_amount > 0).length;
 
-      // Overall verdict
+      // ── WHAT — factual observations ─────────────────────────
+      const whatParts = [];
       if (isCritical) {
-        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — well above the 5% critical threshold. ${formatCurrency(totalLeakage)} is being lost to above-contract billing. This is a procurement control failure that needs immediate escalation.`));
+        whatParts.push(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — ${formatCurrency(totalLeakage)} paid above contracted rates, exceeding the 5% critical threshold.`);
       } else if (isModerate) {
-        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — in the caution zone (2–5%). ${formatCurrency(totalLeakage)} is being overpaid vs contracted rates. Not yet critical but trending the wrong way.`));
+        whatParts.push(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — ${formatCurrency(totalLeakage)} overpaid vs contracted rates, in the 2–5% caution zone.`);
       } else {
-        bullets.push(b(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — below the 2% healthy threshold. Rate discipline is working. ${totalLeakage > 0 ? `The remaining ${formatCurrency(totalLeakage)} of leakage is within normal tolerance for invoice rounding and timing differences.` : 'No material overcharging detected.'}`));
+        whatParts.push(`<strong style="color:#0b1220;">Leakage is ${formatPercent(leakagePct)} of total spend</strong> — ${totalLeakage > 0 ? formatCurrency(totalLeakage) + ' overpaid' : 'no material overcharging detected'}, below the 2% healthy threshold.`);
       }
-
-      // Top leaking vendor
       if (topVendor && topVendor.leakage_amount > 0) {
-        bullets.push(b(`<strong style="color:#0b1220;">Worst offender: ${topVendor.vendor_name}</strong> — ${formatCurrency(topVendor.leakage_amount)} in leakage at a ${formatPercent(topVendor.rate_variance_pct)} rate premium above contract. Start here: pull the last 3 months of invoices and reconcile line by line against the rate card.`));
+        whatParts.push(`Worst offender: <strong style="color:#0b1220;">${topVendor.vendor_name}</strong> — ${formatCurrency(topVendor.leakage_amount)} at a ${formatPercent(topVendor.rate_variance_pct)} rate premium.`);
       }
-
-      // Vendor breadth
       if (leakVendorCount > 1) {
-        bullets.push(b(`<strong style="color:#0b1220;">${leakVendorCount} vendors are overcharging</strong> — this isn't a one-vendor problem. ${leakVendorCount >= 4 ? 'Breadth this wide suggests the rate card enforcement process itself is broken, not just individual vendor behaviour. Fix the process, not just the vendors.' : 'Address the top 2–3 by dollar leakage first, then work down the list.'}`));
+        whatParts.push(`<strong style="color:#0b1220;">${leakVendorCount} vendors</strong> are billing above contracted rates.`);
       }
-
-      // Flagged transactions
       if (totalFlagged > 0) {
-        bullets.push(b(`<strong style="color:#0b1220;">${totalFlagged.toLocaleString()} transactions flagged</strong> above contracted rates. ${totalFlagged > 50 ? 'Volume this high means manual review isn\'t feasible — implement automated invoice matching against rate cards in the AP system.' : 'Pull these transactions and dispute directly with vendors before the next payment cycle.'}`));
+        whatParts.push(`<strong style="color:#0b1220;">${totalFlagged.toLocaleString()} transactions</strong> flagged above contracted rates.`);
       }
 
-      // Action
-      const action = isCritical
-        ? 'Freeze payments to top leaking vendors pending invoice audit. Escalate to procurement. Implement PO-matched approval workflow before next payment run.'
-        : isModerate
-        ? 'Schedule vendor reviews with the top 2–3 offenders this month. Add rate card compliance as a standing agenda item in vendor QBRs.'
-        : 'No urgent action needed. Review at next contract renewal cycle and tighten rate card clauses to include penalty clauses for over-billing.';
-      bullets.push(b(`<strong style="color:#0b1220;">Decision:</strong> ${action}`));
+      // ── SO WHAT — business meaning & risk ────────────────────
+      const soWhatParts = [];
+      if (isCritical) {
+        soWhatParts.push(`This is a procurement control failure — ${formatCurrency(totalLeakage)} is being lost to above-contract billing at scale.`);
+        if (leakVendorCount >= 4) soWhatParts.push(`Breadth across ${leakVendorCount} vendors suggests the rate card enforcement process itself is broken, not just individual vendor behaviour.`);
+        if (totalFlagged > 50) soWhatParts.push(`Volume of ${totalFlagged.toLocaleString()} flagged transactions makes manual review infeasible without a systematic fix.`);
+      } else if (isModerate) {
+        soWhatParts.push(`Not yet critical, but trending the wrong way — unchecked, this will cross the 5% threshold and require a formal escalation.`);
+        if (leakVendorCount > 1) soWhatParts.push(`${leakVendorCount} vendors overcharging means this isn't a one-off — it signals a pattern.`);
+      } else {
+        soWhatParts.push(`Rate discipline is working. ${totalLeakage > 0 ? 'Remaining leakage is within normal tolerance for invoice rounding and timing differences.' : 'No material overcharging detected.'}`);
+      }
 
-      soWhatList.innerHTML = bullets.join('');
+      // ── NOW WHAT — action + owner + timeline ─────────────────
+      const nowWhat = isCritical
+        ? `Freeze payments to top leaking vendors pending invoice audit. Escalate to procurement. Implement PO-matched approval workflow before next payment run.`
+        : isModerate
+        ? `Schedule vendor reviews with the top 2–3 offenders this month. Add rate card compliance as a standing agenda item in vendor QBRs.`
+        : `No urgent action needed. Review at next contract renewal cycle and tighten rate card clauses to include penalty clauses for over-billing.`;
+
+      // ── Render as W/SW/NW grid ────────────────────────────────
+      const row = (lblCls, lbl, content) =>
+        `<div class="wswn-row">
+           <span class="wswn-label ${lblCls}">${lbl}</span>
+           <span class="wswn-content">${content}</span>
+         </div>`;
+
+      soWhatList.innerHTML = `<div class="wswn">
+        ${row('lbl-what',    'What',     whatParts.join(' '))}
+        ${row('lbl-sowhat',  'So What',  soWhatParts.join(' '))}
+        ${row('lbl-nowwhat', 'Now What', `<strong style="color:#0b1220;">${nowWhat}</strong>`)}
+      </div>`;
     }
     
     function renderLeakageChart(topVendors) {
@@ -2605,45 +2811,64 @@
       const aIcon  = isAccrualHigh ? '🔴' : isAccrualModerate ? '⚠️' : '✅';
       const aStatus = isAccrualHigh ? 'High Accrual Risk' : isAccrualModerate ? 'Moderate — Monitor Closely' : 'Healthy — Invoicing On Track';
       aSwLabel.style.color = aColor;
-      aSwLabel.textContent  = `💡 So What — ${aIcon} ${aStatus}`;
+      aSwLabel.innerHTML   = `💡 What · So What · Now What — ${aIcon} ${aStatus} <span class="help-icon" style="margin-left:4px;vertical-align:middle;" data-help="How the status is determined — ✅ Healthy: un-invoiced accruals below 10% of total incurred · ⚠️ Moderate: 10–24% · 🔴 High Risk: 25%+. Metric = accrual amount ÷ total incurred spend."></span>`;
 
       const ab = (text) => `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${aColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
       const aBullets = [];
       const worstAccrualMonth = monthlyTotals.reduce((a,b) => b.accrual > a.accrual ? b : a, monthlyTotals[0]);
 
-      // Overall
+      // ── WHAT — factual observations ─────────────────────────
+      const aWhatParts = [];
       if (isAccrualHigh) {
-        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} sitting as open accruals. This level of un-invoiced cost creates significant P&L uncertainty and close risk. Finance estimates are replacing real invoices.`));
+        aWhatParts.push(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} sitting as open accruals.`);
       } else if (isAccrualModerate) {
-        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals. This is manageable but watch the trend. If the gap between incurred and invoiced keeps widening month-on-month, invoice discipline is slipping.`));
+        aWhatParts.push(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are not yet invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals.`);
       } else {
-        aBullets.push(ab(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are un-invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals. Vendors are billing on time and accrual estimates are closely matching actuals. Month-end close risk is low.`));
+        aWhatParts.push(`<strong style="color:#0b1220;">${formatPercent(pctNotInvoiced)} of incurred costs are un-invoiced</strong> — ${formatCurrency(totalAccrued)} in open accruals.`);
       }
-
-      // Open months
       if (openMonths > 0) {
-        aBullets.push(ab(`<strong style="color:#0b1220;">${openMonths} of 12 months still have open accruals.</strong> ${openMonths >= 6 ? `Over half the year has unsettled accruals — this suggests vendors have a systematic invoicing lag. Contractually require invoices within 30 days of service delivery.` : `Focus on the ${openMonths} open month${openMonths > 1 ? 's' : ''} — chase the relevant vendors for invoice submission before the next close.`}`));
+        aWhatParts.push(`<strong style="color:#0b1220;">${openMonths} of 12 months</strong> still have open accruals.`);
       }
-
-      // Worst month
       if (worstAccrualMonth && worstAccrualMonth.accrual > 0) {
-        aBullets.push(ab(`<strong style="color:#0b1220;">Highest open accrual: ${worstAccrualMonth.month}</strong> — ${formatCurrency(worstAccrualMonth.accrual)} un-invoiced (${formatPercent(worstAccrualMonth.incurred > 0 ? worstAccrualMonth.accrual / worstAccrualMonth.incurred * 100 : 0)} of that month's spend). Prioritise getting invoices for this month — the accrual estimate may not match the final invoice, creating a P&L true-up.`));
+        aWhatParts.push(`Highest open accrual: <strong style="color:#0b1220;">${worstAccrualMonth.month}</strong> — ${formatCurrency(worstAccrualMonth.accrual)} un-invoiced (${formatPercent(worstAccrualMonth.incurred > 0 ? worstAccrualMonth.accrual / worstAccrualMonth.incurred * 100 : 0)} of that month's spend).`);
       }
-
-      // Invoice count context
       if (totalInvoiceCount > 0) {
-        aBullets.push(ab(`<strong style="color:#0b1220;">${totalInvoiceCount.toLocaleString()} invoices received, ${openVendorMonthCount} vendor-accrual records still open.</strong> ${openVendorMonthCount > 0 ? `Expand any red month row in the table below to see exactly which vendors are still outstanding — those are the records the Decision Box is flagging.` : 'All vendor accruals are fully invoiced and balanced.'}`));
+        aWhatParts.push(`${totalInvoiceCount.toLocaleString()} invoices received; ${openVendorMonthCount} vendor-accrual records remain open.`);
       }
 
-      // Action
-      const aAction = isAccrualHigh
-        ? 'Immediately contact vendors with the largest open accruals and set a hard deadline for invoice submission. Review whether your accrual estimates are based on contracts (good) or guesses (bad). Brief CFO on P&L close exposure before month-end.'
-        : isAccrualModerate
-        ? 'Add accrual reconciliation to your monthly vendor review cadence. Ensure accrual amounts are based on contract rates, not estimates. Flag any accrual older than 60 days for escalation.'
-        : 'No urgent action. Maintain current invoicing requirements in vendor contracts and verify accrual methodology at next audit cycle.';
-      aBullets.push(ab(`<strong style="color:#0b1220;">Decision:</strong> ${aAction}`));
+      // ── SO WHAT — business meaning & risk ────────────────────
+      const aSoWhatParts = [];
+      if (isAccrualHigh) {
+        aSoWhatParts.push(`This level of un-invoiced cost creates significant P&amp;L uncertainty and close risk — finance estimates are substituting for real invoices.`);
+        if (openMonths >= 6) aSoWhatParts.push(`Over half the year has unsettled accruals, suggesting a systematic invoicing lag, not isolated delays.`);
+        if (worstAccrualMonth && worstAccrualMonth.accrual > 0) aSoWhatParts.push(`${worstAccrualMonth.month}'s accrual estimate may diverge materially from the final invoice, creating a P&amp;L true-up at settlement.`);
+      } else if (isAccrualModerate) {
+        aSoWhatParts.push(`Manageable now, but if the gap between incurred and invoiced keeps widening month-on-month, invoice discipline is slipping.`);
+        if (openVendorMonthCount > 0) aSoWhatParts.push(`Expand any red month in the table below to see exactly which vendors are still outstanding.`);
+      } else {
+        aSoWhatParts.push(`Vendors are billing on time and accrual estimates are closely matching actuals. Month-end close risk is low.`);
+        if (openVendorMonthCount === 0) aSoWhatParts.push(`All vendor accruals are fully invoiced and balanced.`);
+      }
 
-      aSwList.innerHTML = aBullets.join('');
+      // ── NOW WHAT — action + owner + timeline ─────────────────
+      const aNowWhat = isAccrualHigh
+        ? `Immediately contact vendors with the largest open accruals and set a hard deadline for invoice submission. Review whether accrual estimates are based on contracts (good) or guesses (bad). Brief CFO on P&L close exposure before month-end.`
+        : isAccrualModerate
+        ? `Add accrual reconciliation to your monthly vendor review cadence. Ensure accrual amounts are based on contract rates, not estimates. Flag any accrual older than 60 days for escalation.`
+        : `No urgent action. Maintain current invoicing requirements in vendor contracts and verify accrual methodology at next audit cycle.`;
+
+      // ── Render as W/SW/NW grid ────────────────────────────────
+      const aRow = (lblCls, lbl, content) =>
+        `<div class="wswn-row">
+           <span class="wswn-label ${lblCls}">${lbl}</span>
+           <span class="wswn-content">${content}</span>
+         </div>`;
+
+      aSwList.innerHTML = `<div class="wswn">
+        ${aRow('lbl-what',    'What',     aWhatParts.join(' '))}
+        ${aRow('lbl-sowhat',  'So What',  aSoWhatParts.join(' '))}
+        ${aRow('lbl-nowwhat', 'Now What', `<strong style="color:#0b1220;">${aNowWhat}</strong>`)}
+      </div>`;
     }
     
     function renderAccrualChart(monthlyTotals) {
@@ -2848,55 +3073,76 @@
       soWhatEl.style.border     = `1.5px solid ${borderColor}`;
       soWhatEl.style.background = bgColor;
       soWhatLabel.style.color   = accentColor;
-      soWhatLabel.textContent   = `💡 So What — ${statusIcon} ${statusLabel}`;
+      soWhatLabel.innerHTML     = `💡 What · So What · Now What — ${statusIcon} ${statusLabel} <span class="help-icon" style="margin-left:4px;vertical-align:middle;" data-help="How the status is determined — ✅ On Track: overall variance below 3% AND no overrun months · ⚠️ Moderate: variance 3–10% OR 1–2 overrun months · 🔴 Critical: variance above 10% OR 3+ overrun months."></span>`;
 
       const b = (text) =>
         `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${accentColor};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
 
       const bullets = [];
 
-      // ① Overall position
+      // ── WHAT — factual observations ─────────────────────────
+      const fWhatParts = [];
       if (isCritical) {
-        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — actual spend exceeded the ${label} by ${formatCurrency(Math.abs(totalVariance))} across the year. This is a material overrun requiring a formal explanation to leadership and an updated rolling forecast.`));
+        fWhatParts.push(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — actual spend exceeded the ${label} by ${formatCurrency(Math.abs(totalVariance))} across the year.`);
       } else if (isModerate) {
-        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — spend is running slightly above plan (${formatCurrency(Math.abs(totalVariance))}). Still within tolerance but the trend needs watching — if overrun months persist, trigger a reforecast before it becomes material.`));
+        fWhatParts.push(`<strong style="color:#0b1220;">Overall: ${totalVariancePct > 0 ? '+' : ''}${formatPercent(totalVariancePct)} vs ${label}</strong> — spend is running ${formatCurrency(Math.abs(totalVariance))} above plan.`);
       } else if (totalVariancePct < 0) {
-        bullets.push(b(`<strong style="color:#0b1220;">Overall: ${formatPercent(Math.abs(totalVariancePct))} under ${label}</strong> — actual spend came in ${formatCurrency(Math.abs(totalVariance))} below plan. ${underrunMonths.length > 0 ? 'Confirm whether spend was genuinely saved or just deferred — delayed costs will surface in later months and distort the forecast.' : 'Forecast accuracy is strong. No immediate action required.'}`));
+        fWhatParts.push(`<strong style="color:#0b1220;">Overall: ${formatPercent(Math.abs(totalVariancePct))} under ${label}</strong> — actual spend came in ${formatCurrency(Math.abs(totalVariance))} below plan.`);
       } else {
-        bullets.push(b(`<strong style="color:#0b1220;">Overall: On track</strong> — total spend is within ${formatPercent(Math.abs(totalVariancePct))} of ${label} (${totalVariance >= 0 ? '+' : ''}${formatCurrency(totalVariance)}). Forecast discipline is holding across the year.`));
+        fWhatParts.push(`<strong style="color:#0b1220;">Overall: On track</strong> — total spend is within ${formatPercent(Math.abs(totalVariancePct))} of ${label} (${totalVariance >= 0 ? '+' : ''}${formatCurrency(totalVariance)}).`);
       }
-
-      // ② Overrun months breakdown
       if (overrunMonths.length > 0) {
         const names = overrunMonths.map(c => `${c.month} (+${formatPercent(c.variancePct)})`).join(', ');
-        bullets.push(b(`<strong style="color:#0b1220;">${overrunMonths.length} month${overrunMonths.length > 1 ? 's' : ''} exceeded ${label} by >10%:</strong> ${names}. ${overrunMonths.length >= 3 ? 'Three or more overrun months signals a systematic bias — the forecast baseline is set too low and needs to be revised upward, not just explained away.' : 'Determine if each overrun was a one-off event or a recurring driver before adjusting the forecast.'}`));
+        fWhatParts.push(`<strong style="color:#0b1220;">${overrunMonths.length} month${overrunMonths.length > 1 ? 's' : ''}</strong> exceeded ${label} by &gt;10%: ${names}.`);
       }
-
-      // ③ Underrun months (only surface if no overrun issue — otherwise it's noise)
       if (underrunMonths.length > 0 && overrunMonths.length === 0) {
         const names = underrunMonths.map(c => `${c.month} (${formatPercent(c.variancePct)})`).join(', ');
-        bullets.push(b(`<strong style="color:#0b1220;">${underrunMonths.length} month${underrunMonths.length > 1 ? 's' : ''} came in >10% under ${label}:</strong> ${names}. Verify spend was genuinely lower — not delayed into subsequent months. If genuine savings, consider whether budget can be reallocated.`));
+        fWhatParts.push(`<strong style="color:#0b1220;">${underrunMonths.length} month${underrunMonths.length > 1 ? 's' : ''}</strong> came in &gt;10% under ${label}: ${names}.`);
       }
-
-      // ④ Worst single month callout
       if (worstMonth && worstMonth.variancePct > 5) {
-        bullets.push(b(`<strong style="color:#0b1220;">Worst month: ${worstMonth.month}</strong> — ${formatCurrency(worstMonth.variance)} over ${label} (+${formatPercent(worstMonth.variancePct)}). Drill into which vendors or cost centres drove the spike and confirm whether the driver is recurring before the next close.`));
+        fWhatParts.push(`Worst month: <strong style="color:#0b1220;">${worstMonth.month}</strong> — ${formatCurrency(worstMonth.variance)} over ${label} (+${formatPercent(worstMonth.variancePct)}).`);
       }
-
-      // ⑤ Best month callout (only when overall is positive — reward the good)
       if (isHealthy && bestMonth && bestMonth.variancePct < -5) {
-        bullets.push(b(`<strong style="color:#0b1220;">Best month: ${bestMonth.month}</strong> — ${formatCurrency(Math.abs(bestMonth.variance))} under ${label} (${formatPercent(bestMonth.variancePct)}). Document what drove this — whether it was a delayed invoice, genuine saving, or tighter vendor management — so the practice can be repeated.`));
+        fWhatParts.push(`Best month: <strong style="color:#0b1220;">${bestMonth.month}</strong> — ${formatCurrency(Math.abs(bestMonth.variance))} under ${label} (${formatPercent(bestMonth.variancePct)}).`);
       }
 
-      // ⑥ Clear decision
-      const decision = isCritical
+      // ── SO WHAT — business meaning & risk ────────────────────
+      const fSoWhatParts = [];
+      if (isCritical) {
+        fSoWhatParts.push(`This is a material overrun requiring a formal explanation to leadership and an updated rolling forecast.`);
+        if (overrunMonths.length >= 3) fSoWhatParts.push(`${overrunMonths.length}+ overrun months signals a systematic bias — the forecast baseline is set too low and needs revising upward, not just explained away.`);
+      } else if (isModerate) {
+        fSoWhatParts.push(`Still within tolerance, but if overrun months persist, this will require a reforecast before it becomes material.`);
+        if (overrunMonths.length >= 1) fSoWhatParts.push(`Determine if each overrun was a one-off event or a recurring driver before adjusting the forecast.`);
+      } else if (totalVariancePct < 0) {
+        fSoWhatParts.push(`Confirm whether spend was genuinely saved or just deferred — delayed costs will surface in later months and distort the forecast.`);
+        if (isHealthy && bestMonth && bestMonth.variancePct < -5) fSoWhatParts.push(`Document what drove ${bestMonth.month}'s outperformance — delayed invoice, genuine saving, or tighter vendor management — so the practice can be repeated.`);
+      } else {
+        fSoWhatParts.push(`Forecast discipline is holding across the year. Methodology is working.`);
+      }
+      if (worstMonth && worstMonth.variancePct > 5) {
+        fSoWhatParts.push(`Drill into ${worstMonth.month}: identify which vendors or cost centres drove the spike and confirm whether the driver is recurring before the next close.`);
+      }
+
+      // ── NOW WHAT — action + owner + timeline ─────────────────
+      const fNowWhat = isCritical
         ? `Trigger a reforecast now. Identify the top 2–3 cost categories driving overruns, get owner sign-off on revised numbers, and present to leadership before next reporting cycle. Do not wait for month-end.`
         : isModerate
         ? `Put the ${overrunMonths.length} overrun month${overrunMonths.length > 1 ? 's' : ''} on your agenda for the next spend review. If the overspend driver is structural (headcount, contracts, volume), update the rolling forecast rather than carry the variance forward.`
         : `No action required on variance. Maintain current controls and use this as a baseline for the next budget cycle — the forecast methodology is working.`;
-      bullets.push(b(`<strong style="color:#0b1220;">Decision:</strong> ${decision}`));
 
-      soWhatList.innerHTML = bullets.join('');
+      // ── Render as W/SW/NW grid ────────────────────────────────
+      const fRow = (lblCls, lbl, content) =>
+        `<div class="wswn-row">
+           <span class="wswn-label ${lblCls}">${lbl}</span>
+           <span class="wswn-content">${content}</span>
+         </div>`;
+
+      soWhatList.innerHTML = `<div class="wswn">
+        ${fRow('lbl-what',    'What',     fWhatParts.join(' '))}
+        ${fRow('lbl-sowhat',  'So What',  fSoWhatParts.join(' '))}
+        ${fRow('lbl-nowwhat', 'Now What', `<strong style="color:#0b1220;">${fNowWhat}</strong>`)}
+      </div>`;
       
       renderForecastChart(comparison);
     }
@@ -3003,173 +3249,378 @@
       ctx.fillText(compareMode === 'forecast' ? 'Forecast' : 'Budget', paddingLeft + 90, 12);
     }
     
-    // ========== RISK FLAGS FUNCTIONS ==========
-    
+    // ═══════════════════════════════════════════════════════════════════════
+    // RISK v2 — Preset & mode controls
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function applyRiskPreset(preset) {
+      if (preset === 'custom') return;       // read-only placeholder
+      _riskPreset = preset;
+      _lastNamedPreset = preset;             // remember for reset
+      const p = RISK_PRESETS[preset];
+      document.getElementById('thresholdRate').value          = p.rateVariance;
+      document.getElementById('thresholdSpike').value         = p.spike;
+      document.getElementById('thresholdAccrual').value       = p.accrual;
+      document.getElementById('thresholdConcentration').value = Math.min(p.concentration, 65);
+      const rl = document.getElementById('resetPresetLink');
+      if (rl) rl.style.display = 'none';
+      computeRiskFlags();
+    }
+
+    function resetToLastPreset() {
+      const preset = _lastNamedPreset || 'balanced';
+      _riskPreset = preset;
+      const p = RISK_PRESETS[preset];
+      document.getElementById('thresholdRate').value          = p.rateVariance;
+      document.getElementById('thresholdSpike').value         = p.spike;
+      document.getElementById('thresholdAccrual').value       = p.accrual;
+      document.getElementById('thresholdConcentration').value = Math.min(p.concentration, 65);
+      const sel = document.getElementById('riskPreset');
+      if (sel) sel.value = preset;
+      const cOpt = sel ? sel.querySelector('option[value="custom"]') : null;
+      if (cOpt) { cOpt.hidden = true; cOpt.disabled = true; }
+      const rl = document.getElementById('resetPresetLink');
+      if (rl) rl.style.display = 'none';
+      computeRiskFlags();
+    }
+
+    function setDetectionMode(mode) {
+      _detectionMode = mode;
+      document.getElementById('modeThreshBtn').classList.toggle('active', mode === 'threshold');
+      document.getElementById('modeAdaptBtn').classList.toggle('active',  mode === 'adaptive');
+      computeRiskFlags();
+    }
+
+    function _updateDetectionModeBadges(thresholdCount, adaptiveCount) {
+      const tEl = document.getElementById('modeThreshCount');
+      const aEl = document.getElementById('modeAdaptCount');
+      if (tEl) tEl.textContent = thresholdCount > 0 ? thresholdCount : '';
+      if (aEl) aEl.textContent = adaptiveCount  > 0 ? adaptiveCount  : '';
+    }
+
+    // Called on every manual keypress — switches dropdown to Custom
+    function onThresholdInput() {
+      _riskPreset = 'custom';
+      const sel  = document.getElementById('riskPreset');
+      const cOpt = sel.querySelector('option[value="custom"]');
+      cOpt.hidden = false; cOpt.disabled = false;
+      sel.value = 'custom';
+      const rl = document.getElementById('resetPresetLink');
+      if (rl) rl.style.display = '';
+      computeRiskFlags();
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // RISK v2 — Adaptive detection helpers (MAD)
+    //
+    // WHY MAD?  Standard deviation is pulled upward by the very outliers we
+    // want to catch, making them look less extreme. MAD (median of absolute
+    // deviations from the median) is not affected by outliers — it's the
+    // standard robust alternative to σ. A value is flagged when its modified
+    // z-score  (value − median) / MAD > k. We use k=2.5 (≈97.5th pctile
+    // under a normal distribution) — conservative enough to avoid noise but
+    // sensitive to genuine spikes.  OR logic: fires if threshold OR adaptive
+    // triggers, catching anomalies the fixed % would miss when a category's
+    // normal spend is very flat.
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function _median(arr) {
+      if (!arr.length) return 0;
+      const s = [...arr].sort((a, b) => a - b);
+      const m = Math.floor(s.length / 2);
+      return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+    }
+
+    function _mad(arr) {
+      const med = _median(arr);
+      return _median(arr.map(v => Math.abs(v - med)));
+    }
+
+    // Returns true if `value` is a high outlier in `series` (k = 2.5 by default)
+    function _isMADAnomaly(value, series, k) {
+      k = k || 2.5;
+      if (series.length < 3) return false;   // need enough history
+      const med = _median(series);
+      const mad = _mad(series);
+      if (mad === 0) return false;           // no variance → can't score
+      return (value - med) / mad > k;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // RISK v2 — Guardrail helpers
+    // ═══════════════════════════════════════════════════════════════════════
+
+    // Show or hide an inline warning beneath one threshold input
+    function _setWarn(elId, value, opts) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.className = 'threshold-warn';
+      const { noisyBelow, strictAbove, isConc } = opts;
+      if (isConc && value >= 65) {
+        el.textContent = 'At 65%+, concentration alerts are very unlikely to trigger.';
+        el.classList.add('w-dead'); el.style.display = 'block';
+      } else if (value <= noisyBelow) {
+        el.textContent = 'Very sensitive: may produce noisy alerts.';
+        el.classList.add('w-noisy'); el.style.display = 'block';
+      } else if (value >= strictAbove) {
+        el.textContent = 'Very strict: may hide early warning signs.';
+        el.classList.add('w-strict'); el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+
+    // Update the live sensitivity pill next to the preset dropdown
+    function _updateSensitivityPill(t) {
+      // Simple normalised average — spike ÷5 to bring to same ~0-100 scale
+      const avg  = (t.rateVariance + t.spike / 5 + t.accrual + t.concentration) / 4;
+      const pill = document.getElementById('sensitivityPill');
+      if (!pill) return;
+      if (avg <= 15) {
+        pill.textContent = 'High sensitivity (more alerts)';
+        pill.className   = 'sens-pill sp-high';
+      } else if (avg <= 28) {
+        pill.textContent = 'Balanced';
+        pill.className   = 'sens-pill sp-mid';
+      } else {
+        pill.textContent = 'Low sensitivity (fewer alerts)';
+        pill.className   = 'sens-pill sp-low';
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // RISK v2 — Main flag computation (replaces v1 computeRiskFlags entirely)
+    // ═══════════════════════════════════════════════════════════════════════
+
     function computeRiskFlags() {
-      thresholds.rateVariance = parseFloat(document.getElementById('thresholdRate').value) || 5;
-      thresholds.spike = parseFloat(document.getElementById('thresholdSpike').value) || 20;
-      thresholds.accrual = parseFloat(document.getElementById('thresholdAccrual').value) || 20;
-      thresholds.concentration = parseFloat(document.getElementById('thresholdConcentration').value) || 25;
-      
+      // 1. Read & clamp inputs ──────────────────────────────────────────────
+      thresholds.rateVariance  = Math.min(parseFloat(document.getElementById('thresholdRate').value)          || 20,  100);
+      thresholds.spike         = Math.min(parseFloat(document.getElementById('thresholdSpike').value)         || 35,  500);
+      thresholds.accrual       = Math.min(parseFloat(document.getElementById('thresholdAccrual').value)       || 25,  100);
+      thresholds.concentration = Math.min(parseFloat(document.getElementById('thresholdConcentration').value) || 30,   65);
+      // Sync concentration field if user typed > 65
+      document.getElementById('thresholdConcentration').value = thresholds.concentration;
+
+      // 2. Guardrail warnings & sensitivity pill ────────────────────────────
+      _setWarn('warnRate',          thresholds.rateVariance,  { noisyBelow: 5,  strictAbove: 60 });
+      _setWarn('warnSpike',         thresholds.spike,         { noisyBelow: 10, strictAbove: 80 });
+      _setWarn('warnAccrual',       thresholds.accrual,       { noisyBelow: 8,  strictAbove: 60 });
+      _setWarn('warnConcentration', thresholds.concentration, { noisyBelow: 10, strictAbove: 55, isConc: true });
+      _updateSensitivityPill(thresholds);
+
       const alerts = [];
-      
-      // Rate leakage alerts
+
+      // 3a. Rate leakage — threshold only ──────────────────────────────────
       const vendorLeakage = {};
       transactions.forEach(t => {
         const rc = rateCards.find(r => r.vendor_id === t.vendor_id && r.service === t.service);
         if (!rc) return;
-        
         if (!vendorLeakage[t.vendor_id]) {
           vendorLeakage[t.vendor_id] = {
-            vendor_name: rc.vendor_name,
-            service: rc.service,
+            vendor_name: rc.vendor_name, service: rc.service,
             contract_rate: parseFloat(rc.contract_rate),
-            total_amount: 0,
-            total_units: 0,
-            leakage_amount: 0
+            total_amount: 0, total_units: 0, leakage_amount: 0
           };
         }
-        
-        const amount = parseFloat(t.amount);
-        const units = parseFloat(t.units);
-        const unitRate = parseFloat(t.unit_rate);
-        const contractRate = parseFloat(rc.contract_rate);
-        
-        vendorLeakage[t.vendor_id].total_amount += amount;
-        vendorLeakage[t.vendor_id].total_units += units;
-        
+        const units = parseFloat(t.units), unitRate = parseFloat(t.unit_rate), contractRate = parseFloat(rc.contract_rate);
+        vendorLeakage[t.vendor_id].total_amount += parseFloat(t.amount);
+        vendorLeakage[t.vendor_id].total_units  += units;
         if (unitRate > contractRate * (1 + thresholds.rateVariance / 100)) {
           vendorLeakage[t.vendor_id].leakage_amount += (unitRate - contractRate) * units;
         }
       });
-      
       Object.values(vendorLeakage).forEach(v => {
         if (v.leakage_amount > 0) {
-          const severity = v.leakage_amount > 2000 ? 'high' : v.leakage_amount > 500 ? 'med' : 'low';
           alerts.push({
-            severity,
-            title: `Rate Leakage: ${v.vendor_name}`,
-            what: `Paid ${formatCurrency(v.leakage_amount)} above contract rate for ${v.service}.`,
-            why: 'Erodes margin and suggests weak rate discipline.',
-            action: 'Review invoices, renegotiate rate, or enforce PO controls.'
+            severity:    v.leakage_amount > 2000 ? 'high' : v.leakage_amount > 500 ? 'med' : 'low',
+            triggeredBy: 'Threshold',
+            title:       `Rate Leakage: ${v.vendor_name}`,
+            what:        `Paid ${formatCurrency(v.leakage_amount)} above contract rate for ${v.service}.`,
+            why:         'Erodes margin and signals weak rate discipline.',
+            action:      'Review invoices, renegotiate rate, or enforce PO controls.',
+            triggerNote: `Rate variance trigger (>${thresholds.rateVariance}% above contract)`,
+            impactDollar: v.leakage_amount > 2000 ? v.leakage_amount : undefined
           });
         }
       });
-      
-      // Spend spikes
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const categoryMonthSpend = {};
+
+      // 3b. Spend spikes — threshold OR adaptive (MAD) ─────────────────────
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const catMonthSpend = {};
       transactions.forEach(t => {
-        const monthNum = parseInt(t.date.substring(5, 7));
-        const month = months[monthNum - 1];
-        const key = `${t.category}-${month}`;
-        if (!categoryMonthSpend[key]) {
-          categoryMonthSpend[key] = { category: t.category, month, amount: 0 };
-        }
-        categoryMonthSpend[key].amount += parseFloat(t.amount);
+        const mn  = parseInt(t.date.substring(5,7));
+        const key = `${t.category}-${months[mn-1]}`;
+        if (!catMonthSpend[key]) catMonthSpend[key] = { category: t.category, month: months[mn-1], amount: 0 };
+        catMonthSpend[key].amount += parseFloat(t.amount);
       });
-      
-      const categoryAvgs = {};
-      Object.values(categoryMonthSpend).forEach(cm => {
-        if (!categoryAvgs[cm.category]) {
-          categoryAvgs[cm.category] = { total: 0, count: 0 };
-        }
-        categoryAvgs[cm.category].total += cm.amount;
-        categoryAvgs[cm.category].count += 1;
+      // Build per-category series for MAD
+      const catSeries = {};
+      Object.values(catMonthSpend).forEach(cm => {
+        if (!catSeries[cm.category]) catSeries[cm.category] = [];
+        catSeries[cm.category].push(cm.amount);
       });
-      
-      Object.values(categoryMonthSpend).forEach(cm => {
-        const avg = categoryAvgs[cm.category].total / categoryAvgs[cm.category].count;
-        const spike = ((cm.amount - avg) / avg) * 100;
-        if (spike > thresholds.spike) {
-          const severity = spike > 40 ? 'high' : spike > 25 ? 'med' : 'low';
-          alerts.push({
-            severity,
-            title: `Spend Spike: ${cm.category} (${cm.month})`,
-            what: `${formatPercent(spike)} above average (${formatCurrency(cm.amount)} vs ${formatCurrency(avg)}).`,
-            why: 'Could indicate one-time event, vendor issue, or forecast miss.',
-            action: 'Investigate root cause and update forecast if recurring.'
-          });
-        }
+      const catAvgs = {};
+      Object.values(catMonthSpend).forEach(cm => {
+        if (!catAvgs[cm.category]) catAvgs[cm.category] = { total: 0, count: 0 };
+        catAvgs[cm.category].total += cm.amount; catAvgs[cm.category].count++;
       });
-      
-      // Accrual risk
+      Object.values(catMonthSpend).forEach(cm => {
+        const avg       = catAvgs[cm.category].total / catAvgs[cm.category].count;
+        const spikePct  = avg > 0 ? ((cm.amount - avg) / avg) * 100 : 0;
+        const threshHit = spikePct > thresholds.spike;
+        // Adaptive: MAD outlier check — only active in adaptive mode
+        const adaptHit  = _detectionMode === 'adaptive' && _isMADAnomaly(cm.amount, catSeries[cm.category]);
+
+        if (!threshHit && !adaptHit) return;
+
+        // Attribution
+        let triggeredBy, triggerNote;
+        if (threshHit && adaptHit) {
+          triggeredBy = 'Both';
+          triggerNote = `Spend spike: +${spikePct.toFixed(0)}% vs avg (Threshold) · Statistically unusual vs history (Adaptive)`;
+        } else if (adaptHit) {
+          triggeredBy = 'Adaptive';
+          triggerNote = `Spend spike: Statistically unusual vs category history (MAD)`;
+        } else {
+          triggeredBy = 'Threshold';
+          triggerNote = `Spend spike: +${spikePct.toFixed(0)}% vs avg (Threshold >${thresholds.spike}%)`;
+        }
+
+        const spikeExcess = cm.amount - avg;
+        alerts.push({
+          severity:    spikePct > 40 ? 'high' : spikePct > 25 ? 'med' : 'low',
+          triggeredBy, triggerNote,
+          title:  `Spend Spike: ${cm.category} (${cm.month})`,
+          what:   `${formatPercent(spikePct)} above average (${formatCurrency(cm.amount)} vs ${formatCurrency(avg)}).`,
+          why:    'May indicate a one-time event, vendor issue, or forecast miss.',
+          action: 'Investigate root cause and update forecast if recurring.',
+          impactDollar: spikePct > 40 ? spikeExcess : undefined
+        });
+      });
+
+      // 3c. Accrual risk — threshold only ──────────────────────────────────
       accruals.forEach(a => {
         const incurred = parseFloat(a.incurred_amount);
-        const accrual = parseFloat(a.accrual_amount);
+        const accrual  = parseFloat(a.accrual_amount);
         if (accrual > incurred * (thresholds.accrual / 100)) {
-          const severity = accrual > incurred * 0.3 ? 'high' : 'med';
           const rc = rateCards.find(r => r.vendor_id === a.vendor_id);
-          const vendorName = rc ? rc.vendor_name : a.vendor_id;
           alerts.push({
-            severity,
-            title: `Accrual Risk: ${vendorName} (${a.month})`,
-            what: `Accrual of ${formatCurrency(accrual)} represents ${formatPercent((accrual / incurred) * 100)} of incurred.`,
-            why: 'Large accruals increase close variance and signal invoice delays.',
-            action: 'Follow up with vendor on invoice timing or true-up accrual.'
+            severity:    accrual > incurred * 0.3 ? 'high' : 'med',
+            triggeredBy: 'Threshold',
+            title:       `Accrual Risk: ${rc ? rc.vendor_name : a.vendor_id} (${a.month})`,
+            what:        `Accrual of ${formatCurrency(accrual)} is ${formatPercent((accrual/incurred)*100)} of incurred cost.`,
+            why:         'Large accruals increase close variance and signal invoice delays.',
+            action:      'Follow up with vendor on invoice timing or true-up accrual.',
+            triggerNote: `Accrual ratio exceeds trigger (>${thresholds.accrual}% of incurred)`,
+            impactDollar: accrual > incurred * 0.3 ? accrual : undefined
           });
         }
       });
-      
-      // Concentration risk
+
+      // 3d. Concentration risk — threshold only, hard-capped at 65% ────────
       const vendorTotals = {};
       transactions.forEach(t => {
-        if (!vendorTotals[t.vendor_id]) {
-          vendorTotals[t.vendor_id] = 0;
-        }
-        vendorTotals[t.vendor_id] += parseFloat(t.amount);
+        vendorTotals[t.vendor_id] = (vendorTotals[t.vendor_id] || 0) + parseFloat(t.amount);
       });
-      
-      const totalSpend = Object.values(vendorTotals).reduce((sum, v) => sum + v, 0);
-      Object.entries(vendorTotals).forEach(([vendorId, amount]) => {
-        const pct = (amount / totalSpend) * 100;
+      const totalSpend = Object.values(vendorTotals).reduce((s,v) => s+v, 0);
+      Object.entries(vendorTotals).forEach(([vid, amt]) => {
+        const pct = (amt / totalSpend) * 100;
         if (pct > thresholds.concentration) {
-          const rc = rateCards.find(r => r.vendor_id === vendorId);
-          const vendorName = rc ? rc.vendor_name : vendorId;
-          const severity = pct > 40 ? 'high' : pct > 30 ? 'med' : 'low';
+          const rc = rateCards.find(r => r.vendor_id === vid);
           alerts.push({
-            severity,
-            title: `Concentration Risk: ${vendorName}`,
-            what: `${formatPercent(pct)} of total spend (${formatCurrency(amount)}).`,
-            why: 'High dependency on single vendor increases operational risk.',
-            action: 'Diversify suppliers or negotiate volume discounts.'
+            severity:    pct > 40 ? 'high' : pct > 30 ? 'med' : 'low',
+            triggeredBy: 'Threshold',
+            title:       `Concentration Risk: ${rc ? rc.vendor_name : vid}`,
+            what:        `${formatPercent(pct)} of total spend (${formatCurrency(amt)}).`,
+            why:         'High dependency on one vendor creates pricing and operational risk.',
+            action:      'Diversify suppliers or negotiate volume-discount protections.',
+            triggerNote: `Concentration exceeds trigger (>${thresholds.concentration}% of total spend)`,
+            impactDollar: pct > 40 ? amt : undefined
           });
         }
       });
-      
-      // Sort by severity
-      const severityOrder = { high: 0, med: 1, low: 2 };
-      alerts.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
-      
+
+      // 4. Sort by severity ─────────────────────────────────────────────────
+      const sevOrd = { high: 0, med: 1, low: 2 };
+      alerts.sort((a,b) => sevOrd[a.severity] - sevOrd[b.severity]);
+
+      // 5. Render alert cards ───────────────────────────────────────────────
+      const tbClass = { Threshold: 'tb-thr', Adaptive: 'tb-adap', Both: 'tb-both' };
       let alertsHTML = '';
       if (alerts.length === 0) {
-        alertsHTML = '<div style="padding: 20px; text-align: center; color: var(--muted);">No alerts detected with current thresholds.</div>';
+        alertsHTML = `
+          <div class="alerts-empty">
+            <div class="alerts-empty-icon">✓</div>
+            <div class="alerts-empty-title">No issues flagged under current thresholds</div>
+            <div class="alerts-empty-sub">
+              All metrics are within your configured trigger levels.
+              Lower a trigger or switch to the Conservative preset to cast a wider net.
+            </div>
+          </div>`;
       } else {
         alerts.forEach(alert => {
+          const tb = alert.triggeredBy || 'Threshold';
+          const impactBadge = (alert.severity === 'high' && alert.impactDollar)
+            ? `<span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(220,38,38,0.10);color:#dc2626;">💸 ${formatCurrency(alert.impactDollar)} at risk</span>`
+            : '';
           alertsHTML += `
             <div class="alert-card ${alert.severity}">
               <div class="alert-header">
-                <div class="alert-title">${alert.title}</div>
-                <div class="severity-badge ${alert.severity}">${alert.severity}</div>
+                <div class="alert-title">${alert.title}${impactBadge}</div>
+                <div style="display:flex;gap:5px;align-items:center;">
+                  <span class="trig-badge ${tbClass[tb] || 'tb-thr'}">${tb}</span>
+                  <div class="severity-badge ${alert.severity}">${alert.severity}</div>
+                </div>
               </div>
-              <div class="alert-text">${alert.what}</div>
-              <div class="alert-why">Why it matters: ${alert.why}</div>
-              <div class="alert-action">→ ${alert.action}</div>
-            </div>
-          `;
+              <div class="wswn" style="margin-top:8px;">
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-what">What</span>
+                  <span class="wswn-content">${alert.what}</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-sowhat">So What</span>
+                  <span class="wswn-content">${alert.why}</span>
+                </div>
+                <div class="wswn-row">
+                  <span class="wswn-label lbl-nowwhat">Now What</span>
+                  <span class="wswn-content"><strong style="color:#0b1220;">${alert.action}</strong></span>
+                </div>
+              </div>
+              <div style="margin-top:8px;font-size:11px;color:var(--muted);">⚑ ${alert.triggerNote || ''}</div>
+            </div>`;
         });
       }
-      
       document.getElementById('alertsContainer').innerHTML = alertsHTML;
 
-      // --- Alert counter / filter buttons ---
+      // 6. Counter / filter buttons ─────────────────────────────────────────
       const counterBar = document.getElementById('alertCounterBar');
-      const highCount = alerts.filter(a => a.severity === 'high').length;
-      const medCount  = alerts.filter(a => a.severity === 'med').length;
-      const lowCount  = alerts.filter(a => a.severity === 'low').length;
-
-      // Cache for decision box
+      const highCount  = alerts.filter(a => a.severity === 'high').length;
+      const medCount   = alerts.filter(a => a.severity === 'med').length;
+      const lowCount   = alerts.filter(a => a.severity === 'low').length;
       _riskAlertCounts = { total: alerts.length, high: highCount, med: medCount, low: lowCount };
+
+      // Update detection mode count badges
+      (function() {
+        const threshCount = alerts.length;
+        let adaptCount = threshCount;
+        if (_detectionMode === 'threshold') {
+          const catSeries2 = {};
+          Object.values(catMonthSpend).forEach(cm => {
+            if (!catSeries2[cm.category]) catSeries2[cm.category] = [];
+            catSeries2[cm.category].push(cm.amount);
+          });
+          let adaptExtra = 0;
+          Object.values(catMonthSpend).forEach(cm => {
+            const avg2  = catAvgs[cm.category].total / catAvgs[cm.category].count;
+            const spPct = avg2 > 0 ? ((cm.amount - avg2) / avg2) * 100 : 0;
+            const tHit2 = spPct > thresholds.spike;
+            const aHit2 = _isMADAnomaly(cm.amount, catSeries2[cm.category]);
+            if (!tHit2 && aHit2) adaptExtra++;
+          });
+          adaptCount = threshCount + adaptExtra;
+        }
+        _updateDetectionModeBadges(threshCount, adaptCount);
+      })();
 
       if (alerts.length > 0) {
         counterBar.style.display = 'flex';
@@ -3180,118 +3631,183 @@
         hEl.textContent = highCount ? highCount + ' High' : ''; hEl.style.display = highCount ? '' : 'none';
         mEl.textContent = medCount  ? medCount  + ' Med'  : ''; mEl.style.display = medCount  ? '' : 'none';
         lEl.textContent = lowCount  ? lowCount  + ' Low'  : ''; lEl.style.display = lowCount  ? '' : 'none';
-        // Reset to "all" view whenever flags are recomputed
         filterAlerts('all');
       } else {
         counterBar.style.display = 'none';
       }
 
-      // --- So What: Risk & Anomaly Flags ---
+      // 7. So What explainer (W/SW/NW) ──────────────────────────────────────
       const riskSoWhat      = document.getElementById('riskSoWhat');
       const riskSoWhatLabel = document.getElementById('riskSoWhatLabel');
       const riskSoWhatList  = document.getElementById('riskSoWhatList');
-
       if (alerts.length === 0) {
         riskSoWhat.style.display = 'none';
       } else {
         riskSoWhat.style.display = '';
-
-        // Severity-driven colour scheme
         const rColor  = highCount > 0 ? '#dc2626' : medCount > 0 ? '#d97706' : '#6b7280';
         const rBorder = highCount > 0 ? 'rgba(220,38,38,0.25)' : medCount > 0 ? 'rgba(245,158,11,0.30)' : 'rgba(107,114,128,0.20)';
         const rBg     = highCount > 0 ? '#fef9f9' : medCount > 0 ? '#fffbeb' : '#f9fafb';
         const rIcon   = highCount > 0 ? '🔴' : medCount > 0 ? '⚠️' : '✅';
         const rStatus = highCount > 0 ? 'High Severity — Immediate Action' : medCount > 0 ? 'Moderate — Monitor Closely' : 'Low Risk — No Critical Flags';
-
         riskSoWhat.style.border     = `1.5px solid ${rBorder}`;
         riskSoWhat.style.background = rBg;
         riskSoWhatLabel.style.color = rColor;
-        riskSoWhatLabel.textContent = `💡 So What — ${rIcon} ${rStatus}`;
-        const rbullet = (color, text) =>
-          `<li style="font-size:13px;color:#5d6b7a;display:flex;align-items:flex-start;gap:8px;"><span style="color:${color};font-weight:700;flex-shrink:0;">›</span>${text}</li>`;
-        const rbullets = [];
+        riskSoWhatLabel.innerHTML   = `💡 What · So What · Now What — ${rIcon} ${rStatus} <span class="help-icon" style="margin-left:4px;vertical-align:middle;" data-help="How the status is determined — ✅ Low Risk: no high or medium severity flags · ⚠️ Moderate: medium-severity flags only · 🔴 High Severity: one or more high-severity flags present. Severity is set per-flag type (e.g. leakage above $2K = high)."></span>`;
 
-        // Overall summary
-        if (highCount > 0) {
-          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">${highCount} high-severity issue${highCount > 1 ? 's' : ''} require immediate attention.</strong> These represent the biggest risks to spend control and margin — prioritise these before the next reporting period.`));
-        }
-        if (medCount > 0 && highCount === 0) {
-          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">${medCount} medium-severity flag${medCount > 1 ? 's' : ''} detected.</strong> These are worth monitoring closely — escalate if trends worsen or if the same vendors appear repeatedly.`));
-        }
-        if (highCount === 0 && medCount === 0) {
-          rbullets.push(rbullet(rColor, `<strong style="color:#0b1220;">No critical risks flagged.</strong> Only low-severity anomalies detected. Current thresholds may need tightening if you want earlier warnings.`));
-        }
-
-        // Rate leakage
-        const rateFlags = alerts.filter(a => a.title.startsWith('Rate Leakage'));
-        if (rateFlags.length > 0) {
-          rbullets.push(rbullet('#dc2626', `<strong style="color:#0b1220;">${rateFlags.length} vendor${rateFlags.length > 1 ? 's' : ''} flagged for rate leakage.</strong> These vendors are billing above their contracted rates. Each one needs an invoice audit; if overcharging is confirmed, escalate to procurement for rate correction or PO clawback.`));
-        }
-
-        // Spend spikes
-        const spikeFlags = alerts.filter(a => a.title.startsWith('Spend Spike'));
-        if (spikeFlags.length > 0) {
-          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${spikeFlags.length} spend spike${spikeFlags.length > 1 ? 's' : ''} detected.</strong> These categories had unusually high spend in specific months. Determine if these are one-off events (e.g. project kick-off) or recurring — recurring spikes mean your forecast baseline needs to be updated.`));
-        }
-
-        // Concentration risk
-        const concFlags = alerts.filter(a => a.title.startsWith('Concentration'));
-        if (concFlags.length > 0) {
-          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${concFlags.length} vendor${concFlags.length > 1 ? 's' : ''} flagged for concentration risk.</strong> Over-reliance on a single supplier is an operational hazard. If that vendor raises rates, delays delivery, or exits, you have limited options. Begin qualifying a second source or negotiate volume-tiered pricing.`));
-        }
-
-        // Accrual risk
+        const rateFlags    = alerts.filter(a => a.title.startsWith('Rate Leakage'));
+        const spikeFlags   = alerts.filter(a => a.title.startsWith('Spend Spike'));
+        const concFlags    = alerts.filter(a => a.title.startsWith('Concentration'));
         const accrualFlags = alerts.filter(a => a.title.startsWith('Accrual Risk'));
-        if (accrualFlags.length > 0) {
-          rbullets.push(rbullet('#d97706', `<strong style="color:#0b1220;">${accrualFlags.length} accrual risk flag${accrualFlags.length > 1 ? 's' : ''}.</strong> These vendor-months have a high proportion of spend that is incurred but not yet invoiced — creating P&L uncertainty at close. Chase vendors for timely invoicing or revise accrual methodology to use contract run-rates.`));
-        }
 
-        // Decision row
-        const riskAction = highCount > 0
-          ? 'Pause spend with vendors flagged for rate leakage until invoices are audited. Escalate high-severity issues to procurement and the CFO before next payment run. Set a 48-hour resolution deadline on each high flag.'
+        const rWhatParts = [];
+        rWhatParts.push(`<strong style="color:#0b1220;">${alerts.length} issue${alerts.length!==1?'s':''} flagged</strong> — ${[highCount&&`${highCount} high`,medCount&&`${medCount} medium`,lowCount&&`${lowCount} low`].filter(Boolean).join(', ')} severity.`);
+        if (rateFlags.length)    rWhatParts.push(`${rateFlags.length} vendor${rateFlags.length>1?'s':''} with <strong style="color:#0b1220;">rate leakage</strong>.`);
+        if (spikeFlags.length)   rWhatParts.push(`${spikeFlags.length} <strong style="color:#0b1220;">spend spike${spikeFlags.length>1?'s':''}</strong>.`);
+        if (concFlags.length)    rWhatParts.push(`${concFlags.length} <strong style="color:#0b1220;">concentration risk</strong> flag${concFlags.length>1?'s':''}.`);
+        if (accrualFlags.length) rWhatParts.push(`${accrualFlags.length} <strong style="color:#0b1220;">accrual risk</strong> flag${accrualFlags.length>1?'s':''}.`);
+
+        const rSoWhatParts = [];
+        if (highCount > 0) {
+          const totalHighImpact = alerts.filter(a => a.severity === 'high' && a.impactDollar).reduce((s, a) => s + a.impactDollar, 0);
+          const impactStr = totalHighImpact > 0 ? ` — <strong style="color:#dc2626;">${formatCurrency(totalHighImpact)} quantified at risk</strong>` : '';
+          rSoWhatParts.push(`<strong style="color:#0b1220;">${highCount} high-severity issue${highCount>1?'s':''}</strong> are the biggest risks to spend control${impactStr}. Resolve before the next reporting period.`);
+        } else if (medCount > 0) rSoWhatParts.push(`<strong style="color:#0b1220;">${medCount} medium-severity flag${medCount>1?'s':''}</strong> warrant close monitoring — escalate if the same vendors recur.`);
+        else                   rSoWhatParts.push(`Only low-severity anomalies. No immediate risk to margin or cash flow.`);
+        if (rateFlags.length)    rSoWhatParts.push(`Rate leakage erodes margin silently — each flagged vendor needs an invoice audit.`);
+        if (concFlags.length)    rSoWhatParts.push(`Single-vendor over-reliance is an operational hazard: rate hikes, delivery delays, or supplier exits leave you with limited options.`);
+        if (accrualFlags.length) rSoWhatParts.push(`High un-invoiced accruals create P&amp;L uncertainty at close.`);
+        if (spikeFlags.length)   rSoWhatParts.push(`Recurring spend spikes indicate the forecast baseline needs updating.`);
+
+        const rNowWhat = highCount > 0
+          ? `Pause payments to vendors flagged for rate leakage pending invoice audit. Escalate high flags to procurement + CFO before next payment run. Set a 48-hour deadline per flag.`
           : medCount > 0
-          ? 'Assign ownership of each medium flag to a vendor manager this week. Review threshold settings — if the same vendors appear repeatedly, tighten contract clauses at next renewal. Re-run this analysis after 30 days to check for improvement.'
-          : 'No urgent action required. Review threshold settings to ensure they are sensitive enough to catch early-stage issues. Schedule a quarterly anomaly review to track trends over time.';
-        rbullets.push(rbullet(highCount > 0 ? '#dc2626' : medCount > 0 ? '#d97706' : '#6b7280', `<strong style="color:#0b1220;">Decision:</strong> ${riskAction}`));
+          ? `Assign each medium flag to a vendor manager this week. Tighten contract clauses at next renewal if the same vendors recur. Re-run in 30 days.`
+          : `No urgent action. Review thresholds to ensure sensitivity is right. Schedule a quarterly anomaly review.`;
 
-        riskSoWhatList.innerHTML = rbullets.join('');
+        const rRow = (cls, lbl, content) =>
+          `<div class="wswn-row"><span class="wswn-label ${cls}">${lbl}</span><span class="wswn-content">${content}</span></div>`;
+        riskSoWhatList.innerHTML = `<div class="wswn">
+          ${rRow('lbl-what',    'What',     rWhatParts.join(' '))}
+          ${rRow('lbl-sowhat',  'So What',  rSoWhatParts.join(' '))}
+          ${rRow('lbl-nowwhat', 'Now What', `<strong style="color:#0b1220;">${rNowWhat}</strong>`)}
+        </div>`;
       }
 
       renderSpendDecisionBox();
     }
 
-    // ── Alert filter — called by the counter buttons ──────────────────────────
-    // severity: 'all' | 'high' | 'med' | 'low'
+    // ── Alert filter ────────────────────────────────────────────────────────
     function filterAlerts(severity) {
-      // Update active button styles
-      const ids = { all: 'alertCountTotal', high: 'alertCountHigh', med: 'alertCountMed', low: 'alertCountLow' };
-      const borders = {
-        all:  'rgba(12,23,45,0.30)',
-        high: '#dc2626',
-        med:  '#d97706',
-        low:  '#6b7280'
-      };
+      const ids     = { all: 'alertCountTotal', high: 'alertCountHigh', med: 'alertCountMed', low: 'alertCountLow' };
+      const borders = { all: 'rgba(12,23,45,0.30)', high: '#dc2626', med: '#d97706', low: '#6b7280' };
       Object.entries(ids).forEach(([key, id]) => {
         const btn = document.getElementById(id);
         if (!btn) return;
-        btn.style.borderColor = (key === severity) ? (borders[key] || 'transparent') : 'transparent';
+        btn.style.borderColor = (key === severity) ? borders[key] : 'transparent';
         btn.style.boxShadow   = (key === severity) ? '0 0 0 0px transparent' : '';
       });
-
-      // Show / hide alert cards
-      const cards = document.querySelectorAll('#alertsContainer .alert-card');
-      cards.forEach(card => {
-        if (severity === 'all') {
-          card.style.display = '';
-        } else {
-          // card has class "alert-card high|med|low"
-          card.style.display = card.classList.contains(severity) ? '' : 'none';
-        }
+      document.querySelectorAll('#alertsContainer .alert-card').forEach(card => {
+        card.style.display = (severity === 'all' || card.classList.contains(severity)) ? '' : 'none';
       });
     }
-    
-    // ========== CSV DOWNLOADS ==========
-    
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // RISK v2 — Export Alerts CSV (includes v2 metadata)
+    // ═══════════════════════════════════════════════════════════════════════
+
+    function downloadRiskFlagsCSV() {
+      // Re-evaluate alerts using current state to build export rows
+      const exportRows = [];
+      const today = new Date().toISOString().slice(0,10);
+      const thStr = `rate=${thresholds.rateVariance}%,spike=${thresholds.spike}%,accrual=${thresholds.accrual}%,conc=${thresholds.concentration}%`;
+
+      // — Rate leakage —
+      const vl = {};
+      transactions.forEach(t => {
+        const rc = rateCards.find(r => r.vendor_id === t.vendor_id && r.service === t.service);
+        if (!rc) return;
+        if (!vl[t.vendor_id]) vl[t.vendor_id] = { name: rc.vendor_name, svc: rc.service, leakage: 0 };
+        const ur = parseFloat(t.unit_rate), cr = parseFloat(rc.contract_rate), un = parseFloat(t.units);
+        if (ur > cr * (1 + thresholds.rateVariance / 100)) vl[t.vendor_id].leakage += (ur - cr) * un;
+      });
+      Object.values(vl).forEach(v => {
+        if (v.leakage > 0) exportRows.push({
+          date: today, type: 'Rate Leakage',
+          detail: `${v.name} / ${v.svc} — ${formatCurrency(v.leakage)} above contract`,
+          severity: v.leakage > 2000 ? 'high' : v.leakage > 500 ? 'med' : 'low',
+          triggeredBy: 'Threshold', detectionMode: _detectionMode, preset: _riskPreset,
+          thresholds_used: thStr, trigger_note: `Rate variance trigger (>${thresholds.rateVariance}%)`
+        });
+      });
+
+      // — Spend spikes —
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const cms = {}; transactions.forEach(t => {
+        const mn = parseInt(t.date.substring(5,7));
+        const key = `${t.category}-${months[mn-1]}`;
+        if (!cms[key]) cms[key] = { cat: t.category, mon: months[mn-1], amt: 0, arr: [] };
+        cms[key].amt += parseFloat(t.amount);
+      });
+      // Rebuild per-category arrays for MAD
+      const cArr = {};
+      Object.values(cms).forEach(c => { if (!cArr[c.cat]) cArr[c.cat] = []; cArr[c.cat].push(c.amt); });
+      const cAvg = {};
+      Object.values(cms).forEach(c => { if (!cAvg[c.cat]) cAvg[c.cat]={t:0,n:0}; cAvg[c.cat].t+=c.amt; cAvg[c.cat].n++; });
+      Object.values(cms).forEach(cm => {
+        const avg=cAvg[cm.cat].t/cAvg[cm.cat].n, sp=avg>0?((cm.amt-avg)/avg)*100:0;
+        const tHit=sp>thresholds.spike, aHit=_detectionMode==='adaptive'&&_isMADAnomaly(cm.amt,cArr[cm.cat]);
+        if (!tHit && !aHit) return;
+        const tb = (tHit&&aHit)?'Both':aHit?'Adaptive':'Threshold';
+        exportRows.push({
+          date: today, type: 'Spend Spike',
+          detail: `${cm.cat} (${cm.mon}) — +${sp.toFixed(0)}% vs avg (${formatCurrency(cm.amt)} vs ${formatCurrency(avg)})`,
+          severity: sp>40?'high':sp>25?'med':'low',
+          triggeredBy: tb, detectionMode: _detectionMode, preset: _riskPreset,
+          thresholds_used: thStr, trigger_note: tb==='Both'?'Threshold + MAD':tb==='Adaptive'?'MAD anomaly':`>${thresholds.spike}% above avg`
+        });
+      });
+
+      // — Accrual risk —
+      accruals.forEach(a => {
+        const inc=parseFloat(a.incurred_amount), acc=parseFloat(a.accrual_amount);
+        if (acc > inc*(thresholds.accrual/100)) {
+          const rc=rateCards.find(r=>r.vendor_id===a.vendor_id);
+          exportRows.push({
+            date: today, type: 'Accrual Risk',
+            detail: `${rc?rc.vendor_name:a.vendor_id} (${a.month}) — ${formatCurrency(acc)} un-invoiced (${formatPercent((acc/inc)*100)})`,
+            severity: acc>inc*0.3?'high':'med',
+            triggeredBy: 'Threshold', detectionMode: _detectionMode, preset: _riskPreset,
+            thresholds_used: thStr, trigger_note: `Accrual ratio >${thresholds.accrual}%`
+          });
+        }
+      });
+
+      // — Concentration risk —
+      const vt={}; transactions.forEach(t=>{ vt[t.vendor_id]=(vt[t.vendor_id]||0)+parseFloat(t.amount); });
+      const tot=Object.values(vt).reduce((s,v)=>s+v,0);
+      Object.entries(vt).forEach(([id,amt])=>{
+        const pct=(amt/tot)*100;
+        if (pct>thresholds.concentration) {
+          const rc=rateCards.find(r=>r.vendor_id===id);
+          exportRows.push({
+            date: today, type: 'Concentration Risk',
+            detail: `${rc?rc.vendor_name:id} — ${formatPercent(pct)} of total spend`,
+            severity: pct>40?'high':pct>30?'med':'low',
+            triggeredBy: 'Threshold', detectionMode: _detectionMode, preset: _riskPreset,
+            thresholds_used: thStr, trigger_note: `Concentration >${thresholds.concentration}%`
+          });
+        }
+      });
+
+      if (exportRows.length === 0) {
+        showNotification('No alerts to export under current thresholds.', 'info');
+        return;
+      }
+      const headers = ['date','type','detail','severity','triggeredBy','detectionMode','preset','thresholds_used','trigger_note'];
+      downloadCSV('risk_flags_export.csv', headers, exportRows);
+      showNotification(`Exported ${exportRows.length} alert${exportRows.length>1?'s':''} to CSV.`, 'success');
+    }
+
     function downloadRateLeakageCSV() {
       const headers = ['vendor_id', 'vendor_name', 'service', 'contract_rate', 'avg_paid_rate', 'rate_variance_pct', 'leakage_amount'];
       const rows = [];
@@ -3374,10 +3890,6 @@
       downloadCSV('forecast_vs_actual_export.csv', headers, rows);
     }
     
-    function downloadRiskFlagsCSV() {
-      showNotification('Use "Export as Excel" in the sidebar to get all risk flags in Sheet 4 (Rate Leakage)', 'info');
-    }
-    
     // ========== TEMPLATE DOWNLOADS ==========
     
     // Template downloads handled by downloadFlatTemplate() above
@@ -3435,12 +3947,30 @@
     function handleFlatUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
+
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        showNotification('Please upload a .csv file.', 'error');
+        event.target.value = '';
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         try {
           const { headers, data } = parseCSV(e.target.result);
-          if (!validateHeaders(headers, FLAT_CSV_REQUIRED)) {
-            showNotification('Missing columns. Required: ' + FLAT_CSV_REQUIRED.join(', '), 'error');
+          const missing = FLAT_CSV_REQUIRED.filter(h => !headers.includes(h));
+          if (missing.length > 0) {
+            const plural = missing.length === 1 ? 'column is' : 'columns are';
+            showNotification(
+              `Upload failed — ${missing.length} required ${plural} missing: ${missing.join(', ')}. Download the template to see the expected format.`,
+              'error'
+            );
+            event.target.value = '';
+            return;
+          }
+          if (data.length === 0) {
+            showNotification('The file has headers but no data rows. Please check your file.', 'error');
+            event.target.value = '';
             return;
           }
           deriveDatasetsFromFlat(data);
@@ -3449,8 +3979,11 @@
           renderAll();
           showNotification('✓ Loaded ' + data.length + ' rows — all sections updated', 'success');
         } catch (err) {
-          showNotification('Error: ' + err.message, 'error');
+          showNotification('Error reading file: ' + err.message, 'error');
         }
+      };
+      reader.onerror = () => {
+        showNotification('Could not read the file. Please try again.', 'error');
       };
       reader.readAsText(file);
       event.target.value = '';
@@ -3871,6 +4404,21 @@
 
       document.getElementById('spendDecisionVerdict').innerHTML =
         `Decision: <span class="verdict-action">${verdict}</span>`;
+
+      // Plain-English one-liner summary
+      const summaryEl = document.getElementById('spendDecisionSummary');
+      if (summaryEl) {
+        const highAlerts = _riskAlertCounts.high;
+        const openAcc    = accruals.filter(a => a.status === 'Open' || parseFloat(a.accrual_amount) > 0).length;
+        const parts = [];
+        if (totalLeakageDollar > 0) parts.push(`<strong>${formatCurrency(totalLeakageDollar)}</strong> in rate leakage`);
+        if (overrunCount > 0)       parts.push(`<strong>${overrunCount} month${overrunCount > 1 ? 's' : ''}</strong> over forecast`);
+        if (openAcc > 0)            parts.push(`<strong>${openAcc}</strong> open accrual${openAcc > 1 ? 's' : ''}`);
+        if (highAlerts > 0)         parts.push(`<strong>${highAlerts} high-severity</strong> risk flag${highAlerts > 1 ? 's' : ''}`);
+        summaryEl.innerHTML = parts.length > 0
+          ? parts.join(' · ') + ' require your attention.'
+          : 'No critical issues detected — spend is within normal parameters.';
+      }
 
       // Anchors
       const exceptionAnchors = {
