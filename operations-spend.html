@@ -2242,6 +2242,7 @@
                 <button class="btn-small btn-accent" onclick="pbBuildPlan()" data-help="Recalculates the forecast from all current Commitments and refreshes the Forecast chart and Variance table below. Run this after any changes to commitments.">Build Plan</button>
                 <button class="btn-small" id="pbLockBtn" onclick="pbLockBudget()" data-help="Snapshots today's commitment totals as the Budget Baseline (your Approved Forecast v1). After locking, editing commitments updates the rolling Forecast but the Budget stays frozen — this is what creates meaningful variance analysis.">Lock Budget Baseline</button>
                 <button class="btn-small btn-danger" onclick="pbResetBudget()" data-help="Clears the locked budget snapshot. While unlocked, Budget = Forecast (no variance). Use Reset if the baseline was set too early or needs to be re-approved.">Reset Baseline</button>
+                <button class="btn-small btn-danger" onclick="pbResetAllData()" data-help="Wipes everything — all intake requests, all commitments, and the budget baseline. Use this to start completely fresh. Cannot be undone, so export your plan first if you want a backup." style="border-color:rgba(220,38,38,0.4);">🗑 Reset All Data</button>
                 <button class="btn-small" onclick="pbExportJSON()" data-help="Downloads all intake rows, commitments, and the budget baseline as a JSON file — useful for version control, sharing with another finance team member, or backing up before major changes.">Export Plan (JSON)</button>
                 <label class="btn-small" style="cursor:pointer;display:inline-flex;align-items:center;" data-help="Load a previously exported plan JSON file. This will overwrite the current intake, commitments, and baseline. Use Import to restore a backup or load a plan shared by a colleague.">
                   Import Plan (JSON)
@@ -5346,18 +5347,18 @@
     //  PLAN BUILDER GUIDE PANEL
     // ════════════════════════════════════════════════════════════
     const PB_GUIDE_STEPS = 5;
-    let pbGuideDone = [false, false, false, false, false]; // index 0 = step 1
+    let pbGuideDone = [false, false, false, false, false]; // always resets fresh on page load
     let pbGuideOpen = false;
 
+    // NOTE: pbGuideLoad / pbGuideSave intentionally do NOT persist guide step state.
+    // The guide resets to all-pending every time the page opens — so it always feels
+    // like a live walkthrough, not a checklist with old checkmarks.
     function pbGuideLoad() {
-      try {
-        const saved = localStorage.getItem('pbGuideDone');
-        if (saved) pbGuideDone = JSON.parse(saved);
-      } catch(e) {}
+      // intentionally blank — fresh start every session
     }
 
     function pbGuideSave() {
-      try { localStorage.setItem('pbGuideDone', JSON.stringify(pbGuideDone)); } catch(e) {}
+      // intentionally blank — guide steps are session-only
     }
 
     function pbGuideToggle() {
@@ -5601,6 +5602,24 @@
       pbBudgetLocked   = false;
       savePlanBuilderToStorage();
       pbRenderStatusChip();
+      renderForecastVsActual();
+    }
+
+    // ── Reset ALL Plan Builder data ──
+    function pbResetAllData() {
+      const confirmed = window.confirm(
+        '⚠️ Reset everything?\n\nThis will delete all intake requests, all commitments, and the budget baseline.\n\nExport your plan first if you want a backup. This cannot be undone.'
+      );
+      if (!confirmed) return;
+
+      pbIntake         = [];
+      pbCommitments    = [];
+      pbBudgetBaseline = {};
+      pbBudgetLocked   = false;
+      // Keep pbEnabled as-is — user stays in Plan Builder mode, just with a clean slate
+
+      savePlanBuilderToStorage();
+      pbRenderUI();
       renderForecastVsActual();
     }
 
