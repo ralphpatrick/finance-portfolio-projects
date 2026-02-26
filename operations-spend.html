@@ -2010,6 +2010,257 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════
+       DATA COLLECTION PLAYBOOK — OPS FINANCE / SPEND ANALYTICS
+       Collapsible, open by default, placed before all 4 modules
+  ═══════════════════════════════════════════════════════ -->
+  <section id="playbook-section" style="border-bottom:1px solid var(--border);background:#fafbfc;">
+    <div style="max-width:1400px;margin:0 auto;padding:0 24px;">
+
+      <!-- Toggle header -->
+      <button
+        id="playbookToggleBtn"
+        onclick="togglePlaybook()"
+        style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;
+               padding:18px 0;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;"
+        aria-expanded="true"
+        aria-controls="playbookBody">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:18px;">🗂️</span>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:2px;">Behind the Model</div>
+            <div style="font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.02em;">Data Collection Playbook — How I Get Clean Spend Data From a Complex, Multi-Stakeholder Environment</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <span class="playbook-hint" style="font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;">Click to collapse</span>
+          <span id="playbookChevron" style="font-size:14px;color:var(--muted);transition:transform 200ms ease;">▲</span>
+        </div>
+      </button>
+
+      <!-- Playbook body — open by default -->
+      <div id="playbookBody" style="padding-bottom:32px;">
+
+        <!-- Intro -->
+        <div style="max-width:820px;margin-bottom:28px;">
+          <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
+            In a large, globally distributed organisation, spend data is rarely clean or centralised. Invoice lines live in the AP system, contract rates sit in procurement, accruals are tracked in spreadsheets, and forecast figures come from cost center managers across multiple regions and time zones — often with no single person responsible for reconciling them.
+          </p>
+          <p style="font-size:14px;color:var(--muted);line-height:1.65;">
+            Below is how I approach this systematically — mapping who owns which field, handling the mess before it reaches the model, and aligning stakeholders without creating process overhead for teams that are already stretched.
+          </p>
+        </div>
+
+        <!-- ── Step 1: Stakeholder → Field Ownership Map ── -->
+        <div style="margin-bottom:32px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">1</span>
+            Stakeholder → Field Ownership Map
+          </div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
+            Every column in this module's schema has a single owner. Mapping this before data collection starts prevents the most common failure: three teams partially filling in the same field with different definitions and different source systems.
+          </p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;">
+
+            <!-- Procurement -->
+            <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #0f766e;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:6px;">Procurement</div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Contract Terms &amp; Vendor Master</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Source of truth for agreed rates and vendor identity. Owns the contract — so any discrepancy between <code>contract_rate</code> and what the vendor bills is a procurement issue to resolve, not a Finance guess to make.</div>
+              <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">vendor_id</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">vendor_name</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">contract_rate</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">unit</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">po_id</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">service</span>
+              </div>
+            </div>
+
+            <!-- Accounts Payable / Finance Ops -->
+            <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #1b4d7a;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#1b4d7a;margin-bottom:6px;">Accounts Payable / Finance Ops</div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Invoice Actuals &amp; Accruals</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Owns what was actually billed and what has been accrued. In leaner Finance teams — particularly in regions with limited coverage — this data often lives in the AP system but hasn't been reconciled to the accrual ledger, which is where open accruals accumulate silently.</div>
+              <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">invoice_id</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">invoiced_amount</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">accrual_amount</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">date</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">amount</span>
+              </div>
+            </div>
+
+            <!-- Budget Owners / Cost Center Managers -->
+            <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #d97706;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d97706;margin-bottom:6px;">Budget Owners / Cost Center Managers</div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Forecast &amp; Budget Figures</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">In an org with 80+ budget owners across regions, forecast accuracy varies significantly. Each cost center manager owns their planned spend — but without a structured intake, forecast submissions arrive in different formats, at different levels of granularity, and sometimes after the close window.</div>
+              <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">cost_center</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">forecast_amount</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">budget_amount</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">category</span>
+              </div>
+            </div>
+
+            <!-- Vendor / Operations -->
+            <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #7c3aed;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#7c3aed;margin-bottom:6px;">Vendor / Operations</div>
+              <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Actual Unit Consumption</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">What was delivered, and at what rate. The gap between <code>unit_rate</code> (what the vendor charged) and <code>contract_rate</code> (what was agreed) is the core of rate leakage detection. This data comes from vendor invoices — and is the field most likely to arrive late or inconsistently formatted in EMEA.</div>
+              <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">unit_rate</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">units</span>
+                <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">service</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Step 2: Messy → Clean ── -->
+        <div style="margin-bottom:32px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">2</span>
+            Messy Input → Clean Schema — What the Reality Looks Like
+          </div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
+            In a global ops finance environment running ~$80M in program spend across 80+ budget owners, this is the data that actually arrives — and what to do with each problem before it reaches the model.
+          </p>
+          <div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px;">
+              <thead>
+                <tr style="background:rgba(246,248,251,0.9);">
+                  <th style="padding:10px 14px;text-align:left;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border-bottom:1px solid var(--border);">What Comes In</th>
+                  <th style="padding:10px 14px;text-align:left;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border-bottom:1px solid var(--border);">Why It's a Problem</th>
+                  <th style="padding:10px 14px;text-align:left;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border-bottom:1px solid var(--border);">How I Handle It</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Vendor invoice has no PO reference (<code>po_id</code> is blank)</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Rate leakage and anomaly detection both require a matched PO. Unmatched invoices are the most common source of duplicate payments and off-contract spend.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">Invoice is flagged automatically as "Missing PO" in Section 4. AP team is notified before payment is released. Procurement confirms whether a verbal approval exists or whether the invoice should be rejected.</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);background:rgba(246,248,251,0.4);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;"><code>unit_rate</code> on invoice is 3–5% above <code>contract_rate</code> — no explanation provided</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Silent rate leakage. Vendors incrementally overbill without raising a formal amendment — it goes undetected unless someone compares the invoice rate to the contracted rate line by line.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">Rate variance is calculated for every invoice line. Any line above the threshold (default 20%) is flagged in Section 1 with dollar leakage quantified. Procurement is the resolver — Finance provides the evidence.</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Accruals tracked in a regional spreadsheet, not matched to the AP system</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Accrued amounts and invoiced amounts can't be reconciled. Open accruals accumulate month after month — especially in regions with limited Finance headcount — creating P&amp;L distortion at period close.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">The intake template requires both <code>accrual_amount</code> and <code>invoiced_amount</code> per line. The model computes the gap. Section 2 surfaces every open accrual with the vendor and month it belongs to — no manual hunting required.</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);background:rgba(246,248,251,0.4);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Same service billed twice in the same period by the same vendor (<code>invoice_id</code> duplicated or varied slightly)</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Duplicate invoices cause double-payment. Vendors sometimes resubmit with a slightly different invoice number — which passes basic duplicate checks but represents the same spend event.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">Section 4 anomaly detection flags statistical spend spikes per category and month. AP team is responsible for confirming whether a spike is a genuine duplicate or a legitimate volume increase.</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Cost center codes inconsistent across regions — EMEA uses a different CC format than the ERP standard</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Forecast vs actual variance analysis breaks if cost center codes don't match. EMEA submissions often arrive with local CC identifiers that don't map cleanly to the global chart of accounts.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">The template includes a CC lookup tab with the global-to-regional mapping pre-filled. Regional leads validate their CC codes against this before submission. A validation script flags any unrecognised CC on upload.</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);background:rgba(246,248,251,0.4);">
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Forecast data from Workday, actuals from the AP system — different levels of aggregation, never reconciled before the model</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Forecast is at category+month level; actuals are at invoice line level. Without a reconciliation step, comparing them produces meaningless variance figures.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">The flat schema is the reconciliation layer. <code>forecast_amount</code> and <code>budget_amount</code> are repeated on each invoice row, then aggregated by the model to the right level for comparison. One upload, one reconciliation pass.</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">EMEA vendors submit invoices 15–30 days after the service period, after the close window</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Late invoices mean accruals are understated at close. The P&amp;L looks better than it is — then corrects sharply when invoices arrive. Finance teams with limited EMEA coverage can't chase vendors manually.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">The intake process sets a submission deadline 5 days before close. Any vendor not invoiced by that date is flagged as an open accrual using the prior-period average as the estimated amount. Section 2 highlights these explicitly.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ── Step 3: Template + Process ── -->
+        <div style="margin-bottom:32px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">3</span>
+            The Intake Template — 17 Columns, 4 Owners, One File
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;">
+            <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
+              <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">What's in the template</div>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All 17 required columns pre-labelled with data type and accepted values</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>An "Owner" row at row 1 mapping each column to Procurement / AP / Budget Owner / Vendor Ops</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Source System" row at row 2 — ERP / AP system / Procurement portal / manual — so contributors know where to pull each field from</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A CC lookup tab with global-to-regional cost center mappings pre-filled for EMEA, APAC, and Americas</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows — one with rate leakage, one clean — so contributors immediately see what correct vs. flagged data looks like</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Confidence" field (Confirmed / Estimated / Pending) — so the model can flag which rows are based on assumptions vs. verified actuals</li>
+              </ul>
+            </div>
+            <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
+              <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">The async-first collection process for a remote, multi-region team</div>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">1.</span>Template + submission deadline shared via async message (Slack / email) to each regional lead — one contact per region consolidates their own team's inputs. No cross-timezone kick-off call needed.</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">2.</span>Shared tracker (e.g. Airtable) shows submission status per owner, region, and vendor — Finance has live visibility without chasing individuals over email.</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">3.</span>Validation script runs on each submission — flags specific errors (missing PO, unrecognised CC, <code>unit_rate</code> above contract) and sends back a targeted query, not a generic "please fix".</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">4.</span>For EMEA specifically — where Finance coverage is leaner — the template is pre-populated with prior-period actuals as defaults. Contributors only need to update what changed, reducing the effort to submit.</li>
+              </ul>
+            </div>
+          </div>
+          <div style="margin-top:12px;">
+            <button onclick="downloadFlatTemplate()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 140ms ease;" onmouseover="this.style.borderColor='rgba(12,23,45,0.2)';this.style.boxShadow='0 4px 12px rgba(11,18,32,0.08)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='';">
+              ⬇ Download the Unified CSV Template
+            </button>
+            <span style="font-size:11px;color:var(--muted);margin-left:12px;">17 columns. 4 owners. One file. All 4 modules update on upload.</span>
+          </div>
+        </div>
+
+        <!-- ── Step 4: Alignment Note ── -->
+        <div style="margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">4</span>
+            Stakeholder Alignment — What I Do When Procurement, AP, and Budget Owners Don't Agree on the Numbers
+          </div>
+          <div style="max-width:860px;padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
+            <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
+              In a large, fully remote, multi-region ops finance environment — with 80+ budget owners, a lean EMEA Finance team, and data split across Workday, an AP system, and procurement tooling — alignment doesn't happen automatically. Here's how I structure it:
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;">
+                <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">A</span>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Agree on definitions before the template goes out — not after the data comes back</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">The most common conflict in ops finance data collection: Procurement defines "contract rate" as the rate in the signed MSA; AP defines it as the rate on the most recent PO amendment; the budget owner doesn't distinguish between the two. A one-page definition doc, shared and signed off by all three before collection opens, eliminates most disputes before they start. In a distributed team, I publish this asynchronously and give 48 hours to flag disagreements — most stakeholders respond within one working day, regardless of time zone.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;">
+                <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">B</span>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Make Procurement the resolver, not Finance — Finance provides the evidence</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When the model flags a rate mismatch, Finance's job is to quantify and surface it — not to adjudicate it. The escalation path is clear: Finance flags the leakage with the dollar amount and the invoice line, Procurement confirms whether it was approved or not, and AP either holds or releases the payment. This keeps Finance out of vendor relationship decisions while ensuring nothing falls through the cracks between teams.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;">
+                <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">C</span>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Be explicit about data quality — especially for EMEA where coverage is limited</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When EMEA accruals are estimated rather than confirmed — because the vendor hasn't invoiced yet or the AP team hasn't had time to reconcile — the model output says so. A "Confidence: Estimated" tag on an accrual row is more useful to a Finance Director than a clean-looking number that's actually a placeholder. It also protects the analyst: when the actual invoice arrives and differs from the estimate, the discrepancy is documented and expected, not a surprise.</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;">
+                <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">D</span>
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Reduce the collection burden on high-volume, under-resourced regions</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">A Finance team supporting a region with significant vendor complexity but limited headcount can't afford a heavy data collection process every month. The solution: pre-populate the template with prior-period data and mark what's changed. Require input only on the delta. Keep the submission to 10–15 minutes of effort for a regional contact who already has the source data open. The goal is accurate spend data with the least possible friction for the people responsible for producing it.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /playbookBody -->
+    </div><!-- /container -->
+  </section>
+
     <!-- Main Layout with Sidebar -->
     <div class="module-layout">
       
@@ -5193,6 +5444,28 @@
         heading.style.transition = 'color 300ms ease';
         heading.style.color = 'var(--accent)';
         setTimeout(() => { heading.style.color = ''; }, 1800);
+      }
+    }
+
+    // ========== PLAYBOOK TOGGLE ==========
+    function togglePlaybook() {
+      var body = document.getElementById('playbookBody');
+      var btn  = document.getElementById('playbookToggleBtn');
+      var chev = document.getElementById('playbookChevron');
+      if (!body) return;
+      var isOpen = body.style.display !== 'none';
+      if (isOpen) {
+        body.style.display = 'none';
+        btn.setAttribute('aria-expanded', 'false');
+        chev.style.transform = 'rotate(180deg)';
+        var hint = btn.querySelector('.playbook-hint');
+        if (hint) hint.textContent = 'Click to expand';
+      } else {
+        body.style.display = '';
+        btn.setAttribute('aria-expanded', 'true');
+        chev.style.transform = '';
+        var hint = btn.querySelector('.playbook-hint');
+        if (hint) hint.textContent = 'Click to collapse';
       }
     }
 
