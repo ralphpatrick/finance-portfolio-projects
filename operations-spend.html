@@ -3,39 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operations Finance & Spend Analytics · FP&A Portfolio</title>
+  <title>Operations Finance &amp; Spend Analytics · FP&amp;A Portfolio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon.png">
   <style>
     /* module-hero, module-label, module-title, module-pill, module-subtitle,
        module-problem, module-role, feature-chips — all in style.css */
-    
-    /* Main layout with sidebar */
-    .module-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      align-items: start;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
-    
-    /* Main content area */
-    .main-content {
-      min-width: 0;
-    }
-    
+
     /* Module sections */
     .module-section {
       padding: 0 0 48px 0;
-    }
-    
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .module-layout {
-        grid-template-columns: 1fr;
-      }
     }
 
     .chip {
@@ -443,6 +420,102 @@
     .alerts-empty-icon  { font-size: 24px; margin-bottom: 10px; }
     .alerts-empty-title { font-size: 14px; font-weight: 650; color: var(--text); margin-bottom: 4px; }
     .alerts-empty-sub   { font-size: 13px; color: var(--muted); line-height: 1.5; max-width: 360px; margin: 0 auto; }
+
+    /* ── Forecast Confidence Bar (dynamic) ── */
+    .conf-bar-wrap {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(15,118,110,0.04);
+      border-radius: 10px;
+      border: 1px solid rgba(15,118,110,0.14);
+    }
+    .conf-bar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .conf-bar-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .conf-summary-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .conf-summary-pill.high   { background: rgba(5,150,105,0.12);  color: #065f46; }
+    .conf-summary-pill.medium { background: rgba(245,158,11,0.12); color: #92400e; }
+    .conf-summary-pill.low    { background: rgba(220,38,38,0.10);  color: #dc2626; }
+    .conf-stacked-bar {
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      background: rgba(12,23,45,0.06);
+      margin-bottom: 8px;
+    }
+    .conf-seg {
+      height: 100%;
+      transition: width 400ms ease;
+    }
+    .conf-seg.high   { background: #10b981; }
+    .conf-seg.medium { background: #f59e0b; }
+    .conf-seg.low    { background: #ef4444; }
+    .conf-legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .conf-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .conf-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .conf-legend-dot.high   { background: #10b981; }
+    .conf-legend-dot.medium { background: #f59e0b; }
+    .conf-legend-dot.low    { background: #ef4444; }
+    .conf-legend-pct {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ── Alert card owner badge ── */
+    .alert-owner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      margin-top: 8px;
+    }
+    .alert-owner-badge.owner-procurement { background: rgba(59,130,246,0.10); color: #1d4ed8; }
+    .alert-owner-badge.owner-ap          { background: rgba(124,58,237,0.10); color: #6d28d9; }
+    .alert-owner-badge.owner-budget      { background: rgba(245,158,11,0.12); color: #92400e; }
+    .alert-owner-badge.owner-finance     { background: rgba(15,118,110,0.10); color: #0f766e; }
 
     /* Demo section */
     .demo-section {
@@ -1297,72 +1370,9 @@
     }
 
 
-    /* ═══════════════════════════════════
-       SIDEBAR — Accordion (shared across all modules)
-    ═══════════════════════════════════ */
-    .sidebar {
-      position: sticky;
-      top: 80px;
-      padding: 16px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-soft);
-      max-height: calc(100vh - 100px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(12,23,45,0.15) transparent;
-    }
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(12,23,45,0.15); border-radius: 4px; }
-    .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(12,23,45,0.28); }
 
-    /* Static top section (data mode badge + always-visible controls) */
-    .sb-static {
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 0;
-    }
-    .sb-static-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
 
-    /* Accordion group */
-    .sb-acc-group {
-      border-bottom: 1px solid var(--border);
-    }
-    .sb-acc-group:last-child { border-bottom: none; }
-
-    .sb-acc-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 12px 0;
-      cursor: pointer;
-      user-select: none;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      transition: color 120ms ease;
-    }
+    /* ── Sidebar accordion ── */
     .sb-acc-header:hover { color: var(--text); }
     .sb-acc-header.open  { color: var(--text); }
     .sb-acc-chevron {
@@ -1978,34 +1988,71 @@
     <!-- Hero -->
     <section class="module-hero">
       <div class="container">
-        <div class="module-eyebrow">Ops &bull; Spend Control</div>
+        <div class="module-eyebrow">Operations Finance &bull; Budget Operations</div>
         <h1 class="module-title">Operations Finance &amp; Spend Analytics</h1>
-        <p class="module-subtitle">Detect spend leakage early and improve forecast accuracy with controls and variance drivers.</p>
+        <p class="module-subtitle">Four connected analyses that answer the core operations question: is spend tracking the plan, where is it leaking, and what needs to be resolved before close?</p>
         <div class="feature-chips">
-          <span class="chip">Forecast vs Actuals</span>
-          <span class="chip">Accrual Tracking</span>
-          <span class="chip">Rate Cards</span>
-          <span class="chip">Anomaly Flags</span>
+          <span class="chip">Forecast Confidence</span>
+          <span class="chip">Accrual Support</span>
+          <span class="chip">Rate Discipline</span>
+          <span class="chip">Exception Routing</span>
+          <span class="chip">Owner Accountability</span>
         </div>
       </div>
     </section>
 
+  <!-- WHY THIS MATTERS STRIP -->
+  <div style="background:#f8fafb;border-bottom:1px solid var(--border);padding:18px 0;">
+    <div style="max-width:1400px;margin:0 auto;padding:0 24px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:16px;flex-shrink:0;">📈</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Forecast signals that hold under review</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.4;">Owner commitments and variance drivers surface before month-end surprises hit the P&amp;L.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:16px;flex-shrink:0;">🔍</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Rate discipline before payment</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.4;">Rate mismatches and missing POs are caught and routed to Procurement before invoices are released.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:16px;flex-shrink:0;">📋</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Accrual visibility before period close</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.4;">Open accruals tracked by vendor and month — AP knows exactly what to chase before the close deadline.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-size:16px;flex-shrink:0;">🤝</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Structured intake, less manual chasing</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.4;">Clear field ownership and async-first data collection reduce back-and-forth across regions and time zones.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DATA NEEDED STRIP -->
   <div class="data-needed-section">
     <div class="data-needed-wrap">
-      <div class="data-needed-label">📂 &nbsp;One file powers this entire module</div>
+      <div class="data-needed-label">📂 &nbsp;One structured intake drives a complete spend management workflow</div>
       <div class="data-needed-grid" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
         <div class="data-needed-item" style="border-color:rgba(15,118,110,0.30);background:#f0fdf9;">
           <div class="data-needed-icon" style="background:rgba(15,118,110,0.12);">📄</div>
           <div>
             <div class="data-needed-name">Single Flat CSV</div>
-            <div class="data-needed-desc">One row per invoice line — all 4 analyses run from this single file. No joins, no extra sheets needed.</div>
+            <div class="data-needed-desc">One row per invoice line — all 4 workflow layers run from this file. Owner fields built in.</div>
           </div>
         </div>
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">🔍</div><div><div class="data-needed-name">Rate Leakage</div><div class="data-needed-desc">Are vendors billing above contracted rates? Flags every line where unit price exceeds the agreed rate.</div></div></div>
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📦</div><div><div class="data-needed-name">Accrual Tracking</div><div class="data-needed-desc">Is accrued spend matching actual invoices? Surfaces over- and under-accruals before period close.</div></div></div>
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📊</div><div><div class="data-needed-name">Forecast vs Actual</div><div class="data-needed-desc">How accurate are spend forecasts? Shows variance by vendor and category to sharpen future planning.</div></div></div>
-        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">⚑</div><div><div class="data-needed-name">Risk &amp; Anomaly</div><div class="data-needed-desc">Any suspicious patterns? Auto-flags duplicate invoices, missing POs, and statistical spend outliers.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;">🔍</div><div><div class="data-needed-name">Rate Checks</div><div class="data-needed-desc">Vendor billed above contract? Flags every overbilled line with dollar leakage quantified for Procurement.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;">📦</div><div><div class="data-needed-name">Accrual Review</div><div class="data-needed-desc">Costs incurred but not yet invoiced? Surfaces open accruals by vendor and month before period close.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;">📊</div><div><div class="data-needed-name">Forecast Variance</div><div class="data-needed-desc">Is spend tracking the plan? Separates timing-only variance from true overruns so action is targeted.</div></div></div>
+        <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;">⚑</div><div><div class="data-needed-name">Exception Follow-up</div><div class="data-needed-desc">Missing POs, duplicate invoices, spend spikes — each flagged with a likely owner and next action.</div></div></div>
       </div>
     </div>
   </div>
@@ -2029,7 +2076,7 @@
           <span style="font-size:18px;">🗂️</span>
           <div>
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:2px;">Behind the Model</div>
-            <div style="font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.02em;">Data Collection Playbook — How I Get Clean Spend Data From a Complex, Multi-Stakeholder Environment</div>
+            <div style="font-size:16px;font-weight:700;color:var(--text);letter-spacing:-0.02em;">Operations Data Framework — How Fragmented Owner Inputs Become a Forecast-Ready Baseline</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
@@ -2044,10 +2091,10 @@
         <!-- Intro -->
         <div style="max-width:820px;margin-bottom:28px;">
           <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
-            In a large, globally distributed organisation, spend data is rarely clean or centralised. Invoice lines live in the AP system, contract rates sit in procurement, accruals are tracked in spreadsheets, and forecast figures come from cost center managers across multiple regions and time zones — often with no single person responsible for reconciling them.
+            In a large, globally distributed organisation, spend data rarely arrives clean or centralised. Invoice lines live in the AP system, contract rates sit in procurement, accruals are tracked in spreadsheets, and forecast figures come from cost center managers across multiple regions and time zones — with no single person responsible for reconciling them. The result: Finance discovers gaps only at month-end, when it's too late to act cleanly.
           </p>
           <p style="font-size:14px;color:var(--muted);line-height:1.65;">
-            Below is how I approach this systematically — mapping who owns which field, handling the mess before it reaches the model, and aligning stakeholders without creating process overhead for teams that are already stretched.
+            Below is how I approach this systematically — mapping field ownership before collection starts, handling data quality issues before they reach the model, and giving budget owners a structured, lightweight way to contribute. The goal is forecast-ready visibility without creating overhead for teams that are already stretched.
           </p>
         </div>
 
@@ -2337,12 +2384,89 @@
           </div>
         </div>
 
+        <!-- BUDGET OWNER WATCHLIST -->
+        <div style="margin-bottom:28px;padding:18px 20px;border:1px solid var(--border);border-radius:var(--radius);background:white;box-shadow:var(--shadow-soft);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:3px;">Owner Accountability</div>
+              <div style="font-size:15px;font-weight:700;color:var(--text);">Budget-Owner Watchlist
+                <span class="help-icon" data-help="A budget owner is the person responsible for a specific area of spend — e.g. a campaign manager, regional marketing lead, or operations head. This watchlist surfaces items that need their input or follow-up before Finance can close cleanly."></span>
+              </div>
+            </div>
+            <span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(245,158,11,0.12);color:#92400e;">Requires follow-up</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+            <div style="padding:12px 14px;border:1px solid rgba(220,38,38,0.20);border-radius:10px;background:rgba(220,38,38,0.02);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#dc2626;margin-bottom:5px;">🔴 Missing PO Support</div>
+              <div style="font-size:12px;color:var(--text);margin-bottom:3px;font-weight:600;">Invoice received, no PO attached</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.4;">AP cannot process. Owner must confirm verbal approval or reject invoice. → <strong>Procurement</strong></div>
+            </div>
+            <div style="padding:12px 14px;border:1px solid rgba(245,158,11,0.25);border-radius:10px;background:rgba(245,158,11,0.02);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b45309;margin-bottom:5px;">⚠️ Estimate-Only Rows</div>
+              <div style="font-size:12px;color:var(--text);margin-bottom:3px;font-weight:600;">Accrual based on estimate, not confirmed</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.4;">Forecast confidence is Medium. Owner needs to confirm or submit invoice before close. → <strong>Budget Owner</strong></div>
+            </div>
+            <div style="padding:12px 14px;border:1px solid rgba(245,158,11,0.25);border-radius:10px;background:rgba(245,158,11,0.02);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b45309;margin-bottom:5px;">⚠️ Delivered Not Invoiced</div>
+              <div style="font-size:12px;color:var(--text);margin-bottom:3px;font-weight:600;">Service delivered, invoice outstanding</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.4;">Accrual posted but no invoice to match against. Chase vendor or use prior-period average. → <strong>AP / Finance Ops</strong></div>
+            </div>
+            <div style="padding:12px 14px;border:1px solid rgba(107,114,128,0.20);border-radius:10px;background:rgba(107,114,128,0.02);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#6b7280;margin-bottom:5px;">📋 Forecast Input Pending</div>
+              <div style="font-size:12px;color:var(--text);margin-bottom:3px;font-weight:600;">Owner hasn't submitted for this period</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.4;">Forecast confidence is Low. Template deadline has passed — Finance uses prior-period default until submission arrives. → <strong>Budget Owner</strong></div>
+            </div>
+            <div style="padding:12px 14px;border:1px solid rgba(107,114,128,0.20);border-radius:10px;background:rgba(107,114,128,0.02);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#6b7280;margin-bottom:5px;">📋 Pending Procurement Sign-off</div>
+              <div style="font-size:12px;color:var(--text);margin-bottom:3px;font-weight:600;">Committed spend, contract not yet finalised</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.4;">Cannot book accrual until deal terms are confirmed. Escalate if within 10 days of close. → <strong>Procurement</strong></div>
+            </div>
+          </div>
+          <!-- Dynamic Forecast Confidence Bar -->
+          <div class="conf-bar-wrap" id="forecastConfidenceBar">
+            <div class="conf-bar-header">
+              <div class="conf-bar-title">
+                📊 Forecast Confidence
+                <span class="help-icon" data-help="Sourced from the invoiced_amount and accrual_amount columns of the same flat CSV that powers all 4 sections. These two columns split each row's total spend into: (1) the portion already matched to a confirmed invoice, and (2) the portion incurred but not yet billed. The confidence total will differ from Section 1's Total Spend because Section 1 sums the raw amount column (everything vendors billed), while confidence measures only the reconciled invoice-matched portion."></span>
+              </div>
+              <span class="conf-summary-pill high" id="confOverallPill">Load data to compute</span>
+            </div>
+            <div class="conf-stacked-bar" id="confStackedBar">
+              <div class="conf-seg high"   id="confSegHigh"   style="width:0%"></div>
+              <div class="conf-seg medium" id="confSegMedium" style="width:0%"></div>
+              <div class="conf-seg low"    id="confSegLow"    style="width:0%"></div>
+            </div>
+            <div class="conf-legend">
+              <div class="conf-legend-item">
+                <div class="conf-legend-dot high"></div>
+                <span class="conf-legend-pct" id="confPctHigh">—</span>
+                <span>High — <code style="font-size:9px;background:rgba(12,23,45,0.06);padding:1px 4px;border-radius:3px;">invoiced_amount</code> confirmed &amp; matched</span>
+              </div>
+              <div class="conf-legend-item">
+                <div class="conf-legend-dot medium"></div>
+                <span class="conf-legend-pct" id="confPctMedium">—</span>
+                <span>Medium — <code style="font-size:9px;background:rgba(12,23,45,0.06);padding:1px 4px;border-radius:3px;">accrual_amount</code> incurred, not yet invoiced</span>
+              </div>
+              <div class="conf-legend-item">
+                <div class="conf-legend-dot low"></div>
+                <span class="conf-legend-pct" id="confPctLow">—</span>
+                <span>Low — forecast rows with no transaction backing</span>
+              </div>
+            </div>
+            <div id="confNarrative" style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.5;display:none;"></div>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(15,118,110,0.12);font-size:10px;color:var(--muted);line-height:1.5;">
+              <strong style="color:#0f766e;">Same CSV, different columns.</strong> Section 1 sums the <code style="background:rgba(12,23,45,0.06);padding:1px 4px;border-radius:3px;">amount</code> column (everything vendors billed). Confidence sums <code style="background:rgba(12,23,45,0.06);padding:1px 4px;border-radius:3px;">invoiced_amount</code> + <code style="background:rgba(12,23,45,0.06);padding:1px 4px;border-radius:3px;">accrual_amount</code> (the reconciled split). The difference between the two totals is the unreconciled gap — costs billed but not yet matched to the accrual ledger.
+            </div>
+          </div>
+        </div>
+
         <!-- Rate Leakage -->
         <section class="module-section" id="section-rate-leakage">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
-          1. Vendor Rate Cards (Rate Discipline)
-          <span class="help-icon" data-help="Checks whether vendors are charging you exactly what was agreed in the contract. If they bill even $1 more per unit than the agreed rate, it silently drains profit month after month without anyone noticing — this section catches that."></span>
+          1. Vendor Rate Cards &amp; Rate Discipline
+          <span class="help-icon" data-help="Checks whether vendors are billing at exactly the rate agreed in the contract. Silent overbilling — where the invoiced rate is even a few percent above the contracted rate — compounds across high-volume vendors and drains budget without raising a flag. This section catches it line by line."></span>
         </h2>
+        <p style="font-size:13px;color:var(--muted);margin:-8px 0 16px;line-height:1.5;">Vendors billing above contracted rates is the most common silent budget drain — it compounds across high-volume vendors and rarely surfaces unless explicitly checked. Route flagged lines to <strong style="color:var(--text);">Procurement</strong> for contract validation. Finance quantifies the leakage; Procurement resolves and documents any approved rate exceptions before the next payment cycle.</p>
         
         <div class="module-card">
           <div class="card-header">
@@ -2396,9 +2520,10 @@
     <section class="module-section section-muted" id="section-accruals">
       <div class="container">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
-          2. Accrual Tracking
-          <span class="help-icon" data-help="An accrual is a cost you've already received (e.g. a month of security guard services) but haven't been billed for yet. Tracking accruals means your P&L shows the true cost for the month — not just what invoices happened to arrive. This prevents nasty surprises at month-end close."></span>
+          2. Accrual Tracking — Incurred Not Yet Invoiced
+          <span class="help-icon" data-help="An accrual is a cost already incurred (e.g. a month of IT services or facilities support) but not yet billed. Tracking accruals keeps your P&L accurate at close — it shows true costs for the period, not just what invoices happened to arrive. Open accruals left unresolved create P&L distortion and close-risk."></span>
         </h2>
+        <p style="font-size:13px;color:var(--muted);margin:-8px 0 16px;line-height:1.5;">Open accruals left unresolved at period close create P&amp;L distortion and audit exposure. Flag outstanding vendor-months <em>before</em> close — not after. <strong style="color:var(--text);">AP / Finance Ops</strong> should reconcile each open balance against the expected invoice and document large items in close commentary. A clean accrual schedule is the difference between a close that runs on time and one that doesn't.</p>
         
         <div class="module-card">
           <div class="card-header">
@@ -2437,8 +2562,9 @@
     <section class="module-section" id="section-forecast">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
           3. Forecast vs Actual Spend
-          <span class="help-icon" data-help="Compares what you predicted you'd spend with what you actually spent. The goal is to catch overruns early — before they become budget crises — and improve the accuracy of future forecasts so the business can plan confidently."></span>
+          <span class="help-icon" data-help="Compares planned spend against what was actually incurred. The goal is to separate true overruns from timing-only variance — and catch budget risk early enough to act. A variance isn't always a problem: some months run high because invoices arrive late, not because spending increased."></span>
         </h2>
+        <p style="font-size:13px;color:var(--muted);margin:-8px 0 16px;line-height:1.5;">Not every unfavorable variance is a real spend problem — and escalating the wrong ones erodes trust with budget owners. Before escalating, identify the driver: <strong style="color:var(--text);">timing</strong> (invoice arrived in the wrong period), <strong style="color:var(--text);">rate</strong> (vendor overbilled versus contract), or <strong style="color:var(--text);">volume</strong> (genuine activity increase). Timing-only variances belong in close commentary; rate and volume variances require owner action and a documented response before the next forecast cycle.</p>
         
         <div class="module-card">
           <div class="card-header">
@@ -2469,8 +2595,8 @@
           <div class="plan-builder-card" id="planBuilderCard">
             <div class="plan-builder-header">
               <div class="plan-builder-title">
-                Plan Builder: Intake → Commitments
-                <span class="pb-info" data-help="The Plan Builder turns your marketing spend requests into a finance-grade forecast. It has two layers: Intake (who asked for budget and how much) and Commitments (what finance has formally approved and can track). Together they produce a rolling forecast and a locked budget baseline for variance analysis.">i</span>
+                Plan Builder: Intake → Commitments → Locked Baseline
+                <span class="pb-info" data-help="This is how fragmented spend requests from multiple budget owners become a forecast-ready baseline. Intake captures what owners are requesting. Commitments are what Finance has formally approved and will track. Locking the baseline freezes it as the official budget — so future changes show up as real variance, not noise.">i</span>
               </div>
               <div class="plan-builder-actions">
                 <label class="pb-switch" title="Enable Plan Builder to use commitments as forecast source">
@@ -2577,13 +2703,14 @@
         </div>
     </section>
 
-    <!-- Risk & Anomaly Flags -->
+    <!-- Exception Queue -->
     <section class="module-section section-muted" id="section-risk">
       <div class="container">
         <h2 class="module-section-title" style="display:flex;align-items:center;gap:8px;">
-          4. Risk &amp; Anomaly Flags
-          <span class="help-icon" data-help="An automatic early-warning system that scans spend data for anything unusual or risky — such as a vendor billing way more than usual, a single supplier absorbing too much of your budget, or invoices that haven't arrived yet for costs already incurred. Flags problems before they escalate."></span>
+          4. Exception Queue &amp; Actionable Flags
+          <span class="help-icon" data-help="An automatic early-warning system that scans spend data for anything that needs follow-up — vendors overbilling above contract, spend spikes above average, invoices not yet received for costs already incurred, or a single supplier absorbing too much of the budget. Each flag includes a suggested action owner."></span>
         </h2>
+        <p style="font-size:13px;color:var(--muted);margin:-8px 0 16px;line-height:1.5;">Exception routing is where most spend risk gets resolved or ignored. Every flagged item routes to the team that can actually act on it — not to a generic Finance inbox: <strong style="color:var(--text);">Procurement</strong> for rate issues and missing POs, <strong style="color:var(--text);">AP / Finance Ops</strong> for duplicate invoices and open accruals, <strong style="color:var(--text);">Budget Owner</strong> for spend spikes that need a documented explanation. High-severity flags should be closed before the next reporting period, with resolution notes retained for the audit file.</p>
         
         <div class="module-card">
           <div class="card-header">
@@ -2690,21 +2817,27 @@
         <h2 class="module-section-title">What This Demonstrates</h2>
         <div class="demo-grid">
           <div class="demo-card">
-            <div class="demo-card-title">Spend Control With Teeth</div>
+            <div class="demo-card-title">Budget Operations, Not Just Dashboards</div>
             <div class="demo-card-text">
-              Rate discipline + leakage detection that prevents silent overpay.
+              Structured intake, clear field ownership, and exception routing — the full monthly workflow from spend submission to close support, not a retrospective view of what already happened.
             </div>
           </div>
           <div class="demo-card">
-            <div class="demo-card-title">Close-Ready Ops Finance</div>
+            <div class="demo-card-title">Forecast Signals That Hold Under Scrutiny</div>
             <div class="demo-card-text">
-              Accrual tracking that reduces month-end surprises and cleanup.
+              Separating timing-only variance from true overruns, and flagging low-confidence forecast items before close, gives leadership a cleaner signal and reduces the noise that leads to wrong decisions.
             </div>
           </div>
           <div class="demo-card">
-            <div class="demo-card-title">Early Warning Analytics</div>
+            <div class="demo-card-title">Close-Ready Accrual Visibility</div>
             <div class="demo-card-text">
-              Practical anomaly flags for spikes, concentration risk, and vendor issues.
+              Open accruals tracked by vendor and month, surfaced before period close — not discovered during it. AP knows exactly what to chase and Finance can sign off without last-minute corrections.
+            </div>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-title">Every Exception Has a Named Owner</div>
+            <div class="demo-card-text">
+              Rate mismatches, missing POs, and spend spikes each route to the team that can resolve them — with resolution tracked. Finance quantifies; Procurement, AP, and budget owners act.
             </div>
           </div>
         </div>
@@ -2721,7 +2854,7 @@
     <div>
       <div class="next-module-label">Next recommended</div>
       <div class="next-module-title">Indirect Cost &amp; Headcount CoE</div>
-      <div class="next-module-why">Vendor spend is under control — now model the biggest internal cost: your people.</div>
+      <div class="next-module-why">Vendor spend is tracked — now model the biggest internal cost driver: headcount, benefits, and contractor commitments.</div>
     </div>
     <div class="next-module-actions">
       <a class="btn btn-solid" href="indirect-cost-headcount.html">Open Headcount →</a>
@@ -2858,6 +2991,9 @@
       renderAll();
       });
     }
+
+    // Alias used in loadWorstCase — ops uses updateDataModeBadge instead
+    function _setSampleBtnState() { /* managed by updateDataModeBadge */ }
     
     function initializeSampleData() {
       // ── Seeded PRNG (mulberry32) — same seed = same data every page load ──
@@ -4024,7 +4160,7 @@
         if (overrunMonths.length >= 3) fSoWhatParts.push(`${overrunMonths.length}+ overrun months signals a systematic bias — the forecast baseline is set too low and needs revising upward, not just explained away.`);
       } else if (isModerate) {
         fSoWhatParts.push(`Still within tolerance, but if overrun months persist, this will require a reforecast before it becomes material.`);
-        if (overrunMonths.length >= 1) fSoWhatParts.push(`Determine if each overrun was a one-off event or a recurring driver before adjusting the forecast.`);
+        if (overrunMonths.length >= 1) fSoWhatParts.push(`Before escalating: check whether the driver is timing (late invoice), rate (vendor overbilled), or genuine volume increase. Timing-only variances should be documented in close commentary — not treated as a control issue.`);
       } else if (totalVariancePct < 0) {
         fSoWhatParts.push(`Confirm whether spend was genuinely saved or just deferred — delayed costs will surface in later months and distort the forecast.`);
         if (isHealthy && bestMonth && bestMonth.variancePct < -5) fSoWhatParts.push(`Document what drove ${bestMonth.month}'s outperformance — delayed invoice, genuine saving, or tighter vendor management — so the practice can be repeated.`);
@@ -4039,8 +4175,8 @@
       const fNowWhat = isCritical
         ? `Trigger a reforecast now. Identify the top 2–3 cost categories driving overruns, get owner sign-off on revised numbers, and present to leadership before next reporting cycle. Do not wait for month-end.`
         : isModerate
-        ? `Put the ${overrunMonths.length} overrun month${overrunMonths.length > 1 ? 's' : ''} on your agenda for the next spend review. If the overspend driver is structural (headcount, contracts, volume), update the rolling forecast rather than carry the variance forward.`
-        : `No action required on variance. Maintain current controls and use this as a baseline for the next budget cycle — the forecast methodology is working.`;
+        ? `Review overrun months: if the driver is timing only, document in close commentary. If rate-driven, route to Procurement. If volume-driven, update the rolling forecast. Do not carry the variance forward without a written explanation.`
+        : `No action required on variance. Maintain current controls and use this as a baseline for the next budget cycle — forecast methodology is working.`;
 
       // ── Render as W/SW/NW grid ────────────────────────────────
       const fRow = (lblCls, lbl, content) =>
@@ -4349,6 +4485,9 @@
             what:        `Paid ${formatCurrency(v.leakage_amount)} above contract rate for ${v.service}.`,
             why:         'Erodes margin and signals weak rate discipline.',
             action:      'Review invoices, renegotiate rate, or enforce PO controls.',
+            owner:       'Procurement',
+            ownerClass:  'owner-procurement',
+            ownerNote:   'Finance flags the leakage; Procurement resolves with vendor.',
             triggerNote: `Rate variance trigger (>${thresholds.rateVariance}% above contract)`,
             impactDollar: v.leakage_amount > 2000 ? v.leakage_amount : undefined
           });
@@ -4405,6 +4544,9 @@
           what:   `${formatPercent(spikePct)} above average (${formatCurrency(cm.amount)} vs ${formatCurrency(avg)}).`,
           why:    'May indicate a one-time event, vendor issue, or forecast miss.',
           action: 'Investigate root cause and update forecast if recurring.',
+          owner:     'Budget Owner',
+          ownerClass: 'owner-budget',
+          ownerNote:  'Owner explains the driver — timing event, genuine volume, or forecast gap.',
           impactDollar: spikePct > 40 ? spikeExcess : undefined
         });
       });
@@ -4422,6 +4564,9 @@
             what:        `Accrual of ${formatCurrency(accrual)} is ${formatPercent((accrual/incurred)*100)} of incurred cost.`,
             why:         'Large accruals increase close variance and signal invoice delays.',
             action:      'Follow up with vendor on invoice timing or true-up accrual.',
+            owner:       'AP / Finance Ops',
+            ownerClass:  'owner-ap',
+            ownerNote:   'AP confirms whether invoice is pending or a true-up is needed before close.',
             triggerNote: `Accrual ratio exceeds trigger (>${thresholds.accrual}% of incurred)`,
             impactDollar: accrual > incurred * 0.3 ? accrual : undefined
           });
@@ -4445,6 +4590,9 @@
             what:        `${formatPercent(pct)} of total spend (${formatCurrency(amt)}).`,
             why:         'High dependency on one vendor creates pricing and operational risk.',
             action:      'Diversify suppliers or negotiate volume-discount protections.',
+            owner:       'Procurement',
+            ownerClass:  'owner-procurement',
+            ownerNote:   'Procurement assesses whether a second vendor or framework contract can reduce dependency.',
             triggerNote: `Concentration exceeds trigger (>${thresholds.concentration}% of total spend)`,
             impactDollar: pct > 40 ? amt : undefined
           });
@@ -4474,6 +4622,12 @@
           const impactBadge = (alert.severity === 'high' && alert.impactDollar)
             ? `<span style="display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(220,38,38,0.10);color:#dc2626;">💸 ${formatCurrency(alert.impactDollar)} at risk</span>`
             : '';
+          const ownerBadge = alert.owner
+            ? `<div style="margin-top:10px;display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid rgba(12,23,45,0.06);">
+                <span class="alert-owner-badge ${alert.ownerClass || 'owner-finance'}">→ ${alert.owner}</span>
+                ${alert.ownerNote ? `<span style="font-size:11px;color:var(--muted);">${alert.ownerNote}</span>` : ''}
+               </div>`
+            : '';
           alertsHTML += `
             <div class="alert-card ${alert.severity}">
               <div class="alert-header">
@@ -4497,6 +4651,7 @@
                   <span class="wswn-content"><strong style="color:#0b1220;">${alert.action}</strong></span>
                 </div>
               </div>
+              ${ownerBadge}
               <div style="margin-top:8px;font-size:11px;color:var(--muted);">⚑ ${alert.triggerNote || ''}</div>
             </div>`;
         });
@@ -5471,6 +5626,122 @@
 
     // ========== RENDER ALL ==========
     
+    // ========== FORECAST CONFIDENCE ==========
+    function computeForecastConfidence() {
+      // Guard — no data yet
+      if (!accruals || accruals.length === 0) return;
+
+      // ── 1. Dollar-weighted confidence from accrual records ──────────────────
+      // High  = portion of total incurred that is already fully invoiced
+      // Medium = portion incurred but not yet invoiced (open accrual gap)
+      // Low   = estimated from forecastBudget rows that have NO matching transactions at all
+
+      let totalIncurred  = 0;
+      let totalInvoiced  = 0;
+      let totalAccrual   = 0;
+
+      accruals.forEach(a => {
+        const inc = parseFloat(a.incurred_amount) || 0;
+        const inv = parseFloat(a.invoiced_amount) || 0;
+        const acc = parseFloat(a.accrual_amount)  || 0;
+        totalIncurred += inc;
+        totalInvoiced += inv;
+        totalAccrual  += acc;
+      });
+
+      // ── 2. Low confidence: forecast $ with zero transactional backing ───────
+      // Proxy: forecastBudget rows where matching category-month has no transactions
+      const coveredKeys = new Set();
+      transactions.forEach(t => {
+        const mn = parseInt((t.date || '').substring(5, 7)) || 0;
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        if (mn >= 1 && mn <= 12) coveredKeys.add(`${t.category}-${months[mn-1]}`);
+      });
+
+      let totalForecast = 0;
+      let forecastLow   = 0;
+      forecastBudget.forEach(fb => {
+        const amt = parseFloat(fb.forecast_amount) || 0;
+        totalForecast += amt;
+        const key = `${fb.category}-${fb.month}`;
+        if (!coveredKeys.has(key)) forecastLow += amt;
+      });
+
+      // ── 3. Build confidence proportions (dollar-weighted) ───────────────────
+      // We blend the two datasets: incurred spend + forecast-only spend
+      const grandTotal = totalIncurred + forecastLow;
+
+      let highAmt   = grandTotal > 0 ? totalInvoiced : 0;
+      let mediumAmt = grandTotal > 0 ? totalAccrual  : 0;
+      let lowAmt    = grandTotal > 0 ? forecastLow   : 0;
+
+      // If grandTotal is 0, show equal thirds as placeholder
+      const safeTotal = highAmt + mediumAmt + lowAmt || 1;
+      const highPct   = (highAmt   / safeTotal) * 100;
+      const mediumPct = (mediumAmt / safeTotal) * 100;
+      const lowPct    = (lowAmt    / safeTotal) * 100;
+
+      // ── 4. Overall rating ────────────────────────────────────────────────────
+      let overallRating, overallLabel, overallClass;
+      if (highPct >= 75) {
+        overallRating = 'high';   overallLabel = 'High Confidence';
+      } else if (highPct >= 50 || (highPct >= 40 && lowPct < 15)) {
+        overallRating = 'medium'; overallLabel = 'Medium Confidence';
+      } else {
+        overallRating = 'low';    overallLabel = 'Low Confidence';
+      }
+
+      // ── 5. Update DOM ────────────────────────────────────────────────────────
+      const pill = document.getElementById('confOverallPill');
+      if (pill) {
+        pill.textContent  = overallLabel;
+        pill.className    = `conf-summary-pill ${overallRating}`;
+      }
+
+      const segH = document.getElementById('confSegHigh');
+      const segM = document.getElementById('confSegMedium');
+      const segL = document.getElementById('confSegLow');
+      if (segH) segH.style.width = highPct.toFixed(1) + '%';
+      if (segM) segM.style.width = mediumPct.toFixed(1) + '%';
+      if (segL) segL.style.width = lowPct.toFixed(1) + '%';
+
+      const pH = document.getElementById('confPctHigh');
+      const pM = document.getElementById('confPctMedium');
+      const pL = document.getElementById('confPctLow');
+      if (pH) pH.textContent = Math.round(highPct)   + '%';
+      if (pM) pM.textContent = Math.round(mediumPct) + '%';
+      if (pL) pL.textContent = Math.round(lowPct)    + '%';
+
+      // ── 6. Narrative sentence ────────────────────────────────────────────────
+      const narrative = document.getElementById('confNarrative');
+      if (narrative) {
+        narrative.style.display = '';
+        const invoicedFmt  = '$' + Math.round(totalInvoiced).toLocaleString();
+        const accrualFmt   = '$' + Math.round(totalAccrual).toLocaleString();
+        const lowFmt       = '$' + Math.round(forecastLow).toLocaleString();
+        const totalRawSpend = transactions.reduce((s, t) => s + (parseFloat(t.amount) || 0), 0);
+        const rawFmt        = '$' + Math.round(totalRawSpend).toLocaleString();
+
+        // Line 1: confidence status — what the tiers mean for close readiness
+        let statusLine = '';
+        if (overallRating === 'high') {
+          statusLine = `${Math.round(highPct)}% of spend (${invoicedFmt}) is confirmed by matched invoices.`;
+          if (mediumPct > 0) statusLine += ` The remaining ${Math.round(mediumPct)}% (${accrualFmt}) is incurred but not yet invoiced — AP should chase these before close.`;
+        } else if (overallRating === 'medium') {
+          statusLine = `${Math.round(mediumPct)}% of incurred spend (${accrualFmt}) has no invoice yet — these are open accruals. AP needs to resolve them before period close or document in close commentary.`;
+        } else {
+          statusLine = `${Math.round(lowPct)}% of forecast spend (${lowFmt}) has no transactional backing — Finance is on estimates. Chase owners for confirmed inputs before locking the baseline.`;
+        }
+
+        // Line 2: explain why confidence total may differ from Section 1, using live numbers
+        const reconciledTotal = totalInvoiced + totalAccrual;
+        const reconciledFmt   = '$' + Math.round(reconciledTotal).toLocaleString();
+        let sourceLine = `This bar reads the invoiced_amount and accrual_amount columns from the same CSV. Section 1 shows ${rawFmt} (raw amount column — everything vendors billed). This bar covers ${reconciledFmt} (the reconciled split). Both come from the same file.`;
+
+        narrative.textContent = statusLine + ' — ' + sourceLine;
+      }
+    }
+
     function renderAll() {
       populateRateFilters();
       renderRateLeakage();
@@ -5478,6 +5749,7 @@
       renderForecastVsActual();
       computeRiskFlags();
       renderSpendDecisionBox();
+      computeForecastConfidence();
     }
     
     // ========== INIT ==========
