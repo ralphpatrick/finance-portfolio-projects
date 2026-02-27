@@ -2017,6 +2017,9 @@
           <span class="chip">Exception Routing</span>
           <span class="chip">Owner Accountability</span>
         </div>
+        <div class="module-hero-meta">
+          <span class="demo-data-pill">Demo dataset &bull; Synthetic, non-confidential</span>
+        </div>
       </div>
     </section>
 
@@ -2109,12 +2112,9 @@
         <div style="max-width:960px;margin:0 auto;">
 
         <!-- Intro -->
-        <div style="margin-bottom:28px;">
-          <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
-            In a large, globally distributed organisation, spend data rarely arrives clean or centralised. Invoice lines live in the AP system, contract rates sit in procurement, accruals are tracked in spreadsheets, and forecast figures come from cost center managers across multiple regions and time zones — with no single person responsible for reconciling them. The result: Finance discovers gaps only at month-end, when it's too late to act cleanly.
-          </p>
-          <p style="font-size:14px;color:var(--muted);line-height:1.65;">
-            Below is how I approach this systematically — mapping field ownership before collection starts, handling data quality issues before they reach the model, and giving budget owners a structured, lightweight way to contribute. The goal is forecast-ready visibility without creating overhead for teams that are already stretched.
+        <div style="margin-bottom:24px;">
+          <p class="fw-intro">
+            In a globally distributed organisation, spend data rarely arrives clean. Invoice lines live in AP, contract rates in procurement, accruals in spreadsheets, and forecast figures with cost center managers — no single owner reconciles them all. Below is how I map field ownership, handle data quality before it reaches the model, and keep collection lightweight for stretched teams.
           </p>
         </div>
 
@@ -2125,7 +2125,7 @@
             Stakeholder → Field Ownership Map
           </div>
           <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
-            Every column in this module's schema has a single owner. Mapping this before data collection starts prevents the most common failure: three teams partially filling in the same field with different definitions and different source systems.
+            Every column in the schema has a single owner. Mapping this before collection starts prevents the most common failure: multiple teams partially filling the same field with different definitions.
           </p>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
 
@@ -2133,7 +2133,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #0f766e;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:6px;">Procurement</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Contract Terms &amp; Vendor Master</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Source of truth for agreed rates and vendor identity. Owns the contract — so any discrepancy between <code>contract_rate</code> and what the vendor bills is a procurement issue to resolve, not a Finance guess to make.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Source of truth for agreed rates and vendor identity. Any gap between <code>contract_rate</code> and what the vendor bills is a procurement issue to resolve — not a Finance estimate.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">vendor_id</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(15,118,110,0.08);color:#0f766e;font-weight:600;">vendor_name</span>
@@ -2148,7 +2148,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #1b4d7a;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#1b4d7a;margin-bottom:6px;">Accounts Payable / Finance Ops</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Invoice Actuals &amp; Accruals</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Owns what was actually billed and what has been accrued. In leaner Finance teams — particularly in regions with limited coverage — this data often lives in the AP system but hasn't been reconciled to the accrual ledger, which is where open accruals accumulate silently.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Owns actuals and accruals. In leaner teams this data often lives in the AP system unreconciled to the accrual ledger — where open items accumulate silently until period close.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">invoice_id</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(27,77,122,0.08);color:#1b4d7a;font-weight:600;">invoiced_amount</span>
@@ -2162,7 +2162,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #d97706;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d97706;margin-bottom:6px;">Budget Owners / Cost Center Managers</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Forecast &amp; Budget Figures</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">In large orgs with many budget owners across regions, forecast accuracy varies significantly. Each cost center manager owns their planned spend — but without a structured intake, forecast submissions arrive in different formats, at different levels of granularity, and sometimes after the close window.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Each cost center manager owns their planned spend. Without a structured intake, submissions arrive in different formats and at different granularities — sometimes after the close window.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">cost_center</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">forecast_amount</span>
@@ -2175,7 +2175,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #7c3aed;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#7c3aed;margin-bottom:6px;">Vendor / Operations</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Actual Unit Consumption</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">What was delivered, and at what rate. The gap between <code>unit_rate</code> (what the vendor charged) and <code>contract_rate</code> (what was agreed) is the core of rate leakage detection. This data comes from vendor invoices — and is the field most likely to arrive late or inconsistently formatted in decentralized or regional teams.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">The gap between <code>unit_rate</code> (billed) and <code>contract_rate</code> (agreed) is the core of rate leakage detection. Vendor invoices are the source — and the field most likely to arrive late or inconsistently formatted.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">unit_rate</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">units</span>
@@ -2193,7 +2193,7 @@
             Messy Input → Clean Schema — What the Reality Looks Like
           </div>
           <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
-            In a global ops finance environment managing significant program spend across a large distributed network of budget owners, this is the data that actually arrives — and what to do with each problem before it reaches the model.
+            This is the data that actually arrives — and how each issue is handled before it reaches the model.
           </p>
           <div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px;">
@@ -2228,7 +2228,7 @@
                 <tr style="border-bottom:1px solid var(--border);">
                   <td style="padding:10px 14px;color:var(--text);font-weight:600;">Cost center codes inconsistent across regions — some regions use a different CC format than the ERP standard</td>
                   <td style="padding:10px 14px;color:#dc2626;">Forecast vs actual variance analysis breaks if cost center codes don't match. Regional submissions often arrive with local CC identifiers that don't map cleanly to the global chart of accounts.</td>
-                  <td style="padding:10px 14px;color:#0f766e;">The template includes a CC lookup tab with the global-to-regional mapping pre-filled. Regional leads validate their CC codes against this before submission. A validation script flags any unrecognised CC on upload.</td>
+                  <td style="padding:10px 14px;color:#0f766e;">The template includes a cost_center column with accepted values listed in the accompanying field guide. Upload validation flags any unrecognised cost center codes — regional leads correct and resubmit before the data reaches the model.</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);background:rgba(246,248,251,0.4);">
                   <td style="padding:10px 14px;color:var(--text);font-weight:600;">Forecast data from Workday, actuals from the AP system — different levels of aggregation, never reconciled before the model</td>
@@ -2255,12 +2255,11 @@
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
               <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">What's in the template</div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All 17 required columns pre-labelled with data type and accepted values</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>An "Owner" row at row 1 mapping each column to Procurement / AP / Budget Owner / Vendor Ops</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Source System" row at row 2 — ERP / AP system / Procurement portal / manual — so contributors know where to pull each field from</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A CC lookup tab with global-to-regional cost center mappings pre-filled for each region</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows — one with rate leakage, one clean — so contributors immediately see what correct vs. flagged data looks like</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Confidence" field (Confirmed / Estimated / Pending) — so the model can flag which rows are based on assumptions vs. verified actuals</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All 17 required columns pre-labelled with field name and accepted value format</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Column naming signals owner: rate and vendor columns belong to Procurement; invoice and accrual columns to AP; forecast and budget columns to Budget Owners; unit consumption columns to Vendor Ops</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows — one with rate leakage (billed rate above contract), one clean — so contributors immediately see what a flagged vs. passing row looks like</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Forecast confidence is derived automatically from the invoiced vs. accrual split — no separate confidence column needed; the two columns together signal what is confirmed vs. estimated</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Upload validation rejects files with missing columns and returns the exact column names that are absent — no silent failures</li>
               </ul>
             </div>
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
@@ -2288,36 +2287,36 @@
             Stakeholder Alignment — What I Do When Procurement, AP, and Budget Owners Don't Agree on the Numbers
           </div>
           <div style="padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
-            <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
-              In a large, fully remote, multi-region ops finance environment — with a distributed network of budget owners, regional Finance teams, and data split across an ERP, an AP system, and procurement tooling — alignment doesn't happen automatically. Here's how I structure it:
+            <p style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:12px;">
+              With data split across an ERP, AP system, and procurement tooling — and owners in different time zones — alignment doesn't happen automatically. Here's how I structure it:
             </p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">A</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Agree on definitions before the template goes out — not after the data comes back</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">The most common conflict in ops finance data collection: Procurement defines "contract rate" as the rate in the signed MSA; AP defines it as the rate on the most recent PO amendment; the budget owner doesn't distinguish between the two. A one-page definition doc, shared and signed off by all three before collection opens, eliminates most disputes before they start. In a distributed team, I publish this asynchronously and give 48 hours to flag disagreements — most stakeholders respond within one working day, regardless of time zone.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">Procurement defines "contract rate" as the signed MSA rate; AP uses the most recent PO amendment; the budget owner doesn't distinguish. A one-page definition doc, shared before collection opens, eliminates most disputes before they start. I give 48 hours to flag disagreements — most sign off without a meeting.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">B</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Make Procurement the resolver, not Finance — Finance provides the evidence</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When the model flags a rate mismatch, Finance's job is to quantify and surface it — not to adjudicate it. The escalation path is clear: Finance flags the leakage with the dollar amount and the invoice line, Procurement confirms whether it was approved or not, and AP either holds or releases the payment. This keeps Finance out of vendor relationship decisions while ensuring nothing falls through the cracks between teams.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">Finance's job is to quantify and surface the mismatch — not adjudicate it. Finance flags the dollar amount; Procurement confirms whether it was approved; AP holds or releases payment. Clean escalation path, nothing falls through the cracks.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">C</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Be explicit about data quality — especially where coverage is limited</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When accruals are estimated rather than confirmed — because the vendor hasn't invoiced yet or the AP team hasn't had time to reconcile — the model output says so. A "Confidence: Estimated" tag on an accrual row is more useful to a Finance Director than a clean-looking number that's actually a placeholder. It also protects the analyst: when the actual invoice arrives and differs from the estimate, the discrepancy is documented and expected, not a surprise.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When an accrual is estimated rather than confirmed, the model says so. A "Confidence: Estimated" tag is more useful than a clean-looking placeholder — and it protects the analyst when the actual invoice differs from the estimate.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">D</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Reduce the collection burden on high-volume, under-resourced regions</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">A Finance team supporting a region with significant vendor complexity but limited headcount can't afford a heavy data collection process every month. The solution: pre-populate the template with prior-period data and mark what's changed. Require input only on the delta. Keep the submission to 10–15 minutes of effort for a regional contact who already has the source data open. The goal is accurate spend data with the least possible friction for the people responsible for producing it.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">Pre-populate the template with prior-period data and require input only on the delta. A regional contact with the source data already open should be able to submit in 10–15 minutes. Accurate data with minimum friction.</div>
                 </div>
               </div>
             </div>
@@ -5175,9 +5174,9 @@
         {
           date:'2025-01-20', vendor_id:'V002', vendor_name:'TechStaff Solutions',
           category:'Contractors', service:'Hourly', unit:'hour',
-          contract_rate:'65.00', unit_rate:'68.00', units:'40', amount:'2720.00',
+          contract_rate:'65.00', unit_rate:'65.00', units:'40', amount:'2600.00',
           cost_center:'CC101', invoice_id:'INV1002', po_id:'PO2002',
-          accrual_amount:'0.00', invoiced_amount:'2720.00',
+          accrual_amount:'0.00', invoiced_amount:'2600.00',
           forecast_amount:'12000.00', budget_amount:'11800.00'
         },
         {

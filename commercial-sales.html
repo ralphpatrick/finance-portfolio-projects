@@ -143,7 +143,7 @@
     .module-hero {
       padding: 40px 0 36px 0;
       border-bottom: 1px solid var(--border);
-      height: 250px;
+      height: 284px;
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -1624,6 +1624,76 @@
       .module-layout { padding: 12px; }
     }
 
+    /* ── Demo data pill ── */
+    .demo-data-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #4a5568;
+      padding: 4px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(246,248,251,0.9);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      margin-top: 10px;
+    }
+    .demo-data-pill::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #94a3b8;
+      flex-shrink: 0;
+    }
+    .module-hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Framework section shared classes ── */
+    .fw-intro {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 0;
+      max-width: 760px;
+    }
+
+    /* ── Unified outline button ── */
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text);
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+      white-space: nowrap;
+    }
+    .btn-outline:hover {
+      border-color: rgba(12,23,45,0.20);
+      box-shadow: 0 4px 12px rgba(11,18,32,0.08);
+    }
+    .btn-outline:active { transform: translateY(1px); }
+
+    /* ── Chip refinement ── */
+    .chip { font-size: 11px; padding: 5px 11px; }
+
+    /* ── muted color match with style.css ── */
+    :root { --muted: #4a5568; }
 
 </style>
 </head>
@@ -1655,12 +1725,15 @@
         <h1 class="module-title">Commercial &amp; Sales Finance</h1>
         <p class="module-subtitle">Four connected analyses that answer the core commercial question: where is revenue actually coming from, what is it costing, and where should resources shift next period?</p>
         <div class="feature-chips">
-          <span class="chip">✅ Promo ROI</span>
-          <span class="chip">📊 Channel P&amp;L</span>
-          <span class="chip">🔀 Price / Volume / Mix</span>
-          <span class="chip">💰 Trade Accrual</span>
-          <span class="chip">🎯 Break-even Analysis</span>
-          <span class="chip">📂 Single CSV Upload</span>
+          <span class="chip">Promo ROI</span>
+          <span class="chip">Channel P&amp;L</span>
+          <span class="chip">Price / Volume / Mix</span>
+          <span class="chip">Trade Accrual</span>
+          <span class="chip">Break-even Analysis</span>
+          <span class="chip">Single CSV Upload</span>
+        </div>
+        <div class="module-hero-meta">
+          <span class="demo-data-pill">Demo dataset &bull; Synthetic, non-confidential</span>
         </div>
       </div>
     </section>
@@ -1754,12 +1827,9 @@
         <div style="max-width:960px;margin:0 auto;">
 
         <!-- Intro statement -->
-        <div style="margin-bottom:28px;">
-          <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
-            In real-world commercial environments, the data behind decisions like these rarely arrives clean or aligned. Revenue lives in the ERP, campaign spend is owned by budget owners distributed across regions, COGS allocations are negotiated between Revenue Ops and Finance, and trade deal terms sit in procurement. Different teams use different definitions of the same metric — and without a structured collection process, the analysis can't be trusted.
-          </p>
-          <p style="font-size:14px;color:var(--muted);line-height:1.65;">
-            Below is how I approach this systematically — mapping field ownership upfront, resolving definition conflicts before data collection starts, and keeping the intake lightweight enough that budget owners across the organization can contribute without a meeting.
+        <div style="margin-bottom:24px;">
+          <p class="fw-intro">
+            Revenue lives in the ERP, campaign spend with budget owners, COGS in Finance, trade deal terms in procurement — each team uses different definitions of the same metric. Below is how I map field ownership upfront, resolve definition conflicts before collection starts, and keep intake lightweight enough that owners can contribute without a meeting.
           </p>
         </div>
 
@@ -1770,7 +1840,7 @@
             Stakeholder → Field Ownership Map
           </div>
           <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
-            Before any data collection starts, I map every field in the schema to the team that owns it. This prevents the most common failure mode: five people partially filling in the same column with slightly different definitions.
+            Before collection starts, every field maps to a single owner. This prevents the most common failure: multiple teams partially filling the same column with different definitions.
           </p>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
 
@@ -1834,7 +1904,7 @@
             Messy Input → Clean Schema — What the Reality Looks Like
           </div>
           <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
-            In a global SaaS environment, data rarely arrives ready to use. Here's what typical intake looks like — and how each issue is handled before it reaches the model.
+            Here's what typical intake looks like — and how each issue is handled before it reaches the model.
           </p>
           <div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px;">
@@ -1891,11 +1961,11 @@
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
               <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">What's in the template</div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All required columns pre-labelled with data type (number / text / %)</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>An "Owner" row at row 1 — each column shows who fills it in</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Currency" header field — USD default, overrideable per region</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows so contributors see exactly what's expected</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Confidence" column (High / Medium / Estimate) — flags data quality before it hits the model</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All 20 required columns across four analyses: channel P&amp;L, promo ROI, price/volume/mix, and trade accrual — pre-labelled with field name and expected format</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Column naming signals owner: channel and margin columns belong to Finance/Revenue Ops; promo columns to Marketing/Budget Owners; discount pool and deal timing columns to Procurement</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows (Direct and Online channels for January) so contributors see exactly what a complete, correctly formatted row looks like</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All monetary values should be in a single agreed currency before submission — the model applies no FX conversion, so alignment on currency must happen before the template goes out</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Upload validation checks for all required columns and returns the specific missing column names — no silent failures</li>
               </ul>
             </div>
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
@@ -1909,7 +1979,7 @@
             </div>
           </div>
           <div style="margin-top:12px;">
-            <button onclick="downloadFlatTemplate()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 140ms ease;" onmouseover="this.style.borderColor='rgba(12,23,45,0.2)';this.style.boxShadow='0 4px 12px rgba(11,18,32,0.08)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='';">
+            <button onclick="downloadFlatTemplate()" class="btn-outline">
               ⬇ Download the Unified CSV Template
             </button>
             <span style="font-size:11px;color:var(--muted);margin-left:12px;">All 4 modules. One file. Pre-labelled columns with owner guidance.</span>
@@ -1923,36 +1993,36 @@
             Stakeholder Alignment — What I Do When Teams Can't Agree on the Numbers
           </div>
           <div style="padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
-            <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
-              In practice, the hardest part of building a model like this isn't the analysis — it's getting a large, distributed group of budget owners across multiple regions and time zones to agree on what the numbers mean. Here's how I approach it:
+            <p style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:12px;">
+              The hardest part of a model like this isn't the analysis — it's getting distributed owners across time zones to agree on what the numbers mean. Here's how I approach it:
             </p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">A</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Define terms before collecting data</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">What counts as "baseline revenue"? Is it the prior 4-week average, the same period last year, or a statistical forecast? In a SaaS context — does it include renewals, expansions, or new logo only? I publish a one-page definition doc before data collection opens. Disagreements get resolved at that stage, not after the model is built.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">What counts as "baseline revenue"? Prior 4-week average, same period last year, or a statistical forecast? Does it include renewals and expansions, or new logo only? I publish a one-page definition doc before collection opens — disagreements get resolved then, not after the model is built.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">B</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Use lightweight async sign-off, not long meetings</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">For a fully remote, multi-timezone team, a 60-minute alignment call with 12 stakeholders is expensive and often unproductive. Instead: send a structured async brief (definition + two example data points + a "does this match your understanding?" question) and give a 48-hour window to flag disagreements. Most approvals happen without a meeting.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">A 60-minute alignment call with 12 stakeholders is expensive and often unproductive. Instead: send an async brief — definition, two example data points, and a "does this match your understanding?" question — with a 48-hour window. Most approvals happen without a meeting.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">C</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Flag data quality explicitly — don't hide uncertainty</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">If COGS are estimated because the ERP export isn't reconciled yet, the model output says so clearly. A "Confidence: Medium" tag on that row is more honest — and more useful to a decision-maker — than a clean-looking number that's actually an assumption. This also protects the analyst when the real number comes in different.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">If COGS are estimated because the ERP export isn't reconciled, the model says so. A "Confidence: Medium" tag is more useful to a decision-maker than a clean-looking placeholder — and it protects the analyst when the real number comes in different.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">D</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Reduce the burden on high-volume regions with limited Finance coverage</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When a region is understaffed, adding process overhead makes things worse. For lean teams: pre-fill what I can from existing data, limit the template to only the fields that genuinely need human input, and give a clear "if in doubt, use this default" instruction. The goal is accurate data with the least possible effort from the people who are already stretched.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">For lean teams: pre-fill from existing data, limit the template to fields that genuinely need human input, and give a clear default instruction. The goal is accurate data with minimum effort from people who are already stretched.</div>
                 </div>
               </div>
             </div>

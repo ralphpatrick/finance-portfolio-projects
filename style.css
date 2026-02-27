@@ -7,7 +7,7 @@
   --bg: #ffffff;
   --bg-muted: #f6f8fb;
   --text: #0b1220;
-  --muted: #5d6b7a;
+  --muted: #4a5568;       /* deepened for WCAG AA at body sizes */
   --border: rgba(12, 23, 45, 0.10);
   --shadow: 0 10px 30px rgba(11, 18, 32, 0.08);
   --shadow-soft: 0 8px 18px rgba(11, 18, 32, 0.06);
@@ -1099,8 +1099,8 @@ img { max-width: 100%; display: block; }
   padding: 40px 0 36px 0;
   border-bottom: 1px solid var(--border);
   /* Fixed height — every module header is exactly the same size.
-     Calculated: 40 top + 26 eyebrow + 50 title + 45 subtitle + 50 chips + 36 bottom = 247 → 250px */
-  height: 250px;
+     Added 34px for .module-hero-meta demo pill row → 284px */
+  height: 284px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1586,7 +1586,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 560px) {
   .module-layout { padding: 12px; }
   .module-title { font-size: 26px; }
-  .module-hero { height: auto; min-height: 230px; }
+  .module-hero { height: auto; min-height: 260px; }
 }
 
 /* ── Next module banner (inside module pages) ──── */
@@ -1639,4 +1639,159 @@ img { max-width: 100%; display: block; }
     padding-bottom: 44px;
     scroll-margin-top: 84px;
   }
+}
+
+/* ═══════════════════════════════════════════════════
+   DEMO DATA PILL — shared across all module pages
+   Add .demo-data-pill anywhere near the hero subtitle
+   or module header to signal synthetic non-confidential data.
+════════════════════════════════════════════════════ */
+.demo-data-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(246,248,251,0.9);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+.demo-data-pill::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   PLAYBOOK / FRAMEWORK SECTION — shared polish
+   Tightens the "Behind the Model" collapsible section
+   for scan-readability in interviews.
+════════════════════════════════════════════════════ */
+
+/* Step header badges — consistent across both modules */
+.fw-step-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.fw-step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Owner cards in field-ownership grid */
+.fw-owner-card {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+
+/* Alignment steps (A/B/C/D) */
+.fw-align-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.fw-align-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  background: rgba(15,118,110,0.15);
+  color: #0f766e;
+}
+.fw-align-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.fw-align-body {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* Intro paragraph tightening in framework */
+.fw-intro {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 760px;
+}
+
+/* ═══════════════════════════════════════════════════
+   UNIFIED BUTTON — .btn-outline
+   Consistent ghost button for framework/download CTAs
+════════════════════════════════════════════════════ */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  color: var(--text);
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+  white-space: nowrap;
+}
+.btn-outline:hover {
+  border-color: rgba(12,23,45,0.20);
+  box-shadow: 0 4px 12px rgba(11,18,32,0.08);
+}
+.btn-outline:active { transform: translateY(1px); }
+
+/* ═══════════════════════════════════════════════════
+   HERO DEMO BAND — compact row below subtitle
+   Holds the demo pill + any module-specific status
+════════════════════════════════════════════════════ */
+.module-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Chip refinement: slightly tighter, unified weight ── */
+.chip {
+  font-size: 11px;
+  padding: 5px 11px;
 }
