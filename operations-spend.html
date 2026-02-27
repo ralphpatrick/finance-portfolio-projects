@@ -1961,6 +1961,25 @@
       .module-layout { padding: 12px; }
     }
 
+    /* Download template button — hover via CSS, not inline JS */
+    .btn-download-template {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+    .btn-download-template:hover {
+      border-color: rgba(12, 23, 45, 0.2);
+      box-shadow: 0 4px 12px rgba(11, 18, 32, 0.08);
+    }
 
 </style>
 </head>
@@ -2087,9 +2106,10 @@
 
       <!-- Playbook body — open by default -->
       <div id="playbookBody" style="padding-bottom:32px;">
+        <div style="max-width:960px;margin:0 auto;">
 
         <!-- Intro -->
-        <div style="max-width:820px;margin-bottom:28px;">
+        <div style="margin-bottom:28px;">
           <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
             In a large, globally distributed organisation, spend data rarely arrives clean or centralised. Invoice lines live in the AP system, contract rates sit in procurement, accruals are tracked in spreadsheets, and forecast figures come from cost center managers across multiple regions and time zones — with no single person responsible for reconciling them. The result: Finance discovers gaps only at month-end, when it's too late to act cleanly.
           </p>
@@ -2104,10 +2124,10 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">1</span>
             Stakeholder → Field Ownership Map
           </div>
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
             Every column in this module's schema has a single owner. Mapping this before data collection starts prevents the most common failure: three teams partially filling in the same field with different definitions and different source systems.
           </p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
 
             <!-- Procurement -->
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #0f766e;">
@@ -2142,7 +2162,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #d97706;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d97706;margin-bottom:6px;">Budget Owners / Cost Center Managers</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Forecast &amp; Budget Figures</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">In an org with 80+ budget owners across regions, forecast accuracy varies significantly. Each cost center manager owns their planned spend — but without a structured intake, forecast submissions arrive in different formats, at different levels of granularity, and sometimes after the close window.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">In large orgs with many budget owners across regions, forecast accuracy varies significantly. Each cost center manager owns their planned spend — but without a structured intake, forecast submissions arrive in different formats, at different levels of granularity, and sometimes after the close window.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">cost_center</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">forecast_amount</span>
@@ -2155,7 +2175,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #7c3aed;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#7c3aed;margin-bottom:6px;">Vendor / Operations</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Actual Unit Consumption</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">What was delivered, and at what rate. The gap between <code>unit_rate</code> (what the vendor charged) and <code>contract_rate</code> (what was agreed) is the core of rate leakage detection. This data comes from vendor invoices — and is the field most likely to arrive late or inconsistently formatted in EMEA.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">What was delivered, and at what rate. The gap between <code>unit_rate</code> (what the vendor charged) and <code>contract_rate</code> (what was agreed) is the core of rate leakage detection. This data comes from vendor invoices — and is the field most likely to arrive late or inconsistently formatted in decentralized or regional teams.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">unit_rate</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(124,58,237,0.08);color:#7c3aed;font-weight:600;">units</span>
@@ -2173,7 +2193,7 @@
             Messy Input → Clean Schema — What the Reality Looks Like
           </div>
           <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
-            In a global ops finance environment running ~$80M in program spend across 80+ budget owners, this is the data that actually arrives — and what to do with each problem before it reaches the model.
+            In a global ops finance environment managing significant program spend across a large distributed network of budget owners, this is the data that actually arrives — and what to do with each problem before it reaches the model.
           </p>
           <div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px;">
@@ -2206,8 +2226,8 @@
                   <td style="padding:10px 14px;color:#0f766e;">Section 4 anomaly detection flags statistical spend spikes per category and month. AP team is responsible for confirming whether a spike is a genuine duplicate or a legitimate volume increase.</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);">
-                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Cost center codes inconsistent across regions — EMEA uses a different CC format than the ERP standard</td>
-                  <td style="padding:10px 14px;color:#dc2626;">Forecast vs actual variance analysis breaks if cost center codes don't match. EMEA submissions often arrive with local CC identifiers that don't map cleanly to the global chart of accounts.</td>
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Cost center codes inconsistent across regions — some regions use a different CC format than the ERP standard</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Forecast vs actual variance analysis breaks if cost center codes don't match. Regional submissions often arrive with local CC identifiers that don't map cleanly to the global chart of accounts.</td>
                   <td style="padding:10px 14px;color:#0f766e;">The template includes a CC lookup tab with the global-to-regional mapping pre-filled. Regional leads validate their CC codes against this before submission. A validation script flags any unrecognised CC on upload.</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);background:rgba(246,248,251,0.4);">
@@ -2216,8 +2236,8 @@
                   <td style="padding:10px 14px;color:#0f766e;">The flat schema is the reconciliation layer. <code>forecast_amount</code> and <code>budget_amount</code> are repeated on each invoice row, then aggregated by the model to the right level for comparison. One upload, one reconciliation pass.</td>
                 </tr>
                 <tr>
-                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">EMEA vendors submit invoices 15–30 days after the service period, after the close window</td>
-                  <td style="padding:10px 14px;color:#dc2626;">Late invoices mean accruals are understated at close. The P&amp;L looks better than it is — then corrects sharply when invoices arrive. Finance teams with limited EMEA coverage can't chase vendors manually.</td>
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">Regional vendors submit invoices 15–30 days after the service period, after the close window</td>
+                  <td style="padding:10px 14px;color:#dc2626;">Late invoices mean accruals are understated at close. The P&amp;L looks better than it is — then corrects sharply when invoices arrive. Finance teams with limited regional coverage can't chase vendors manually.</td>
                   <td style="padding:10px 14px;color:#0f766e;">The intake process sets a submission deadline 5 days before close. Any vendor not invoiced by that date is flagged as an open accrual using the prior-period average as the estimated amount. Section 2 highlights these explicitly.</td>
                 </tr>
               </tbody>
@@ -2231,14 +2251,14 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">3</span>
             The Intake Template — 17 Columns, 4 Owners, One File
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
               <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">What's in the template</div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>All 17 required columns pre-labelled with data type and accepted values</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>An "Owner" row at row 1 mapping each column to Procurement / AP / Budget Owner / Vendor Ops</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Source System" row at row 2 — ERP / AP system / Procurement portal / manual — so contributors know where to pull each field from</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A CC lookup tab with global-to-regional cost center mappings pre-filled for EMEA, APAC, and Americas</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A CC lookup tab with global-to-regional cost center mappings pre-filled for each region</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>Two pre-filled example rows — one with rate leakage, one clean — so contributors immediately see what correct vs. flagged data looks like</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#0f766e;font-weight:700;flex-shrink:0;">✓</span>A "Confidence" field (Confirmed / Estimated / Pending) — so the model can flag which rows are based on assumptions vs. verified actuals</li>
               </ul>
@@ -2249,12 +2269,12 @@
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">1.</span>Template + submission deadline shared via async message (Slack / email) to each regional lead — one contact per region consolidates their own team's inputs. No cross-timezone kick-off call needed.</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">2.</span>Shared tracker (e.g. Airtable) shows submission status per owner, region, and vendor — Finance has live visibility without chasing individuals over email.</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">3.</span>Validation script runs on each submission — flags specific errors (missing PO, unrecognised CC, <code>unit_rate</code> above contract) and sends back a targeted query, not a generic "please fix".</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">4.</span>For EMEA specifically — where Finance coverage is leaner — the template is pre-populated with prior-period actuals as defaults. Contributors only need to update what changed, reducing the effort to submit.</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">4.</span>For regions with leaner Finance coverage — the template is pre-populated with prior-period actuals as defaults. Contributors only need to update what changed, reducing the effort to submit.</li>
               </ul>
             </div>
           </div>
           <div style="margin-top:12px;">
-            <button onclick="downloadFlatTemplate()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid var(--border);background:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 140ms ease;" onmouseover="this.style.borderColor='rgba(12,23,45,0.2)';this.style.boxShadow='0 4px 12px rgba(11,18,32,0.08)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='';">
+            <button onclick="downloadFlatTemplate()" class="btn-download-template">
               ⬇ Download the Unified CSV Template
             </button>
             <span style="font-size:11px;color:var(--muted);margin-left:12px;">17 columns. 4 owners. One file. All 4 modules update on upload.</span>
@@ -2267,9 +2287,9 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">4</span>
             Stakeholder Alignment — What I Do When Procurement, AP, and Budget Owners Don't Agree on the Numbers
           </div>
-          <div style="max-width:860px;padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
+          <div style="padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
             <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
-              In a large, fully remote, multi-region ops finance environment — with 80+ budget owners, a lean EMEA Finance team, and data split across Workday, an AP system, and procurement tooling — alignment doesn't happen automatically. Here's how I structure it:
+              In a large, fully remote, multi-region ops finance environment — with a distributed network of budget owners, regional Finance teams, and data split across an ERP, an AP system, and procurement tooling — alignment doesn't happen automatically. Here's how I structure it:
             </p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -2289,8 +2309,8 @@
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">C</span>
                 <div>
-                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Be explicit about data quality — especially for EMEA where coverage is limited</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When EMEA accruals are estimated rather than confirmed — because the vendor hasn't invoiced yet or the AP team hasn't had time to reconcile — the model output says so. A "Confidence: Estimated" tag on an accrual row is more useful to a Finance Director than a clean-looking number that's actually a placeholder. It also protects the analyst: when the actual invoice arrives and differs from the estimate, the discrepancy is documented and expected, not a surprise.</div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Be explicit about data quality — especially where coverage is limited</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">When accruals are estimated rather than confirmed — because the vendor hasn't invoiced yet or the AP team hasn't had time to reconcile — the model output says so. A "Confidence: Estimated" tag on an accrual row is more useful to a Finance Director than a clean-looking number that's actually a placeholder. It also protects the analyst: when the actual invoice arrives and differs from the estimate, the discrepancy is documented and expected, not a surprise.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -2304,6 +2324,7 @@
           </div>
         </div>
 
+        </div><!-- /inner-centered-wrapper -->
       </div><!-- /playbookBody -->
     </div><!-- /container -->
   </section>
@@ -2997,7 +3018,7 @@
     
     function initializeSampleData() {
       // ── Seeded PRNG (mulberry32) — same seed = same data every page load ──
-      let _seed = 20240101;
+      let _seed = 20250101;
       function seededRand() {
         _seed |= 0; _seed = _seed + 0x6D2B79F5 | 0;
         let t = Math.imul(_seed ^ _seed >>> 15, 1 | _seed);
@@ -3027,8 +3048,8 @@
         unit: v.unit,
         contract_rate: v.rate,
         currency: 'USD',
-        effective_start: '2024-01-01',
-        effective_end: '2024-12-31',
+        effective_start: '2025-01-01',
+        effective_end: '2025-12-31',
         category: v.category
       }));
       
@@ -3048,7 +3069,7 @@
             unitRate = vendor.rate * sRandFloat(0.92, 0.98);
           }
           transactions.push({
-            date: `2024-${String(monthNum).padStart(2, '0')}-${String(sRandInt(1, 28)).padStart(2, '0')}`,
+            date: `2025-${String(monthNum).padStart(2, '0')}-${String(sRandInt(1, 28)).padStart(2, '0')}`,
             vendor_id: vendor.id,
             service: vendor.service,
             units,
@@ -3067,7 +3088,7 @@
         const monthNum = mIdx + 1;
         vendors.forEach(vendor => {
           const monthlyTrans = transactions.filter(t => 
-            t.vendor_id === vendor.id && t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`)
+            t.vendor_id === vendor.id && t.date.startsWith(`2025-${String(monthNum).padStart(2, '0')}`)
           );
           if (monthlyTrans.length > 0) {
             const incurred = monthlyTrans.reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -3162,8 +3183,8 @@
         unit: v.unit,
         contract_rate: v.rate.toFixed(2),
         currency: 'USD',
-        effective_start: '2024-01-01',
-        effective_end: '2024-12-31',
+        effective_start: '2025-01-01',
+        effective_end: '2025-12-31',
         category: v.category
       }));
 
@@ -3182,7 +3203,7 @@
             unitRate = vendor.rate * randFloat(1.02, 1.18);
           }
           transactions.push({
-            date: `2024-${String(monthNum).padStart(2, '0')}-${String(randInt(1, 28)).padStart(2, '0')}`,
+            date: `2025-${String(monthNum).padStart(2, '0')}-${String(randInt(1, 28)).padStart(2, '0')}`,
             vendor_id: vendor.id,
             service: vendor.service,
             units,
@@ -3201,7 +3222,7 @@
         const monthNum = mIdx + 1;
         vendors.forEach(vendor => {
           const monthlyTrans = transactions.filter(t =>
-            t.vendor_id === vendor.id && t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`));
+            t.vendor_id === vendor.id && t.date.startsWith(`2025-${String(monthNum).padStart(2, '0')}`));
           if (monthlyTrans.length > 0) {
             const incurred = monthlyTrans.reduce((sum, t) => sum + parseFloat(t.amount), 0);
             const invoicedPct = randFloat(cfg.accrualInvoicedMin, 1.0);
@@ -3290,7 +3311,7 @@
         rateCards = vendors.map(v => ({
           vendor_id: v.id, vendor_name: v.name, service: v.service,
           unit: v.unit, contract_rate: v.rate, currency: 'USD',
-          effective_start: '2024-01-01', effective_end: '2024-12-31', category: v.category
+          effective_start: '2025-01-01', effective_end: '2025-12-31', category: v.category
         }));
 
         // ── Transactions: massive overbilling on all vendors ──────────────────
@@ -3311,7 +3332,7 @@
             const amount = unitCount * billedRate;
 
             transactions.push({
-              date: `2024-${pad(monthNum)}-${pad(10 + (mIdx % 18))}`,
+              date: `2025-${pad(monthNum)}-${pad(10 + (mIdx % 18))}`,
               vendor_id: v.id,
               service: v.service,
               units: unitCount,
@@ -3327,7 +3348,7 @@
             if (v.id === 'V001' && [2, 6, 9].includes(mIdx)) {
               const spikeUnits = 1200; // creates >40% spike above monthly avg
               transactions.push({
-                date: `2024-${pad(monthNum)}-20`,
+                date: `2025-${pad(monthNum)}-20`,
                 vendor_id: v.id, service: v.service,
                 units: spikeUnits,
                 unit_rate: (v.rate * 1.35).toFixed(2),
@@ -3346,7 +3367,7 @@
           const monthNum = mIdx + 1;
           vendors.forEach(v => {
             const mt = transactions.filter(t =>
-              t.vendor_id === v.id && t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`)
+              t.vendor_id === v.id && t.date.startsWith(`2025-${String(monthNum).padStart(2,'0')}`)
             );
             if (!mt.length) return;
             const incurred  = mt.reduce((s,t) => s + parseFloat(t.amount), 0);
@@ -3372,7 +3393,7 @@
           const monthNum = mIdx + 1;
           // Sum actual transactions for this month to anchor forecast below it
           const monthActual = transactions
-            .filter(t => t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`))
+            .filter(t => t.date.startsWith(`2025-${String(monthNum).padStart(2,'0')}`))
             .reduce((s, t) => s + parseFloat(t.amount), 0);
           // Spread forecast across cost_centers × categories (20 buckets), each = 65% of actual / 20
           const forecastPerBucket = (monthActual * 0.65) / 20;
@@ -3676,7 +3697,7 @@
         // Count distinct invoice_ids from transactions for this month
         const monthNum = months.indexOf(month) + 1;
         const monthTrans = transactions.filter(t =>
-          t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`)
+          t.date.startsWith(`2025-${String(monthNum).padStart(2,'0')}`)
         );
         const invoiceCount = new Set(monthTrans.map(t => t.invoice_id).filter(Boolean)).size;
         return { month, incurred, invoiced, accrual, invoiceCount };
@@ -4036,7 +4057,7 @@
       
       const actualByMonth = months.map(month => {
         const monthNum = months.indexOf(month) + 1;
-        const monthTrans = transactions.filter(t => t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`));
+        const monthTrans = transactions.filter(t => t.date.startsWith(`2025-${String(monthNum).padStart(2, '0')}`));
         const actual = monthTrans.reduce((sum, t) => sum + parseFloat(t.amount), 0);
         return { month, actual };
       });
@@ -4934,7 +4955,7 @@
       
       months.forEach(month => {
         const monthNum = months.indexOf(month) + 1;
-        const monthTrans = transactions.filter(t => t.date.startsWith(`2024-${String(monthNum).padStart(2, '0')}`));
+        const monthTrans = transactions.filter(t => t.date.startsWith(`2025-${String(monthNum).padStart(2, '0')}`));
         const actual = monthTrans.reduce((sum, t) => sum + parseFloat(t.amount), 0);
         
         const monthForecast = forecastBudget.filter(f => f.month === month);
@@ -5144,7 +5165,7 @@
       const headers = FLAT_CSV_REQUIRED;
       const rows = [
         {
-          date:'2024-01-15', vendor_id:'V001', vendor_name:'QuickShip Logistics',
+          date:'2025-01-15', vendor_id:'V001', vendor_name:'QuickShip Logistics',
           category:'Logistics', service:'Delivery', unit:'delivery',
           contract_rate:'15.00', unit_rate:'15.50', units:'50', amount:'775.00',
           cost_center:'CC100', invoice_id:'INV1001', po_id:'PO2001',
@@ -5152,7 +5173,7 @@
           forecast_amount:'8000.00', budget_amount:'8200.00'
         },
         {
-          date:'2024-01-20', vendor_id:'V002', vendor_name:'TechStaff Solutions',
+          date:'2025-01-20', vendor_id:'V002', vendor_name:'TechStaff Solutions',
           category:'Contractors', service:'Hourly', unit:'hour',
           contract_rate:'65.00', unit_rate:'68.00', units:'40', amount:'2720.00',
           cost_center:'CC101', invoice_id:'INV1002', po_id:'PO2002',
@@ -5160,7 +5181,7 @@
           forecast_amount:'12000.00', budget_amount:'11800.00'
         },
         {
-          date:'2024-02-10', vendor_id:'V001', vendor_name:'QuickShip Logistics',
+          date:'2025-02-10', vendor_id:'V001', vendor_name:'QuickShip Logistics',
           category:'Logistics', service:'Delivery', unit:'delivery',
           contract_rate:'15.00', unit_rate:'15.00', units:'60', amount:'900.00',
           cost_center:'CC100', invoice_id:'INV1003', po_id:'PO2003',
@@ -5257,7 +5278,7 @@
         const accrualRows = months.map(month => {
           const monthAccruals = accruals.filter(a => a.month === month);
           const mN = months.indexOf(month) + 1;
-          const mTx = transactions.filter(t => t.date.startsWith(`2024-${String(mN).padStart(2,'0')}`));
+          const mTx = transactions.filter(t => t.date.startsWith(`2025-${String(mN).padStart(2,'0')}`));
           const invoiceCount = new Set(mTx.map(t => t.invoice_id).filter(Boolean)).size;
           const incurred  = monthAccruals.reduce((s,a) => s + parseFloat(a.incurred_amount), 0);
           const invoiced  = monthAccruals.reduce((s,a) => s + parseFloat(a.invoiced_amount), 0);
@@ -5278,7 +5299,7 @@
         // ── Sheet 3: Forecast vs Actual by Month ──
         const fvRows = months.map(month => {
           const mN = months.indexOf(month) + 1;
-          const mTx = transactions.filter(t => t.date.startsWith(`2024-${String(mN).padStart(2,'0')}`));
+          const mTx = transactions.filter(t => t.date.startsWith(`2025-${String(mN).padStart(2,'0')}`));
           const actual   = mTx.reduce((s,t) => s + parseFloat(t.amount), 0);
           const mFB      = forecastBudget.filter(f => f.month === month);
           const forecast = mFB.reduce((s,f) => s + parseFloat(f.forecast_amount), 0);
@@ -5380,7 +5401,7 @@
       months.forEach(month => {
         const monthNum = months.indexOf(month) + 1;
         const monthTrans = transactions.filter(t =>
-          t.date.startsWith(`2024-${String(monthNum).padStart(2,'0')}`)
+          t.date.startsWith(`2025-${String(monthNum).padStart(2,'0')}`)
         );
         const actual = monthTrans.reduce((s, t) => s + parseFloat(t.amount), 0);
         const fb = forecastBudget.filter(f => f.month === month);

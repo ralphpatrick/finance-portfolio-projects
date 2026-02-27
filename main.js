@@ -29,11 +29,13 @@
     const isModule = file.endsWith(".html") && file !== "index.html";
     if (!isModule) return;
 
-    const key = "ga_entry_module";
-    if (!sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, file);
-      gtag("event", "entry_module", { module: file });
-    }
+    try {
+      const key = "ga_entry_module";
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, file);
+        gtag("event", "entry_module", { module: file });
+      }
+    } catch (e) { /* sessionStorage unavailable (private browsing / Safari ITP) */ }
   })();
 
   // =========================================
@@ -42,11 +44,13 @@
   // =========================================
   (function trackNavFlow() {
     const to = (location.pathname || "") + (location.search || "");
-    const from = sessionStorage.getItem("ga_prev_path") || "(entry)";
-    gtag("event", "nav_flow", { from, to });
-
-    // Set prev for the NEXT page
-    sessionStorage.setItem("ga_prev_path", to);
+    try {
+      const from = sessionStorage.getItem("ga_prev_path") || "(entry)";
+      gtag("event", "nav_flow", { from, to });
+      sessionStorage.setItem("ga_prev_path", to);
+    } catch (e) {
+      gtag("event", "nav_flow", { from: "(entry)", to });
+    }
   })();
 
   // =========================================
@@ -452,11 +456,26 @@ window.withStableScroll = function withStableScroll(fn) {
     function position(targetEl) {
       if (!targetEl) return;
       var r = targetEl.getBoundingClientRect();
-      // default: centered above the target
-      var top = r.top + window.scrollY - 10;
-      var left = r.left + window.scrollX + r.width / 2;
+      var ttW = 270;
+      var gap = 8;
 
+      // Horizontal: center on element, clamp to viewport edges
+      var left = r.left + r.width / 2 - ttW / 2;
+      left = Math.max(12, Math.min(left, window.innerWidth - ttW - 12));
+
+      ttEl.style.position = "fixed";
+      ttEl.style.width = ttW + "px";
+      ttEl.style.transform = "none";
       ttEl.style.left = left + "px";
+
+      // Vertical: prefer above, flip below if not enough space
+      var ttH = ttEl.offsetHeight || 60;
+      var top;
+      if (r.top - ttH - gap - 8 < 0) {
+        top = r.bottom + gap;
+      } else {
+        top = r.top - ttH - gap;
+      }
       ttEl.style.top = top + "px";
     }
 

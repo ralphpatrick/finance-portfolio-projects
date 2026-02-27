@@ -1751,14 +1751,15 @@
 
       <!-- Playbook body — open by default -->
       <div id="playbookBody" style="padding-bottom:32px;">
+        <div style="max-width:960px;margin:0 auto;">
 
         <!-- Intro statement -->
-        <div style="max-width:820px;margin-bottom:28px;">
+        <div style="margin-bottom:28px;">
           <p style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:10px;">
-            In real-world commercial environments, the data behind decisions like these rarely arrives clean or aligned. Revenue lives in the ERP, campaign spend is owned by 80+ budget owners across regions, COGS allocations are negotiated between Revenue Ops and Finance, and trade deal terms sit in procurement. Different teams use different definitions of the same metric — and without a structured collection process, the analysis can't be trusted.
+            In real-world commercial environments, the data behind decisions like these rarely arrives clean or aligned. Revenue lives in the ERP, campaign spend is owned by budget owners distributed across regions, COGS allocations are negotiated between Revenue Ops and Finance, and trade deal terms sit in procurement. Different teams use different definitions of the same metric — and without a structured collection process, the analysis can't be trusted.
           </p>
           <p style="font-size:14px;color:var(--muted);line-height:1.65;">
-            Below is how I approach this systematically — mapping field ownership upfront, resolving definition conflicts before data collection starts, and keeping the intake lightweight enough that 80+ budget owners can contribute without a meeting.
+            Below is how I approach this systematically — mapping field ownership upfront, resolving definition conflicts before data collection starts, and keeping the intake lightweight enough that budget owners across the organization can contribute without a meeting.
           </p>
         </div>
 
@@ -1768,10 +1769,10 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">1</span>
             Stakeholder → Field Ownership Map
           </div>
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
             Before any data collection starts, I map every field in the schema to the team that owns it. This prevents the most common failure mode: five people partially filling in the same column with slightly different definitions.
           </p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
 
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #0f766e;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0f766e;margin-bottom:6px;">Finance (FP&amp;A)</div>
@@ -1802,7 +1803,7 @@
             <div style="padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:white;border-left:3px solid #d97706;">
               <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d97706;margin-bottom:6px;">Marketing / Growth (Budget Owners)</div>
               <div style="font-size:12px;color:var(--text);font-weight:600;margin-bottom:4px;">Baseline Revenue, Promo Revenue, GP During Promo, Promo Cost</div>
-              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Each budget owner knows their campaign spend and the revenue numbers during the promo window. In orgs with 80+ budget owners, this must be collected via a structured template — not ad hoc emails.</div>
+              <div style="font-size:11px;color:var(--muted);line-height:1.5;">Each budget owner knows their campaign spend and the revenue numbers during the promo window. In orgs with many distributed budget owners, this must be collected via a structured template — not ad hoc emails.</div>
               <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">baseline_revenue</span>
                 <span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:#b45309;font-weight:600;">promo_revenue</span>
@@ -1832,7 +1833,7 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">2</span>
             Messy Input → Clean Schema — What the Reality Looks Like
           </div>
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;max-width:700px;">
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
             In a global SaaS environment, data rarely arrives ready to use. Here's what typical intake looks like — and how each issue is handled before it reaches the model.
           </p>
           <div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;">
@@ -1856,7 +1857,7 @@
                   <td style="padding:10px 14px;color:#0f766e;">Template header requires: currency + FX rate used. Finance team provides a shared rate card per period.</td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border);">
-                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">COGS missing for EMEA channels — "finance will add later"</td>
+                  <td style="padding:10px 14px;color:var(--text);font-weight:600;">COGS missing for certain channels — "finance will add later"</td>
                   <td style="padding:10px 14px;color:#dc2626;">GP% and contribution are blank = model can't compute Channel P&amp;L</td>
                   <td style="padding:10px 14px;color:#0f766e;">Validation flags missing COGS rows before submission. Default: use prior-period COGS% as placeholder, flagged in output.</td>
                 </tr>
@@ -1886,7 +1887,7 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">3</span>
             The Intake Template — One File, Clear Ownership, No Ambiguity
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div style="padding:16px 18px;border:1px solid var(--border);border-radius:12px;background:white;">
               <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">What's in the template</div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
@@ -1903,7 +1904,7 @@
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">1.</span>Template + deadline sent to each owner via async message (Slack/email) with clear field instructions — no meeting required to kick off</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">2.</span>Shared tracker (e.g. Airtable) shows submission status per owner and region — no chasing over email threads</li>
                 <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">3.</span>Validation script runs on each submission — flags gaps and sends back a specific query, not a generic "please fix"</li>
-                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">4.</span>Regional leads (EMEA, APAC, Americas) each have a single point of contact who consolidates their region's inputs — reduces noise for Finance</li>
+                <li style="font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;"><span style="color:#1b4d7a;font-weight:700;flex-shrink:0;">4.</span>Regional leads each have a single point of contact who consolidates their region's inputs — reduces noise for Finance</li>
               </ul>
             </div>
           </div>
@@ -1921,9 +1922,9 @@
             <span style="width:20px;height:20px;border-radius:50%;background:var(--accent);color:white;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">4</span>
             Stakeholder Alignment — What I Do When Teams Can't Agree on the Numbers
           </div>
-          <div style="max-width:860px;padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
+          <div style="padding:20px 24px;border:1px solid rgba(15,118,110,0.25);border-radius:14px;background:#f0fdf9;">
             <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
-              In practice, the hardest part of building a model like this isn't the analysis — it's getting 80+ budget owners across multiple regions and time zones to agree on what the numbers mean. Here's how I approach it:
+              In practice, the hardest part of building a model like this isn't the analysis — it's getting a large, distributed group of budget owners across multiple regions and time zones to agree on what the numbers mean. Here's how I approach it:
             </p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -1944,13 +1945,13 @@
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">C</span>
                 <div>
                   <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Flag data quality explicitly — don't hide uncertainty</div>
-                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">If EMEA COGS are estimated because the Workday export isn't reconciled yet, the model output says so clearly. A "Confidence: Medium" tag on that row is more honest — and more useful to a decision-maker — than a clean-looking number that's actually an assumption. This also protects the analyst when the real number comes in different.</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.55;">If COGS are estimated because the ERP export isn't reconciled yet, the model output says so clearly. A "Confidence: Medium" tag on that row is more honest — and more useful to a decision-maker — than a clean-looking number that's actually an assumption. This also protects the analyst when the real number comes in different.</div>
                 </div>
               </div>
               <div style="display:flex;align-items:flex-start;gap:12px;">
                 <span style="width:24px;height:24px;border-radius:6px;background:rgba(15,118,110,0.15);color:#0f766e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">D</span>
                 <div>
-                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Reduce the burden on high-volume regions (e.g. EMEA with limited Finance coverage)</div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;">Reduce the burden on high-volume regions with limited Finance coverage</div>
                   <div style="font-size:12px;color:var(--muted);line-height:1.55;">When a region is understaffed, adding process overhead makes things worse. For lean teams: pre-fill what I can from existing data, limit the template to only the fields that genuinely need human input, and give a clear "if in doubt, use this default" instruction. The goal is accurate data with the least possible effort from the people who are already stretched.</div>
                 </div>
               </div>
@@ -1958,6 +1959,7 @@
           </div>
         </div>
 
+        </div><!-- /inner-centered-wrapper -->
       </div><!-- /playbookBody -->
     </div><!-- /container -->
   </section>
