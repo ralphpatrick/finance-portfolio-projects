@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Operating Rhythm Layer — Coordinate the next best action across teams, owners, and timezones." />
+  <meta name="theme-color" content="#0B1220" />
+  <title>Operating Rhythm Layer — Cross-Regional Coordination</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    :root {
+      --bg:#ffffff; --bg-muted:#f6f8fb; --text:#0b1220; --muted:#5d6b7a;
+      --border:rgba(12,23,45,0.10); --shadow:0 10px 30px rgba(11,18,32,0.08);
+      --shadow-soft:0 8px 18px rgba(11,18,32,0.06);
+      --accent:#0f766e; --accent-2:#1b4d7a; --accent-soft:rgba(15,118,110,0.10);
+      --radius:18px; --radius-sm:14px; --max:1120px;
+      --font-sans:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      --c-healthy:#059669; --c-healthy-bg:rgba(5,150,105,0.08);
+      --c-watch:#d97706;   --c-watch-bg:rgba(217,119,6,0.08);
+      --c-risk:#dc2626;    --c-risk-bg:rgba(220,38,38,0.08);
+      --c-stalled:#94a3b8; --c-stalled-bg:rgba(148,163,184,0.10);
+    }
+    *{box-sizing:border-box;} html{scroll-behavior:auto;}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.45;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;} p{margin:0;} h1,h2,h3,h4{margin:0;letter-spacing:-0.02em;}
+    .container{width:min(var(--max),calc(100% - 48px));margin:0 auto;}
+    .skip-link{position:absolute;left:-999px;top:12px;padding:10px 12px;background:var(--text);color:white;border-radius:10px;z-index:9999;}
+    .skip-link:focus{left:12px;}
+
+    /* NAV */
+    .site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.97);border-bottom:1px solid var(--border);will-change:transform;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;}
+    .brand{display:inline-flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-0.02em;}
+    .brand-mark{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px var(--accent-soft);}
+
+    /* TICKER */
+    .tz-ticker{position:sticky;top:var(--nav-h,56px);z-index:89;background:rgba(250,251,252,0.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);height:36px;display:flex;align-items:center;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity 220ms ease,transform 220ms ease;}
+    .tz-ticker.tz-ticker--visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+    .tz-ticker-inner{max-width:900px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;overflow:hidden;}
+    .tz-ticker-brand{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:750;letter-spacing:0.07em;text-transform:uppercase;color:var(--accent);text-decoration:none;flex-shrink:0;padding-right:10px;}
+    .tz-ticker-brand:hover{opacity:0.75;}
+    .tz-ticker-divider{width:1px;height:16px;background:var(--border);flex-shrink:0;margin-right:10px;}
+    .tz-ticker-items{display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;min-width:0;}
+    .tz-ticker-items::-webkit-scrollbar{display:none;}
+    .tz-ticker-item{display:inline-flex;align-items:center;gap:5px;padding:0 12px;height:36px;font-size:11px;flex-shrink:0;border-right:1px solid var(--border);white-space:nowrap;}
+    .tz-ticker-item:first-child{padding-left:0;} .tz-ticker-item:last-child{border-right:none;}
+    .tz-ticker-item-label{font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);}
+    .tz-ticker-item-value{font-size:11px;font-weight:620;color:var(--text);font-variant-numeric:tabular-nums;}
+    .tz-ticker-item-value.tk-active{color:#059669;font-weight:700;} .tz-ticker-item-value.tk-ending{color:#d97706;font-weight:700;}
+    .tz-ticker-item-value.tk-offline{color:#94a3b8;} .tz-ticker-item-value.tk-window{color:var(--accent);font-weight:680;}
+    .tz-ticker-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+    .tz-ticker-dot.tk-active{background:#059669;} .tz-ticker-dot.tk-ending{background:#d97706;} .tz-ticker-dot.tk-offline{background:#cbd5e1;}
+    .tz-live-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;flex-shrink:0;}
+    @media(max-width:640px){.tz-ticker-inner{padding:0 12px;}.tz-ticker-item{padding:0 9px;}}
+
+    /* SIDEBAR COMPONENTS */
+    .sb-static{padding-bottom:14px;border-bottom:1px solid var(--border);}
+    .sb-static-title{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+    .data-badge{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:1px solid rgba(15,118,110,0.18);border-radius:999px;padding:3px 8px;}
+    .sb-acc-group{border-bottom:1px solid var(--border);} .sb-acc-group:last-child{border-bottom:none;}
+    .sb-acc-header{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 0;background:transparent;border:none;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;font-family:inherit;gap:8px;}
+    .sb-acc-header:hover,.sb-acc-header.open{color:var(--text);}
+    .sb-acc-chevron{font-size:10px;margin-left:auto;flex-shrink:0;transition:transform 200ms ease;color:var(--muted);}
+    .sb-acc-header.open .sb-acc-chevron{transform:rotate(180deg);color:var(--text);}
+    .sb-acc-badge{font-size:10px;font-weight:700;color:var(--muted);background:var(--bg-muted);border:1px solid var(--border);border-radius:999px;padding:2px 7px;white-space:nowrap;}
+    .sb-acc-body{display:none;padding-bottom:14px;} .sb-acc-body.open{display:block;}
+    .sb-acc-tabs{display:flex;flex-direction:column;gap:6px;}
+    .sb-acc-tab{display:flex;align-items:center;width:100%;padding:9px 12px;background:white;border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;text-align:left;transition:all 140ms ease;}
+    .sb-acc-tab:hover{border-color:rgba(12,23,45,0.18);box-shadow:0 4px 12px rgba(11,18,32,0.06);color:var(--text);}
+    .sb-acc-tab.active{background:var(--text);color:white;border-color:var(--text);}
+    .sb-acc-btn{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;background:white;border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;font-family:inherit;text-align:left;transition:all 140ms ease;margin-top:6px;}
+    .sb-acc-btn:hover{border-color:rgba(12,23,45,0.18);box-shadow:0 4px 12px rgba(11,18,32,0.06);}
+    .sb-acc-btn.primary{background:var(--text);color:white;border-color:var(--text);}
+    .demo-data-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--muted);padding:4px 11px;border-radius:999px;border:1px solid var(--border);background:rgba(246,248,251,0.9);letter-spacing:0.01em;white-space:nowrap;margin-top:10px;}
+    .demo-data-pill::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#94a3b8;flex-shrink:0;}
+
+    /* SECTION RHYTHM */
+    .or-section{padding:28px 0;border-bottom:1px solid var(--border);}
+    .or-section:last-child{border-bottom:none;}
+    .or-section-label{font-size:10px;font-weight:800;letter-spacing:0.10em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+    .or-section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* 1. COMMAND STRIP */
+    .or-cmd-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .or-cmd-card{padding:16px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);box-shadow:0 1px 0 rgba(11,18,32,0.02);}
+    .or-cmd-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+    .or-cmd-value{font-size:24px;font-weight:760;letter-spacing:-0.03em;line-height:1;margin-bottom:4px;}
+    .or-cmd-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+    .or-cmd-card.is-alert .or-cmd-value{color:var(--c-risk);}
+    .or-cmd-card.is-accent .or-cmd-value{color:var(--accent);font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-top:4px;}
+    .or-cmd-card.is-accent-2 .or-cmd-value{color:var(--accent-2);font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-top:4px;}
+
+    /* 2. BLOCKER SPOTLIGHT */
+    .or-blocker{background:white;border:1.5px solid rgba(220,38,38,0.22);border-radius:var(--radius);box-shadow:0 0 0 4px rgba(220,38,38,0.04),var(--shadow-soft);overflow:hidden;}
+    .or-blocker-head{padding:13px 20px;background:rgba(220,38,38,0.04);border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;gap:10px;}
+    .or-blocker-pulse{width:8px;height:8px;border-radius:50%;background:var(--c-risk);flex-shrink:0;animation:or-pulse 2s ease-in-out infinite;}
+    @keyframes or-pulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.3);}50%{box-shadow:0 0 0 5px rgba(220,38,38,0);}}
+    .or-blocker-head-title{font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-risk);}
+    .or-blocker-body{display:grid;grid-template-columns:1fr 1fr;}
+    .or-blocker-cell{padding:16px 20px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .or-blocker-cell:nth-child(2){border-right:none;}
+    .or-blocker-cell.full{grid-column:1/-1;border-right:none;border-bottom:none;}
+    .or-blocker-cell-label{font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .or-blocker-cell-value{font-size:13px;font-weight:600;color:var(--text);line-height:1.5;}
+    .or-blocker-cell-value.red{color:var(--c-risk);}
+    .or-path{font-size:13px;font-weight:600;color:var(--accent);padding:12px 14px;background:rgba(15,118,110,0.05);border-radius:10px;border:1px solid rgba(15,118,110,0.15);margin-top:2px;line-height:1.55;}
+
+    /* 3. BATON FLOW */
+    .or-baton-wrap{background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-soft);padding:20px 22px;overflow-x:auto;}
+    .or-baton{display:flex;align-items:stretch;min-width:540px;}
+    .or-baton-stage{flex:1;position:relative;}
+    .or-baton-arrow{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;padding-top:22px;}
+    .or-baton-arrow span{font-size:14px;color:var(--border);display:block;}
+    .or-baton-card{margin:0 6px;padding:14px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-muted);height:100%;transition:border-color 140ms,box-shadow 140ms;}
+    .or-baton-card.is-active{background:white;border-color:rgba(15,118,110,0.30);box-shadow:0 0 0 3px rgba(15,118,110,0.07);}
+    .or-baton-card.is-blocked{background:rgba(220,38,38,0.02);border-color:rgba(220,38,38,0.22);}
+    .or-baton-card.is-waiting{opacity:0.68;}
+    .or-baton-stage-name{font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
+    .or-baton-owner{font-size:13px;font-weight:700;margin-bottom:1px;color:var(--text);}
+    .or-baton-region{font-size:11px;color:var(--muted);margin-bottom:9px;}
+    .or-baton-state{display:flex;align-items:center;gap:5px;margin-bottom:7px;}
+    .or-baton-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+    .or-baton-state-text{font-size:11px;font-weight:600;}
+    .s-ready{color:var(--c-healthy);} .s-blocked{color:var(--c-risk);} .s-review{color:var(--c-watch);} .s-progress{color:var(--accent-2);} .s-awaiting{color:var(--muted);}
+    .or-baton-reach{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;}
+    .reach-now{background:var(--c-healthy-bg);color:var(--c-healthy);}
+    .reach-soon{background:var(--c-watch-bg);color:var(--c-watch);}
+    .reach-later{background:var(--c-stalled-bg);color:var(--c-stalled);}
+
+    /* 4. NOW / NEXT / LATER */
+    .or-nnl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+    .or-nnl-card{background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-soft);padding:20px;display:flex;flex-direction:column;gap:10px;}
+    .or-nnl-card.is-now{border-top:3px solid var(--c-healthy);}
+    .or-nnl-card.is-next{border-top:3px solid var(--c-watch);}
+    .or-nnl-card.is-later{border-top:3px solid var(--accent-2);}
+    .or-nnl-period{font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;}
+    .or-nnl-period.now{color:var(--c-healthy);} .or-nnl-period.next{color:var(--c-watch);} .or-nnl-period.later{color:var(--accent-2);}
+    .or-nnl-action{font-size:13px;font-weight:650;color:var(--text);line-height:1.5;flex:1;}
+    .or-nnl-owner{font-size:11px;color:var(--muted);}
+    .or-nnl-foot{padding-top:8px;border-top:1px solid var(--border);}
+
+    /* 5. RECOMMENDED ACTION */
+    .or-action{background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-soft);overflow:hidden;}
+    .or-action-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .or-action-head-label{font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);}
+    .or-action-best{font-size:14px;font-weight:650;color:var(--text);line-height:1.5;padding:18px 20px;border-bottom:1px solid var(--border);}
+    .or-action-grid{display:grid;grid-template-columns:repeat(2,1fr);}
+    .or-action-cell{padding:14px 20px;border-right:1px solid var(--border);}
+    .or-action-cell:last-child{border-right:none;}
+    .or-action-cell-label{font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .or-action-cell-value{font-size:13px;font-weight:650;color:var(--text);line-height:1.4;}
+    .or-action-cell-value.accent{color:var(--accent);}
+    .or-action-why{padding:14px 20px;background:rgba(246,248,251,0.7);border-top:1px solid var(--border);}
+    .or-action-why-label{font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+    .or-action-why-text{font-size:12px;color:var(--muted);line-height:1.6;}
+
+    /* 6. SUPPORT — OWNERS (collapsed) */
+    .or-support-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;}
+    .or-support-toggle-label{font-size:10px;font-weight:800;letter-spacing:0.10em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;flex:1;}
+    .or-support-toggle-label::after{content:'';flex:1;height:1px;background:var(--border);}
+    .or-support-toggle:hover .or-support-toggle-label{color:var(--text);}
+    .or-support-chevron{font-size:10px;color:var(--muted);transition:transform 200ms ease;flex-shrink:0;margin-left:8px;}
+    .or-support-toggle.open .or-support-chevron{transform:rotate(180deg);}
+    .or-support-body{display:none;margin-top:16px;} .or-support-body.open{display:block;}
+
+    .or-owner-table{width:100%;border-collapse:collapse;background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-soft);}
+    .or-owner-table th{background:var(--bg-muted);padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);border-bottom:1px solid var(--border);}
+    .or-owner-table td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:12px;}
+    .or-owner-table tbody tr:last-child td{border-bottom:none;}
+    .or-owner-table tbody tr:hover{background:var(--bg-muted);}
+    .owner-name{font-weight:650;color:var(--text);} .owner-func{font-size:11px;color:var(--muted);margin-top:2px;}
+
+    /* SHARED TAGS */
+    .mode-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:4px 9px;border-radius:999px;border:1px solid transparent;white-space:nowrap;}
+    .mode-live{background:rgba(5,150,105,0.10);color:var(--c-healthy);border-color:rgba(5,150,105,0.20);}
+    .mode-async{background:rgba(27,77,122,0.08);color:var(--accent-2);border-color:rgba(27,77,122,0.15);}
+    .mode-wait{background:rgba(217,119,6,0.08);color:var(--c-watch);border-color:rgba(217,119,6,0.15);}
+    .mode-escalate{background:rgba(220,38,38,0.08);color:var(--c-risk);border-color:rgba(220,38,38,0.15);}
+    .avail-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;}
+    .avail-active{background:var(--c-healthy-bg);color:var(--c-healthy);}
+    .avail-ending{background:var(--c-watch-bg);color:var(--c-watch);}
+    .avail-offline{background:var(--c-stalled-bg);color:var(--c-stalled);}
+    .reply-high{color:var(--c-healthy);font-size:11px;font-weight:600;}
+    .reply-good{color:var(--accent-2);font-size:11px;font-weight:600;}
+    .reply-limited{color:var(--c-watch);font-size:11px;font-weight:600;}
+    .reply-offline{color:var(--c-stalled);font-size:11px;font-weight:600;}
+
+    /* MOBILE */
+    .mobile-controls-btn{display:none;align-items:center;gap:10px;width:100%;padding:12px 16px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-weight:700;color:var(--text);cursor:pointer;margin-bottom:4px;box-shadow:var(--shadow-soft);transition:all 140ms ease;font-family:var(--font-sans);}
+    .mobile-controls-btn:hover{border-color:rgba(12,23,45,0.18);box-shadow:var(--shadow);}
+    .mcb-icon{font-size:16px;flex-shrink:0;} .mcb-label{flex:1;text-align:left;} .mcb-chevron{font-size:11px;color:var(--muted);transition:transform 200ms ease;}
+    .mobile-controls-btn[aria-expanded="true"] .mcb-chevron{transform:rotate(180deg);}
+    .or-content-fade{transition:opacity 180ms ease;} .or-content-fade.fading{opacity:0;}
+
+    @media(max-width:860px){
+      .module-layout{grid-template-columns:1fr !important;padding:16px !important;}
+      .mobile-controls-btn{display:flex;}
+      .sidebar{position:static !important;top:0 !important;width:100% !important;max-height:none !important;overflow-y:visible !important;display:none;border-radius:var(--radius-sm);margin-bottom:8px;}
+      .sidebar.mobile-open{display:block;}
+      .or-cmd-strip{grid-template-columns:repeat(2,1fr);}
+      .or-nnl{grid-template-columns:1fr;}
+      .or-action-grid{grid-template-columns:1fr;}
+      .or-action-cell{border-right:none;border-bottom:1px solid var(--border);}
+      .or-action-cell:last-child{border-bottom:none;}
+      .or-blocker-body{grid-template-columns:1fr;}
+      .or-blocker-cell{border-right:none;}
+      .or-blocker-cell:nth-child(2){border-bottom:1px solid var(--border);}
+    }
+    @media(max-width:560px){
+      .module-hero{height:auto !important;min-height:260px;}
+      .module-title{font-size:26px;}
+    }
+  </style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header" id="top">
+  <div class="container">
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        Ralph Patrick Divina
+      </a>
+      <div class="nav-cta">
+        <a href="index.html#projects" class="btn btn-ghost">← Back to Portfolio</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="tz-ticker tz-ticker--visible" id="tz-ticker" aria-label="Global time coordination summary">
+  <div class="tz-ticker-inner">
+    <a class="tz-ticker-brand" href="#tz-owners" aria-label="Jump to owner reachability">
+      <span class="tz-live-dot"></span>
+      <span>Time</span>
+    </a>
+    <div class="tz-ticker-divider"></div>
+    <div class="tz-ticker-items" id="tz-ticker-items"></div>
+  </div>
+</div>
+
+<section class="module-hero">
+  <div class="container">
+    <div class="module-eyebrow">Operations &bull; Module 10</div>
+    <h1 class="module-title">Operating Rhythm Layer</h1>
+    <p class="module-subtitle">Coordinate the next best action across teams, owners, and timezones — async or live sync.</p>
+    <div class="module-hero-meta">
+      <span class="demo-data-pill">Sample Data</span>
+    </div>
+    <div class="feature-chips">
+      <span class="chip">Ownership Clarity</span>
+      <span class="chip">Handoff Timing</span>
+      <span class="chip">Sync vs Async</span>
+      <span class="chip">Reachability</span>
+      <span class="chip">Execution Risk</span>
+    </div>
+  </div>
+</section>
+
+<div class="data-needed-section">
+  <div class="data-needed-wrap">
+    <div class="data-needed-label">&#9679;&nbsp; Data needed for this module</div>
+    <div class="data-needed-grid">
+      <div class="data-needed-item"><div class="data-needed-icon" style="background:#eff6ff;font-size:14px;">🗂</div><div><div class="data-needed-name">Workstream Ownership Map</div><div class="data-needed-desc">Who owns each initiative by function and region</div></div></div>
+      <div class="data-needed-item"><div class="data-needed-icon" style="background:#f0fdf9;font-size:14px;">🌍</div><div><div class="data-needed-name">Regional Team Calendars</div><div class="data-needed-desc">Working hours by timezone for reachability logic</div></div></div>
+      <div class="data-needed-item"><div class="data-needed-icon" style="background:#fef3c7;font-size:14px;">🔗</div><div><div class="data-needed-name">Dependency / Blocker Log</div><div class="data-needed-desc">Current handoffs, blocked items, and waiting states</div></div></div>
+      <div class="data-needed-item"><div class="data-needed-icon" style="background:#f5f3ff;font-size:14px;">📋</div><div><div class="data-needed-name">Decision Payload Checklist</div><div class="data-needed-desc">What each handoff needs to be async-ready</div></div></div>
+      <div class="data-needed-item"><div class="data-needed-icon" style="background:#fdf2f8;font-size:14px;">📅</div><div><div class="data-needed-name">Approval Workflow Sequence</div><div class="data-needed-desc">Review order, escalation paths, and SLA targets</div></div></div>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+  <div class="module-layout">
+
+    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false">
+      <span class="mcb-icon">⚙</span>
+      <span class="mcb-label">Controls</span>
+      <span class="mcb-chevron">▾</span>
+    </button>
+
+    <aside class="sidebar" id="sidebarPanel">
+      <div class="sb-static">
+        <div class="sb-static-title">
+          <span>DATA MODE</span>
+          <span id="dataModeBadge" class="data-badge">SAMPLE</span>
+        </div>
+        <div style="display:flex;gap:0;height:34px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--bg-muted);margin-bottom:6px;">
+          <button id="btnSampleMode" onclick="setDataMode('sample')" style="flex:1;height:100%;padding:0 4px;background:var(--text);color:white;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Sample</button>
+          <button id="btnRandomMode" onclick="setDataMode('random')" style="flex:1;height:100%;padding:0 4px;background:transparent;border:none;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;">Random</button>
+        </div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.4;">Sample = fixed demo dataset &bull; Random = generated dataset</div>
+      </div>
+
+      <div class="sb-acc-group">
+        <button class="sb-acc-header open" onclick="toggleAcc(this)">
+          <span>Scenario</span>
+          <span id="sbScenarioLabel" class="sb-acc-badge">Campaign</span>
+          <span class="sb-acc-chevron">▾</span>
+        </button>
+        <div class="sb-acc-body open">
+          <div class="sb-acc-tabs">
+            <button class="sb-acc-tab active" data-scenario="campaign" onclick="switchScenario('campaign',this)">Campaign Budget Approval</button>
+            <button class="sb-acc-tab" data-scenario="forecast" onclick="switchScenario('forecast',this)">Forecast Review Handoff</button>
+            <button class="sb-acc-tab" data-scenario="launch" onclick="switchScenario('launch',this)">Product Launch Readiness</button>
+            <button class="sb-acc-tab" data-scenario="pricing" onclick="switchScenario('pricing',this)">Pricing Change Approval</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sb-acc-group">
+        <button class="sb-acc-header" onclick="toggleAcc(this)">
+          <span>Actions</span>
+          <span class="sb-acc-chevron">▾</span>
+        </button>
+        <div class="sb-acc-body">
+          <button class="sb-acc-btn primary" onclick="refreshTimes()">↻ Refresh Reachability</button>
+          <button class="sb-acc-btn" onclick="window.print()">⎙ Export View</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-content or-content-fade" id="orContent">
+
+      <!-- 1. STATUS AT A GLANCE -->
+      <div class="or-section">
+        <div class="or-section-label">Status at a glance</div>
+        <div class="or-cmd-strip" id="cmdStrip"></div>
+      </div>
+
+      <!-- 2. CURRENT BLOCKER — primary anchor, most prominent -->
+      <div class="or-section">
+        <div class="or-section-label">Current blocker</div>
+        <div class="or-blocker" id="blockerPanel"></div>
+      </div>
+
+      <!-- 3. BATON FLOW — who holds the work -->
+      <div class="or-section">
+        <div class="or-section-label">Handoff flow — who holds the baton</div>
+        <div class="or-baton-wrap">
+          <div class="or-baton" id="batonFlow"></div>
+        </div>
+      </div>
+
+      <!-- 4. NOW / NEXT / LATER -->
+      <div class="or-section">
+        <div class="or-section-label">Coordination timeline</div>
+        <div class="or-nnl" id="nnlGrid"></div>
+      </div>
+
+      <!-- 5. RECOMMENDED ACTION -->
+      <div class="or-section">
+        <div class="or-section-label">Recommended action</div>
+        <div class="or-action" id="actionPanel"></div>
+      </div>
+
+      <!-- 6. OWNER REACHABILITY — collapsed, supporting detail -->
+      <div class="or-section" id="tz-owners">
+        <button class="or-support-toggle" id="ownersToggle" onclick="toggleSupport(this)">
+          <span class="or-support-toggle-label">Owner reachability</span>
+          <span class="or-support-chevron">▾</span>
+        </button>
+        <div class="or-support-body" id="ownersBody">
+          <table class="or-owner-table" id="ownerTable"></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <nav class="next-module-bar" aria-label="Next recommended module">
+    <div>
+      <div class="next-module-label">Next recommended</div>
+      <div class="next-module-title">Core FP&amp;A Model</div>
+      <div class="next-module-why">Coordination layer mapped — connect the operating rhythm to your financial model and planning cadence.</div>
+    </div>
+    <div class="next-module-actions">
+      <a class="btn btn-ghost" href="index.html">← Back to Portfolio</a>
+      <a class="btn btn-solid" href="corefp-and-a.html">Go to Core FP&amp;A →</a>
+    </div>
+  </nav>
+</main>
+
+<script src="main.js"></script>
+<script>
+(function(){
+'use strict';
+
+var SCENARIOS = {
+  campaign:{
+    name:'Campaign Budget Approval',
+    cmd:{blocked:1,activeOwners:3,syncWindow:'5:00 PM – 7:00 PM',bestContact:'APAC Finance'},
+    blocker:{
+      current:'EMEA channel mix assumptions — incomplete and not submitted',
+      blockedBy:'EMEA Marketing Lead (offline for ~2h)',
+      impact:'APAC Finance cannot finalize review; USA RevOps and LATAM Leadership are in a hard wait state. Risk of missing tonight\'s approval window.',
+      fastestPath:'Send structured async request to EMEA now with specific data fields required. APAC Finance preps review template in parallel. Schedule live review at 5:00 PM–7:00 PM Manila.'
+    },
+    swimlane:[
+      {stage:'Marketing',  owner:'EMEA Marketing Lead', region:'EMEA', state:'blocked',  stateLabel:'Blocked — Assumptions Incomplete',reachable:false,reachLabel:'Offline ~2h', cardClass:'is-blocked'},
+      {stage:'Finance',    owner:'APAC Finance Mgr',    region:'APAC', state:'ready',    stateLabel:'Ready to Review',                 reachable:true, reachLabel:'Active Now',  cardClass:'is-active'},
+      {stage:'RevOps',     owner:'USA RevOps Analyst',  region:'USA',  state:'awaiting', stateLabel:'Awaiting Finance Output',          reachable:false,reachLabel:'Offline ~6h', cardClass:'is-waiting'},
+      {stage:'Leadership', owner:'LATAM Approver',      region:'LATAM',state:'awaiting', stateLabel:'Awaiting Full Sign-Off',           reachable:false,reachLabel:'Offline ~3h', cardClass:'is-waiting'}
+    ],
+    nnl:{
+      now: {action:'APAC Finance can start budget review now — build template while EMEA assumptions are pending.',owner:'APAC Finance Manager · Manila',mode:'async',modeLabel:'Async Prep Now'},
+      next:{action:'EMEA Marketing Lead online in ~2h. Async request already waiting — response expected within 30 min of their arrival.',owner:'EMEA Marketing Lead · London',mode:'async',modeLabel:'Async Request Sent'},
+      later:{action:'Best overlap window at 5:00 PM–7:00 PM Manila. Run live review with APAC + EMEA + USA together.',owner:'3 regions active simultaneously',mode:'live',modeLabel:'Live Sync Later'}
+    },
+    intel:{
+      bestAction:'Send async data request to EMEA Marketing now. APAC Finance preps review template immediately — do not wait.',
+      mode:'async',modeLabel:'Async Now → Live Sync at 5 PM',
+      syncWindow:'5:00 PM – 7:00 PM Manila (3 regions active)',
+      why:'Acting now reduces idle handoff time by 2+ hours and prevents downstream delay on USA RevOps QA and LATAM approval, which depend on Finance completing its review before the USA work window opens tonight.'
+    },
+    owners:[
+      {name:'EMEA Marketing Lead', func:'Marketing', region:'EMEA', avail:'offline',availLabel:'Offline ~2h',window:'2:00 PM – 6:00 PM',reply:'limited'},
+      {name:'APAC Finance Manager',func:'Finance',   region:'APAC', avail:'active', availLabel:'Active Now', window:'Now – 6:00 PM',    reply:'high'},
+      {name:'USA RevOps Analyst',  func:'RevOps',    region:'USA',  avail:'offline',availLabel:'Offline ~6h',window:'5:00 PM – 9:00 PM',reply:'offline'},
+      {name:'LATAM Approver',      func:'Leadership',region:'LATAM',avail:'offline',availLabel:'Offline ~3h',window:'3:00 PM – 7:00 PM',reply:'good'}
+    ]
+  },
+
+  forecast:{
+    name:'Forecast Review Handoff',
+    cmd:{blocked:2,activeOwners:2,syncWindow:'4:00 PM – 6:00 PM',bestContact:'EMEA Finance'},
+    blocker:{
+      current:'USA data warehouse system refresh delayed — actuals not available',
+      blockedBy:'IT / Systems team (estimated 3h delay)',
+      impact:'CFO deck cannot be finalized. EMEA variance review will be incomplete without validated actuals. Risk of pushing CFO presentation by 24h.',
+      fastestPath:'Escalate system refresh to IT immediately. APAC Finance drafts deck structure with placeholders. EMEA reviews available data and flags provisional variances. Hard deadline: actuals must land before 5:00 PM Manila.'
+    },
+    swimlane:[
+      {stage:'APAC FP&A',    owner:'APAC FP&A Lead',    region:'APAC',state:'progress',stateLabel:'In Progress',           reachable:true, reachLabel:'Active Now',   cardClass:'is-active'},
+      {stage:'EMEA Finance', owner:'EMEA Finance Lead',  region:'EMEA',state:'awaiting',stateLabel:'Awaiting Pack',         reachable:false,reachLabel:'Online in 1h',  cardClass:''},
+      {stage:'USA Analytics',owner:'USA Senior Analyst', region:'USA', state:'blocked', stateLabel:'Stalled — System Delay',reachable:false,reachLabel:'Offline ~5h',  cardClass:'is-blocked'},
+      {stage:'CFO Review',   owner:'APAC Finance Mgr',   region:'APAC',state:'awaiting',stateLabel:'Awaiting Full Input',   reachable:true, reachLabel:'Active Now',   cardClass:''}
+    ],
+    nnl:{
+      now: {action:'APAC FP&A finalizes revenue assumptions and pushes forecast pack async to EMEA. Do not wait for the USA system.',owner:'APAC FP&A Lead · Singapore',mode:'async',modeLabel:'Async Output Now'},
+      next:{action:'EMEA Finance Lead online in 1h — forecast pack already queued with flagged variances. Expect response within 2h.',owner:'EMEA Finance Lead · London',mode:'async',modeLabel:'Pre-Send Async'},
+      later:{action:'Consolidated review sync at 4:00 PM–6:00 PM Manila with APAC + EMEA + USA Finance.',owner:'Finance leads — 3 regions',mode:'live',modeLabel:'Live Sync Later'}
+    },
+    intel:{
+      bestAction:'Escalate IT system refresh now. APAC Finance drafts CFO deck skeleton with placeholders in parallel — do not let system delay pause all work.',
+      mode:'escalate',modeLabel:'Escalate → Parallel Async',
+      syncWindow:'4:00 PM – 6:00 PM Manila (APAC + EMEA active)',
+      why:'System delay is not a people problem — it cannot be expedited by communication alone. The right action is parallel preparation with placeholders. This protects the CFO deck timeline even if actuals land late.'
+    },
+    owners:[
+      {name:'APAC FP&A Lead',   func:'Finance',region:'APAC',avail:'active', availLabel:'Active Now',  window:'Now – 5:00 PM',    reply:'high'},
+      {name:'EMEA Finance Lead',func:'Finance',region:'EMEA',avail:'ending', availLabel:'Online in 1h',window:'1:00 PM – 5:00 PM',reply:'good'},
+      {name:'USA Senior Analyst',func:'Finance',region:'USA', avail:'offline',availLabel:'Offline ~5h', window:'5:00 PM – 9:00 PM',reply:'offline'},
+      {name:'APAC Finance Mgr', func:'Finance',region:'APAC',avail:'active', availLabel:'Active Now',  window:'Now – 6:00 PM',    reply:'high'}
+    ]
+  },
+
+  launch:{
+    name:'Product Launch Readiness',
+    cmd:{blocked:0,activeOwners:4,syncWindow:'6:00 PM – 8:00 PM',bestContact:'APAC Product Lead'},
+    blocker:{
+      current:'USA GTM package not started — Growth Manager offline for ~4h',
+      blockedBy:'USA Growth Manager (timezone — online at 5:00 PM Manila)',
+      impact:'LATAM Go/No-Go decision cannot be prepared without GTM package. Full 4-region launch alignment meeting at risk of being unproductive.',
+      fastestPath:'Send GTM pricing inputs and brief async to USA Growth Manager now. APAC and EMEA complete their work in parallel. Target USA pick-up at 5:00 PM Manila, 1h before alignment sync.'
+    },
+    swimlane:[
+      {stage:'Product QA',     owner:'APAC Product Lead',  region:'APAC', state:'ready',   stateLabel:'Ready — Sign-Off Pending',   reachable:true, reachLabel:'Active Now',  cardClass:'is-active'},
+      {stage:'Marketing Brief',owner:'EMEA Marketing Lead',region:'EMEA', state:'review',  stateLabel:'Awaiting Product Alignment', reachable:true, reachLabel:'Active Now',  cardClass:'is-active'},
+      {stage:'GTM Package',    owner:'USA Growth Mgr',      region:'USA',  state:'awaiting',stateLabel:'Not Started — Offline',      reachable:false,reachLabel:'Offline ~4h', cardClass:'is-waiting'},
+      {stage:'Go / No-Go',     owner:'LATAM Approver',      region:'LATAM',state:'awaiting',stateLabel:'Awaiting All Inputs',         reachable:false,reachLabel:'Offline ~3h', cardClass:'is-waiting'}
+    ],
+    nnl:{
+      now: {action:'APAC Product Lead and EMEA Marketing are both active — run live QA sign-off and campaign brief alignment now.',owner:'APAC Product + EMEA Marketing',mode:'live',modeLabel:'Live Sync Now'},
+      next:{action:'USA Growth team online in 4h — GTM inputs already in their queue with pricing brief and launch checklist.',owner:'USA Growth Manager',mode:'async',modeLabel:'Async Pre-Read'},
+      later:{action:'Full 4-region launch alignment sync at 6:00 PM–8:00 PM Manila — all regions active, final Go/No-Go decision.',owner:'All 4 regions — complete team',mode:'live',modeLabel:'Live Alignment Sync'}
+    },
+    intel:{
+      bestAction:'Run APAC + EMEA live session now to complete QA sign-off and campaign brief. Send GTM inputs async to USA simultaneously.',
+      mode:'live',modeLabel:'Live Sync Now + Async to USA',
+      syncWindow:'6:00 PM – 8:00 PM Manila (all 4 regions active)',
+      why:'Two regions are active right now — using this window eliminates re-work in the full 4-region sync and gives USA Growth Manager structured inputs to act on immediately when they come online at 5:00 PM.'
+    },
+    owners:[
+      {name:'APAC Product Lead',   func:'Product',   region:'APAC', avail:'active', availLabel:'Active Now',  window:'Now – 7:00 PM',    reply:'high'},
+      {name:'EMEA Marketing Lead', func:'Marketing', region:'EMEA', avail:'active', availLabel:'Active Now',  window:'Now – 5:00 PM',    reply:'high'},
+      {name:'USA Growth Manager',  func:'RevOps',    region:'USA',  avail:'offline',availLabel:'Offline ~4h', window:'5:00 PM – 9:00 PM',reply:'offline'},
+      {name:'LATAM Approver',      func:'Leadership',region:'LATAM',avail:'offline',availLabel:'Offline ~3h', window:'3:00 PM – 7:00 PM',reply:'limited'}
+    ]
+  },
+
+  pricing:{
+    name:'Pricing Change Approval',
+    cmd:{blocked:2,activeOwners:2,syncWindow:'5:30 PM – 7:30 PM',bestContact:'APAC Finance'},
+    blocker:{
+      current:'CFO approval blocked until Finance model + EMEA commercial review are both complete',
+      blockedBy:'Sequential dependency — Finance output → EMEA review → CFO sign-off',
+      impact:'USA RevOps cannot begin any system changes. Pricing change implementation at risk of slipping by 1–2 days.',
+      fastestPath:'APAC Finance completes model in next 2h and sends async. EMEA reviews on arrival and flags commercial risk within 1h. CFO review scheduled at 5:30 PM Manila overlap window.'
+    },
+    swimlane:[
+      {stage:'Finance Model',     owner:'APAC Finance Mgr',    region:'APAC',state:'progress',stateLabel:'In Progress — Model Active',reachable:true, reachLabel:'Active Now',   cardClass:'is-active'},
+      {stage:'Commercial Review', owner:'EMEA Commercial Lead', region:'EMEA',state:'awaiting',stateLabel:'Awaiting Finance Output',   reachable:false,reachLabel:'Offline ~2h',  cardClass:''},
+      {stage:'CFO Sign-Off',      owner:'CFO',                  region:'APAC',state:'awaiting',stateLabel:'Awaiting Model + Review',   reachable:true, reachLabel:'Active — Ltd', cardClass:''},
+      {stage:'Systems Rollout',   owner:'USA RevOps Analyst',   region:'USA', state:'blocked', stateLabel:'Blocked — No Sign-Off Yet', reachable:false,reachLabel:'Offline ~6h',  cardClass:'is-blocked'}
+    ],
+    nnl:{
+      now: {action:'APAC Finance completes pricing sensitivity model and sends async to EMEA Commercial. Do not wait for EMEA to be online first.',owner:'APAC Finance Manager · Manila',mode:'async',modeLabel:'Async Model Now'},
+      next:{action:'EMEA Commercial Lead online in 2h — sensitivity output already queued with margin impact. Flag win-rate risk on arrival.',owner:'EMEA Commercial Lead · London',mode:'async',modeLabel:'Async Pre-Send'},
+      later:{action:'CFO + Commercial approval sync at 5:30 PM–7:30 PM Manila — final decision on pricing, USA unblocked immediately after.',owner:'CFO + EMEA Commercial + USA RevOps',mode:'live',modeLabel:'Live Approval Sync'}
+    },
+    intel:{
+      bestAction:'APAC Finance completes and sends sensitivity model async now. The sequential chain only advances if Finance moves first.',
+      mode:'async',modeLabel:'Full Async Chain → Live at 5:30 PM',
+      syncWindow:'5:30 PM – 7:30 PM Manila (CFO + EMEA + APAC)',
+      why:'This is a high-stakes, sequential approval process. The fastest path is to advance each stage as far as possible before the overlap window, so the CFO review conversation is a decision — not a status update.'
+    },
+    owners:[
+      {name:'APAC Finance Manager', func:'Finance',   region:'APAC',avail:'active', availLabel:'Active Now',   window:'Now – 6:00 PM',    reply:'high'},
+      {name:'EMEA Commercial Lead', func:'Commercial',region:'EMEA',avail:'offline',availLabel:'Offline ~2h',  window:'2:00 PM – 6:00 PM',reply:'limited'},
+      {name:'CFO',                  func:'Leadership',region:'APAC',avail:'active', availLabel:'Active — Ltd', window:'5:30 PM – 7:30 PM',reply:'good'},
+      {name:'USA RevOps Analyst',   func:'RevOps',    region:'USA', avail:'offline',availLabel:'Offline ~6h',  window:'5:00 PM – 9:00 PM',reply:'offline'}
+    ]
+  }
+};
+
+var currentScenario = 'campaign';
+
+window.toggleAcc = function(btn){
+  var body = btn.nextElementSibling;
+  var open = btn.classList.contains('open');
+  btn.classList.toggle('open',!open);
+  body.classList.toggle('open',!open);
+};
+
+window.toggleSupport = function(btn){
+  var body = document.getElementById('ownersBody');
+  var open = btn.classList.contains('open');
+  btn.classList.toggle('open',!open);
+  body.classList.toggle('open',!open);
+};
+
+window.switchScenario = function(key,btn){
+  if(key===currentScenario) return;
+  currentScenario = key;
+  document.querySelectorAll('[data-scenario]').forEach(function(b){ b.classList.toggle('active',b.dataset.scenario===key); });
+  var labels={campaign:'Campaign',forecast:'Forecast',launch:'Launch',pricing:'Pricing'};
+  document.getElementById('sbScenarioLabel').textContent = labels[key];
+  renderAll();
+};
+
+window.setDataMode = function(mode){
+  var s = mode==='sample';
+  document.getElementById('btnSampleMode').style.cssText='flex:1;height:100%;padding:0 4px;border:none;border-right:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;background:'+(s?'var(--text)':'transparent')+';color:'+(s?'white':'var(--muted)')+';';
+  document.getElementById('btnRandomMode').style.cssText='flex:1;height:100%;padding:0 4px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;background:'+(!s?'var(--text)':'transparent')+';color:'+(!s?'white':'var(--muted)')+';';
+  document.getElementById('dataModeBadge').textContent = mode.toUpperCase();
+  renderAll();
+};
+
+window.refreshTimes = function(){ renderAll(); };
+
+function modeTag(mode,label){
+  var c={live:'mode-live',async:'mode-async',wait:'mode-wait',escalate:'mode-escalate'}[mode]||'mode-async';
+  var i={live:'⟳',async:'→',wait:'◷',escalate:'⚑'}[mode]||'→';
+  return '<span class="mode-tag '+c+'">'+i+' '+label+'</span>';
+}
+function stateClass(s){ return {ready:'s-ready',blocked:'s-blocked',review:'s-review',progress:'s-progress',awaiting:'s-awaiting'}[s]||'s-awaiting'; }
+function dotColor(s){ return {ready:'var(--c-healthy)',blocked:'var(--c-risk)',review:'var(--c-watch)',progress:'var(--accent-2)',awaiting:'var(--c-stalled)'}[s]||'var(--c-stalled)'; }
+function reachBadge(reachable,label){
+  var cls = reachable ? 'reach-now' : (/1h|2h|3h/.test(label)?'reach-soon':'reach-later');
+  return '<span class="or-baton-reach '+cls+'">'+label+'</span>';
+}
+function availPill(avail,label){
+  var c={active:'avail-active',ending:'avail-ending',offline:'avail-offline'}[avail]||'avail-offline';
+  return '<span class="avail-pill '+c+'">'+label+'</span>';
+}
+function replyClass(r){ return {high:'reply-high',good:'reply-good',limited:'reply-limited',offline:'reply-offline'}[r]||'reply-offline'; }
+
+function renderCmd(){
+  var d = SCENARIOS[currentScenario].cmd;
+  var alertClass = d.blocked > 0 ? 'is-alert' : '';
+  document.getElementById('cmdStrip').innerHTML =
+    '<div class="or-cmd-card '+alertClass+'"><div class="or-cmd-label">Blocked Now</div><div class="or-cmd-value">'+d.blocked+'</div><div class="or-cmd-sub">'+(d.blocked>0?'Handoffs need action':'No active blockers')+'</div></div>' +
+    '<div class="or-cmd-card"><div class="or-cmd-label">Active Owners</div><div class="or-cmd-value">'+d.activeOwners+'</div><div class="or-cmd-sub">Reachable right now</div></div>' +
+    '<div class="or-cmd-card is-accent"><div class="or-cmd-label">Next Sync Window</div><div class="or-cmd-value">'+d.syncWindow+'</div><div class="or-cmd-sub">Manila time</div></div>' +
+    '<div class="or-cmd-card is-accent-2"><div class="or-cmd-label">Best Next Contact</div><div class="or-cmd-value">'+d.bestContact+'</div><div class="or-cmd-sub">Highest reachability now</div></div>';
+}
+
+function renderBlocker(){
+  var b = SCENARIOS[currentScenario].blocker;
+  document.getElementById('blockerPanel').innerHTML =
+    '<div class="or-blocker-head"><span class="or-blocker-pulse"></span><span class="or-blocker-head-title">Active Blocker</span></div>'+
+    '<div class="or-blocker-body">'+
+      '<div class="or-blocker-cell"><div class="or-blocker-cell-label">What is blocked</div><div class="or-blocker-cell-value red">'+b.current+'</div></div>'+
+      '<div class="or-blocker-cell"><div class="or-blocker-cell-label">Blocked by</div><div class="or-blocker-cell-value">'+b.blockedBy+'</div></div>'+
+      '<div class="or-blocker-cell full">'+
+        '<div class="or-blocker-cell-label">Impact if delayed</div>'+
+        '<div class="or-blocker-cell-value" style="margin-bottom:14px;">'+b.impact+'</div>'+
+        '<div class="or-blocker-cell-label">Fastest path to unblock</div>'+
+        '<div class="or-path">'+b.fastestPath+'</div>'+
+      '</div>'+
+    '</div>';
+}
+
+function renderBaton(){
+  var lanes = SCENARIOS[currentScenario].swimlane;
+  var html = '';
+  lanes.forEach(function(l,i){
+    html += '<div class="or-baton-stage">'+
+      '<div class="or-baton-card '+l.cardClass+'">'+
+        '<div class="or-baton-stage-name">'+l.stage+'</div>'+
+        '<div class="or-baton-owner">'+l.owner+'</div>'+
+        '<div class="or-baton-region">'+l.region+'</div>'+
+        '<div class="or-baton-state"><span class="or-baton-dot" style="background:'+dotColor(l.state)+'"></span><span class="or-baton-state-text '+stateClass(l.state)+'">'+l.stateLabel+'</span></div>'+
+        reachBadge(l.reachable,l.reachLabel)+
+      '</div></div>';
+    if(i < lanes.length-1) html += '<div class="or-baton-arrow"><span>→</span></div>';
+  });
+  document.getElementById('batonFlow').innerHTML = html;
+}
+
+function renderNNL(){
+  var n = SCENARIOS[currentScenario].nnl;
+  var slots = [
+    {cls:'is-now', pCls:'now', period:'Now',  d:n.now},
+    {cls:'is-next',pCls:'next',period:'Next', d:n.next},
+    {cls:'is-later',pCls:'later',period:'Later',d:n.later}
+  ];
+  document.getElementById('nnlGrid').innerHTML = slots.map(function(s){
+    return '<div class="or-nnl-card '+s.cls+'">'+
+      '<div class="or-nnl-period '+s.pCls+'">'+s.period+'</div>'+
+      '<div class="or-nnl-action">'+s.d.action+'</div>'+
+      '<div class="or-nnl-owner">'+s.d.owner+'</div>'+
+      '<div class="or-nnl-foot">'+modeTag(s.d.mode,s.d.modeLabel)+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderAction(){
+  var i = SCENARIOS[currentScenario].intel;
+  document.getElementById('actionPanel').innerHTML =
+    '<div class="or-action-head"><span class="or-action-head-label">Recommended Action</span>'+modeTag(i.mode,i.modeLabel)+'</div>'+
+    '<div class="or-action-best">'+i.bestAction+'</div>'+
+    '<div class="or-action-grid">'+
+      '<div class="or-action-cell"><div class="or-action-cell-label">Coordination mode</div><div class="or-action-cell-value accent">'+i.modeLabel+'</div></div>'+
+      '<div class="or-action-cell"><div class="or-action-cell-label">Next sync window</div><div class="or-action-cell-value accent">'+i.syncWindow+'</div></div>'+
+    '</div>'+
+    '<div class="or-action-why"><div class="or-action-why-label">Why it matters</div><div class="or-action-why-text">'+i.why+'</div></div>';
+}
+
+function renderOwners(){
+  var owners = SCENARIOS[currentScenario].owners;
+  var rows = owners.map(function(o){
+    return '<tr>'+
+      '<td><div class="owner-name">'+o.name+'</div><div class="owner-func">'+o.func+' &bull; '+o.region+'</div></td>'+
+      '<td>'+availPill(o.avail,o.availLabel)+'</td>'+
+      '<td style="font-size:12px;color:var(--muted);">'+o.window+' Manila</td>'+
+      '<td><span class="'+replyClass(o.reply)+'">'+o.reply.charAt(0).toUpperCase()+o.reply.slice(1)+'</span></td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('ownerTable').innerHTML =
+    '<thead><tr><th>Owner</th><th>Availability</th><th>Best Window</th><th>Reply Likelihood</th></tr></thead><tbody>'+rows+'</tbody>';
+}
+
+function renderAll(){
+  var el = document.getElementById('orContent');
+  el.classList.add('fading');
+  setTimeout(function(){
+    renderCmd(); renderBlocker(); renderBaton(); renderNNL(); renderAction(); renderOwners();
+    el.classList.remove('fading');
+  },140);
+}
+
+var mobileBtn = document.getElementById('mobileControlsBtn');
+var sidebarEl = document.getElementById('sidebarPanel');
+if(mobileBtn && sidebarEl){
+  mobileBtn.addEventListener('click',function(){
+    var open = sidebarEl.classList.toggle('mobile-open');
+    mobileBtn.setAttribute('aria-expanded',open?'true':'false');
+  });
+}
+
+renderAll();
+})();
+</script>
+
+<script>
+(function(){
+  var R=[{l:'APAC',t:'Asia/Singapore'},{l:'EMEA',t:'Europe/London'},{l:'USA',t:'America/New_York'},{l:'LATAM',t:'America/Sao_Paulo'}];
+  var WS=6,WN=17,WE=18;
+  function fmt(tz){return new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true}).format(new Date())}
+  function hm(tz){var p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:false}).formatToParts(new Date()),h=0,m=0;p.forEach(function(x){if(x.type==='hour')h=+x.value;if(x.type==='minute')m=+x.value});return{h:h||0,m:m||0}}
+  function st(tz){var h=hm(tz).h;return h>=WS&&h<WN?'active':h===WN?'ending':'offline'}
+  function wake(tz){var x=hm(tz),d=WS*60-(x.h*60+x.m);return d<=0?d+1440:d}
+  function slp(tz){var x=hm(tz);return Math.max(0,WE*60-(x.h*60+x.m))}
+  function dur(m){var h=Math.floor(m/60),n=m%60;return h===0?n+'m':n===0?h+'h':h+'h '+n+'m'}
+  function bestWin(ltz){
+    var now=new Date(),s=new Date(now);s.setUTCMinutes(0,0,0);s.setUTCHours(s.getUTCHours()+1);
+    var bu=null,bc=0;
+    for(var i=0;i<48;i++){var pr=new Date(s.getTime()+i*3600000),iw=0;R.forEach(function(r){var p=new Intl.DateTimeFormat('en-US',{timeZone:r.t,hour:'numeric',hour12:false}).formatToParts(pr),h=0;p.forEach(function(x){if(x.type==='hour')h=+x.value});if(h>=WS&&h<WE)iw++});if(iw>bc){bc=iw;bu=pr}if(bc===R.length)break;}
+    if(!bu||bc<2)return null;
+    var e=new Date(bu.getTime()+7200000),o={timeZone:ltz,hour:'numeric',minute:'2-digit',hour12:true};
+    var t1=new Intl.DateTimeFormat('en-US',o).format(bu),t2=new Intl.DateTimeFormat('en-US',o).format(e);
+    var fd={timeZone:ltz,year:'numeric',month:'2-digit',day:'2-digit'};
+    var tm=new Intl.DateTimeFormat('en-US',fd).format(now)!==new Intl.DateTimeFormat('en-US',fd).format(bu)?' (tom)':'';
+    return{time:t1+'–'+t2+tm,count:bc}
+  }
+  function render(){
+    var el=document.getElementById('tz-ticker-items');if(!el)return;
+    var ltz=Intl.DateTimeFormat().resolvedOptions().timeZone,h='';
+    h+='<span class="tz-ticker-item"><span class="tz-ticker-item-label">You</span><span class="tz-ticker-item-value" style="font-weight:700">'+fmt(ltz)+'</span></span>';
+    R.forEach(function(r){var s=st(r.t),dc=s==='active'?'tk-active':s==='ending'?'tk-ending':'tk-offline',vt;if(s==='active'){var ml=slp(r.t);vt=ml<180?'Active – ends '+dur(ml):'Active'}else if(s==='ending')vt='Ending – '+dur(slp(r.t));else vt='Online '+dur(wake(r.t));h+='<span class="tz-ticker-item"><span class="tz-ticker-dot '+dc+'"></span><span class="tz-ticker-item-label">'+r.l+'</span><span class="tz-ticker-item-value '+dc+'">'+vt+'</span></span>';});
+    var w=bestWin(ltz),wt=w?w.time.split('(')[0].trim():'—';
+    h+='<span class="tz-ticker-item"><span class="tz-ticker-item-label">Best window</span><span class="tz-ticker-item-value tk-window">'+wt+'</span></span>';
+    el.innerHTML=h;
+  }
+  function init(){
+    var hdr=document.querySelector('.site-header')||document.querySelector('header');
+    document.documentElement.style.setProperty('--nav-h',(hdr?hdr.offsetHeight:56)+'px');
+    window.addEventListener('resize',function(){var h2=document.querySelector('.site-header')||document.querySelector('header');document.documentElement.style.setProperty('--nav-h',(h2?h2.offsetHeight:56)+'px')});
+    render();setInterval(render,30000);
+  }
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
+</script>
+</body>
+</html>
