@@ -1229,13 +1229,13 @@ img { max-width: 100%; display: block; }
 /* Sidebar shell */
 .sidebar {
   position: sticky;
-  top: 84px;
+  top: 120px;
   padding: 16px;
   background: white;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
-  max-height: calc(100vh - 104px);
+  max-height: calc(100vh - 140px);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;

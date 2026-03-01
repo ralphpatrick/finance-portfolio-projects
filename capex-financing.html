@@ -519,13 +519,13 @@
     /* Sidebar shell */
     .sidebar {
       position: sticky;
-      top: 84px;
+      top: calc(var(--nav-h, 56px) + 36px);
       padding: 16px;
       background: white;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-soft);
-      max-height: calc(100vh - 104px);
+      max-height: calc(100vh - var(--nav-h, 56px) - 52px);
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
@@ -874,7 +874,7 @@
 @keyframes tzPulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}60%{box-shadow:0 0 0 5px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
 .tz-ticker{position:sticky;top:var(--nav-h,56px);z-index:89;background:rgba(250,251,252,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);height:36px;display:flex;align-items:center;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity 220ms ease,transform 220ms ease}
 .tz-ticker.tz-ticker--visible{opacity:1;pointer-events:auto;transform:translateY(0)}
-.tz-ticker-inner{max-width:1120px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;overflow:hidden}
+.tz-ticker-inner{max-width:900px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;overflow:hidden}
 .tz-ticker-brand{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);text-decoration:none;flex-shrink:0;padding-right:10px}
 .tz-ticker-brand:hover{opacity:.75}
 .tz-ticker-divider{width:1px;height:16px;background:var(--border);flex-shrink:0;margin-right:10px}
