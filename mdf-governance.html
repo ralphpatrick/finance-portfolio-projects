@@ -44,12 +44,12 @@
     .mdf-section-title{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;display:flex;align-items:center;gap:8px;color:var(--text)}
     .mdf-section-desc{font-size:13px;color:var(--muted);margin:0 0 18px;line-height:1.5;}
     /* How to use */
-    .mdf-how-strip{background:var(--bg-muted);border-bottom:1px solid var(--border);padding:14px 0}
-    .mdf-how-inner{width:min(var(--max),calc(100% - 48px));margin:0 auto;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap}
-    .mdf-how-label{font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);flex-shrink:0;padding-top:2px;white-space:nowrap}
-    .mdf-how-steps{display:flex;gap:0;flex-wrap:wrap;overflow-x:visible;scrollbar-width:none}
+    .mdf-how-strip{background:var(--bg-muted);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden}
+    .mdf-how-inner{width:min(var(--max),calc(100% - 48px));margin:0 auto;display:flex;align-items:flex-start;gap:20px;flex-wrap:nowrap}
+    .mdf-how-label{font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);flex-shrink:0;padding-top:8px;white-space:nowrap}
+    .mdf-how-steps{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
     .mdf-how-steps::-webkit-scrollbar{display:none}
-    .mdf-how-step{display:flex;align-items:flex-start;gap:8px;padding:6px 16px;border-right:1px solid var(--border);white-space:normal;flex-shrink:0;max-width:260px}
+    .mdf-how-step{display:flex;align-items:flex-start;gap:8px;padding:4px 16px;border-right:1px solid var(--border);white-space:normal;flex:1;min-width:160px}
     .mdf-how-step:first-child{padding-left:0}
     .mdf-how-step:last-child{border-right:none}
     .mdf-how-num{width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:800;display:grid;place-items:center;flex-shrink:0;margin-top:1px;border:1px solid rgba(15,118,110,0.18)}
@@ -127,7 +127,7 @@
     .module-layout-full{max-width:1400px;margin:0 auto;padding:0 24px 48px}
     /* ── Inline control bar ── */
     .mdf-control-bar{background:white;border-bottom:1px solid var(--border);position:sticky;top:calc(var(--nav-h,56px) + 36px);z-index:80;box-shadow:0 1px 0 rgba(11,18,32,0.04)}
-    .mdf-control-bar-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;height:48px;overflow-x:auto;scrollbar-width:none}
+    .mdf-control-bar-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:0;height:48px;overflow-x:auto;scrollbar-width:none}
     .mdf-control-bar-inner::-webkit-scrollbar{display:none}
     .mdf-control-filters{display:flex;align-items:center;gap:8px;padding-right:20px;border-right:1px solid var(--border);flex-shrink:0}
     .mdf-control-label{font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
@@ -137,7 +137,7 @@
     .mdf-control-stat:last-child{border-right:none}
     .mdf-control-stat-label{font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);line-height:1}
     .mdf-control-stat-value{font-size:13px;font-weight:760;letter-spacing:-0.01em;color:var(--text);font-variant-numeric:tabular-nums;line-height:1.3}
-    .mdf-control-actions{display:flex;align-items:center;gap:6px;padding-left:20px;flex-shrink:0;margin-left:auto}
+    .mdf-control-actions{display:flex;align-items:center;gap:6px;padding-left:20px;flex-shrink:0}
     .mdf-control-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:inherit;height:30px;transition:all 120ms ease;white-space:nowrap}
     .mdf-control-btn:hover{color:var(--text);border-color:rgba(12,23,45,0.22);background:var(--bg-muted)}
     /* ── Floating detail modal ── */
@@ -148,6 +148,7 @@
     .mdf-modal.is-clean{box-shadow:0 20px 60px rgba(11,18,32,0.18),0 0 0 1px rgba(15,118,110,0.22)}
     .mdf-modal-head{padding:14px 20px;background:rgba(220,38,38,0.04);border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:2;border-radius:var(--radius) var(--radius) 0 0}
     .mdf-modal.is-clean .mdf-modal-head{background:rgba(15,118,110,0.04);border-bottom-color:rgba(15,118,110,0.12)}
+    .mdf-modal-head-left{display:flex;align-items:center;gap:8px}
     /* Detail panel */
     .mdf-detail-panel{display:none}
     .mdf-detail-panel.is-visible{display:none}
@@ -263,8 +264,9 @@
     @media(max-width:1024px){.mdf-kpi-strip{grid-template-columns:repeat(3,1fr)}.mdf-accrual-grid{grid-template-columns:repeat(3,1fr)}.mdf-pop-grid{grid-template-columns:1fr}.mdf-sop-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:860px){.module-layout{grid-template-columns:1fr !important;padding:16px !important}.mobile-controls-btn{display:flex}.sidebar{display:none;border-radius:var(--radius-sm);margin-bottom:8px}.sidebar.mobile-open{display:block}.mdf-kpi-strip{grid-template-columns:repeat(2,1fr)}.mdf-or-grid{grid-template-columns:1fr}.mdf-detail-body{grid-template-columns:1fr}.mdf-detail-cell{border-right:none}.mdf-owner-table{font-size:11px}.mdf-owner-table thead th,.mdf-owner-table tbody td{padding:8px 10px}.mdf-sop-grid{grid-template-columns:1fr}.mdf-accrual-grid{grid-template-columns:repeat(2,1fr)}.mdf-how-steps{flex-wrap:wrap}.mdf-how-step{border-right:none;border-bottom:1px solid var(--border);padding:6px 0}.mdf-how-step:last-child{border-bottom:none}}
     @media(max-width:560px){.module-hero{height:auto !important;min-height:260px}.module-title{font-size:26px}.mdf-kpi-strip{grid-template-columns:1fr 1fr}.mdf-comp-row{grid-template-columns:1fr 80px 40px}}
-    /* ── Value line under hero subtitle ── */
-    .module-value-line{font-size:13px;color:rgba(255,255,255,0.65);margin:8px 0 0;line-height:1.5;max-width:520px;font-style:italic}
+    /* Hero height override — value line adds ~40px over the base 284px */
+    .module-hero{height:auto !important;min-height:284px;padding-bottom:36px}
+    .module-value-line{font-size:13px;color:var(--muted);margin:6px 0 0;line-height:1.5;max-width:520px;font-style:italic}
     /* ── Section no-bottom-border variant ── */
     .mdf-section--no-bottom-border{border-bottom:none;padding-bottom:0}
     /* ── Top Actions Today panel ── */
@@ -311,7 +313,7 @@
     .owner-row-watch td:first-child{padding-left:10px}
     /* ── Responsive overrides for new components ── */
     @media(max-width:1024px){.mdf-wfkpi-strip{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:860px){.mdf-action-item{grid-template-columns:1fr;gap:8px}.mdf-action-priority{flex-direction:row;align-items:center}.mdf-action-meta{align-items:flex-start}.mdf-wfkpi-strip{grid-template-columns:repeat(2,1fr)}.mdf-how-step{border-right:none;border-bottom:1px solid var(--border);padding:6px 0;max-width:100%}.mdf-how-step:last-child{border-bottom:none}}
+    @media(max-width:860px){.mdf-action-item{grid-template-columns:1fr;gap:8px}.mdf-action-priority{flex-direction:row;align-items:center}.mdf-action-meta{align-items:flex-start}.mdf-wfkpi-strip{grid-template-columns:repeat(2,1fr)}.mdf-how-inner{flex-wrap:wrap;gap:10px}.mdf-how-steps{flex-wrap:wrap;overflow-x:visible}.mdf-how-step{border-right:none;border-bottom:1px solid var(--border);padding:6px 0;flex:none;min-width:100%}.mdf-how-step:last-child{border-bottom:none}}
     @media(max-width:560px){.mdf-wfkpi-strip{grid-template-columns:1fr 1fr}}
   </style>
 </head>
@@ -359,29 +361,6 @@
     </div>
   </div>
 </section>
-<div class="mdf-how-strip">
-  <div class="mdf-how-inner">
-    <div class="mdf-how-label">How to use</div>
-    <div class="mdf-how-steps">
-      <div class="mdf-how-step">
-        <div class="mdf-how-num">1</div>
-        <div class="mdf-how-text">Check <strong>Top Actions Today</strong> &mdash; act on blocked, aging, and at-risk claims first</div>
-      </div>
-      <div class="mdf-how-step">
-        <div class="mdf-how-num">2</div>
-        <div class="mdf-how-text">Check <strong>Status at a Glance</strong> and <strong>Workflow KPIs</strong> to see where the process is breaking</div>
-      </div>
-      <div class="mdf-how-step">
-        <div class="mdf-how-num">3</div>
-        <div class="mdf-how-text">Review the <strong>Claims Control Table</strong> &mdash; click any row to see missing support and fastest path to close</div>
-      </div>
-      <div class="mdf-how-step">
-        <div class="mdf-how-num">4</div>
-        <div class="mdf-how-text">Use <strong>Operating Rhythm</strong> when blocked claims need structured cross-functional follow-up &mdash; not standard tracking</div>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="data-needed-collapsed">
   <div class="data-needed-collapsed-inner">
     <button class="data-needed-toggle" id="dataNeededToggle" aria-expanded="false" onclick="toggleDataNeeded()">
