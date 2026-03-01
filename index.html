@@ -13,7 +13,7 @@
 <link href="./style.css" rel="stylesheet"/>
 <style>
     /* Anchor scroll offset */
-    #pick-problem, #start-here, #about, #contact,
+    #pick-problem, #start-here, #about, #contact, #tz-world,
     #card-core-fpa, #card-commercial-sales, #card-unit-economics,
     #card-indirect-cost, #card-operations-spend, #card-working-capital,
     #card-revenue-bridge, #card-capex-financing, #card-kpi-tree {
@@ -440,6 +440,578 @@
     }
   
 
+    /* ── Global Team Time Coordination — section framing ── */
+    .tz-section {
+      padding: 56px 0;
+      background: #fafbfc;
+      border-bottom: 1px solid var(--border);
+    }
+    /* No container override — uses the global 1120px max like all other sections */
+    /* The component content (top-row, cards, strip) is constrained via .tz-body */
+    .tz-body {
+      max-width: 900px; /* keeps the time component compact within the full-width container */
+      margin: 0 auto;   /* centers the widget block while header stays left-aligned */
+    }
+    /* Override section-head margin-bottom for tighter tz layout */
+    .tz-section .section-head { margin-bottom: 20px; }
+
+    /* ── Best Window info icon ── */
+    .tz-info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1px solid rgba(11,18,32,0.20);
+      background: rgba(11,18,32,0.04);
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: default;
+      flex-shrink: 0;
+      line-height: 1;
+      user-select: none;
+      vertical-align: middle;
+      margin-left: 3px;
+    }
+
+    /* Fixed-position tooltip rendered by JS — escapes all clipping contexts */
+    .tz-info-tip-fixed {
+      position: fixed;
+      min-width: 210px;
+      max-width: 240px;
+      background: #1e293b;
+      color: #f1f5f9;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.45;
+      border-radius: 9px;
+      padding: 9px 12px;
+      box-shadow: 0 6px 20px rgba(11,18,32,0.22);
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      text-align: left;
+    }
+    .tz-info-tip-fixed.visible { opacity: 1; }
+    .tz-info-tip-fixed::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1e293b;
+    }
+    @media (max-width: 480px) { .tz-info-tip-fixed { display: none !important; } }
+
+    .tz-top-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: stretch;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Local anchor ── */
+    .tz-anchor {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: #fff;
+      border: 1px solid rgba(15,118,110,0.22);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(11,18,32,0.06);
+      flex-shrink: 0;
+    }
+    .tz-you-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid rgba(15,118,110,0.18);
+      border-radius: 999px;
+      padding: 2px 8px;
+      flex-shrink: 0;
+    }
+    .tz-anchor-times { display: flex; flex-direction: column; gap: 2px; }
+    .tz-local-time {
+      font-size: 26px;
+      font-weight: 760;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .tz-anchor-sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .tz-anchor-sub .tz-sub-city { color: var(--text); font-weight: 600; }
+
+    /* ── Intelligence panel ── */
+    .tz-intel-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(11,18,32,0.05);
+      overflow: visible; /* allow tooltips to escape — border-radius still clips the background */
+      isolation: isolate;
+    }
+    /* Clip inner content to the panel's rounded corners without overflow:hidden */
+    .tz-intel-panel > .tz-intel-row:first-child { border-radius: 12px 0 0 0; }
+    .tz-intel-panel > .tz-intel-row:nth-child(2) { border-radius: 0 12px 0 0; }
+    .tz-intel-panel > .tz-intel-row:nth-child(3) { border-radius: 0 0 0 12px; }
+    .tz-intel-panel > .tz-intel-row:last-child   { border-radius: 0 0 12px 0; }
+    .tz-intel-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .tz-intel-row:nth-child(3),
+    .tz-intel-row:nth-child(4) { border-bottom: none; }
+    .tz-intel-row:nth-child(2),
+    .tz-intel-row:nth-child(4) { border-right: none; }
+
+    .tz-intel-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .tz-intel-value {
+      font-size: 12px;
+      font-weight: 620;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .tz-intel-value.accent  { color: var(--accent); font-weight: 650; }
+    .tz-intel-value.recommend { color: #0f766e; font-weight: 680; }
+
+    /* ── Region cards ── */
+    .tz-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+    .tz-card {
+      padding: 12px 13px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(11,18,32,0.04);
+      transition: border-color 700ms ease, background 700ms ease, box-shadow 160ms ease;
+      position: relative;
+      cursor: default;
+    }
+    .tz-card:hover { box-shadow: 0 3px 12px rgba(11,18,32,0.09); }
+    .tz-card.tz-day    { background: #fff;    border-color: rgba(234,179,8,0.30); }
+    .tz-card.tz-ending { background: #fffbf0; border-color: rgba(217,119,6,0.28); }
+    .tz-card.tz-night  { background: #f5f6f9; border-color: rgba(99,102,241,0.15); }
+
+    .tz-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .tz-card-region {
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    /* SVG icon wrapper — consistent sizing */
+    .tz-icon {
+      width: 16px; height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tz-icon svg { width: 14px; height: 14px; display: block; }
+
+    .tz-card-time {
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .tz-card.tz-night .tz-card-time { color: #64748b; }
+    .tz-card-city {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 7px;
+    }
+    .tz-status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 2px 7px;
+    }
+    .tz-status-chip.awake  { background: rgba(5,150,105,0.10);  color: #059669; }
+    .tz-status-chip.ending { background: rgba(217,119,6,0.10);  color: #b45309; }
+    .tz-status-chip.asleep { background: rgba(99,102,241,0.08); color: #6366f1; }
+    .tz-status-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .tz-card-hint {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 4px;
+      line-height: 1.25;
+      min-height: 13px; /* always reserve space even when empty — keeps bar vertically aligned across all cards */
+    }
+
+    /* ── Timeline bar — standardized geometry ── */
+    .tz-timeline {
+      margin-top: 10px;   /* same for all states */
+      margin-bottom: 0;
+      position: relative;
+      /* fixed height: track(4) + labels(14) + gap(4) = 22px wrapper */
+      height: 22px;
+    }
+    .tz-timeline-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;           /* fixed track height */
+      background: rgba(11,18,32,0.07);
+      border-radius: 99px;
+      overflow: visible;
+    }
+    .tz-timeline-fill {
+      position: absolute;
+      top: 0;
+      height: 4px;           /* match track height exactly */
+      border-radius: 99px;
+      pointer-events: none;
+    }
+    .tz-card.tz-day    .tz-timeline-fill { background: rgba(234,179,8,0.55); }
+    .tz-card.tz-ending .tz-timeline-fill { background: rgba(217,119,6,0.55); }
+    .tz-card.tz-night  .tz-timeline-fill { background: rgba(99,102,241,0.35); }
+    .tz-timeline-now {
+      position: absolute;
+      /* vertically center the 8px dot on the 4px track: top of track is 0, center = 2px, dot center = 4px → top = -2px */
+      top: -2px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(11,18,32,0.25);
+      pointer-events: none;
+      z-index: 2;
+      /* horizontal centering via margin-left applied inline */
+      transform: translateX(-50%);
+    }
+    .tz-card.tz-day    .tz-timeline-now { background: #ca8a04; }
+    .tz-card.tz-ending .tz-timeline-now { background: #d97706; }
+    .tz-card.tz-night  .tz-timeline-now { background: #6366f1; }
+    .tz-timeline-labels {
+      position: absolute;
+      top: 8px;              /* 4px track + 4px gap = consistent baseline */
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .tz-timeline-label {
+      font-size: 9px;
+      color: var(--muted);
+      font-weight: 500;
+      opacity: 0.7;
+      line-height: 1;
+    }
+
+    /* ── Hover tooltip ── */
+    .tz-tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 210px;
+      max-width: 240px;
+      background: #1e293b;
+      color: #f1f5f9;
+      border-radius: 10px;
+      padding: 11px 13px;
+      box-shadow: 0 8px 24px rgba(11,18,32,0.22);
+      z-index: 100;
+      pointer-events: none;
+    }
+    /* Arrow */
+    .tz-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #1e293b;
+    }
+    .tz-card:hover .tz-tooltip { display: block; }
+    .tz-tt-row {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-bottom: 7px;
+    }
+    .tz-tt-row:last-child { margin-bottom: 0; }
+    .tz-tt-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(241,245,249,0.5);
+    }
+    .tz-tt-value {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.3;
+    }
+    .tz-tt-value.tt-good  { color: #6ee7b7; }
+    .tz-tt-value.tt-warn  { color: #fcd34d; }
+    .tz-tt-value.tt-muted { color: rgba(241,245,249,0.6); font-weight: 500; }
+    .tz-tt-value.tt-high  { color: #34d399; font-weight: 700; }
+    .tz-tt-rec {
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px solid rgba(241,245,249,0.1);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+    .tz-tt-rec strong { color: #f1f5f9; }
+
+    /* ── Status strip — simplified ── */
+    .tz-strip {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: center;
+      opacity: 0.85;
+    }
+    .tz-strip-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .tz-region-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 650;
+      border-radius: 999px;
+      padding: 1px 8px;
+      border: 1px solid;
+    }
+    .tz-region-chip.awake  { background: rgba(5,150,105,0.07);  color: #065f46; border-color: rgba(5,150,105,0.20); }
+    .tz-region-chip.ending { background: rgba(217,119,6,0.07);  color: #92400e; border-color: rgba(217,119,6,0.20); }
+    .tz-region-chip.asleep { background: rgba(148,163,184,0.08);color: #64748b; border-color: rgba(148,163,184,0.20); }
+    .tz-strip-divider {
+      width: 1px; height: 12px;
+      background: var(--border);
+      flex-shrink: 0;
+      margin: 0 2px;
+    }
+    .tz-strip-next {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .tz-strip-next strong { color: var(--text); font-weight: 650; }
+
+    /* ── Live dot ── */
+    .tz-live-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 0 rgba(16,185,129,0.4);
+      animation: tzPulse 2.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes tzPulse {
+      0%   { box-shadow: 0 0 0 0   rgba(16,185,129,0.4); }
+      60%  { box-shadow: 0 0 0 5px rgba(16,185,129,0);   }
+      100% { box-shadow: 0 0 0 0   rgba(16,185,129,0);   }
+    }
+
+    @media (max-width: 780px) {
+      .tz-top-row { grid-template-columns: 1fr; }
+      .tz-anchor  { justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .tz-cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .tz-intel-panel { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tz-intel-panel { grid-template-columns: 1fr; }
+      .tz-intel-row:nth-child(odd)  { border-right: none; }
+      .tz-intel-row:nth-child(1),
+      .tz-intel-row:nth-child(2),
+      .tz-intel-row:nth-child(3)    { border-bottom: 1px solid var(--border); }
+      .tz-local-time { font-size: 22px; }
+      /* Tooltips disabled on touch */
+      .tz-card:hover .tz-tooltip { display: none; }
+    }
+
+    /* ── Sticky Global Time Ticker ─────────────────────────────── */
+    .tz-ticker {
+      position: sticky;
+      top: var(--nav-h, 56px); /* dynamically set by JS to match actual navbar height */
+      z-index: 89; /* just below site-header z-index */
+      background: rgba(250,251,252,0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      /* Hidden by default — JS reveals when section scrolls out of view */
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-100%);
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+    .tz-ticker.tz-ticker--visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .tz-ticker-inner {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 var(--container-pad, 24px);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow: hidden; /* clip on mobile */
+    }
+    /* "Time" brand link — jump back anchor */
+    .tz-ticker-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      flex-shrink: 0;
+      padding-right: 10px;
+    }
+    .tz-ticker-brand:hover { opacity: 0.75; }
+    .tz-ticker-brand-label { line-height: 1; }
+    /* Vertical divider after brand */
+    .tz-ticker-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+      flex-shrink: 0;
+      margin-right: 10px;
+    }
+    /* Scrollable items row */
+    .tz-ticker-items {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;
+      flex: 1;
+      min-width: 0;
+    }
+    .tz-ticker-items::-webkit-scrollbar { display: none; }
+    /* Individual ticker item */
+    .tz-ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 12px;
+      height: 36px;
+      font-size: 11px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .tz-ticker-item:first-child { padding-left: 0; }
+    .tz-ticker-item:last-child  { border-right: none; }
+    .tz-ticker-item-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .tz-ticker-item-value {
+      font-size: 11px;
+      font-weight: 620;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .tz-ticker-item-value.tk-active  { color: #059669; font-weight: 700; }
+    .tz-ticker-item-value.tk-ending  { color: #d97706; font-weight: 700; }
+    .tz-ticker-item-value.tk-offline { color: #94a3b8; }
+    .tz-ticker-item-value.tk-window  { color: var(--accent); font-weight: 680; }
+    /* State dot in ticker */
+    .tz-ticker-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .tz-ticker-dot.tk-active  { background: #059669; }
+    .tz-ticker-dot.tk-ending  { background: #d97706; }
+    .tz-ticker-dot.tk-offline { background: #cbd5e1; }
+
+    @media (max-width: 640px) {
+      .tz-ticker-inner { padding: 0 12px; }
+      .tz-ticker-item  { padding: 0 9px; }
+    }
+
     /* Tighten section head spacing */
     .section-subhead{ margin: 6px 0 0; }
     #about .section-head{ margin-bottom: 14px; }
@@ -462,6 +1034,7 @@
 <span class="brand-text">Ralph Patrick Divina</span>
 </a>
 <nav aria-label="Primary" class="nav-links">
+<a href="#tz-world">Time</a>
 <a href="#start-here">Start Here</a>
 <a href="#pick-problem">Find a Model</a>
 <a href="#about">About Me</a>
@@ -479,6 +1052,7 @@
 <!-- Mobile menu -->
 <div class="mobile-menu" data-mobile-menu="">
 <div class="container mobile-menu-inner">
+<a class="mobile-link" href="#tz-world">Time</a>
 <a class="mobile-link" href="#start-here">Start Here</a>
 <a class="mobile-link" href="#pick-problem">Find a Model</a>
 <a class="mobile-link" href="#about">About Me</a>
@@ -490,6 +1064,18 @@
 </div>
 </div>
 </header>
+
+<!-- ── Global Time Ticker — appears when main time section is out of view ── -->
+<div class="tz-ticker" id="tz-ticker" aria-label="Global time coordination summary" aria-hidden="true">
+  <div class="tz-ticker-inner">
+    <a class="tz-ticker-brand" href="#tz-world" aria-label="Jump to Time section">
+      <span class="tz-live-dot"></span>
+      <span class="tz-ticker-brand-label">Time</span>
+    </a>
+    <div class="tz-ticker-divider"></div>
+    <div class="tz-ticker-items" id="tz-ticker-items"><!-- JS-rendered --></div>
+  </div>
+</div>
 <main id="main">
 <!-- ── 1) Hero ─────────────────────────────────────────────── -->
 <section class="hero hero--full">
@@ -524,6 +1110,65 @@
 </div>
 </div>
 </div>
+</div>
+</section>
+<!-- ── 1b) Global Team Time Coordination ────────────────────── -->
+<section class="tz-section" id="tz-world">
+<div class="container">
+
+  <!-- Section header — full container width, matches all other section headers -->
+  <div class="section-head reveal">
+    <h2>Global Team Time Coordination</h2>
+    <p class="section-subhead">See who is online now, who comes online next, and the best time to reach each region from your timezone.</p>
+  </div>
+
+  <!-- Component body — constrained to 900px to keep the widget compact -->
+  <div class="tz-body">
+
+  <div class="tz-top-row">
+    <!-- Local anchor -->
+    <div class="tz-anchor">
+      <span class="tz-you-pill"><span class="tz-live-dot"></span> You</span>
+      <div class="tz-anchor-times">
+        <span class="tz-local-time" id="tz-local-time">--:-- --</span>
+        <div class="tz-anchor-sub">
+          <span class="tz-sub-city" id="tz-local-city">Detecting…</span>
+          <span>&middot;</span>
+          <span class="tz-sub-city" id="tz-local-tz"></span>
+          <span>&middot; All times in your timezone</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intelligence panel: Active → Next → Best later → Recommended → Next best -->
+    <div class="tz-intel-panel">
+      <div class="tz-intel-row">
+        <span class="tz-intel-label">Active now</span>
+        <span class="tz-intel-value accent" id="tz-active-now">—</span>
+      </div>
+      <div class="tz-intel-row">
+        <span class="tz-intel-label">Next online</span>
+        <span class="tz-intel-value" id="tz-next-online">—</span>
+      </div>
+      <div class="tz-intel-row">
+        <span class="tz-intel-label">Best window <span class="tz-info-icon" id="tz-best-window-info" aria-label="About Best window">i</span></span>
+        <span class="tz-intel-value" id="tz-best-window">—</span>
+      </div>
+      <div class="tz-intel-row">
+        <span class="tz-intel-label">Recommended</span>
+        <span class="tz-intel-value recommend" id="tz-recommended">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Region cards — fixed APAC → EMEA → USA → LATAM -->
+  <div class="tz-cards-grid" id="tz-cards-grid"><!-- JS-rendered --></div>
+
+  <!-- Status strip -->
+  <div class="tz-strip" id="tz-strip"><!-- JS-rendered --></div>
+
+  </div><!-- /.tz-body -->
+
 </div>
 </section>
 <!-- ── 2) Start Here ───────────────────────────────────────── -->
@@ -919,7 +1564,7 @@
 <div class="contact-grid reveal">
 <button aria-label="Copy email address to clipboard" class="contact-card contact-card--email" id="emailCopyCard">
 <span class="contact-card-label">Fastest</span>
-<span class="contact-card-value">rpatrickdivina@gmail.com</span>
+<span class="contact-card-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0b797b6a7f796268606f627d62656a4b6c666a626725686466">[email&#160;protected]</a></span>
 <span class="copy-hint">
 <span class="copy-text">Click to copy</span>
 <span class="copy-icon">⎘</span>
@@ -973,50 +1618,734 @@
 </div>
 <script src="main.js"></script>
 <script>
-  /* ── Email copy to clipboard ── */
-  (function() {
-    var card = document.getElementById('emailCopyCard');
-    if (!card) return;
-    var copyText = card.querySelector('.copy-text');
-    var copyIcon = card.querySelector('.copy-icon');
-    var email = 'rpatrickdivina@gmail.com';
-    var resetTimer = null;
-
-    function handleCopy(e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      navigator.clipboard.writeText(email).then(function() {
-        card.classList.add('copied');
-        if (copyText) copyText.textContent = 'Email copied!';
-        if (copyIcon) copyIcon.textContent = '✓';
-
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(function() {
-          card.classList.remove('copied');
-          if (copyText) copyText.textContent = 'Click to copy';
-          if (copyIcon) copyIcon.textContent = '⎘';
-        }, 2500);
-      }).catch(function() {
-        /* Fallback for older browsers */
+/* ── Email copy to clipboard ── */
+(function() {
+  var card = document.getElementById('emailCopyCard');
+  if (!card) return;
+  var copyText = card.querySelector('.copy-text');
+  var copyIcon = card.querySelector('.copy-icon');
+  var email = 'rpatrickdivina@gmail.com';
+  var resetTimer = null;
+  function reset() {
+    card.classList.remove('copied');
+    if (copyText) copyText.textContent = 'Click to copy';
+    if (copyIcon) copyIcon.textContent = '\u2398';
+  }
+  function handleCopy(e) {
+    e.preventDefault(); e.stopPropagation();
+    function onSuccess() {
+      card.classList.add('copied');
+      if (copyText) copyText.textContent = 'Email copied!';
+      if (copyIcon) copyIcon.textContent = '\u2713';
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(reset, 2500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(onSuccess).catch(function() {
         var ta = document.createElement('textarea');
-        ta.value = email;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        card.classList.add('copied');
-        if (copyText) copyText.textContent = 'Email copied!';
-        if (copyIcon) copyIcon.textContent = '✓';
-        clearTimeout(resetTimer);
-        resetTimer = setTimeout(function() {
-          card.classList.remove('copied');
-          if (copyText) copyText.textContent = 'Click to copy';
-          if (copyIcon) copyIcon.textContent = '⎘';
-        }, 2500);
+        ta.value = email; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta); onSuccess();
       });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = email; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta); onSuccess();
+    }
+  }
+  card.addEventListener('click', handleCopy);
+  card.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCopy(e); }
+  });
+})();
+
+/* ── Global Coordination Header v7 ── */
+(function() {
+  var REGIONS = [
+    { id: 'apac',  label: 'APAC',  tz: 'Asia/Singapore',    city: 'Singapore'  },
+    { id: 'emea',  label: 'EMEA',  tz: 'Europe/London',     city: 'London'     },
+    { id: 'usa',   label: 'USA',   tz: 'America/New_York',  city: 'New York'   },
+    { id: 'latam', label: 'LATAM', tz: 'America/Sao_Paulo', city: 'S\u00e3o Paulo' }
+  ];
+  var WORK_START = 6, WORK_ENDING = 17, WORK_END = 18;
+  var REPLY_START = 9, REPLY_END = 16; /* best-reply window within workday */
+
+  /* ── Consistent SVG icons — same family, same weight ── */
+  var ICONS = {
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>',
+    sunset: '<svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+  };
+
+  /* ── Helpers ── */
+  function fmtTime(tz) {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: true
+    }).format(new Date());
+  }
+  function fmtTimeAt(tz, h, m) {
+    /* format a specific hour:min in a tz (uses today's date, just overrides h/m) */
+    var d = new Date();
+    /* Build date in region tz at the given hour */
+    var refParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(d);
+    var rp = {};
+    refParts.forEach(function(p){ rp[p.type] = p.value; });
+    /* Use a UTC-based proxy: find the UTC offset for this tz */
+    var nowUtc = d.getTime();
+    var tzHM = getHourMin(tz);
+    var tzOffsetMins = (tzHM.h * 60 + tzHM.m) - (d.getUTCHours() * 60 + d.getUTCMinutes());
+    var targetUtc = new Date(nowUtc);
+    /* Set to target hour in tz */
+    targetUtc.setUTCHours(h - Math.floor(tzOffsetMins / 60), m - (tzOffsetMins % 60), 0, 0);
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: true
+    }).format(targetUtc);
+  }
+  function getHourMin(tz) {
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: false
+    }).formatToParts(new Date());
+    var h = 0, m = 0;
+    parts.forEach(function(p){
+      if (p.type === 'hour')   h = parseInt(p.value, 10);
+      if (p.type === 'minute') m = parseInt(p.value, 10);
+    });
+    if (isNaN(h)) h = 0; if (isNaN(m)) m = 0;
+    return { h: h, m: m };
+  }
+  function getState(tz) {
+    var h = getHourMin(tz).h;
+    if (h >= WORK_START && h < WORK_ENDING) return 'active';
+    if (h === WORK_ENDING)                  return 'ending';
+    return 'offline';
+  }
+  function minsUntilWake(tz) {
+    var hm = getHourMin(tz);
+    var now = hm.h * 60 + hm.m;
+    var diff = WORK_START * 60 - now;
+    if (diff <= 0) diff += 1440;
+    return diff;
+  }
+  function minsUntilSleep(tz) {
+    var hm = getHourMin(tz);
+    return Math.max(0, WORK_END * 60 - (hm.h * 60 + hm.m));
+  }
+  function fmtDur(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60;
+    if (h === 0) return m + 'm';
+    if (m === 0) return h + 'h';
+    return h + 'h ' + m + 'm';
+  }
+  function fmtTzAbbr(tz) {
+    try {
+      var p = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'short' })
+        .formatToParts(new Date()).find(function(x){ return x.type === 'timeZoneName'; });
+      return p ? p.value : '';
+    } catch(e) { return ''; }
+  }
+  function cityFromTz(tz) { return tz.split('/').pop().replace(/_/g, ' '); }
+  function joinNames(arr) {
+    if (!arr.length) return '';
+    if (arr.length === 1) return arr[0];
+    return arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+  }
+
+  /* ── Best meeting window ──────────────────────────────────────────────────
+   * Fully timezone-aware: searches the next 48 hours in real UTC time so
+   * it works correctly for ANY user timezone — including those where the
+   * best overlap window falls after midnight or before dawn local time.
+   *
+   * Algorithm:
+   *   1. Start from the next whole UTC minute (now + 1 min, rounded to hour).
+   *   2. Walk forward hour-by-hour for up to 48 hours.
+   *   3. At each UTC hour, ask "what local hour is it right now in each region?"
+   *      using Intl.DateTimeFormat — no manual offset arithmetic.
+   *   4. Count how many regions are inside WORK_START–WORK_END at that UTC moment.
+   *   5. Track the first hour that maximises overlap count (≥ 2 regions).
+   *   6. Format the result in the USER's local timezone using Intl — so the
+   *      displayed time is always correct regardless of where they are.
+   * ─────────────────────────────────────────────────────────────────────── */
+  function bestMeetingWindow(localTz) {
+    var now = new Date();
+    /* Round up to the next whole hour in UTC */
+    var startUtc = new Date(now);
+    startUtc.setUTCMinutes(0, 0, 0);
+    startUtc.setUTCHours(startUtc.getUTCHours() + 1);
+
+    var bestUtc = null, bestRegions = [], bestCount = 0;
+
+    for (var i = 0; i < 48; i++) {
+      var probe = new Date(startUtc.getTime() + i * 3600000);
+      var inWin = [];
+      REGIONS.forEach(function(r) {
+        /* Ask Intl what hour it is in this region at the probe UTC moment */
+        var parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: r.tz, hour: 'numeric', hour12: false
+        }).formatToParts(probe);
+        var rh = 0;
+        parts.forEach(function(p){ if (p.type === 'hour') rh = parseInt(p.value, 10); });
+        if (isNaN(rh)) rh = 0;
+        if (rh >= WORK_START && rh < WORK_END) inWin.push(r.label);
+      });
+      if (inWin.length > bestCount) {
+        bestCount = inWin.length;
+        bestUtc   = probe;
+        bestRegions = inWin.slice();
+      }
+      /* Stop early once we've found a full-overlap window and passed it */
+      if (bestCount === REGIONS.length) break;
     }
 
-    card.addEventListener('click',
+    if (!bestUtc || bestCount < 2) return null;
+
+    /* Format window start and end in the USER's own timezone */
+    var endUtc = new Date(bestUtc.getTime() + 2 * 3600000);
+    var opts = { timeZone: localTz, hour: 'numeric', minute: '2-digit', hour12: true };
+    var t1 = new Intl.DateTimeFormat('en-US', opts).format(bestUtc);
+    var t2 = new Intl.DateTimeFormat('en-US', opts).format(endUtc);
+
+    /* Flag if the window is tomorrow in the user's timezone */
+    var localToday = new Intl.DateTimeFormat('en-US', {
+      timeZone: localTz, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(now);
+    var localWinDay = new Intl.DateTimeFormat('en-US', {
+      timeZone: localTz, year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(bestUtc);
+    var dayLabel = localWinDay !== localToday ? ' (tomorrow)' : '';
+
+    return { time: t1 + '\u2013' + t2 + dayLabel, regions: bestRegions, count: bestCount };
+  }
+
+  /*
+   * Convert a region's workday hours into local-time positions (0–100%)
+   * for the 24-hour timeline bar.
+   *
+   * Uses real UTC time as the anchor so half-hour and quarter-hour
+   * timezone offsets (India +5:30, Nepal +5:45, etc.) are handled correctly.
+   */
+  function timelinePositions(regionTz, localTz) {
+    var now = new Date();
+
+    /* What minute-of-day is it right now in the user's local timezone? */
+    var lParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: localTz, hour: 'numeric', minute: '2-digit', hour12: false
+    }).formatToParts(now);
+    var lh = 0, lm = 0;
+    lParts.forEach(function(p){
+      if (p.type === 'hour')   lh = parseInt(p.value, 10);
+      if (p.type === 'minute') lm = parseInt(p.value, 10);
+    });
+    var nowMinLocal = lh * 60 + lm;
+
+    /* What minute-of-day is work-start/end in the region, expressed in local time?
+     * We do this by finding the UTC offset difference between the two zones. */
+    var rParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: regionTz, hour: 'numeric', minute: '2-digit', hour12: false
+    }).formatToParts(now);
+    var rh = 0, rm = 0;
+    rParts.forEach(function(p){
+      if (p.type === 'hour')   rh = parseInt(p.value, 10);
+      if (p.type === 'minute') rm = parseInt(p.value, 10);
+    });
+    /* offsetMins: how many minutes ahead the region is vs user local */
+    var regionNowMin = rh * 60 + rm;
+    var offsetMins   = regionNowMin - nowMinLocal;
+
+    /* Region work start/end expressed as minute-of-day in user's local timezone */
+    var startLocal = ((WORK_START * 60 - offsetMins) % 1440 + 1440) % 1440;
+    var endLocal   = ((WORK_END   * 60 - offsetMins) % 1440 + 1440) % 1440;
+
+    var nowPct   = nowMinLocal   / 1440 * 100;
+    var startPct = startLocal    / 1440 * 100;
+    var endPct   = endLocal      / 1440 * 100;
+    return { startPct: startPct, endPct: endPct, nowPct: nowPct };
+  }
+
+  /*
+   * Build tooltip HTML for a region — shows workday in local time,
+   * best contact window, state, reply likelihood, next transition, and recommendation.
+   */
+  function replyLikelihood(state) {
+    /* Returns { label, cls } */
+    if (state === 'active')  return { label: 'High',    cls: 'tt-high' };
+    if (state === 'ending')  return { label: 'Limited', cls: 'tt-warn' };
+    return                          { label: 'Offline', cls: 'tt-muted' };
+  }
+
+  function buildTooltip(r, localTz, state) {
+    var localCity = cityFromTz(localTz);
+
+    /* Convert a region work-hour to a real Date, then format in user's timezone.
+     * Same UTC-anchor technique used in timeline labels — handles all offsets. */
+    function regionWorkHourToLocal(workHour) {
+      var nowUtc = new Date();
+      var rCur = new Intl.DateTimeFormat('en-US', {
+        timeZone: r.tz, hour: 'numeric', minute: '2-digit', hour12: false
+      }).formatToParts(nowUtc);
+      var rcH = 0, rcM = 0;
+      rCur.forEach(function(p){
+        if (p.type === 'hour')   rcH = parseInt(p.value, 10);
+        if (p.type === 'minute') rcM = parseInt(p.value, 10);
+      });
+      var deltaMins = workHour * 60 - (rcH * 60 + rcM);
+      var d = new Date(nowUtc.getTime() + deltaMins * 60000);
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: localTz, hour: 'numeric', minute: '2-digit', hour12: true
+      }).format(d);
+    }
+
+    var wdStart   = regionWorkHourToLocal(WORK_START);
+    var wdEnd     = regionWorkHourToLocal(WORK_END);
+    var bestStart = regionWorkHourToLocal(REPLY_START);
+    var bestEnd   = regionWorkHourToLocal(REPLY_END);
+
+    var stateLabel = state === 'active' ? 'Active' : state === 'ending' ? 'Ending soon' : 'Offline';
+    var stateClass = state === 'active' ? 'tt-good' : state === 'ending' ? 'tt-warn' : 'tt-muted';
+    var rl = replyLikelihood(state);
+
+    var nextLine = '';
+    if (state === 'offline') {
+      nextLine = '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Online in</span>' +
+        '<span class="tz-tt-value">' + fmtDur(minsUntilWake(r.tz)) + '</span></div>';
+    } else {
+      nextLine = '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Ends in</span>' +
+        '<span class="tz-tt-value">' + fmtDur(minsUntilSleep(r.tz)) + '</span></div>';
+    }
+
+    /* Recommendation line */
+    var rec = '';
+    if (state === 'active')  rec = 'Good time to message now';
+    else if (state === 'ending') rec = 'Message soon — window closing';
+    else {
+      var wakeIn = minsUntilWake(r.tz);
+      rec = wakeIn < 120
+        ? 'Coming online soon — queue a message'
+        : 'Queue async; online in ' + fmtDur(wakeIn);
+    }
+
+    return '<div class="tz-tooltip">' +
+      '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Best contact (' + localCity + ')</span>' +
+        '<span class="tz-tt-value tt-good">' + bestStart + '\u2013' + bestEnd + '</span>' +
+      '</div>' +
+      '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Full workday in your time</span>' +
+        '<span class="tz-tt-value">' + wdStart + '\u2013' + wdEnd + '</span>' +
+      '</div>' +
+      '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Currently</span>' +
+        '<span class="tz-tt-value ' + stateClass + '">' + stateLabel + '</span>' +
+      '</div>' +
+      '<div class="tz-tt-row">' +
+        '<span class="tz-tt-label">Reply likelihood</span>' +
+        '<span class="tz-tt-value ' + rl.cls + '">' + rl.label + '</span>' +
+      '</div>' +
+      nextLine +
+      '<div class="tz-tt-rec">' + rec + '</div>' +
+    '</div>';
+  }
+
+  /* ── Build card scaffolding (order locked) ── */
+  var grid = document.getElementById('tz-cards-grid');
+  if (grid) {
+    grid.innerHTML = REGIONS.map(function(r) {
+      return '<div class="tz-card" id="tzcard-' + r.id + '" style="position:relative">' +
+        '<div class="tz-card-header">' +
+          '<span class="tz-card-region">' + r.label + '</span>' +
+          '<span class="tz-icon" id="tzicon-' + r.id + '"></span>' +
+        '</div>' +
+        '<div class="tz-card-time" id="tztime-' + r.id + '">--:-- --</div>' +
+        '<div class="tz-card-city">' + r.city + ' &middot; <span id="tzabbr-' + r.id + '"></span></div>' +
+        '<span class="tz-status-chip" id="tzchip-' + r.id + '">' +
+          '<span class="tz-status-dot"></span> <span id="tzstatus-' + r.id + '">…</span>' +
+        '</span>' +
+        '<span class="tz-card-hint" id="tzhint-' + r.id + '"></span>' +
+        '<div class="tz-timeline" id="tztl-' + r.id + '">' +
+          '<div class="tz-timeline-track">' +
+            '<div class="tz-timeline-fill" id="tztl-fill-' + r.id + '"></div>' +
+            '<div class="tz-timeline-now"  id="tztl-now-'  + r.id + '"></div>' +
+          '</div>' +
+          '<div class="tz-timeline-labels">' +
+            '<span class="tz-timeline-label" id="tztl-l1-' + r.id + '"></span>' +
+            '<span class="tz-timeline-label" id="tztl-l2-' + r.id + '"></span>' +
+          '</div>' +
+        '</div>' +
+        '<span id="tztt-' + r.id + '"></span>' + /* tooltip injected here */
+      '</div>';
+    }).join('');
+  }
+
+  /* ── Main tick ── */
+  function tick() {
+    var localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    var el = function(id) { return document.getElementById(id); };
+
+    /* Local anchor */
+    if (el('tz-local-time')) el('tz-local-time').textContent = fmtTime(localTz);
+    if (el('tz-local-city')) el('tz-local-city').textContent = cityFromTz(localTz);
+    if (el('tz-local-tz'))   el('tz-local-tz').textContent   = fmtTzAbbr(localTz);
+
+    /* Classify */
+    var activeR = [], endingR = [], offlineR = [];
+    REGIONS.forEach(function(r) {
+      r._state = getState(r.tz);
+      if (r._state === 'active')  activeR.push(r);
+      else if (r._state === 'ending') endingR.push(r);
+      else offlineR.push(r);
+    });
+    var liveR = activeR.concat(endingR);
+
+    /* ── Cards ── */
+    REGIONS.forEach(function(r) {
+      var s = r._state;
+      /* Card class */
+      var cc = 'tz-card ' + (s === 'active' ? 'tz-day' : s === 'ending' ? 'tz-ending' : 'tz-night');
+      if (el('tzcard-' + r.id)) el('tzcard-' + r.id).className = cc;
+      /* Time + abbr */
+      if (el('tztime-' + r.id)) el('tztime-' + r.id).textContent = fmtTime(r.tz);
+      if (el('tzabbr-' + r.id)) el('tzabbr-' + r.id).textContent = fmtTzAbbr(r.tz);
+      /* SVG icon — consistent family */
+      var iconEl = el('tzicon-' + r.id);
+      if (iconEl) iconEl.innerHTML = s === 'active' ? ICONS.sun : s === 'ending' ? ICONS.sunset : ICONS.moon;
+      /* Status chip */
+      var chipCls  = 'tz-status-chip ' + (s === 'active' ? 'awake' : s === 'ending' ? 'ending' : 'asleep');
+      var chipText = s === 'active' ? 'Active' : s === 'ending' ? 'Ending soon' : 'Offline';
+      if (el('tzchip-'   + r.id)) el('tzchip-'   + r.id).className   = chipCls;
+      if (el('tzstatus-' + r.id)) el('tzstatus-' + r.id).textContent = chipText;
+      /* Hint */
+      var hint = '';
+      if (s === 'active') {
+        var ml = minsUntilSleep(r.tz);
+        if (ml < 180) hint = 'Ends in ' + fmtDur(ml);
+      } else if (s === 'ending') {
+        hint = 'Ends in ' + fmtDur(minsUntilSleep(r.tz));
+      } else {
+        hint = 'Online in ' + fmtDur(minsUntilWake(r.tz));
+      }
+      if (el('tzhint-' + r.id)) el('tzhint-' + r.id).textContent = hint;
+
+      /* ── Timeline bar ── */
+      var pos = timelinePositions(r.tz, localTz);
+      /* fill: from startPct to endPct (handles wrap-around simply) */
+      var fillEl = el('tztl-fill-' + r.id);
+      var nowEl  = el('tztl-now-'  + r.id);
+      var l1El   = el('tztl-l1-'   + r.id);
+      var l2El   = el('tztl-l2-'   + r.id);
+      if (fillEl) {
+        /* Clamp to 0–100 for simple bar; if crosses midnight, just show partial */
+        var fs = Math.max(0, Math.min(100, pos.startPct));
+        var fe = Math.max(0, Math.min(100, pos.endPct));
+        if (fe < fs) {
+          /* crosses midnight — show two segments by putting fill from 0 to endPct */
+          fillEl.style.left  = '0%';
+          fillEl.style.width = Math.min(fe, 100) + '%';
+        } else {
+          fillEl.style.left  = fs + '%';
+          fillEl.style.width = Math.max(0, fe - fs) + '%';
+        }
+      }
+      if (nowEl) {
+        nowEl.style.left = Math.max(0, Math.min(100, pos.nowPct)) + '%';
+      }
+      /* Labels: show user's local-time equivalents of region work-start and work-end */
+      if (l1El && l2El) {
+        /* Build a real Date at region's WORK_START and WORK_END today, then
+         * format it in the user's timezone — handles all offsets correctly. */
+        function regionWorkHourToDate(workHour) {
+          /* Find what UTC time corresponds to `workHour` in regionTz today.
+           * Strategy: take now, get the region's current hour, compute delta,
+           * then shift now by that delta. */
+          var nowUtc = new Date();
+          var rCur = new Intl.DateTimeFormat('en-US', {
+            timeZone: r.tz, hour: 'numeric', minute: '2-digit', hour12: false
+          }).formatToParts(nowUtc);
+          var rcH = 0, rcM = 0;
+          rCur.forEach(function(p){
+            if (p.type === 'hour')   rcH = parseInt(p.value, 10);
+            if (p.type === 'minute') rcM = parseInt(p.value, 10);
+          });
+          var regionNowMins = rcH * 60 + rcM;
+          var targetMins    = workHour * 60;
+          var deltaMins     = targetMins - regionNowMins;
+          return new Date(nowUtc.getTime() + deltaMins * 60000);
+        }
+        var fmtOpts = { timeZone: localTz, hour: 'numeric', hour12: true };
+        l1El.textContent = new Intl.DateTimeFormat('en-US', fmtOpts).format(regionWorkHourToDate(WORK_START));
+        l2El.textContent = new Intl.DateTimeFormat('en-US', fmtOpts).format(regionWorkHourToDate(WORK_END));
+      }
+
+      /* ── Hover tooltip ── */
+      var ttEl = el('tztt-' + r.id);
+      if (ttEl) ttEl.innerHTML = buildTooltip(r, localTz, s);
+    });
+
+    /* ── Intelligence panel ── */
+    /* Active now */
+    var activeText;
+    if (liveR.length === 0) {
+      activeText = 'All regions offline';
+    } else if (liveR.length === REGIONS.length) {
+      activeText = 'All regions active';
+    } else {
+      var pts = [];
+      if (activeR.length)  pts.push(activeR.map(function(r){return r.label;}).join(', '));
+      if (endingR.length)  pts.push(endingR.map(function(r){return r.label;}).join(', ') + ' (ending)');
+      activeText = pts.join('; ');
+    }
+    if (el('tz-active-now')) el('tz-active-now').textContent = activeText;
+
+    /* Next online */
+    var nextText = 'All in working hours';
+    if (offlineR.length > 0) {
+      var soonest = offlineR.slice().sort(function(a,b){
+        return minsUntilWake(a.tz) - minsUntilWake(b.tz);
+      })[0];
+      nextText = soonest.label + ' in ' + fmtDur(minsUntilWake(soonest.tz));
+    }
+    if (el('tz-next-online')) el('tz-next-online').textContent = nextText;
+
+    /* Best window — shows next multi-region overlap */
+    var win = bestMeetingWindow(localTz);
+    var winText;
+    if (liveR.length >= 3) {
+      if (win && win.regions.length >= 3) {
+        winText = 'Now (' + liveR.length + ' regions); broader at ' + win.time.split('\u2013')[0];
+      } else {
+        winText = 'Now — ' + liveR.map(function(r){return r.label;}).join(', ');
+      }
+    } else if (win && win.regions.length >= 3) {
+      winText = win.time + ' — ' + joinNames(win.regions);
+    } else if (win && win.regions.length === 2) {
+      winText = win.time + ' — ' + win.regions.join(' + ');
+    } else {
+      winText = 'No strong overlap today';
+    }
+    if (el('tz-best-window')) el('tz-best-window').textContent = winText;
+
+    /* ── Next best to contact (scored) ── */
+    function nextBestContact() {
+      /* Score: active-in-best-window=4, active=3, ending=2, offline-soon=1, offline=0 */
+      var localHM = getHourMin(localTz);
+      var scored = REGIONS.map(function(r) {
+        var s = r._state;
+        var rh = getHourMin(r.tz).h;
+        var score = 0;
+        if (s === 'active' && rh >= REPLY_START && rh < REPLY_END) score = 4;
+        else if (s === 'active')  score = 3;
+        else if (s === 'ending')  score = 2;
+        else {
+          var wakeIn = minsUntilWake(r.tz);
+          score = wakeIn < 120 ? 1 : 0;
+        }
+        return { r: r, score: score, wakeIn: minsUntilWake(r.tz) };
+      });
+      scored.sort(function(a, b) {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.wakeIn - b.wakeIn;
+      });
+      return scored[0];
+    }
+
+    /* Recommended — tighter, natural copy */
+    var best = nextBestContact();
+    var rec;
+    if (liveR.length === 0) {
+      var sn2 = offlineR.length ? offlineR.slice().sort(function(a,b){
+        return minsUntilWake(a.tz) - minsUntilWake(b.tz);
+      })[0] : null;
+      rec = sn2
+        ? 'Send async now; ' + sn2.label + ' online in ' + fmtDur(minsUntilWake(sn2.tz))
+        : 'All offline — send async';
+    } else if (liveR.length === REGIONS.length) {
+      rec = 'All regions reachable — good time for a live sync';
+    } else if (liveR.length >= 3) {
+      rec = 'Message ' + liveR.map(function(r){return r.label;}).join(', ') + ' now';
+    } else if (liveR.length === 1) {
+      if (win) {
+        rec = 'Message ' + liveR[0].label + ' now; broader window at ' + win.time.split('\u2013')[0];
+      } else {
+        rec = 'Message ' + liveR[0].label + ' now; send async to others';
+      }
+    } else {
+      var ln = liveR.map(function(r){return r.label;}).join(' + ');
+      rec = win ? 'Live: ' + ln + '; more regions join at ' + win.time.split('\u2013')[0] : 'Message ' + ln + ' now; async for the rest';
+    }
+    /* Append next-best note if it adds value */
+    if (best && best.score <= 1 && best.r._state === 'offline') {
+      var nb = best.r;
+      var wakeIn = minsUntilWake(nb.tz);
+      if (wakeIn < 240) rec += ' · ' + nb.label + ' in ' + fmtDur(wakeIn);
+    }
+    if (el('tz-recommended')) el('tz-recommended').textContent = rec;
+
+    /* ── Status strip — simplified: just chips + next online ── */
+    var strip = el('tz-strip');
+    if (strip) {
+      var html = '<span class="tz-strip-label">Now:</span>';
+      REGIONS.forEach(function(r) {
+        var s = r._state;
+        var cc = s === 'active' ? 'awake' : s === 'ending' ? 'ending' : 'asleep';
+        var dot = s !== 'offline' ? '\u25cf' : '\u25cb';
+        html += '<span class="tz-region-chip ' + cc + '">' + dot + ' ' + r.label + '</span>';
+      });
+      if (offlineR.length > 0) {
+        var sn3 = offlineR.slice().sort(function(a,b){
+          return minsUntilWake(a.tz) - minsUntilWake(b.tz);
+        })[0];
+        html += '<span class="tz-strip-divider"></span>' +
+          '<span class="tz-strip-next">Next: <strong>' +
+          sn3.label + ' in ' + fmtDur(minsUntilWake(sn3.tz)) + '</strong></span>';
+      }
+      strip.innerHTML = html;
+    }
+
+    /* Update sticky ticker */
+    renderTicker(localTz, fmtTime(localTz));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){
+      tick();
+      setInterval(tick, 30000);
+      initInfoTip();
+      initTicker();
+    });
+  } else {
+    tick();
+    setInterval(tick, 30000);
+    initInfoTip();
+    initTicker();
+  }
+
+  /* ── Sticky Global Time Ticker ── */
+  function initTicker() {
+    var ticker    = document.getElementById('tz-ticker');
+    var tzSection = document.getElementById('tz-world');
+    var siteHeader = document.querySelector('.site-header') || document.querySelector('header');
+    if (!ticker || !tzSection) return;
+
+    /* Measure navbar height and expose as --nav-h so the ticker sits flush below it */
+    function setNavHeight() {
+      var h = siteHeader ? siteHeader.offsetHeight : 56;
+      document.documentElement.style.setProperty('--nav-h', h + 'px');
+    }
+    setNavHeight();
+    window.addEventListener('resize', setNavHeight);
+
+    /* Show ticker only when the main time section is fully scrolled out of view */
+    if (window.IntersectionObserver) {
+      var obs = new IntersectionObserver(function(entries) {
+        var entry = entries[0];
+        if (entry.isIntersecting) {
+          ticker.classList.remove('tz-ticker--visible');
+          ticker.setAttribute('aria-hidden', 'true');
+        } else {
+          ticker.classList.add('tz-ticker--visible');
+          ticker.setAttribute('aria-hidden', 'false');
+        }
+      }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
+      obs.observe(tzSection);
+    }
+  }
+
+  /* ── Render ticker items (called inside tick so it stays live) ── */
+  function renderTicker(localTz, localTime) {
+    var itemsEl = document.getElementById('tz-ticker-items');
+    if (!itemsEl) return;
+
+    var html = '';
+
+    /* You: local time */
+    html += '<span class="tz-ticker-item">' +
+      '<span class="tz-ticker-item-label">You</span>' +
+      '<span class="tz-ticker-item-value" style="font-weight:700">' + localTime + '</span>' +
+    '</span>';
+
+    /* One item per region */
+    REGIONS.forEach(function(r) {
+      var s = r._state;
+      var dotCls  = s === 'active' ? 'tk-active' : s === 'ending' ? 'tk-ending' : 'tk-offline';
+      var valCls  = s === 'active' ? 'tk-active' : s === 'ending' ? 'tk-ending' : 'tk-offline';
+      var valText;
+      if (s === 'active') {
+        var ml = minsUntilSleep(r.tz);
+        valText = ml < 180 ? 'Active · ends ' + fmtDur(ml) : 'Active';
+      } else if (s === 'ending') {
+        valText = 'Ending · ' + fmtDur(minsUntilSleep(r.tz));
+      } else {
+        valText = 'Online ' + fmtDur(minsUntilWake(r.tz));
+      }
+      html += '<span class="tz-ticker-item">' +
+        '<span class="tz-ticker-dot ' + dotCls + '"></span>' +
+        '<span class="tz-ticker-item-label">' + r.label + '</span>' +
+        '<span class="tz-ticker-item-value ' + valCls + '">' + valText + '</span>' +
+      '</span>';
+    });
+
+    /* Best window */
+    var win = bestMeetingWindow(localTz);
+    var winText = win ? win.time.split('(')[0].trim() + (win.count >= 3 ? ' · ' + win.count + ' regions' : '') : '—';
+    html += '<span class="tz-ticker-item">' +
+      '<span class="tz-ticker-item-label">Best window</span>' +
+      '<span class="tz-ticker-item-value tk-window">' + winText + '</span>' +
+    '</span>';
+
+    itemsEl.innerHTML = html;
+  }
+
+  /* ── Best Window fixed-position tooltip ── */
+  function initInfoTip() {
+    var icon = document.getElementById('tz-best-window-info');
+    if (!icon) return;
+
+    /* Create the tooltip element once, hidden, appended to body */
+    var tip = document.createElement('div');
+    tip.className = 'tz-info-tip-fixed';
+    tip.textContent = 'Shown in your timezone. The strongest upcoming overlap window for reaching the most regions simultaneously during working hours.';
+    tip.style.display = 'none'; /* start hidden so offsetHeight reads correctly */
+    document.body.appendChild(tip);
+
+    var hideTimer;
+
+    function showTip() {
+      clearTimeout(hideTimer);
+      var tipW = 230;
+      /* Make visible but transparent to measure height accurately */
+      tip.style.display = 'block';
+      tip.style.width   = tipW + 'px';
+      tip.style.left    = '-9999px';
+      tip.style.top     = '-9999px';
+      tip.classList.remove('visible');
+      var tipH = tip.offsetHeight;
+      /* Now position above the icon using fixed coords */
+      var r = icon.getBoundingClientRect();
+      var left = r.left + r.width / 2 - tipW / 2;
+      tip.style.left = Math.max(8, Math.min(left, window.innerWidth - tipW - 8)) + 'px';
+      tip.style.top  = (r.top - tipH - 10) + 'px';
+      tip.classList.add('visible');
+    }
+
+    function hideTip() {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(function() {
+        tip.classList.remove('visible');
+        /* After fade-out transition completes, hide from layout */
+        setTimeout(function(){ if (!tip.classList.contains('visible')) tip.style.display = 'none'; }, 130);
+      }, 80);
+    }
+
+    icon.addEventListener('mouseenter', showTip);
+    icon.addEventListener('mouseleave', hideTip);
+    icon.addEventListener('focus',      showTip);
+    icon.addEventListener('blur',       hideTip);
+  }
+})();
+</script>
+</body>
+</html>
+<!-- END -->

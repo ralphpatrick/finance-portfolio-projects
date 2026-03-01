@@ -868,6 +868,27 @@
 
 
 </style>
+<style>
+/* ── Global Time Ticker ── */
+.tz-live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 0 0 rgba(16,185,129,.4);animation:tzPulse 2.4s ease-in-out infinite;flex-shrink:0}
+@keyframes tzPulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.4)}60%{box-shadow:0 0 0 5px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+.tz-ticker{position:sticky;top:var(--nav-h,56px);z-index:89;background:rgba(250,251,252,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);height:36px;display:flex;align-items:center;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity 220ms ease,transform 220ms ease}
+.tz-ticker.tz-ticker--visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.tz-ticker-inner{max-width:1120px;width:100%;margin:0 auto;padding:0 24px;display:flex;align-items:center;overflow:hidden}
+.tz-ticker-brand{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);text-decoration:none;flex-shrink:0;padding-right:10px}
+.tz-ticker-brand:hover{opacity:.75}
+.tz-ticker-divider{width:1px;height:16px;background:var(--border);flex-shrink:0;margin-right:10px}
+.tz-ticker-items{display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;min-width:0}
+.tz-ticker-items::-webkit-scrollbar{display:none}
+.tz-ticker-item{display:inline-flex;align-items:center;gap:5px;padding:0 12px;height:36px;font-size:11px;flex-shrink:0;border-right:1px solid var(--border);white-space:nowrap}
+.tz-ticker-item:first-child{padding-left:0}.tz-ticker-item:last-child{border-right:none}
+.tz-ticker-item-label{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.tz-ticker-item-value{font-size:11px;font-weight:620;color:var(--text);font-variant-numeric:tabular-nums}
+.tz-ticker-item-value.tk-active{color:#059669;font-weight:700}.tz-ticker-item-value.tk-ending{color:#d97706;font-weight:700}.tz-ticker-item-value.tk-offline{color:#94a3b8}.tz-ticker-item-value.tk-window{color:var(--accent);font-weight:680}
+.tz-ticker-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.tz-ticker-dot.tk-active{background:#059669}.tz-ticker-dot.tk-ending{background:#d97706}.tz-ticker-dot.tk-offline{background:#cbd5e1}
+@media(max-width:640px){.tz-ticker-inner{padding:0 12px}.tz-ticker-item{padding:0 9px}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -884,6 +905,18 @@
     </nav>
   </div>
 </header>
+</header>
+<!-- Global Time Ticker -->
+<div class="tz-ticker tz-ticker--visible" id="tz-ticker" aria-label="Global time coordination summary">
+  <div class="tz-ticker-inner">
+    <a class="tz-ticker-brand" href="index.html#tz-world" aria-label="Go to Time section">
+      <span class="tz-live-dot"></span>
+      <span>Time</span>
+    </a>
+    <div class="tz-ticker-divider"></div>
+    <div class="tz-ticker-items" id="tz-ticker-items"><!-- JS-rendered --></div>
+  </div>
+</div>
 
 <main id="main">
   <section class="module-hero">
@@ -1682,6 +1715,57 @@
     }
 
 
+</script>
+<script>
+/* Global Time Ticker */
+(function(){
+  var R=[{l:'APAC',t:'Asia/Singapore'},{l:'EMEA',t:'Europe/London'},{l:'USA',t:'America/New_York'},{l:'LATAM',t:'America/Sao_Paulo'}];
+  var WS=6,WN=17,WE=18;
+  function fmt(tz){return new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true}).format(new Date())}
+  function hm(tz){var p=new Intl.DateTimeFormat('en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:false}).formatToParts(new Date()),h=0,m=0;p.forEach(function(x){if(x.type==='hour')h=+x.value;if(x.type==='minute')m=+x.value});return{h:h||0,m:m||0}}
+  function st(tz){var h=hm(tz).h;return h>=WS&&h<WN?'active':h===WN?'ending':'offline'}
+  function wake(tz){var x=hm(tz),d=WS*60-(x.h*60+x.m);return d<=0?d+1440:d}
+  function slp(tz){var x=hm(tz);return Math.max(0,WE*60-(x.h*60+x.m))}
+  function dur(m){var h=Math.floor(m/60),n=m%60;return h===0?n+'m':n===0?h+'h':h+'h '+n+'m'}
+  function bestWin(ltz){
+    var now=new Date(),s=new Date(now);s.setUTCMinutes(0,0,0);s.setUTCHours(s.getUTCHours()+1);
+    var bu=null,bc=0;
+    for(var i=0;i<48;i++){
+      var pr=new Date(s.getTime()+i*3600000),iw=0;
+      R.forEach(function(r){var p=new Intl.DateTimeFormat('en-US',{timeZone:r.t,hour:'numeric',hour12:false}).formatToParts(pr),h=0;p.forEach(function(x){if(x.type==='hour')h=+x.value});if(h>=WS&&h<WE)iw++});
+      if(iw>bc){bc=iw;bu=pr}
+      if(bc===R.length)break;
+    }
+    if(!bu||bc<2)return null;
+    var e=new Date(bu.getTime()+7200000),o={timeZone:ltz,hour:'numeric',minute:'2-digit',hour12:true};
+    var t1=new Intl.DateTimeFormat('en-US',o).format(bu),t2=new Intl.DateTimeFormat('en-US',o).format(e);
+    var fd={timeZone:ltz,year:'numeric',month:'2-digit',day:'2-digit'};
+    var tm=new Intl.DateTimeFormat('en-US',fd).format(now)!==new Intl.DateTimeFormat('en-US',fd).format(bu)?' (tom)':'';
+    return{time:t1+'–'+t2+tm,count:bc}
+  }
+  function render(){
+    var el=document.getElementById('tz-ticker-items');if(!el)return;
+    var ltz=Intl.DateTimeFormat().resolvedOptions().timeZone,h='';
+    h+='<span class="tz-ticker-item"><span class="tz-ticker-item-label">You</span><span class="tz-ticker-item-value" style="font-weight:700">'+fmt(ltz)+'</span></span>';
+    R.forEach(function(r){
+      var s=st(r.t),dc=s==='active'?'tk-active':s==='ending'?'tk-ending':'tk-offline',vt;
+      if(s==='active'){var ml=slp(r.t);vt=ml<180?'Active · ends '+dur(ml):'Active'}
+      else if(s==='ending')vt='Ending · '+dur(slp(r.t));
+      else vt='Online '+dur(wake(r.t));
+      h+='<span class="tz-ticker-item"><span class="tz-ticker-dot '+dc+'"></span><span class="tz-ticker-item-label">'+r.l+'</span><span class="tz-ticker-item-value '+dc+'">'+vt+'</span></span>';
+    });
+    var w=bestWin(ltz),wt=w?w.time.split('(')[0].trim()+(w.count>=3?' · '+w.count+' regions':''): '—';
+    h+='<span class="tz-ticker-item"><span class="tz-ticker-item-label">Best window</span><span class="tz-ticker-item-value tk-window">'+wt+'</span></span>';
+    el.innerHTML=h;
+  }
+  function init(){
+    var hdr=document.querySelector('.site-header')||document.querySelector('header');
+    document.documentElement.style.setProperty('--nav-h',(hdr?hdr.offsetHeight:56)+'px');
+    window.addEventListener('resize',function(){var h2=document.querySelector('.site-header')||document.querySelector('header');document.documentElement.style.setProperty('--nav-h',(h2?h2.offsetHeight:56)+'px')});
+    render();setInterval(render,30000);
+  }
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
 </script>
 </body>
 </html>
