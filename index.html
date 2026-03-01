@@ -2289,7 +2289,7 @@
 
     /* Best window */
     var win = bestMeetingWindow(localTz);
-    var winText = win ? win.time.split('(')[0].trim() + (win.count >= 3 ? ' · ' + win.count + ' regions' : '') : '—';
+    var winText = win ? win.time.split('(')[0].trim() : '—';
     html += '<span class="tz-ticker-item">' +
       '<span class="tz-ticker-item-label">Best window</span>' +
       '<span class="tz-ticker-item-value tk-window">' + winText + '</span>' +

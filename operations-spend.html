@@ -6733,7 +6733,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else vt='Online '+dur(wake(r.t));
       h+='<span class="tz-ticker-item"><span class="tz-ticker-dot '+dc+'"></span><span class="tz-ticker-item-label">'+r.l+'</span><span class="tz-ticker-item-value '+dc+'">'+vt+'</span></span>';
     });
-    var w=bestWin(ltz),wt=w?w.time.split('(')[0].trim()+(w.count>=3?' · '+w.count+' regions':''): '—';
+    var w=bestWin(ltz),wt=w?w.time.split('(')[0].trim(): '—';
     h+='<span class="tz-ticker-item"><span class="tz-ticker-item-label">Best window</span><span class="tz-ticker-item-value tk-window">'+wt+'</span></span>';
     el.innerHTML=h;
   }
