@@ -47,9 +47,9 @@
     .mdf-how-strip{background:var(--bg-muted);border-bottom:1px solid var(--border);padding:14px 0}
     .mdf-how-inner{width:min(var(--max),calc(100% - 48px));margin:0 auto;display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap}
     .mdf-how-label{font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);flex-shrink:0;padding-top:2px;white-space:nowrap}
-    .mdf-how-steps{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+    .mdf-how-steps{display:flex;gap:0;flex-wrap:wrap;overflow-x:visible;scrollbar-width:none}
     .mdf-how-steps::-webkit-scrollbar{display:none}
-    .mdf-how-step{display:flex;align-items:flex-start;gap:8px;padding:0 16px;border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+    .mdf-how-step{display:flex;align-items:flex-start;gap:8px;padding:6px 16px;border-right:1px solid var(--border);white-space:normal;flex-shrink:0;max-width:260px}
     .mdf-how-step:first-child{padding-left:0}
     .mdf-how-step:last-child{border-right:none}
     .mdf-how-num{width:18px;height:18px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:800;display:grid;place-items:center;flex-shrink:0;margin-top:1px;border:1px solid rgba(15,118,110,0.18)}
@@ -123,10 +123,34 @@
     .s-submitted{background:rgba(15,118,110,0.08);color:var(--accent);border-color:rgba(15,118,110,0.18)}
     .s-closed{background:var(--c-stalled-bg);color:var(--c-stalled);border-color:rgba(148,163,184,0.20)}
     .s-pending{background:var(--c-info-bg);color:var(--c-info);border-color:rgba(27,77,122,0.18)}
+    /* ── Full-width layout (replaces sidebar grid) ── */
+    .module-layout-full{max-width:1400px;margin:0 auto;padding:0 24px 48px}
+    /* ── Inline control bar ── */
+    .mdf-control-bar{background:white;border-bottom:1px solid var(--border);position:sticky;top:calc(var(--nav-h,56px) + 36px);z-index:80;box-shadow:0 1px 0 rgba(11,18,32,0.04)}
+    .mdf-control-bar-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;height:48px;overflow-x:auto;scrollbar-width:none}
+    .mdf-control-bar-inner::-webkit-scrollbar{display:none}
+    .mdf-control-filters{display:flex;align-items:center;gap:8px;padding-right:20px;border-right:1px solid var(--border);flex-shrink:0}
+    .mdf-control-label{font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+    .mdf-control-select{padding:5px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;background:var(--bg-muted);color:var(--text);cursor:pointer;height:30px}
+    .mdf-control-summary{display:flex;align-items:center;padding:0 20px;gap:0;border-right:1px solid var(--border);flex-shrink:0}
+    .mdf-control-stat{display:flex;flex-direction:column;align-items:flex-start;padding:0 14px;border-right:1px solid var(--border)}
+    .mdf-control-stat:last-child{border-right:none}
+    .mdf-control-stat-label{font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);line-height:1}
+    .mdf-control-stat-value{font-size:13px;font-weight:760;letter-spacing:-0.01em;color:var(--text);font-variant-numeric:tabular-nums;line-height:1.3}
+    .mdf-control-actions{display:flex;align-items:center;gap:6px;padding-left:20px;flex-shrink:0;margin-left:auto}
+    .mdf-control-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 12px;cursor:pointer;font-family:inherit;height:30px;transition:all 120ms ease;white-space:nowrap}
+    .mdf-control-btn:hover{color:var(--text);border-color:rgba(12,23,45,0.22);background:var(--bg-muted)}
+    /* ── Floating detail modal ── */
+    .mdf-modal-backdrop{position:fixed;inset:0;background:rgba(11,18,32,0.35);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:900;opacity:0;pointer-events:none;transition:opacity 180ms ease}
+    .mdf-modal-backdrop.is-visible{opacity:1;pointer-events:auto}
+    .mdf-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-44%);z-index:901;width:min(780px,calc(100vw - 32px));max-height:calc(100vh - 80px);overflow-y:auto;background:white;border-radius:var(--radius);box-shadow:0 20px 60px rgba(11,18,32,0.22),0 0 0 1px rgba(11,18,32,0.08);opacity:0;pointer-events:none;transition:opacity 200ms ease,transform 200ms ease;scrollbar-width:thin}
+    .mdf-modal.is-visible{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+    .mdf-modal.is-clean{box-shadow:0 20px 60px rgba(11,18,32,0.18),0 0 0 1px rgba(15,118,110,0.22)}
+    .mdf-modal-head{padding:14px 20px;background:rgba(220,38,38,0.04);border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:2;border-radius:var(--radius) var(--radius) 0 0}
+    .mdf-modal.is-clean .mdf-modal-head{background:rgba(15,118,110,0.04);border-bottom-color:rgba(15,118,110,0.12)}
     /* Detail panel */
-    .mdf-detail-panel{background:white;border:1.5px solid rgba(220,38,38,0.20);border-radius:var(--radius);box-shadow:0 0 0 4px rgba(220,38,38,0.04),var(--shadow-soft);overflow:hidden;display:none;margin-bottom:12px}
-    .mdf-detail-panel.is-visible{display:block}
-    .mdf-detail-panel.is-clean{border-color:rgba(15,118,110,0.22);box-shadow:0 0 0 4px rgba(15,118,110,0.04),var(--shadow-soft)}
+    .mdf-detail-panel{display:none}
+    .mdf-detail-panel.is-visible{display:none}
     .mdf-detail-head{padding:13px 20px;background:rgba(220,38,38,0.04);border-bottom:1px solid rgba(220,38,38,0.12);display:flex;align-items:center;justify-content:space-between;gap:10px}
     .mdf-detail-panel.is-clean .mdf-detail-head{background:rgba(15,118,110,0.04);border-bottom-color:rgba(15,118,110,0.12)}
     .mdf-detail-head-left{display:flex;align-items:center;gap:10px}
@@ -239,6 +263,56 @@
     @media(max-width:1024px){.mdf-kpi-strip{grid-template-columns:repeat(3,1fr)}.mdf-accrual-grid{grid-template-columns:repeat(3,1fr)}.mdf-pop-grid{grid-template-columns:1fr}.mdf-sop-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:860px){.module-layout{grid-template-columns:1fr !important;padding:16px !important}.mobile-controls-btn{display:flex}.sidebar{display:none;border-radius:var(--radius-sm);margin-bottom:8px}.sidebar.mobile-open{display:block}.mdf-kpi-strip{grid-template-columns:repeat(2,1fr)}.mdf-or-grid{grid-template-columns:1fr}.mdf-detail-body{grid-template-columns:1fr}.mdf-detail-cell{border-right:none}.mdf-owner-table{font-size:11px}.mdf-owner-table thead th,.mdf-owner-table tbody td{padding:8px 10px}.mdf-sop-grid{grid-template-columns:1fr}.mdf-accrual-grid{grid-template-columns:repeat(2,1fr)}.mdf-how-steps{flex-wrap:wrap}.mdf-how-step{border-right:none;border-bottom:1px solid var(--border);padding:6px 0}.mdf-how-step:last-child{border-bottom:none}}
     @media(max-width:560px){.module-hero{height:auto !important;min-height:260px}.module-title{font-size:26px}.mdf-kpi-strip{grid-template-columns:1fr 1fr}.mdf-comp-row{grid-template-columns:1fr 80px 40px}}
+    /* ── Value line under hero subtitle ── */
+    .module-value-line{font-size:13px;color:rgba(255,255,255,0.65);margin:8px 0 0;line-height:1.5;max-width:520px;font-style:italic}
+    /* ── Section no-bottom-border variant ── */
+    .mdf-section--no-bottom-border{border-bottom:none;padding-bottom:0}
+    /* ── Top Actions Today panel ── */
+    .mdf-actions-list{display:grid;gap:8px}
+    .mdf-action-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:14px 16px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);border-left:3px solid var(--border);transition:box-shadow 140ms ease}
+    .mdf-action-item:hover{box-shadow:var(--shadow-soft)}
+    .mdf-action--critical{border-left-color:var(--c-risk);background:rgba(220,38,38,0.015)}
+    .mdf-action--high{border-left-color:var(--c-watch);background:rgba(217,119,6,0.012)}
+    .mdf-action--watch{border-left-color:var(--c-watch);background:rgba(217,119,6,0.012)}
+    .mdf-action--review{border-left-color:var(--c-healthy);background:rgba(5,150,105,0.012)}
+    .mdf-action-priority{display:flex;flex-direction:column;align-items:flex-start;gap:5px;flex-shrink:0;min-width:80px}
+    .mdf-action-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:0.05em;white-space:nowrap}
+    .badge-critical{background:var(--c-risk-bg);color:var(--c-risk);border:1px solid rgba(220,38,38,0.18)}
+    .badge-high{background:var(--c-watch-bg);color:var(--c-watch);border:1px solid rgba(217,119,6,0.18)}
+    .badge-watch{background:var(--c-watch-bg);color:var(--c-watch);border:1px solid rgba(217,119,6,0.18)}
+    .badge-review{background:var(--c-healthy-bg);color:var(--c-healthy);border:1px solid rgba(5,150,105,0.18)}
+    .mdf-action-aging{font-size:10px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+    .mdf-action-body{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .mdf-action-title{font-size:13px;font-weight:700;color:var(--text)}
+    .mdf-action-detail{font-size:12px;color:var(--muted);line-height:1.45}
+    .mdf-action-meta{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0;min-width:130px}
+    .mdf-action-owner{font-size:11px;color:var(--muted);text-align:right}
+    .mdf-action-directive{font-size:11px;font-weight:700;color:var(--accent);text-align:right;white-space:nowrap}
+    /* ── Repeat flag ── */
+    .mdf-repeat-flag{display:inline-flex;align-items:center;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(217,119,6,0.10);color:var(--c-watch);border:1px solid rgba(217,119,6,0.20);margin-left:6px;white-space:nowrap}
+    .mdf-repeat-flag--inline{vertical-align:middle}
+    /* ── Workflow Performance KPIs ── */
+    .mdf-wfkpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .mdf-wfkpi-card{padding:16px 14px;background:white;border:1px solid var(--border);border-radius:var(--radius-sm);box-shadow:0 1px 0 rgba(11,18,32,0.02);position:relative}
+    .mdf-wfkpi-label{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:flex;align-items:center;gap:5px}
+    .mdf-wfkpi-value{font-size:24px;font-weight:760;letter-spacing:-0.03em;line-height:1;margin-bottom:5px}
+    .mdf-wfkpi--healthy{color:var(--c-healthy)}
+    .mdf-wfkpi--watch{color:var(--c-watch)}
+    .mdf-wfkpi--risk{color:var(--c-risk)}
+    .mdf-wfkpi-trend{font-size:10px;font-weight:600;margin-bottom:4px}
+    .mdf-wfkpi-trend--up{color:var(--c-risk)}
+    .mdf-wfkpi-trend--down{color:var(--c-watch)}
+    .mdf-wfkpi-trend--flat{color:var(--muted)}
+    .mdf-wfkpi-sub{font-size:11px;color:var(--muted);line-height:1.4}
+    /* ── Owner attention rows ── */
+    .owner-row-attention{background:rgba(220,38,38,0.02);border-left:3px solid var(--c-risk)}
+    .owner-row-attention td:first-child{padding-left:10px}
+    .owner-row-watch{background:rgba(217,119,6,0.02);border-left:3px solid var(--c-watch)}
+    .owner-row-watch td:first-child{padding-left:10px}
+    /* ── Responsive overrides for new components ── */
+    @media(max-width:1024px){.mdf-wfkpi-strip{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:860px){.mdf-action-item{grid-template-columns:1fr;gap:8px}.mdf-action-priority{flex-direction:row;align-items:center}.mdf-action-meta{align-items:flex-start}.mdf-wfkpi-strip{grid-template-columns:repeat(2,1fr)}.mdf-how-step{border-right:none;border-bottom:1px solid var(--border);padding:6px 0;max-width:100%}.mdf-how-step:last-child{border-bottom:none}}
+    @media(max-width:560px){.mdf-wfkpi-strip{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -271,6 +345,7 @@
     <div class="module-eyebrow">Partner Finance &bull; Module 10</div>
     <h1 class="module-title">MDF Governance Tracker</h1>
     <p class="module-subtitle">Track MDF claims from commitment to reimbursement, identify missing support, and escalate blocked items before close risk builds up.</p>
+    <p class="module-value-line">Use this to catch missing support early, reduce rework, and prevent reimbursement delays &mdash; so claims move to close without last-minute exceptions.</p>
     <div class="module-hero-meta">
       <span class="demo-data-pill">Sample Data &bull; Synthetic, non-confidential</span>
     </div>
@@ -290,15 +365,19 @@
     <div class="mdf-how-steps">
       <div class="mdf-how-step">
         <div class="mdf-how-num">1</div>
-        <div class="mdf-how-text">Check <strong>Status at a Glance</strong> for blocked, aging, and accrual-ready claims</div>
+        <div class="mdf-how-text">Check <strong>Top Actions Today</strong> &mdash; act on blocked, aging, and at-risk claims first</div>
       </div>
       <div class="mdf-how-step">
         <div class="mdf-how-num">2</div>
-        <div class="mdf-how-text">Review the <strong>Claims Control Table</strong> &mdash; click any row to see missing support and next actions</div>
+        <div class="mdf-how-text">Check <strong>Status at a Glance</strong> and <strong>Workflow KPIs</strong> to see where the process is breaking</div>
       </div>
       <div class="mdf-how-step">
         <div class="mdf-how-num">3</div>
-        <div class="mdf-how-text">Use <strong>Operating Rhythm</strong> for stuck or aging claims that need cross-functional coordination</div>
+        <div class="mdf-how-text">Review the <strong>Claims Control Table</strong> &mdash; click any row to see missing support and fastest path to close</div>
+      </div>
+      <div class="mdf-how-step">
+        <div class="mdf-how-num">4</div>
+        <div class="mdf-how-text">Use <strong>Operating Rhythm</strong> when blocked claims need structured cross-functional follow-up &mdash; not standard tracking</div>
       </div>
     </div>
   </div>
@@ -321,58 +400,100 @@
   </div>
 </div>
 <main id="main">
-  <div class="module-layout">
-    <button class="mobile-controls-btn" id="mobileControlsBtn" aria-expanded="false" style="grid-column: 1 / -1;">
-      <span class="mcb-icon">&#9881;</span>
-      <span class="mcb-label">Controls &amp; Filters</span>
-      <span class="mcb-chevron">&#9662;</span>
-    </button>
-    <aside class="sidebar" id="sidebarPanel">
-      <div class="sb-static">
-        <div class="sb-static-title"><span>FILTER</span><span class="data-badge">ALL CLAIMS</span></div>
-        <div style="display:grid;gap:6px;margin-bottom:8px;">
-          <select id="filterRegion" onchange="applyFilters()" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:10px;font-size:12px;font-family:inherit;background:white;color:var(--text);">
+  <div class="module-layout-full">
+    <!-- INLINE FILTER + SUMMARY BAR -->
+    <div class="mdf-control-bar">
+      <div class="mdf-control-bar-inner">
+        <div class="mdf-control-filters">
+          <span class="mdf-control-label">Filter</span>
+          <select id="filterRegion" onchange="applyFilters()" class="mdf-control-select">
             <option value="">All Regions</option><option value="EMEA">EMEA</option><option value="APAC">APAC</option><option value="Americas">Americas</option><option value="LATAM">LATAM</option>
           </select>
-          <select id="filterStatus" onchange="applyFilters()" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:10px;font-size:12px;font-family:inherit;background:white;color:var(--text);">
+          <select id="filterStatus" onchange="applyFilters()" class="mdf-control-select">
             <option value="">All Statuses</option><option value="blocked">Blocked</option><option value="ready">Accrual-Ready</option><option value="missing">Missing Support</option><option value="aging">Aging &gt;10d</option>
           </select>
         </div>
-        <div style="font-size:10px;color:var(--muted);line-height:1.4;">Filter updates the claims table and exception panel.</div>
-      </div>
-      <div class="sb-acc-group">
-        <button class="sb-acc-header open" onclick="toggleAcc(this)"><span>Claim Summary</span><span class="sb-acc-chevron">&#9662;</span></button>
-        <div class="sb-acc-body open">
-          <div style="display:grid;gap:6px;">
-            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg-muted);border-radius:8px;border:1px solid var(--border);"><span style="font-size:11px;color:var(--muted);font-weight:600;">Total committed</span><span style="font-size:12px;font-weight:700;color:var(--text);">$487,000</span></div>
-            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg-muted);border-radius:8px;border:1px solid var(--border);"><span style="font-size:11px;color:var(--muted);font-weight:600;">Total claimed</span><span style="font-size:12px;font-weight:700;color:var(--text);">$362,500</span></div>
-            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg-muted);border-radius:8px;border:1px solid var(--border);"><span style="font-size:11px;color:var(--muted);font-weight:600;">Accrued to date</span><span style="font-size:12px;font-weight:700;color:var(--accent);">$218,000</span></div>
-            <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(220,38,38,0.05);border-radius:8px;border:1px solid rgba(220,38,38,0.15);"><span style="font-size:11px;color:var(--muted);font-weight:600;">At risk (blocked)</span><span style="font-size:12px;font-weight:700;color:var(--c-risk);">$94,000</span></div>
-          </div>
+        <div class="mdf-control-summary">
+          <div class="mdf-control-stat"><span class="mdf-control-stat-label">Committed</span><span class="mdf-control-stat-value">$487K</span></div>
+          <div class="mdf-control-stat"><span class="mdf-control-stat-label">Claimed</span><span class="mdf-control-stat-value">$362.5K</span></div>
+          <div class="mdf-control-stat"><span class="mdf-control-stat-label">Accrued</span><span class="mdf-control-stat-value" style="color:var(--accent)">$218K</span></div>
+          <div class="mdf-control-stat"><span class="mdf-control-stat-label">At Risk</span><span class="mdf-control-stat-value" style="color:var(--c-risk)">$94K</span></div>
+          <div class="mdf-control-stat"><span class="mdf-control-stat-label">Cutoff</span><span class="mdf-control-stat-value" id="closeCountdown" style="color:var(--c-risk)">—</span></div>
+        </div>
+        <div class="mdf-control-actions">
+          <button class="mdf-control-btn" onclick="window.print()">&#9113; Export</button>
+          <button class="mdf-control-btn" onclick="scrollToSection('mdf-sec-or')">&#8599; OR Escalations</button>
         </div>
       </div>
-      <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="toggleAcc(this)"><span>Actions</span><span class="sb-acc-chevron">&#9662;</span></button>
-        <div class="sb-acc-body">
-          <button class="sb-acc-btn primary" onclick="window.print()">&#9113; Export Claim Pack</button>
-          <button class="sb-acc-btn" onclick="scrollToSection('mdf-sec-or')">&#8599; View OR Escalations</button>
-          <button class="sb-acc-btn" onclick="scrollToSection('mdf-sec-sops')">&#128203; View SOPs</button>
-        </div>
-      </div>
-      <div class="sb-acc-group">
-        <button class="sb-acc-header" onclick="toggleAcc(this)"><span>Close Countdown</span><span class="sb-acc-chevron">&#9662;</span></button>
-        <div class="sb-acc-body">
-          <div style="padding:12px;background:rgba(220,38,38,0.04);border-radius:10px;border:1px solid rgba(220,38,38,0.15);">
-            <div style="font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--c-risk);margin-bottom:5px;">Month-end cutoff</div>
-            <div id="closeCountdown" style="font-size:22px;font-weight:760;letter-spacing:-0.02em;color:var(--text);">&#8212;</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:3px;">All support must be submitted to finance before cutoff for accrual inclusion.</div>
-          </div>
-        </div>
-      </div>
-    </aside>
+    </div>
     <div class="main-content" id="mdfContent">
+      <!-- TOP ACTIONS TODAY -->
+      <div class="mdf-section mdf-section--no-bottom-border" id="mdf-sec-actions">
+        <div class="mdf-section-label">Manager Priorities</div>
+        <h2 class="mdf-section-title">Top Actions Today <span class="help-icon" data-help="The highest-priority claims needing manager attention right now — blocked, aging, or at close risk. Address these before reviewing the full claims table."></span></h2>
+        <div class="mdf-section-desc">Act on these first. Each item below risks reimbursement delay, missed accrual, or close-period exception if not addressed today.</div>
+        <div class="mdf-actions-list">
+          <div class="mdf-action-item mdf-action--critical">
+            <div class="mdf-action-priority">
+              <span class="mdf-action-badge badge-critical">Critical</span>
+              <span class="mdf-action-aging">15d</span>
+            </div>
+            <div class="mdf-action-body">
+              <div class="mdf-action-title">CloudPartner EMEA &mdash; Webinar Co-Marketing</div>
+              <div class="mdf-action-detail">Missing invoice + proof of performance. Accrual fully blocked. Reimbursement at close risk if not cleared today.</div>
+            </div>
+            <div class="mdf-action-meta">
+              <div class="mdf-action-owner">Mia Schulz &mdash; follow up with partner AM</div>
+              <div class="mdf-action-directive">Escalate if not cleared today &rarr;</div>
+            </div>
+          </div>
+          <div class="mdf-action-item mdf-action--high">
+            <div class="mdf-action-priority">
+              <span class="mdf-action-badge badge-high">Follow Up</span>
+              <span class="mdf-action-aging">11d</span>
+            </div>
+            <div class="mdf-action-body">
+              <div class="mdf-action-title">DataBridge APAC &mdash; Partner Summit Co-Fund</div>
+              <div class="mdf-action-detail">Blocked &mdash; support package only 25% complete. In OR escalation. Owner follow-up needed before Feb&nbsp;28 cutoff.</div>
+            </div>
+            <div class="mdf-action-meta">
+              <div class="mdf-action-owner">James Tan &mdash; 2 blocked claims <span class="mdf-repeat-flag">Repeat exceptions</span></div>
+              <div class="mdf-action-directive">Owner follow-up needed today &rarr;</div>
+            </div>
+          </div>
+          <div class="mdf-action-item mdf-action--watch">
+            <div class="mdf-action-priority">
+              <span class="mdf-action-badge badge-watch">Watch</span>
+              <span class="mdf-action-aging">9d</span>
+            </div>
+            <div class="mdf-action-body">
+              <div class="mdf-action-title">RioPartner LATAM &mdash; Channel MDF Program</div>
+              <div class="mdf-action-detail">Invoice and PoP package outstanding. Approaching 10d escalation threshold. Send checklist to partner today.</div>
+            </div>
+            <div class="mdf-action-meta">
+              <div class="mdf-action-owner">Carlos Lima &mdash; today deadline</div>
+              <div class="mdf-action-directive">Send PoP checklist today &rarr;</div>
+            </div>
+          </div>
+          <div class="mdf-action-item mdf-action--review">
+            <div class="mdf-action-priority">
+              <span class="mdf-action-badge badge-review">Review</span>
+              <span class="mdf-action-aging">2 claims</span>
+            </div>
+            <div class="mdf-action-body">
+              <div class="mdf-action-title">5 claims accrual-ready &mdash; $112K clear to book this period</div>
+              <div class="mdf-action-detail">GlobalSoft Americas and NordicsEdge EMEA are fully submitted. AsiaConnect, EuroTech, and MarketPro are near-ready. Confirm finance has received packages.</div>
+            </div>
+            <div class="mdf-action-meta">
+              <div class="mdf-action-owner">No blockers &mdash; confirm receipt with finance</div>
+              <div class="mdf-action-directive">Ready to move &rarr;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- STATUS AT A GLANCE -->
       <div class="mdf-section">
-        <h2 class="mdf-section-title">Status at a glance <span class="help-icon" data-help="Live summary of where all MDF claims stand — blocked items, accrual-ready packages, missing support, aging claims, and OR escalations at a single view."></span></h2>
+        <h2 class="mdf-section-title">Status at a Glance <span class="help-icon" data-help="Live summary of where all MDF claims stand — blocked items, accrual-ready packages, missing support, aging claims, and OR escalations at a single view."></span></h2>
         <div class="mdf-kpi-strip">
           <div class="mdf-kpi-card">
             <div class="mdf-kpi-label">Open Claims</div>
@@ -406,18 +527,47 @@
           </div>
         </div>
       </div>
+      <!-- WORKFLOW PERFORMANCE KPIs -->
+      <div class="mdf-section" id="mdf-sec-wfkpi">
+        <div class="mdf-section-label">Process Health</div>
+        <h2 class="mdf-section-title">Workflow Performance <span class="help-icon" data-help="Operational KPIs measuring how cleanly claims move through the process. Use these to track whether the workflow is improving — fewer exceptions, faster reviews, higher first-pass quality."></span></h2>
+        <div class="mdf-section-desc">Is the process getting cleaner? Use these to identify where rework, delay, and exceptions are building up.</div>
+        <div class="mdf-wfkpi-strip">
+          <div class="mdf-wfkpi-card">
+            <div class="mdf-wfkpi-label">First-Pass Complete <span class="help-icon" data-help="% of claims submitted with a fully complete support package on first submission. Higher = less rework and fewer finance rejections."></span></div>
+            <div class="mdf-wfkpi-value mdf-wfkpi--watch">46%</div>
+            <div class="mdf-wfkpi-trend mdf-wfkpi-trend--down">&#9660; down from 58% last period</div>
+            <div class="mdf-wfkpi-sub">Needs attention &mdash; partner prep improving slowly</div>
+          </div>
+          <div class="mdf-wfkpi-card">
+            <div class="mdf-wfkpi-label">Median Review Days <span class="help-icon" data-help="Median days from reimbursement submission to finance approval. Track this to see if approvals are accelerating or stalling."></span></div>
+            <div class="mdf-wfkpi-value mdf-wfkpi--watch">8.4d</div>
+            <div class="mdf-wfkpi-trend mdf-wfkpi-trend--up">&#9650; up from 6.1d last period</div>
+            <div class="mdf-wfkpi-sub">Review cycle lengthening &mdash; watch closely</div>
+          </div>
+          <div class="mdf-wfkpi-card">
+            <div class="mdf-wfkpi-label">Cleared Before Cutoff <span class="help-icon" data-help="% of claims fully resolved before month-end cutoff. Low rates mean accrual carries into next period, creating catch-up noise."></span></div>
+            <div class="mdf-wfkpi-value mdf-wfkpi--healthy">71%</div>
+            <div class="mdf-wfkpi-trend mdf-wfkpi-trend--up">&#9650; up from 64% last period</div>
+            <div class="mdf-wfkpi-sub">Improving &mdash; target 80% by Q2</div>
+          </div>
+          <div class="mdf-wfkpi-card">
+            <div class="mdf-wfkpi-label">Escalation Rate <span class="help-icon" data-help="% of claims that required Operating Rhythm escalation due to blockers or stalled ownership. Lower = healthier workflow."></span></div>
+            <div class="mdf-wfkpi-value mdf-wfkpi--watch">14%</div>
+            <div class="mdf-wfkpi-trend mdf-wfkpi-trend--flat">&#9644; flat vs last period</div>
+            <div class="mdf-wfkpi-sub">2 of 14 claims in OR escalation now</div>
+          </div>
+          <div class="mdf-wfkpi-card">
+            <div class="mdf-wfkpi-label">Repeat Owner Exceptions <span class="help-icon" data-help="Owners with 2+ blocked or exception claims this period. Useful signal for where coaching, tooling, or process support is needed."></span></div>
+            <div class="mdf-wfkpi-value mdf-wfkpi--risk">2</div>
+            <div class="mdf-wfkpi-trend mdf-wfkpi-trend--flat">&#9644; same as last period</div>
+            <div class="mdf-wfkpi-sub">Mia Schulz (EMEA), James Tan (APAC)</div>
+          </div>
+        </div>
+      </div>
+      <!-- CLAIMS CONTROL TABLE -->
       <div class="mdf-section" id="mdf-sec-table">
         <h2 class="mdf-section-title">MDF Claims &mdash; Control Table <span class="help-icon" data-help="Full register of active MDF claims. Click any row to see the blocker detail, missing documents, next owner, and fastest path to close."></span></h2>
-        <div class="mdf-detail-panel" id="detailPanel">
-          <div class="mdf-detail-head">
-            <div class="mdf-detail-head-left">
-              <div class="mdf-detail-pulse"></div>
-              <div class="mdf-detail-head-title" id="detailTitle">Exception Detail</div>
-            </div>
-            <button class="mdf-detail-close" onclick="closeDetail()" aria-label="Close detail panel">&#x2715;</button>
-          </div>
-          <div class="mdf-detail-body" id="detailBody"></div>
-        </div>
         <div class="mdf-table-wrap">
           <table class="mdf-table" id="claimsTable" aria-label="MDF Claims Control Table">
             <thead>
@@ -437,7 +587,7 @@
             <tbody id="claimsTbody"></tbody>
           </table>
         </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:8px;padding-left:2px;">Click any row to see claim detail, missing documents, and fastest path to close. Red-bordered rows need immediate attention.</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px;padding-left:2px;">Click any row to see claim detail, missing documents, and fastest path to close. <strong style="color:var(--c-risk);">Red-bordered rows need immediate attention.</strong> Orange-bordered rows need review before cutoff.</div>
       </div>
       <div class="mdf-section" id="mdf-sec-accrual">
         <h2 class="mdf-section-title">Accrual Readiness &mdash; Close Support Quality <span class="help-icon" data-help="Accrual-Ready: claim has enough support to book the accrual. Partial: some support received but package incomplete. Blocked: accrual cannot proceed until missing documents are received."></span></h2>
@@ -478,15 +628,16 @@
         </div>
       </div>
       <div class="mdf-section" id="mdf-sec-owners">
-        <h2 class="mdf-section-title">Claim Owner Accountability <span class="help-icon" data-help="Maps every active MDF claim to its responsible owner. Surfaces who has blocked or aging items, their total exposure, and when the next follow-up action is due."></span></h2>
+        <h2 class="mdf-section-title">Claim Owner Accountability <span class="help-icon" data-help="Maps every active MDF claim to its responsible owner. Owners with blocked claims or repeat exceptions are surfaced for follow-up. Use this to identify who needs coaching, escalation, or process support."></span></h2>
+        <div class="mdf-section-desc">Owners with blocked or aging claims are highlighted. Repeat exceptions signal where process friction or support gaps may need attention.</div>
         <div class="mdf-owner-table-wrap">
           <table class="mdf-owner-table" aria-label="Claim Owner Roster">
             <thead><tr><th>Owner</th><th>Function / Team</th><th>Region</th><th>Active Claims</th><th>Blocked</th><th>Accrual-Ready</th><th>Next Follow-Up</th><th>Exposure <span class="help-icon" data-help="Risk level based on claim size, number of blockers, and days elapsed. High = immediate action required."></span></th></tr></thead>
             <tbody>
-              <tr><td><div class="owner-name">Mia Schulz</div><div class="owner-func">EMEA Partner Mktg Lead</div></td><td>Channel Marketing</td><td>EMEA</td><td>4</td><td><span style="color:var(--c-risk);font-weight:700;">2</span></td><td><span style="color:var(--c-healthy);font-weight:700;">1</span></td><td>Today &mdash; CloudPartner proof</td><td><span class="exposure-dot exp-high"></span>High</td></tr>
-              <tr><td><div class="owner-name">James Tan</div><div class="owner-func">APAC Channel Finance BP</div></td><td>Partner Finance</td><td>APAC</td><td>3</td><td><span style="color:var(--c-risk);font-weight:700;">1</span></td><td><span style="color:var(--c-healthy);font-weight:700;">2</span></td><td>Feb 28 &mdash; DataBridge review</td><td><span class="exposure-dot exp-med"></span>Medium</td></tr>
+              <tr class="owner-row-attention"><td><div class="owner-name">Mia Schulz <span class="mdf-repeat-flag mdf-repeat-flag--inline">2 blocked &bull; follow up today</span></div><div class="owner-func">EMEA Partner Mktg Lead</div></td><td>Channel Marketing</td><td>EMEA</td><td>4</td><td><span style="color:var(--c-risk);font-weight:700;">2</span></td><td><span style="color:var(--c-healthy);font-weight:700;">1</span></td><td><strong style="color:var(--c-risk);">Today</strong> &mdash; CloudPartner proof</td><td><span class="exposure-dot exp-high"></span>High</td></tr>
+              <tr class="owner-row-watch"><td><div class="owner-name">James Tan <span class="mdf-repeat-flag mdf-repeat-flag--inline">repeat exceptions</span></div><div class="owner-func">APAC Channel Finance BP</div></td><td>Partner Finance</td><td>APAC</td><td>3</td><td><span style="color:var(--c-risk);font-weight:700;">1</span></td><td><span style="color:var(--c-healthy);font-weight:700;">2</span></td><td>Feb 28 &mdash; DataBridge review</td><td><span class="exposure-dot exp-med"></span>Medium</td></tr>
               <tr><td><div class="owner-name">Sofia Reyes</div><div class="owner-func">Americas Partner Mktg</div></td><td>Channel Marketing</td><td>Americas</td><td>4</td><td><span style="color:var(--c-stalled);font-weight:600;">0</span></td><td><span style="color:var(--c-healthy);font-weight:700;">2</span></td><td>Mar 3 &mdash; MarketPro final invoice</td><td><span class="exposure-dot exp-low"></span>Low</td></tr>
-              <tr><td><div class="owner-name">Carlos Lima</div><div class="owner-func">LATAM Channel Finance</div></td><td>Partner Finance</td><td>LATAM</td><td>2</td><td><span style="color:var(--c-risk);font-weight:700;">1</span></td><td><span style="color:var(--c-stalled);font-weight:600;">0</span></td><td>Today &mdash; RioPartner PoP request</td><td><span class="exposure-dot exp-med"></span>Medium</td></tr>
+              <tr class="owner-row-watch"><td><div class="owner-name">Carlos Lima</div><div class="owner-func">LATAM Channel Finance</div></td><td>Partner Finance</td><td>LATAM</td><td>2</td><td><span style="color:var(--c-risk);font-weight:700;">1</span></td><td><span style="color:var(--c-stalled);font-weight:600;">0</span></td><td><strong style="color:var(--c-watch);">Today</strong> &mdash; RioPartner PoP request</td><td><span class="exposure-dot exp-med"></span>Medium</td></tr>
               <tr><td><div class="owner-name">Anna Fischer</div><div class="owner-func">Global Channel Finance</div></td><td>Finance Operations</td><td>Global</td><td>1</td><td><span style="color:var(--c-stalled);font-weight:600;">0</span></td><td><span style="color:var(--c-healthy);font-weight:700;">1</span></td><td>Mar 1 &mdash; TechAlliance approval</td><td><span class="exposure-dot exp-low"></span>Low</td></tr>
             </tbody>
           </table>
@@ -539,7 +690,7 @@
       </div>
       <div class="mdf-section" id="mdf-sec-or">
         <h2 class="mdf-section-title">Operating Rhythm &mdash; Exception Escalations <span class="help-icon" data-help="Claims routed to the OR coordination layer for structured resolution. Each entry includes the blocker, responsible owner, recommended action mode, and fastest path to close."></span></h2>
-        <div class="mdf-or-intro">For claims that are <strong>stuck, aging, or cross-functional</strong>, use Operating Rhythm to coordinate the next best action. This section shows claims that have passed the escalation threshold and need structured owner follow-up or a live sync to unblock.</div>
+        <div class="mdf-or-intro">For claims that are <strong>stuck, aging, or cross-functional</strong>, use Operating Rhythm to coordinate the next best action. <strong>Standard tracking covers normal claim flow</strong> &mdash; Operating Rhythm is for stuck exceptions where ownership, timing, or handoff coordination has become the issue. Escalate here when a blocked claim needs structured cross-functional follow-up, not just a reminder.</div>
         <div style="background:rgba(27,77,122,0.03);border:1px solid rgba(27,77,122,0.15);border-radius:var(--radius);overflow:hidden;">
           <div style="padding:14px 20px;background:rgba(27,77,122,0.06);border-bottom:1px solid rgba(27,77,122,0.15);display:flex;align-items:center;justify-content:space-between;gap:12px;">
             <div>
@@ -602,6 +753,19 @@
     </div>
   </div>
 </main>
+
+<!-- FLOATING CLAIM DETAIL MODAL -->
+<div class="mdf-modal-backdrop" id="modalBackdrop" onclick="closeDetail()"></div>
+<div class="mdf-modal" id="detailPanel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+  <div class="mdf-modal-head" id="detailModalHead">
+    <div class="mdf-modal-head-left">
+      <div class="mdf-detail-pulse" id="detailPulse"></div>
+      <div class="mdf-detail-head-title" id="detailTitle">Exception Detail</div>
+    </div>
+    <button class="mdf-detail-close" onclick="closeDetail()" aria-label="Close">&#x2715;</button>
+  </div>
+  <div class="mdf-detail-body" id="detailBody"></div>
+</div>
 <a href="#top" class="to-top" id="toTop" aria-label="Back to top">&#8593;</a>
 <script>
 (function(){
@@ -619,13 +783,14 @@ function initTicker(){var hdr=document.querySelector(".site-header")||document.q
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",initTicker):initTicker();
 var CLAIMS=[{id:1,partner:"CloudPartner EMEA",program:"Webinar Co-Marketing",region:"EMEA",owner:"Mia Schulz",committed:25000,claimed:18000,accrued:12000,status:"blocked",statusLabel:"Blocked",statusChip:"s-blocked",missing:"PoP + Final Invoice",aging:15,agingClass:"aging-risk",nextAction:"Follow up with EMEA partner — docs overdue",blocker:"Proof of performance + final invoice not submitted. Accrual blocked.",documents:"Proof of performance, final invoice",nextOwner:"Mia Schulz → CloudPartner EMEA AM",accrualStatus:"Blocked — 0% of claim eligible until PoP received",reimbRisk:"High — month-end cutoff at risk if docs not received today",fastestPath:"Partner submits PoP + invoice today → finance review tomorrow → accrual at month-end",escalate:true,rowClass:"row-escalated"},{id:2,partner:"TechAlliance APAC",program:"Digital Co-op Campaign",region:"APAC",owner:"James Tan",committed:40000,claimed:31000,accrued:15000,status:"partial",statusLabel:"Partial Accrual",statusChip:"s-partial",missing:"Phase 2 PoP + Attribution report",aging:7,agingClass:"aging-watch",nextAction:"Request Phase 2 campaign report from partner",blocker:"Phase 2 campaign evidence and attribution tracking report not yet received.",documents:"Phase 2 campaign evidence, attribution tracking report",nextOwner:"James Tan → TechAlliance APAC Campaign Lead",accrualStatus:"Partial — $15K accrued on Phase 1. $16K pending Phase 2 PoP.",reimbRisk:"Medium — Phase 2 submission target Mar 5",fastestPath:"Receive Phase 2 report by Mar 1 → complete package → full accrual Mar 3",escalate:false,rowClass:"row-watch"},{id:3,partner:"GlobalSoft Americas",program:"Event Sponsorship Co-Fund",region:"Americas",owner:"Sofia Reyes",committed:55000,claimed:45000,accrued:45000,status:"submitted",statusLabel:"Reimbursement Submitted",statusChip:"s-submitted",missing:"None",aging:5,agingClass:"aging-ok",nextAction:"Awaiting finance approval — on track",blocker:"None — clean submission, pending standard approval.",documents:"All documents received",nextOwner:"Americas Finance BP — approval in queue",accrualStatus:"Complete — $45K fully accrued",reimbRisk:"Low — standard approval timeline",fastestPath:"Awaiting routine approval — expected within 3 business days",escalate:false,rowClass:""},{id:4,partner:"NordicsEdge EMEA",program:"Demand Gen Campaign",region:"EMEA",owner:"Mia Schulz",committed:28000,claimed:22000,accrued:22000,status:"submitted",statusLabel:"Reimbursement Submitted",statusChip:"s-submitted",missing:"None",aging:4,agingClass:"aging-ok",nextAction:"Submitted — track approval to close",blocker:"None — complete package submitted.",documents:"All documents received",nextOwner:"EMEA Channel Finance — reviewing",accrualStatus:"Complete — $22K fully accrued",reimbRisk:"Low",fastestPath:"Routine approval expected within 5 business days",escalate:false,rowClass:""},{id:5,partner:"RioPartner LATAM",program:"Channel MDF Program",region:"LATAM",owner:"Carlos Lima",committed:18000,claimed:12200,accrued:0,status:"waiting-p",statusLabel:"Waiting on Partner Proof",statusChip:"s-waiting-p",missing:"Invoice + PoP package",aging:9,agingClass:"aging-watch",nextAction:"Send PoP checklist to RioPartner today",blocker:"Partner has not submitted invoice or proof of performance package.",documents:"Invoice, proof of performance package",nextOwner:"Carlos Lima → RioPartner LATAM Contact",accrualStatus:"Blocked — $0 accrued, full claim at risk",reimbRisk:"Medium-High — 9 days elapsed, approaching escalation threshold",fastestPath:"Send async checklist today → 48h response → finance review → partial accrual at close",escalate:false,rowClass:"row-watch"},{id:6,partner:"DataBridge APAC",program:"Partner Summit Co-Fund",region:"APAC",owner:"James Tan",committed:15000,claimed:9500,accrued:0,status:"blocked",statusLabel:"Blocked",statusChip:"s-blocked",missing:"Full event evidence pack",aging:11,agingClass:"aging-risk",nextAction:"Escalated to OR — async follow-up active",blocker:"Support package is 25% complete. Sub-event evidence not consolidated.",documents:"Sub-event campaign evidence (multiple sessions), consolidated attendance report",nextOwner:"James Tan → DataBridge APAC Partner Mktg",accrualStatus:"Blocked — $0 accrued, full claim at risk",reimbRisk:"High — in OR escalation, close risk if not resolved by Feb 28",fastestPath:"Partner sends consolidated event pack → finance review 1 day → accrual decision at close",escalate:true,rowClass:"row-escalated"},{id:7,partner:"MarketPro Americas",program:"Webinar Series MDF",region:"Americas",owner:"Sofia Reyes",committed:22000,claimed:18500,accrued:16500,status:"waiting-f",statusLabel:"Waiting on Finance Review",statusChip:"s-waiting-f",missing:"Final invoice (one session)",aging:3,agingClass:"aging-ok",nextAction:"Final invoice expected by Mar 1 — track",blocker:"Final session invoice not yet received. All other docs complete.",documents:"Final session invoice",nextOwner:"Sofia Reyes — confirm final invoice receipt",accrualStatus:"Mostly complete — $16.5K accrued, $2K pending final invoice",reimbRisk:"Low — minor item, on track for full close",fastestPath:"Receive final invoice by Mar 1 → immediate accrual of remaining $2K",escalate:false,rowClass:""},{id:8,partner:"SkyChannel Americas",program:"Pipeline Acceleration MDF",region:"Americas",owner:"Sofia Reyes",committed:30000,claimed:24000,accrued:24000,status:"closed",statusLabel:"Closed",statusChip:"s-closed",missing:"None",aging:0,agingClass:"aging-ok",nextAction:"Closed — no action required",blocker:"None — closed.",documents:"All documents archived",nextOwner:"N/A — complete",accrualStatus:"Complete — $24K fully accrued and closed",reimbRisk:"None",fastestPath:"Closed",escalate:false,rowClass:""},{id:9,partner:"AsiaConnect APAC",program:"Channel Partner Day Co-Fund",region:"APAC",owner:"James Tan",committed:12000,claimed:10000,accrued:10000,status:"ready",statusLabel:"Ready",statusChip:"s-ready",missing:"None",aging:2,agingClass:"aging-ok",nextAction:"Submit reimbursement package to finance",blocker:"None — clean and ready.",documents:"All documents complete",nextOwner:"James Tan → APAC Finance BP",accrualStatus:"Complete — ready for reimbursement submission",reimbRisk:"Low",fastestPath:"Submit today → routine approval → reimbursement in 5 days",escalate:false,rowClass:""},{id:10,partner:"EuroTech EMEA",program:"Digital Partner Campaign",region:"EMEA",owner:"Mia Schulz",committed:20000,claimed:16000,accrued:0,status:"waiting-p",statusLabel:"Waiting on Partner Proof",statusChip:"s-waiting-p",missing:"Campaign attribution report",aging:6,agingClass:"aging-watch",nextAction:"Follow up with EuroTech on attribution deliverable",blocker:"Attribution / pipeline tracking report not yet received from partner.",documents:"Campaign attribution / pipeline tracking report",nextOwner:"Mia Schulz → EuroTech Campaign Manager",accrualStatus:"Blocked — awaiting attribution before any accrual",reimbRisk:"Medium — 6 days elapsed",fastestPath:"Receive attribution report within 2 days → finance review → full accrual",escalate:false,rowClass:"row-watch"}];
 function renderTable(claims){var tbody=document.getElementById("claimsTbody");if(!tbody)return;var html="";claims.forEach(function(c){var agingTxt=c.aging===0?"—":c.aging+"d";var rowCls=c.rowClass||"";var missingCell=c.missing==="None"?'<span style="color:var(--c-healthy)">—</span>':c.missing;html+=`<tr data-id="${c.id}" class="${rowCls}" onclick="selectClaim(${c.id})"><td><div class="claim-partner">${c.partner}</div><div class="claim-program">${c.program}</div></td><td>${c.region}</td><td style="font-size:11px;color:var(--muted)">${c.owner}</td><td class="claim-amount">$${c.committed.toLocaleString()}</td><td class="claim-amount">$${c.claimed.toLocaleString()}</td><td class="claim-amount" style="color:var(--accent)">$${c.accrued.toLocaleString()}</td><td><span class="status-chip ${c.statusChip}">${c.statusLabel}</span></td><td style="font-size:11px;color:var(--muted)">${missingCell}</td><td><span class="claim-aging ${c.agingClass}">${agingTxt}</span></td><td style="font-size:11px;color:var(--muted)">${c.nextAction}</td></tr>`});tbody.innerHTML=html}
-window.selectClaim=function(id){var c=CLAIMS.find(function(x){return x.id===id});if(!c)return;var panel=document.getElementById("detailPanel"),title=document.getElementById("detailTitle"),body=document.getElementById("detailBody");var rows=document.querySelectorAll("#claimsTbody tr");rows.forEach(function(r){r.classList.remove("is-selected")});var row=document.querySelector(`#claimsTbody tr[data-id="${id}"]`);if(row)row.classList.add("is-selected");var isBlocked=c.status==="blocked"||c.status==="waiting-p";panel.classList.remove("is-clean");if(!isBlocked)panel.classList.add("is-clean");title.textContent=isBlocked?"Exception — "+c.partner:"Detail — "+c.partner;var orBlock="";if(c.escalate){orBlock=`<div class="mdf-or-drawer"><div class="mdf-or-drawer-label">Operating Rhythm Integration</div><div class="mdf-or-grid"><div class="mdf-or-cell"><div class="mdf-or-cell-label">Blocker</div><div class="mdf-or-cell-value" style="color:var(--c-risk)">${c.blocker}</div></div><div class="mdf-or-cell"><div class="mdf-or-cell-label">Next Owner</div><div class="mdf-or-cell-value">${c.nextOwner}</div></div><div class="mdf-or-cell"><div class="mdf-or-cell-label">Recommended Mode</div><div class="mdf-or-cell-value"><span class="mdf-or-mode mode-escalate">Escalate to OR</span></div></div></div><a href="operating-rhythm.html" class="mdf-or-escalate-btn" style="margin-top:2px;">&#8599; Escalate in Operating Rhythm — open coordination layer</a></div>`}
-var blockerClass=isBlocked?"red":"green";var missingClass=c.missing==="None"?"green":"red";var riskClass=c.reimbRisk.startsWith("High")?"red":c.reimbRisk.startsWith("Medium")?"amber":"green";body.innerHTML=`<div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Claim</div><div class="mdf-detail-cell-value">${c.partner} — ${c.program}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Current Blocker</div><div class="mdf-detail-cell-value ${blockerClass}">${c.blocker}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Missing Documents</div><div class="mdf-detail-cell-value ${missingClass}">${c.missing}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Next Owner</div><div class="mdf-detail-cell-value">${c.nextOwner}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Accrual Status</div><div class="mdf-detail-cell-value">${c.accrualStatus}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Reimbursement Risk</div><div class="mdf-detail-cell-value ${riskClass}">${c.reimbRisk}</div></div><div class="mdf-detail-cell full-border"><div class="mdf-detail-cell-label">Fastest Path to Close</div><div class="mdf-path">${c.fastestPath}</div></div>${c.escalate?`<div class="mdf-detail-cell full">${orBlock}</div>`:""}`+``;panel.classList.add("is-visible");panel.scrollIntoView({behavior:"smooth",block:"nearest"})};
-window.closeDetail=function(){var panel=document.getElementById("detailPanel");panel.classList.remove("is-visible");var rows=document.querySelectorAll("#claimsTbody tr");rows.forEach(function(r){r.classList.remove("is-selected")})};
+window.selectClaim=function(id){var c=CLAIMS.find(function(x){return x.id===id});if(!c)return;var panel=document.getElementById("detailPanel"),backdrop=document.getElementById("modalBackdrop"),title=document.getElementById("detailTitle"),body=document.getElementById("detailBody"),head=document.getElementById("detailModalHead");var rows=document.querySelectorAll("#claimsTbody tr");rows.forEach(function(r){r.classList.remove("is-selected")});var row=document.querySelector(`#claimsTbody tr[data-id="${id}"]`);if(row)row.classList.add("is-selected");var isBlocked=c.status==="blocked"||c.status==="waiting-p";panel.classList.remove("is-clean");if(!isBlocked)panel.classList.add("is-clean");if(head){head.style.background=isBlocked?"rgba(220,38,38,0.04)":"rgba(15,118,110,0.04)";head.style.borderBottomColor=isBlocked?"rgba(220,38,38,0.12)":"rgba(15,118,110,0.12)";}var pulse=document.getElementById("detailPulse");if(pulse){pulse.style.background=isBlocked?"var(--c-risk)":"var(--c-healthy)";}title.textContent=isBlocked?"Exception — "+c.partner:"Detail — "+c.partner;title.style.color=isBlocked?"var(--c-risk)":"var(--c-healthy)";var orBlock="";if(c.escalate){orBlock=`<div class="mdf-or-drawer"><div class="mdf-or-drawer-label">Operating Rhythm Integration</div><div class="mdf-or-grid"><div class="mdf-or-cell"><div class="mdf-or-cell-label">Blocker</div><div class="mdf-or-cell-value" style="color:var(--c-risk)">${c.blocker}</div></div><div class="mdf-or-cell"><div class="mdf-or-cell-label">Next Owner</div><div class="mdf-or-cell-value">${c.nextOwner}</div></div><div class="mdf-or-cell"><div class="mdf-or-cell-label">Recommended Mode</div><div class="mdf-or-cell-value"><span class="mdf-or-mode mode-escalate">Escalate to OR</span></div></div></div><a href="operating-rhythm.html" class="mdf-or-escalate-btn" style="margin-top:2px;">&#8599; Escalate in Operating Rhythm — open coordination layer</a></div>`}
+var blockerClass=isBlocked?"red":"green";var missingClass=c.missing==="None"?"green":"red";var riskClass=c.reimbRisk.startsWith("High")?"red":c.reimbRisk.startsWith("Medium")?"amber":"green";body.innerHTML=`<div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Claim</div><div class="mdf-detail-cell-value">${c.partner} — ${c.program}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Current Blocker</div><div class="mdf-detail-cell-value ${blockerClass}">${c.blocker}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Missing Documents</div><div class="mdf-detail-cell-value ${missingClass}">${c.missing}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Next Owner</div><div class="mdf-detail-cell-value">${c.nextOwner}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Accrual Status</div><div class="mdf-detail-cell-value">${c.accrualStatus}</div></div><div class="mdf-detail-cell"><div class="mdf-detail-cell-label">Reimbursement Risk</div><div class="mdf-detail-cell-value ${riskClass}">${c.reimbRisk}</div></div><div class="mdf-detail-cell full-border"><div class="mdf-detail-cell-label">Fastest Path to Close</div><div class="mdf-path">${c.fastestPath}</div></div>${c.escalate?`<div class="mdf-detail-cell full">${orBlock}</div>`:""}`+``;panel.classList.add("is-visible");backdrop.classList.add("is-visible");document.body.style.overflow="hidden";};
+window.closeDetail=function(){var panel=document.getElementById("detailPanel"),backdrop=document.getElementById("modalBackdrop");panel.classList.remove("is-visible");backdrop.classList.remove("is-visible");document.body.style.overflow="";var rows=document.querySelectorAll("#claimsTbody tr");rows.forEach(function(r){r.classList.remove("is-selected")})};
+// Close on Escape key
+document.addEventListener("keydown",function(e){if(e.key==="Escape")window.closeDetail();});
 window.applyFilters=function(){var region=document.getElementById("filterRegion").value,status=document.getElementById("filterStatus").value;var filtered=CLAIMS.filter(function(c){var rMatch=!region||c.region===region;var sMatch=!status||(status==="blocked"&&c.status==="blocked")||(status==="ready"&&(c.status==="ready"||c.status==="submitted"))||(status==="missing"&&(c.status==="waiting-p"||c.status==="waiting-f"||c.status==="partial"))||(status==="aging"&&c.aging>10);return rMatch&&sMatch});renderTable(filtered);closeDetail()};
 window.toggleDataNeeded=function(){var btn=document.getElementById("dataNeededToggle"),body=document.getElementById("dataNeededBody"),expanded=btn.getAttribute("aria-expanded")==="true";btn.setAttribute("aria-expanded",String(!expanded));body.classList.toggle("open",!expanded)};
 window.toggleAcc=function(btn){var body=btn.nextElementSibling,isOpen=btn.classList.contains("open");btn.classList.toggle("open",!isOpen);body.classList.toggle("open",!isOpen)};
-var mobileBtn=document.getElementById("mobileControlsBtn"),sidebar=document.getElementById("sidebarPanel");if(mobileBtn&&sidebar){mobileBtn.addEventListener("click",function(){var expanded=mobileBtn.getAttribute("aria-expanded")==="true";mobileBtn.setAttribute("aria-expanded",String(!expanded));sidebar.classList.toggle("mobile-open",!expanded)})}
 window.scrollToSection=function(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})};
 var toTop=document.getElementById("toTop");if(toTop){window.addEventListener("scroll",function(){toTop.classList.toggle("is-visible",window.scrollY>400)},{passive:true});toTop.addEventListener("click",function(e){e.preventDefault();window.scrollTo({top:0,behavior:"smooth"})})}
 function updateCountdown(){var el=document.getElementById("closeCountdown");if(!el)return;var now=new Date(),year=now.getFullYear(),month=now.getMonth(),cutoff=new Date(year,month+1,0);cutoff.setDate(cutoff.getDate()-2);var diff=Math.max(0,Math.round((cutoff-now)/(1000*60*60*24)));el.textContent=diff+" days"}
