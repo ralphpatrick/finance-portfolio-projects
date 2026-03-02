@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Moved</title>
+  <script>
+    const newUrl =
+      "https://ralphpatrick.com" +
+      window.location.pathname.replace("/finance-portfolio-projects", "") +
+      window.location.search +
+      window.location.hash;
+    window.location.replace(newUrl);
+  </script>
+</head>
+<body>
+  <p>Moved to <a id="newlink" href="https://ralphpatrick.com/">ralphpatrick.com</a>.</p>
+  <script>
+    document.getElementById("newlink").href =
+      "https://ralphpatrick.com" +
+      window.location.pathname.replace("/finance-portfolio-projects", "") +
+      window.location.search +
+      window.location.hash;
+  </script>
+</body>
+</html>
